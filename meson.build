@@ -8,7 +8,8 @@ project(
 
 spdmd_deps = [
     dependency('phosphor-logging'),
-    dependency('sdbusplus', required: true),
+    dependency('sdbusplus'),
+    dependency('phosphor-dbus-interfaces'),
 ]
 
 spdmd_src = [
@@ -17,6 +18,7 @@ spdmd_src = [
     'src/spdm_discovery.cpp',
     'src/mctp_transport_discovery.cpp',
     'src/spdm_dbus_responder.cpp',
+    'src/component_integrity_dbus.cpp',
 ]
 
 spdmd_includes = include_directories('src')
