@@ -8,7 +8,8 @@ project(
 
 spdmd_deps = [
     dependency('phosphor-logging'),
-    dependency('sdbusplus', required: true),
+    dependency('sdbusplus'),
+    dependency('phosphor-dbus-interfaces'),
 ]
 
 sanitizer_flags = []
@@ -24,6 +25,7 @@ spdmd_src = [
     'requester/mctp_transport_discovery.cpp',
     'requester/utils.cpp',
     'requester/spdm_dbus_responder.cpp',
+    'requester/component_integrity_dbus.cpp',
 ]
 
 spdmd_includes = include_directories('requester')
