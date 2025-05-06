@@ -1,0 +1,80 @@
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: Copyright OpenBMC Authors
+
+#pragma once
+
+#include "spdm_discovery.hpp"
+
+#include <sdbusplus/bus.hpp>
+#include <sdbusplus/message.hpp>
+
+#include <map>
+#include <string>
+#include <variant>
+#include <vector>
+
+namespace spdm
+{
+
+/**
+ * @brief MCTP-specific transport implementation
+ * @details Handles discovery of SPDM devices over MCTP transport using D-Bus
+ */
+class MCTPTransportDiscovery : public DiscoveryProtocol
+{
+  public:
+    /**
+     * @brief Construct a new MCTP Transport object
+     * @param busRef Reference to D-Bus connection
+     */
+    explicit MCTPTransportDiscovery(sdbusplus::bus::bus& busRef);
+
+    /**
+     * @brief Discover SPDM devices over MCTP
+     * @return Vector of discovered device information
+     * @throws sdbusplus::exception::SdBusError on D-Bus errors
+     */
+    std::vector<ResponderInfo> discoverDevices() override;
+
+    /**
+     * @brief Get the transport type
+     * @return TransportType::MCTP
+     */
+    TransportType getType() const override
+    {
+        return TransportType::MCTP;
+    }
+
+  private:
+    /**
+     * @brief Get all managed objects for a service
+     * @param service D-Bus service name
+     * @return Map of object paths to their interfaces and properties
+     */
+    std::map<
+        std::string,
+        std::map<std::string,
+                 std::map<std::string, std::variant<std::string, uint8_t,
+                                                    std::vector<uint8_t>>>>>
+        getManagedObjects(const std::string& service);
+
+    /// MCTP endpoint interface name
+    static constexpr auto mctpEndpointIntfName =
+        "xyz.openbmc_project.MCTP.Endpoint";
+
+    /// UUID interface name
+    static constexpr auto uuidIntfName = "xyz.openbmc_project.Common.UUID";
+
+    /// MCTP service name
+    static constexpr auto mctpService = "au.com.codeconstruct.MCTP1";
+
+    /// SPDM message type constant
+    static constexpr uint8_t MCTP_MESSAGE_TYPE_SPDM = 0x05;
+
+    /// Invalid EID marker
+    static constexpr size_t invalid_eid = 255;
+
+    sdbusplus::bus::bus& bus; ///< D-Bus connection
+};
+
+} // namespace spdm
