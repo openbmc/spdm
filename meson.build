@@ -22,6 +22,7 @@ spdmd_src = [
     'src/spdmd.cpp',
     'src/spdmd_app.cpp',
     'src/spdm_discovery.cpp',
+    'src/mctp_discovery.cpp',
 ]
 
 # Include directories
