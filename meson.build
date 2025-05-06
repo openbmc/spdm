@@ -5,8 +5,13 @@ project(
     meson_version: '>=1.1.1',
     default_options: ['cpp_std=c++23', 'warning_level=3', 'werror=true'],
 )
-spdmd_deps = [dependency('sdbusplus')]
-spdmd_src = ['requester/spdmd.cpp']
+spdmd_deps = [dependency('phosphor-logging'), dependency('sdbusplus')]
+spdmd_src = [
+    'requester/spdmd.cpp',
+    'requester/spdm_discovery.cpp',
+    'requester/mctp_transport_discovery.cpp',
+]
+
 spdmd_includes = include_directories('requester')
 executable(
     'spdmd',
