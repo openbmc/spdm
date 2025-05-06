@@ -20,6 +20,7 @@ spdmd_deps = [
 spdmd_src = [
     'src/spdmd.cpp',
     'src/spdmd_app.cpp',
+    'src/spdm_discovery.cpp',
 ]
 
 spdmd_includes = include_directories('spdmd')
