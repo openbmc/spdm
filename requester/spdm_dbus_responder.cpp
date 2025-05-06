@@ -17,10 +17,17 @@ SPDMDBusResponder::SPDMDBusResponder(sdbusplus::async::context& ctx,
     responder(responderInfo)
 {
     const auto devName = name();
+
     std::string componentIntegrityPath =
         "/xyz/openbmc_project/ComponentIntegrity/" + devName;
     componentIntegrity =
         std::make_unique<ComponentIntegrity>(ctx, componentIntegrityPath);
+
+    std::string trustedComponentPath =
+        "/xyz/openbmc_project/TrustedComponent/" + devName;
+    trustedComponent =
+        std::make_unique<TrustedComponent>(ctx, trustedComponentPath);
+
     info("Created SPDM D-Bus responder for device {ID} at {PATH}", "ID",
          devName, "PATH", responder.path);
 }
