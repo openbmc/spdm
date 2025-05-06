@@ -40,6 +40,7 @@ if not libspdm_dep.found()
             ],
             include_directories: include_directories(
                 '/usr/local/include/libspdm',
+                '/usr/local/include/libspdm/include',
             ),
         )
     else
@@ -64,6 +65,7 @@ spdmd_src = [
     'requester/component_integrity_dbus.cpp',
     'requester/trusted_component_dbus.cpp',
     'requester/spdm_device_secret_lib_stub.cpp',
+    'requester/libspdm_mctp_transport.cpp',
 ]
 
 spdmd_lib = static_library(
