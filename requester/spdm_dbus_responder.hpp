@@ -5,6 +5,7 @@
 
 #include "component_integrity_dbus.hpp"
 #include "spdm_discovery.hpp"
+#include "trusted_component_dbus.hpp"
 
 #include <sdbusplus/async.hpp>
 
@@ -34,6 +35,7 @@ class SPDMDBusResponder
      */
     explicit SPDMDBusResponder(sdbusplus::async::context& ctx,
                                const ResponderInfo& responderInfo);
+
     ~SPDMDBusResponder() = default;
 
     /** @brief Device name derived from responder transport info */
@@ -47,8 +49,11 @@ class SPDMDBusResponder
 
   private:
     ResponderInfo responder;
+
     /** @brief D-Bus ComponentIntegrity interface object for this device. */
     std::unique_ptr<ComponentIntegrity> componentIntegrity;
+    /** @brief D-Bus TrustedComponent interface object for this device. */
+    std::unique_ptr<TrustedComponent> trustedComponent;
 };
 
 } // namespace spdm
