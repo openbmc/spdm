@@ -11,21 +11,27 @@ project(
     meson_version: '>=1.1.1',
 )
 
-phosphor_dbus_interfaces_dep = dependency('phosphor-dbus-interfaces')
 phosphor_logging_dep = dependency('phosphor-logging')
 sdbusplus_dep = dependency('sdbusplus')
+phosphor_dbus_interfaces_dep = dependency('phosphor-dbus-interfaces')
 systemd_dep = dependency('systemd')
 
-spdmd_deps = [phosphor_dbus_interfaces_dep, phosphor_logging_dep, sdbusplus_dep]
+spdmd_deps = [
+    phosphor_logging_dep,
+    sdbusplus_dep,
+    phosphor_dbus_interfaces_dep,
+    systemd_dep,
+]
+
 spdmd_src = [
     'requester/spdmd.cpp',
     'requester/spdm_discovery.cpp',
     'requester/mctp_transport_discovery.cpp',
     'requester/tcp_transport_discovery.cpp',
-    'requester/utils.cpp',
     'requester/policy_manager.cpp',
     'requester/policy_manager.hpp',
     'requester/utils/mapper.cpp',
+    'requester/component_integrity_dbus.cpp',
 ]
 
 install_data(
