@@ -16,7 +16,43 @@ phosphor_logging_dep = dependency('phosphor-logging')
 sdbusplus_dep = dependency('sdbusplus')
 systemd_dep = dependency('systemd')
 
-spdmd_deps = [phosphor_dbus_interfaces_dep, phosphor_logging_dep, sdbusplus_dep]
+# Try to find libspdm using pkg-config first
+libspdm_dep = dependency('libspdm', required: false)
+
+# If pkg-config doesn't work, try to find it manually
+if not libspdm_dep.found()
+    libspdm_lib = meson.get_compiler('cpp').find_library('spdm', required: false)
+    libspdm_platform_lib = meson.get_compiler('cpp').find_library(
+        'spdm_platform',
+        required: false,
+    )
+    libspdm_crypto_lib = meson.get_compiler('cpp').find_library(
+        'spdm_crypto',
+        required: false,
+    )
+
+    if libspdm_lib.found() and libspdm_platform_lib.found() and libspdm_crypto_lib.found()
+        libspdm_dep = declare_dependency(
+            dependencies: [
+                libspdm_lib,
+                libspdm_platform_lib,
+                libspdm_crypto_lib,
+            ],
+            include_directories: include_directories(
+                '/usr/local/include/libspdm',
+            ),
+        )
+    else
+        error('libspdm not found. Please ensure libspdm is installed.')
+    endif
+endif
+
+spdmd_deps = [
+    phosphor_dbus_interfaces_dep,
+    phosphor_logging_dep,
+    sdbusplus_dep,
+    libspdm_dep,
+]
 
 sanitizer_flags = []
 
@@ -34,6 +70,7 @@ spdmd_src = [
     'requester/spdm_dbus_responder.cpp',
     'requester/component_integrity_dbus.cpp',
     'requester/trusted_component_dbus.cpp',
+    'requester/spdm_device_secret_lib_stub.cpp',
 ]
 
 install_data(
