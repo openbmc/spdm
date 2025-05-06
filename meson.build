@@ -6,10 +6,43 @@ project(
     default_options: ['cpp_std=c++23', 'warning_level=3'],
 )
 
+# Try to find libspdm using pkg-config first
+libspdm_dep = dependency('libspdm', required: false)
+
+# If pkg-config doesn't work, try to find it manually
+if not libspdm_dep.found()
+    # Try to find the library manually
+    libspdm_lib = meson.get_compiler('cpp').find_library('spdm', required: false)
+    libspdm_platform_lib = meson.get_compiler('cpp').find_library(
+        'spdm_platform',
+        required: false,
+    )
+    libspdm_crypto_lib = meson.get_compiler('cpp').find_library(
+        'spdm_crypto',
+        required: false,
+    )
+
+    if libspdm_lib.found() and libspdm_platform_lib.found() and libspdm_crypto_lib.found()
+        libspdm_dep = declare_dependency(
+            dependencies: [
+                libspdm_lib,
+                libspdm_platform_lib,
+                libspdm_crypto_lib,
+            ],
+            include_directories: include_directories(
+                '/usr/local/include/libspdm',
+            ),
+        )
+    else
+        error('libspdm not found. Please ensure libspdm is installed.')
+    endif
+endif
+
 spdmd_deps = [
     dependency('phosphor-logging'),
     dependency('sdbusplus'),
     dependency('phosphor-dbus-interfaces'),
+    libspdm_dep,
 ]
 
 spdmd_src = [
