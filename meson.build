@@ -11,7 +11,11 @@ spdmd_deps = [
     dependency('sdbusplus', required: true),
 ]
 
-spdmd_src = ['requester/spdmd.cpp']
+spdmd_src = [
+    'requester/spdmd.cpp',
+    'requester/spdm_discovery.cpp',
+    'requester/mctp_transport_discovery.cpp',
+]
 
 spdmd_includes = include_directories('requester')
 
