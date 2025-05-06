@@ -25,6 +25,7 @@ spdmd_src = [
     'src/mctp_discovery.cpp',
     'src/spdm_dbus_responder.cpp',
     'src/spdm_device_secret_lib_stub.cpp',
+    'src/component_integrity_dbus.cpp',
 ]
 
 # Include directories
