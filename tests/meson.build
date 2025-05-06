@@ -8,6 +8,7 @@ test_deps = [
     dependency('gtest', required: true),
     dependency('gtest_main', required: true),
     dependency('gmock', required: true),
+    libspdm_dep,
 ]
 
 # Test source files
@@ -16,6 +17,8 @@ test_src = [
     '../requester/mctp_transport_discovery.cpp',
     '../requester/spdm_discovery.cpp',
     '../requester/utils/mapper.cpp',
+    '../requester/libspdm_mctp_transport.cpp',
+    '../requester/spdm_device_secret_lib_stub.cpp',
 ]
 
 # Test executable
