@@ -29,6 +29,7 @@ spdmd_src = [
     'requester/spdm_discovery.cpp',
     'requester/mctp_transport_discovery.cpp',
     'requester/utils/mapper.cpp',
+    'requester/spdm_dbus_responder.cpp',
 ]
 
 spdmd_includes = include_directories('requester')

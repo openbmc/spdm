@@ -4,6 +4,7 @@
 #include "spdmd.hpp"
 
 #include "mctp_transport_discovery.hpp"
+#include "spdm_dbus_responder.hpp"
 #include "spdm_discovery.hpp"
 
 #include <sdbusplus/async.hpp>
@@ -25,10 +26,17 @@ int main()
     MCTPTransportDiscovery mctp{ctx};
     discovery.discover(mctp);
 
-    // Run the initial discovery and then claim the bus name.
+    std::vector<std::unique_ptr<SPDMDBusResponder>> responders;
+
+    // Run the initial discovery, create D-Bus responders, then claim bus name.
     ctx.spawn([&]() -> sdbusplus::async::task<> {
-        // Perform discovery
         co_await discovery.run();
+
+        for (const auto& device : discovery.devices())
+        {
+            responders.push_back(
+                std::make_unique<SPDMDBusResponder>(ctx, device));
+        }
 
         // Request D-Bus name after initial discovery.
         ctx.request_name(dbusServiceName);
