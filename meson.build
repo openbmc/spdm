@@ -30,6 +30,7 @@ spdmd_src = [
     'requester/utils/mapper.cpp',
     'requester/spdm_dbus_responder.cpp',
     'requester/component_integrity_dbus.cpp',
+    'requester/trusted_component_dbus.cpp',
 ]
 
 spdmd_lib = static_library(
