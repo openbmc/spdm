@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <functional>
 #include <string>
 #include <variant>
 #include <vector>
@@ -28,8 +29,9 @@ enum class TransportType
 
 struct MctpResponderInfo
 {
-    uint8_t eid;      ///< Endpoint ID
-    std::string uuid; ///< Device UUID
+    uint32_t networkId; ///< MCTP network id (unique with EID per MCTP spec)
+    uint8_t eid;        ///< Endpoint ID
+    std::string uuid;   ///< Device UUID
 };
 
 struct TcpResponderInfo
@@ -99,6 +101,26 @@ class SPDMDiscovery
         }(this, d));
     }
 
+    using AddCallback = std::function<void(const ResponderInfo&)>;
+    using RemoveCallback = std::function<void(const sdbusplus::object_path&)>;
+
+    /**
+     * Register a callback invoked whenever a device is added (both
+     * during initial discovery and at runtime).
+     */
+    void onDeviceAdded(AddCallback cb)
+    {
+        addCallback = std::move(cb);
+    }
+
+    /**
+     * Register a callback invoked whenever a device is removed.
+     */
+    void onDeviceRemoved(RemoveCallback cb)
+    {
+        removeCallback = std::move(cb);
+    }
+
     /**
      * Add a discovered device's ResponderInfo.
      * @param r The ResponderInfo.  Adds are deduplicated against path
@@ -116,6 +138,10 @@ class SPDMDiscovery
             return;
         }
         responderInfos.emplace_back(std::move(r));
+        if (addCallback)
+        {
+            addCallback(responderInfos.back());
+        }
     }
 
     /**
@@ -137,6 +163,9 @@ class SPDMDiscovery
 
     /** @brief Discovered devices */
     std::vector<ResponderInfo> responderInfos;
+
+    AddCallback addCallback;
+    RemoveCallback removeCallback;
 };
 
 } // namespace spdm
