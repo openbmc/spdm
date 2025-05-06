@@ -43,8 +43,12 @@ namespace spdm
 class SpdmTransport
 {
   public:
-    SpdmTransport() : spdmContext(nullptr), scratchBuffer(nullptr) {}
-    ~SpdmTransport()
+    SpdmTransport() :
+        sendReceiveBuffer{}, useHashAlgo(0), useMeasurementHashAlgo(0),
+        useAsymAlgo(0), useReqAsymAlgo(0), parameter{}, spdmContext(nullptr),
+        scratchBuffer(nullptr)
+    {}
+    virtual ~SpdmTransport()
     {
         if (scratchBuffer)
         {
