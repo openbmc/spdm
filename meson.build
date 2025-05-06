@@ -46,6 +46,7 @@ spdmd_src = [
     'requester/utils/paths.cpp',
     'requester/utils/dbus_path.cpp',
     'requester/spdm_dbus_responder.cpp',
+    'requester/component_integrity_dbus.cpp',
 ]
 
 spdmd_lib = static_library(
