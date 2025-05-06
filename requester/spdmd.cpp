@@ -4,6 +4,7 @@
 #include "spdmd.hpp"
 
 #include "mctp_transport_discovery.hpp"
+#include "spdm_dbus_responder.hpp"
 #include "spdm_discovery.hpp"
 
 #include <phosphor-logging/lg2.hpp>
@@ -29,20 +30,37 @@ int main()
 
     // Assign the discovery protocol to the discovery object - Context
     spdm::SPDMDiscovery discovery(std::move(protocols));
+    std::vector<std::unique_ptr<spdm::SPDMDBusResponder>> responders;
 
     // Perform discovery
-    discovery.discover([](std::vector<spdm::ResponderInfo> devices) {
+    discovery.discover([&responders,
+                        &ctx](std::vector<spdm::ResponderInfo> devices) {
         if (devices.empty())
         {
             error("No SPDM devices found");
         }
         else
         {
-            // Log discovered devices
+            // Process discovered devices
             for (const auto& device : devices)
             {
-                info("Found SPDM device: PATH={PATH}", "PATH",
-                     device.objectPath);
+                try
+                {
+                    info("Creating D-Bus responder for device {PATH}", "PATH",
+                         device.objectPath);
+                    // Create SPDMDBusResponder with ResponderInfo and async
+                    // context for parallel execution
+                    auto responder = std::make_unique<spdm::SPDMDBusResponder>(
+                        ctx, device, ctx);
+                    responders.push_back(std::move(responder));
+                    info("Successfully created responder for device {PATH}",
+                         "PATH", device.objectPath);
+                }
+                catch (...)
+                {
+                    error("Unknown error processing device {PATH}", "PATH",
+                          device.objectPath);
+                }
             }
         }
     });
