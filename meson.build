@@ -19,6 +19,7 @@ spdmd_src = [
     'src/mctp_transport_discovery.cpp',
     'src/spdm_dbus_responder.cpp',
     'src/component_integrity_dbus.cpp',
+    'src/trusted_component_dbus.cpp',
 ]
 
 spdmd_includes = include_directories('src')
