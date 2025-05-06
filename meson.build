@@ -11,7 +11,12 @@ project(
     ],
 )
 spdmd_deps = [dependency('phosphor-logging'), dependency('sdbusplus')]
-spdmd_src = ['requester/spdmd.cpp']
+spdmd_src = [
+    'requester/spdmd.cpp',
+    'requester/spdm_discovery.cpp',
+    'requester/mctp_transport_discovery.cpp',
+]
+
 spdmd_includes = include_directories('requester')
 executable(
     'spdmd',
