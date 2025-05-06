@@ -10,7 +10,7 @@ PHOSPHOR_LOG2_USING;
 namespace spdm
 {
 
-SPDMDBusResponder::SPDMDBusResponder(sdbusplus::async::context& /* ctx */,
+SPDMDBusResponder::SPDMDBusResponder(sdbusplus::async::context& ctx,
                                      const ResponderInfo& responderInfo) :
     inventoryPath(responderInfo.path.str)
 {
@@ -28,6 +28,16 @@ SPDMDBusResponder::SPDMDBusResponder(sdbusplus::async::context& /* ctx */,
             }
         },
         responderInfo.info);
+
+    std::string componentIntegrityPath =
+        "/xyz/openbmc_project/ComponentIntegrity/" + deviceName;
+    componentIntegrity =
+        std::make_unique<ComponentIntegrity>(ctx, componentIntegrityPath);
+
+    std::string trustedComponentPath =
+        "/xyz/openbmc_project/TrustedComponent/" + deviceName;
+    trustedComponent =
+        std::make_unique<TrustedComponent>(ctx, trustedComponentPath);
 
     info("Created SPDM D-Bus responder for device {ID} at {PATH}", "ID",
          deviceName, "PATH", responderInfo.path);
