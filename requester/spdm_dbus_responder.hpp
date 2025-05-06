@@ -34,11 +34,10 @@ class SPDMDBusResponder
 
     /**
      * @brief Construct a new SPDM DBus Responder with async context
-     * @param bus D-Bus connection
      * @param info ResponderInfo containing device details
      * @param ctx Async context for parallel coroutine execution
      */
-    SPDMDBusResponder(sdbusplus::bus::bus& bus, const ResponderInfo& info,
+    SPDMDBusResponder(const ResponderInfo& info,
                       sdbusplus::async::context& ctx);
 
     /**
