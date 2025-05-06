@@ -18,7 +18,11 @@ phosphor_dbus_interfaces_dep = dependency('phosphor-dbus-interfaces')
 boost_dep = dependency('boost')
 
 # Source files
-spdmd_src = ['src/spdmd.cpp', 'src/spdmd_app.cpp']
+spdmd_src = [
+    'src/spdmd.cpp',
+    'src/spdmd_app.cpp',
+    'src/spdm_discovery.cpp',
+]
 
 # Include directories
 spdmd_includes = include_directories('src')
