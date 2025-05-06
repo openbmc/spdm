@@ -1,0 +1,6 @@
+[wrap-git]
+url = https://github.com/DMTF/libspdm.git
+revision = HEAD
+
+[provide]
+libspdm = libspdm_dep
