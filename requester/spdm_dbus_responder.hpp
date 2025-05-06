@@ -3,7 +3,9 @@
 
 #pragma once
 
+#include "component_integrity_dbus.hpp"
 #include "spdm_discovery.hpp"
+#include "trusted_component_dbus.hpp"
 
 #include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/async.hpp>
@@ -49,6 +51,9 @@ class SPDMDBusResponder
 
     /** @brief Associated inventory object path */
     std::string inventoryPath;
+
+    std::unique_ptr<ComponentIntegrity> componentIntegrity;
+    std::unique_ptr<TrustedComponent> trustedComponent;
 };
 
 } // namespace spdm
