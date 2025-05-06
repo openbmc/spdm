@@ -3,7 +3,7 @@
 
 #pragma once
 
-// #include "libspdm_transport.hpp"
+#include "libspdm_transport.hpp"
 
 #include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/bus.hpp>
@@ -17,7 +17,6 @@
 
 namespace spdm
 {
-
 /**
  * @brief Supported transport types for SPDM
  * @details Enumerates the different transport protocols that can be used
@@ -53,6 +52,7 @@ struct ResponderInfo
     sdbusplus::message::object_path deviceObjectPath;
     std::variant<MctpResponderInfo, TcpResponderInfo> responderData;
     TransportType transportType;
+    std::shared_ptr<spdm::SpdmTransport> transport;
 };
 
 /**
@@ -81,7 +81,8 @@ class DiscoveryProtocol
 
 /**
  * @brief Main SPDM device discovery class
- * @details Manages the discovery of SPDM devices using a configured transport
+ * @details Manages the discovery of SPDM devices using a configured
+ * transport
  */
 class SPDMDiscovery
 {

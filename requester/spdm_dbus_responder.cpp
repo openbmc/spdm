@@ -10,8 +10,7 @@ PHOSPHOR_LOG2_USING;
 namespace spdm
 {
 
-SPDMDBusResponder::SPDMDBusResponder(sdbusplus::bus::bus& /* bus */,
-                                     const ResponderInfo& responderInfo,
+SPDMDBusResponder::SPDMDBusResponder(const ResponderInfo& responderInfo,
                                      sdbusplus::async::context& ctx) :
     inventoryPath(responderInfo.objectPath)
 {
