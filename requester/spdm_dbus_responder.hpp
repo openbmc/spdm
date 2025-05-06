@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "component_integrity_dbus.hpp"
 #include "spdm_discovery.hpp"
 
 #include <sdbusplus/async.hpp>
@@ -26,10 +27,11 @@ class SPDMDBusResponder
 
     /**
      * @brief Construct a new SPDM D-Bus Responder
+     * @param ctx Async context for D-Bus object creation
      * @param responderInfo ResponderInfo containing device details
      */
-    explicit SPDMDBusResponder(const ResponderInfo& responderInfo);
-
+    explicit SPDMDBusResponder(sdbusplus::async::context& ctx,
+                               const ResponderInfo& responderInfo);
     ~SPDMDBusResponder() = default;
 
     /** @brief Device name derived from responder transport info */
@@ -43,6 +45,8 @@ class SPDMDBusResponder
 
   private:
     ResponderInfo responder;
+    /** @brief D-Bus ComponentIntegrity interface object for this device. */
+    std::unique_ptr<ComponentIntegrity> componentIntegrity;
 };
 
 } // namespace spdm
