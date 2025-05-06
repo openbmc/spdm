@@ -13,6 +13,64 @@
 
 PHOSPHOR_LOG2_USING;
 
+/**
+ * @brief Process discovered SPDM devices and create responders
+ * @param devices Vector of discovered SPDM devices
+ * @param responders Vector to store created responders
+ * @param ctx Async context for D-Bus operations
+ */
+void processDiscoveredDevices(
+    const std::vector<spdm::ResponderInfo>& devices,
+    std::vector<std::unique_ptr<spdm::SPDMDBusResponder>>& responders,
+    sdbusplus::async::context& ctx)
+{
+    if (devices.empty())
+    {
+        error("No SPDM devices found");
+        return;
+    }
+
+    // Process discovered devices
+    for (const auto& device : devices)
+    {
+        try
+        {
+            if (!device.transport)
+            {
+                error("Transport is null for device {PATH}", "PATH",
+                      device.objectPath);
+                continue;
+            }
+
+            info("Initializing transport for device {PATH}", "PATH",
+                 device.objectPath);
+            if (!device.transport->initialize())
+            {
+                error("Failed to initialize SPDM transport for device {PATH}",
+                      "PATH", device.objectPath);
+                continue;
+            }
+            info("Creating D-Bus responder for device {PATH}", "PATH",
+                 device.objectPath);
+            // Create SPDMDBusResponder with ResponderInfo and async
+            // context for parallel execution
+            auto responder =
+                std::make_unique<spdm::SPDMDBusResponder>(device, ctx);
+
+            responders.push_back(std::move(responder));
+            info("Successfully created responder for device {PATH}", "PATH",
+                 device.objectPath);
+        }
+        catch (const std::exception& e)
+        {
+            error("Error processing device {PATH}: {ERROR}", "PATH",
+                  device.objectPath, "ERROR", e.what());
+            continue;
+        }
+    }
+}
+
+// Main function must be in global namespace
 int main()
 {
     // Create async context for parallel coroutine execution
@@ -33,37 +91,11 @@ int main()
     std::vector<std::unique_ptr<spdm::SPDMDBusResponder>> responders;
 
     // Perform discovery
-    discovery.discover([&responders,
-                        &ctx](std::vector<spdm::ResponderInfo> devices) {
-        if (devices.empty())
-        {
-            error("No SPDM devices found");
-        }
-        else
-        {
-            // Process discovered devices
-            for (const auto& device : devices)
-            {
-                try
-                {
-                    info("Creating D-Bus responder for device {PATH}", "PATH",
-                         device.objectPath);
-                    // Create SPDMDBusResponder with ResponderInfo and async
-                    // context for parallel execution
-                    auto responder = std::make_unique<spdm::SPDMDBusResponder>(
-                        ctx, device, ctx);
-                    responders.push_back(std::move(responder));
-                    info("Successfully created responder for device {PATH}",
-                         "PATH", device.objectPath);
-                }
-                catch (...)
-                {
-                    error("Unknown error processing device {PATH}", "PATH",
-                          device.objectPath);
-                }
-            }
-        }
-    });
+    discovery.discover(
+        [&responders, &ctx](std::vector<spdm::ResponderInfo> devices) {
+            processDiscoveredDevices(devices, responders, ctx);
+        });
+
     // Run the sdbusplus async context for parallel coroutine execution
     ctx.run();
 
