@@ -276,7 +276,8 @@ class MctpIoClass : public IOClass
         addr.smctp_type = MCTP_TYPE_SPDM;
         addr.smctp_tag = MCTP_TAG_OWNER;
 
-        int rc = bind(socketFd, (struct sockaddr*)&addr, sizeof(addr));
+        int rc = bind(socketFd, reinterpret_cast<struct sockaddr*>(&addr),
+                      sizeof(addr));
         if (rc < 0)
         {
             lg2::error("Failed to bind MCTP socket");
@@ -381,8 +382,9 @@ class MctpIoClass : public IOClass
         struct sockaddr_mctp addr;
         socklen_t addrlen = sizeof(addr);
 
-        ssize_t bytesReceived = recvfrom(socketFd, buf.data(), buf.size(), 0,
-                                         (struct sockaddr*)&addr, &addrlen);
+        ssize_t bytesReceived =
+            recvfrom(socketFd, buf.data(), buf.size(), 0,
+                     reinterpret_cast<struct sockaddr*>(&addr), &addrlen);
         if (bytesReceived < 0)
         {
             lg2::error("Failed to receive data from MCTP socket");

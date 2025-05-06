@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "mctp_helper.hpp"
 #include "spdm_discovery.hpp"
 #include "utils.hpp"
 
@@ -51,7 +52,19 @@ class MCTPTransportDiscovery : public DiscoveryProtocol
     std::vector<ResponderInfo> processManagedObjects(
         const ManagedObjects& managedObjects);
 
+    /**
+     * @brief Create a device from D-Bus interfaces
+     * @param interfaces D-Bus interfaces for the object
+     * @param objectPath Object path for logging
+     * @param socketCreated Whether MCTP socket was successfully created
+     * @return Optional ResponderInfo if device is valid, nullopt otherwise
+     */
+    std::optional<ResponderInfo> createDeviceFromInterfaces(
+        const DbusInterfaces& interfaces, const std::string& objectPath,
+        bool socketCreated);
+
   private:
+    MctpIoClass mctpIo;
     /**
      * @brief Check if endpoint supports SPDM message type
      * @param mctpInterface MCTP interface properties
@@ -89,8 +102,8 @@ class MCTPTransportDiscovery : public DiscoveryProtocol
     /// MCTP service name
     static constexpr auto mctpService = "au.com.codeconstruct.MCTP1";
 
-    /// MCTP message type for SPDM
-    static constexpr uint8_t MCTP_MESSAGE_TYPE_SPDM = 0x05;
+    /// MCTP message type for SPDM (already defined in libspdm headers)
+    static constexpr uint8_t MCTP_MESSAGE_TYPE_SPDM_VALUE = 0x05;
 
     /// Invalid EID marker
     static constexpr size_t invalid_eid = 255;

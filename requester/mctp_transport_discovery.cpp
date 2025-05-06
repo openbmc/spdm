@@ -3,9 +3,13 @@
 
 #include "mctp_transport_discovery.hpp"
 
+#include "libspdm_mctp_transport.hpp"
+#include "mctp_helper.hpp"
+
 #include <phosphor-logging/lg2.hpp>
 
 #include <algorithm>
+#include <optional>
 
 PHOSPHOR_LOG2_USING;
 
@@ -62,41 +66,76 @@ std::vector<ResponderInfo> MCTPTransportDiscovery::processManagedObjects(
 
     std::vector<ResponderInfo> devices;
 
+    // Use the member variable mctpIo for socket creation
+    bool socketCreated = mctpIo.createSocket();
+    if (!socketCreated)
+    {
+        warning(
+            "Failed to create MCTP socket, transport objects will not be created");
+    }
+
     for (const auto& [objectPath, interfaces] : managedObjects)
     {
-        // Check if it supports MCTP endpoint interface
-        auto mctpIt = interfaces.find(mctpEndpointIntfName);
-        if (mctpIt == interfaces.end())
+        auto device =
+            createDeviceFromInterfaces(interfaces, objectPath, socketCreated);
+        if (device.has_value())
         {
-            debug("Object does not implement MCTP endpoint interface: {PATH}",
-                  "PATH", objectPath);
-            continue;
+            devices.emplace_back(std::move(device.value()));
         }
-
-        if (!supportsSpdm(mctpIt->second, objectPath))
-        {
-            continue;
-        }
-
-        size_t eid = extractEid(mctpIt->second, objectPath);
-        if (eid == invalid_eid)
-        {
-            continue;
-        }
-
-        std::string uuid = extractUuid(interfaces, objectPath);
-        if (uuid.empty())
-        {
-            continue;
-        }
-
-        ResponderInfo device{eid, objectPath, uuid};
-
-        devices.emplace_back(std::move(device));
-        info("Found SPDM device: {PATH}", "PATH", objectPath);
     }
 
     return devices;
+}
+
+std::optional<ResponderInfo> MCTPTransportDiscovery::createDeviceFromInterfaces(
+    const DbusInterfaces& interfaces, const std::string& objectPath,
+    bool socketCreated)
+{
+    // Check if it supports MCTP endpoint interface
+    auto mctpIt = interfaces.find(mctpEndpointIntfName);
+    if (mctpIt == interfaces.end())
+    {
+        debug("Object does not implement MCTP endpoint interface: {PATH}",
+              "PATH", objectPath);
+        return std::nullopt;
+    }
+
+    if (!supportsSpdm(mctpIt->second, objectPath))
+    {
+        return std::nullopt;
+    }
+
+    size_t eid = extractEid(mctpIt->second, objectPath);
+    if (eid == invalid_eid)
+    {
+        return std::nullopt;
+    }
+
+    std::string uuid = extractUuid(interfaces, objectPath);
+    if (uuid.empty())
+    {
+        return std::nullopt;
+    }
+
+    ResponderInfo device{eid, objectPath, uuid, nullptr};
+
+    // Try to create transport object for this device
+    if (socketCreated)
+    {
+        // Create SPDM MCTP transport using the shared MCTP IO instance
+        device.transport = std::make_unique<SpdmMctpTransport>(eid, mctpIo);
+        info("Created transport for device {PATH} with EID {EID}", "PATH",
+             objectPath, "EID", eid);
+    }
+    else
+    {
+        warning("Transport not created for device {PATH} due to socket failure",
+                "PATH", objectPath);
+        device.transport = nullptr;
+    }
+
+    info("Found SPDM device: {PATH}", "PATH", objectPath);
+    return device;
 }
 
 bool MCTPTransportDiscovery::supportsSpdm(const DbusInterface& mctpInterface,
@@ -114,7 +153,7 @@ bool MCTPTransportDiscovery::supportsSpdm(const DbusInterface& mctpInterface,
         std::get_if<std::vector<uint8_t>>(&messageTypesIt->second);
     if (!messageTypes ||
         std::find(messageTypes->begin(), messageTypes->end(),
-                  MCTP_MESSAGE_TYPE_SPDM) == messageTypes->end())
+                  MCTP_MESSAGE_TYPE_SPDM_VALUE) == messageTypes->end())
     {
         debug("Endpoint does not support SPDM: {PATH}", "PATH", objectPath);
         return false;
