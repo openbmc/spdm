@@ -3,6 +3,6 @@
 
 #include <xyz/openbmc_project/Attestation/ComponentIntegrity/common.hpp>
 
-constexpr const char* objManagerPath = sdbusplus::common::xyz::openbmc_project::
+constexpr auto objManagerPath = sdbusplus::common::xyz::openbmc_project::
     attestation::ComponentIntegrity::namespace_path;
-constexpr const char* dbusServiceName = "xyz.openbmc_project.spdm.requester";
+constexpr auto dbusServiceName = "xyz.openbmc_project.spdm.requester";
