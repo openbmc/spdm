@@ -111,28 +111,6 @@ class SpdmTransport
      */
     virtual bool initialize() = 0;
 
-    /**
-     * @brief Common function to do the VCA negotiation.
-     *
-     * @return true if the VCA negotiation is successful
-     * @return false if the VCA negotiation is not successful
-     */
-    bool doVcaNegotiation()
-    {
-        if (m_spdm_context == nullptr)
-        {
-            lg2::error("Error: SPDM context is nullptr");
-            return false;
-        }
-        libspdm_return_t status = libspdm_init_connection(m_spdm_context,
-                                                          false);
-        if (status != LIBSPDM_STATUS_SUCCESS)
-        {
-            lg2::error("Error: Failed to initialize SPDM connection");
-            return false;
-        }
-        return true;
-    }
 };
 
 } // namespace spdm
