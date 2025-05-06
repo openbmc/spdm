@@ -46,8 +46,8 @@ int main(int argc, char* argv[])
     std::vector<std::unique_ptr<SPDMDBusResponder>> responders;
 
     // Create a D-Bus responder for every device as it is discovered.
-    discovery.onDeviceAdded([&responders](const ResponderInfo& device) {
-        responders.push_back(std::make_unique<SPDMDBusResponder>(device));
+    discovery.onDeviceAdded([&ctx, &responders](const ResponderInfo& device) {
+        responders.push_back(std::make_unique<SPDMDBusResponder>(ctx, device));
     });
 
     // Destroy the D-Bus responder when a device is removed at runtime.
