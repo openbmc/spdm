@@ -11,9 +11,9 @@ namespace spdm
 {
 
 SPDMDBusResponder::SPDMDBusResponder(sdbusplus::bus::bus& /* bus */,
-                                     const ResponderInfo& info,
-                                     sdbusplus::async::context& /* ctx */) :
-    inventoryPath(info.objectPath)
+                                     const ResponderInfo& responderInfo,
+                                     sdbusplus::async::context& ctx) :
+    inventoryPath(responderInfo.objectPath)
 {
     std::visit(
         [this](const auto& responder) {
@@ -28,10 +28,20 @@ SPDMDBusResponder::SPDMDBusResponder(sdbusplus::bus::bus& /* bus */,
                 deviceName = responder.ipAddr;
             }
         },
-        info.responderData);
+        responderInfo.responderData);
 
-    lg2::info("Created SPDM D-Bus responder for device {ID} at {PATH}", "ID",
-              deviceName, "PATH", info.objectPath);
+    std::string componentIntegrityPath =
+        "/xyz/openbmc_project/ComponentIntegrity/" + deviceName;
+    componentIntegrity =
+        std::make_unique<ComponentIntegrity>(ctx, componentIntegrityPath);
+
+    std::string trustedComponentPath =
+        "/xyz/openbmc_project/TrustedComponent/" + deviceName;
+    trustedComponent =
+        std::make_unique<TrustedComponent>(ctx, trustedComponentPath);
+
+    info("Created SPDM D-Bus responder for device {EID} at {PATH}", "EID",
+         deviceName, "PATH", responderInfo.objectPath);
 }
 
 } // namespace spdm
