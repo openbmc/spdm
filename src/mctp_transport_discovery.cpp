@@ -114,10 +114,10 @@ std::vector<ResponderInfo> MCTPTransportDiscovery::discoverDevices()
                 continue;
             }
 
-            ResponderInfo info{eid, objectPath, *uuid};
+            ResponderInfo device{eid, objectPath, *uuid};
 
-            devices.emplace_back(std::move(info));
-            lg2::info("Found SPDM device: {PATH}", "PATH", objectPath);
+            devices.emplace_back(std::move(device));
+            info("Found SPDM device: {PATH}", "PATH", objectPath);
         }
     }
     catch (const std::exception& e)
