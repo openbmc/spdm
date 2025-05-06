@@ -3,6 +3,9 @@
 
 #include "mctp_transport_discovery.hpp"
 
+#include "libspdm_mctp_transport.hpp"
+#include "mctp_helper.hpp"
+
 #include <phosphor-logging/lg2.hpp>
 
 #include <algorithm>
@@ -35,6 +38,14 @@ std::vector<ResponderInfo> MCTPTransportDiscovery::discoverDevices()
     {
         auto managedObjects = getManagedObjects(mctpService);
 
+        // Use the member variable mctpIo for socket creation
+        bool socketCreated = mctpIo.createSocket();
+        if (!socketCreated)
+        {
+            warning(
+                "Failed to create MCTP socket, transport objects will not be created");
+        }
+
         for (const auto& [objectPath, interfaces] : managedObjects)
         {
             // Check if it supports MCTP endpoint interface
@@ -64,7 +75,24 @@ std::vector<ResponderInfo> MCTPTransportDiscovery::discoverDevices()
                 continue;
             }
 
-            ResponderInfo device{eid, objectPath, uuid};
+            ResponderInfo device{eid, objectPath, uuid, nullptr};
+
+            // Try to create transport object for this device
+            if (socketCreated)
+            {
+                // Create SPDM MCTP transport using the shared MCTP IO instance
+                device.transport =
+                    std::make_unique<SpdmMctpTransport>(eid, mctpIo);
+                info("Created transport for device {PATH} with EID {EID}",
+                     "PATH", objectPath, "EID", eid);
+            }
+            else
+            {
+                warning(
+                    "Transport not created for device {PATH} due to socket failure",
+                    "PATH", objectPath);
+                device.transport = nullptr;
+            }
 
             devices.emplace_back(std::move(device));
             info("Found SPDM device: {PATH}", "PATH", objectPath);

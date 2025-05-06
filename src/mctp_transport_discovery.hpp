@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "mctp_helper.hpp"
 #include "spdm_discovery.hpp"
 
 #include <sdbusplus/bus.hpp>
@@ -46,6 +47,7 @@ class MCTPTransportDiscovery : public DiscoveryProtocol
     }
 
   private:
+    MctpIoClass mctpIo;
     /**
      * @brief Get all managed objects for a service
      * @param service D-Bus service name
@@ -105,9 +107,6 @@ class MCTPTransportDiscovery : public DiscoveryProtocol
 
     /// MCTP service name
     static constexpr auto mctpService = "au.com.codeconstruct.MCTP1";
-
-    /// SPDM message type constant
-    static constexpr uint8_t MCTP_MESSAGE_TYPE_SPDM = 0x05;
 
     /// Invalid EID marker
     static constexpr size_t invalid_eid = 255;

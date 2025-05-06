@@ -39,7 +39,7 @@ class SpdmTransport
 {
   public:
     SpdmTransport() : spdmContext(nullptr), scratchBuffer(nullptr) {}
-    ~SpdmTransport()
+    virtual ~SpdmTransport()
     {
         if (scratchBuffer)
         {
