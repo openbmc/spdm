@@ -26,3 +26,68 @@ To build the project, run the following commands:
 - [phosphor-logging](https://github.com/openbmc/phosphor-logging)
 - [phosphor-dbus-interfaces](https://github.com/openbmc/phosphor-dbus-interfaces)
 - [boost](https://github.com/boostorg/boost)
+
+## Class Diagram (MCTP Discovery)
+
++--------------------------+
+|      SPDMDaemon          |
++--------------------------+
+| - bus: sdbusplus::bus    |
+| - objManager             |
++--------------------------+
+| + getBus()               |
+| + run()                  |
++--------------------------+
+            |
+            |
++---------------------------+
+|      SPDMDiscovery        |<-----------------------------------+---------------------------+
++---------------------------+        uses                        |    DiscoveryProtocol      |
+| - discoveryProtocol       |                                    +---------------------------+
+| - respInfos               |                                    | + discoverDevices()       |
++---------------------------+                                    | + getType()               |
+| + discover()              |                                    +---------------------------+
+| + getRespondersInfo()     |                                            ^                ^
++---------------------------+                                            | inherits from  |
+                                                                          |                |
+                                                 +------------------------+                +------------------------+
+                                                 |   MCTPDiscovery         |                |   PCIeDOEDiscovery      |
+                                                 +------------------------+                +------------------------+
+                                                 | - bus                  |                |                        |
+                                                 +------------------------+                +------------------------+
+                                                 | + discoverDevices()    |                | + discoverDevices()    |
+                                                 | + getType()            |                | + getType()            |
+                                                 | - getMCTPServices()    |                |                        |
+                                                 | - getEID()             |                |                        |
+                                                 | - getUUID()            |                |                        |
+                                                 | - getSupportedMessageTypes()|           |                        |
+                                                 +------------------------+                +------------------------+
+
+## SPDM Discovery Flow
+
+SPDMDaemon             SPDMDiscovery         MCTPDiscovery        MCTP Reactor (libmctp)     SPDM Endpoint (Responder)
+(Requester)                  |                     |                        |                           |
+                             |                     |                        | <-- Detect endpoint       |
+                             |                     |                        | -->                       |
+                             |                     |                        |     Register endpoint     |
+    discover()               |                     |                        |                           |
+    ------------------------>|                     |                        |                           |
+                             | discoverDevices()   |                        |                           |
+                             |-------------------->|                        |                           |
+                             |                     | getEID()              |                           |
+                             |                     |---------------------->|                           |
+                             |                     |<----------------------|                           |
+                             |                     | getUUID()             |                           |
+                             |                     |---------------------->|                           |
+                             |                     |<----------------------|                           |
+                             |                     | getSupportedMsgTypes()|                           |
+                             |                     |---------------------->|                           |
+                             |                     |<----------------------|                           |
+                             | checkSPDMSupport()  |                        |                           |
+                             | createResponderInfo()                        |                           |
+                             |<--------------------|                        |                           |
+                             | Return ResponderInfo (vector)               |                           |
+    <------------------------|                                              |                           |
+    Discovery complete       |                                              |                           |
+~
+
