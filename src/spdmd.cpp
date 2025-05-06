@@ -34,30 +34,50 @@ int main()
             // Print discovered devices
             for (const auto& device : discovery.respInfos)
             {
+                std::cout << "Found SPDM device:\n"
+                          << "  Path: " << device.objectPath << "\n"
+                          << "  EID: " << device.eid << "\n"
+                          << "  UUID: " << device.uuid << "\n";
                 try
                 {
-                    lg2::info("Creating D-Bus responder for device {PATH}",
-                              "PATH", device.objectPath);
+                    if (!device.transport)
+                    {
+                        error("Transport is null for device {PATH}", "PATH",
+                              device.objectPath);
+                        continue;
+                    }
+
+                    info("Initializing transport for device {PATH}", "PATH",
+                         device.objectPath);
+                    if (!device.transport->initialize())
+                    {
+                        error(
+                            "Failed to initialize SPDM transport for device {PATH}",
+                            "PATH", device.objectPath);
+                        continue;
+                    }
+                    info("Creating D-Bus responder for device {PATH}", "PATH",
+                         device.objectPath);
                     // Create SPDMDBusResponder with ResponderInfo and async
                     // context for parallel execution
                     auto responder = std::make_unique<spdm::SPDMDBusResponder>(
                         bus, device, app.ctx);
+
                     responders.push_back(std::move(responder));
-                    lg2::info(
-                        "Successfully created responder for device {PATH}",
-                        "PATH", device.objectPath);
+                    info("Successfully created responder for device {PATH}",
+                         "PATH", device.objectPath);
                 }
-                catch (...)
+                catch (const std::exception& e)
                 {
-                    lg2::error("Unknown error processing device {PATH}", "PATH",
-                               device.objectPath);
+                    error("Error processing device {PATH}: {ERROR}", "PATH",
+                          device.objectPath, "ERROR", e.what());
                     continue;
                 }
             }
         }
         else
         {
-            lg2::error("No SPDM devices found");
+            error("No SPDM devices found");
         }
 
         // Run the daemon (this will block until shutdown)
@@ -66,7 +86,7 @@ int main()
     }
     catch (const std::exception& e)
     {
-        lg2::error("Fatal error: {ERROR}", "ERROR", e);
+        error("Fatal error: {ERROR}", "ERROR", e);
         return EXIT_FAILURE;
     }
 }
