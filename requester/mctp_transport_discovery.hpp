@@ -56,8 +56,8 @@ class MCTPTransportDiscovery
      * @return true if added; false if skipped (logs the skip).
      */
     auto addResponder(SPDMDiscovery& discovery,
-                      const sdbusplus::object_path& path, uint8_t eid,
-                      const std::string& uuid,
+                      const sdbusplus::object_path& path, uint32_t networkId,
+                      uint8_t eid, const std::string& uuid,
                       std::span<const uint8_t> supportedTypes) -> bool;
 
     /// Joins discovery() with the monitors so the matchers are armed before

@@ -28,8 +28,9 @@ enum class TransportType
 
 struct MctpResponderInfo
 {
-    uint8_t eid;      ///< Endpoint ID
-    std::string uuid; ///< Device UUID
+    uint32_t networkId; ///< MCTP network id (unique with EID per MCTP spec)
+    uint8_t eid;        ///< Endpoint ID
+    std::string uuid;   ///< Device UUID
 };
 
 struct TcpResponderInfo
