@@ -45,7 +45,8 @@ int main()
 
         for (const auto& device : discovery.devices())
         {
-            responders.push_back(std::make_unique<SPDMDBusResponder>(device));
+            responders.push_back(
+                std::make_unique<SPDMDBusResponder>(ctx, device));
         }
 
         // Request D-Bus name after initial discovery.
