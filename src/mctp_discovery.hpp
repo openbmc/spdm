@@ -96,8 +96,6 @@ class MCTPDiscovery : public DiscoveryProtocol
 
     /// UUID interface name
     static constexpr auto uuidIntfName = "xyz.openbmc_project.Common.UUID";
-
-    static constexpr auto mctpPath = "/au/com/codeconstruct/mctp1";
 };
 
 } // namespace spdm

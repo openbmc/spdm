@@ -36,6 +36,49 @@ MCTPDiscovery::MCTPDiscovery(sdbusplus::bus::bus& busRef) : bus(busRef) {}
 std::vector<ResponderInfo> MCTPDiscovery::discoverDevices()
 {
     std::vector<ResponderInfo> devices;
+    try
+    {
+        auto services = getMCTPServices();
+        for (const auto& [objectPath, service] : services)
+        {
+            auto messageTypes = getSupportedMessageTypes(objectPath, service);
+            if (!messageTypes ||
+                std::find(messageTypes->begin(), messageTypes->end(),
+                          MCTP_MESSAGE_TYPE_SPDM) == messageTypes->end())
+            {
+                lg2::debug("Endpoint does not support SPDM: {PATH}", "PATH",
+                           objectPath);
+                continue;
+            }
+
+            auto eid = getEID(objectPath, service);
+            if (eid == invalid_eid)
+            {
+                lg2::error("Invalid EID for object: {PATH}", "PATH",
+                           objectPath);
+                continue;
+            }
+            auto uuid = getUUID(objectPath, service);
+            if (uuid.empty())
+            {
+                lg2::error("Failed to get UUID for object: {PATH}", "PATH",
+                           objectPath);
+                continue;
+            }
+            std::string deviceName = std::to_string(eid);
+            std::string inventoryPath =
+                "/xyz/openbmc_project/inventory/system/chassis/" + deviceName;
+            auto responder = std::make_unique<spdm::SPDMDBusResponder>(
+                bus, deviceName, inventoryPath);
+            ResponderInfo info{eid, objectPath, uuid, std::move(responder)};
+            devices.emplace_back(std::move(info));
+            lg2::info("Found SPDM device: {PATH}", "PATH", objectPath);
+        }
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("MCTP device discovery error: {ERROR}", "ERROR", e.what());
+    }
     return devices;
 }
 
@@ -50,6 +93,34 @@ std::vector<ResponderInfo> MCTPDiscovery::discoverDevices()
 std::vector<std::pair<std::string, std::string>>
     MCTPDiscovery::getMCTPServices()
 {
+    std::vector<std::pair<std::string, std::string>> services;
+    try
+    {
+        auto mapper = bus.new_method_call(
+            "xyz.openbmc_project.ObjectMapper",
+            "/xyz/openbmc_project/object_mapper",
+            "xyz.openbmc_project.ObjectMapper", "GetSubTree");
+
+        mapper.append("/", 0, std::array<std::string, 1>{mctpEndpointIntfName});
+
+        std::map<std::string, std::map<std::string, std::vector<std::string>>>
+            subtree;
+        auto reply = bus.call(mapper);
+        reply.read(subtree);
+
+        for (const auto& [path, serviceMap] : subtree)
+        {
+            if (!serviceMap.empty())
+            {
+                services.emplace_back(path, serviceMap.begin()->first);
+            }
+        }
+    }
+    catch (const sdbusplus::exception::SdBusError& e)
+    {
+        lg2::error("Failed to get MCTP services: {ERROR}", "ERROR", e.what());
+        throw;
+    }
     return services;
 }
 
@@ -63,6 +134,31 @@ std::vector<std::pair<std::string, std::string>>
 size_t MCTPDiscovery::getEID(const std::string& objectPath,
                              const std::string& service)
 {
+    try
+    {
+        auto method =
+            bus.new_method_call(service.c_str(), objectPath.c_str(),
+                                "org.freedesktop.DBus.Properties", "Get");
+
+        method.append(mctpEndpointIntfName, "EID");
+
+        auto reply = bus.call(method);
+        std::variant<uint8_t, uint32_t> value;
+        reply.read(value);
+
+        if (auto eid = std::get_if<uint8_t>(&value))
+        {
+            return *eid;
+        }
+        else if (auto eid32 = std::get_if<uint32_t>(&value))
+        {
+            return static_cast<size_t>(*eid32);
+        }
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("Failed to get EID: {ERROR}", "ERROR", e.what());
+    }
     return invalid_eid;
 }
 
@@ -76,7 +172,24 @@ size_t MCTPDiscovery::getEID(const std::string& objectPath,
 std::string MCTPDiscovery::getUUID(const std::string& objectPath,
                                    const std::string& service)
 {
-    return "";
+    try
+    {
+        auto method =
+            bus.new_method_call(service.c_str(), objectPath.c_str(),
+                                "org.freedesktop.DBus.Properties", "Get");
+
+        method.append(uuidIntfName, "UUID");
+
+        auto reply = bus.call(method);
+        std::variant<std::string> uuid;
+        reply.read(uuid);
+        return std::get<std::string>(uuid);
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("Failed to get UUID: {ERROR}", "ERROR", e.what());
+        return {};
+    }
 }
 
 /**
@@ -87,7 +200,24 @@ std::string MCTPDiscovery::getUUID(const std::string& objectPath,
 std::optional<std::vector<uint8_t>> MCTPDiscovery::getSupportedMessageTypes(
     const std::string& objectPath, const std::string& service)
 {
-    return std::nullopt;
+    try
+    {
+        auto method =
+            bus.new_method_call(service.c_str(), objectPath.c_str(),
+                                "org.freedesktop.DBus.Properties", "Get");
+
+        method.append(mctpEndpointIntfName, "SupportedMessageTypes");
+
+        auto reply = bus.call(method);
+        std::variant<std::vector<uint8_t>> messageTypes;
+        reply.read(messageTypes);
+        return std::get<std::vector<uint8_t>>(messageTypes);
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("Failed to get message types: {ERROR}", "ERROR", e.what());
+        return std::nullopt;
+    }
 }
 
 } // namespace spdm
