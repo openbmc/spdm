@@ -5,6 +5,7 @@
 
 #include "mctp_transport_discovery.hpp"
 #include "policy_manager.hpp"
+#include "spdm_dbus_responder.hpp"
 #include "spdm_discovery.hpp"
 #include "tcp_transport_discovery.hpp"
 #include "utils/paths.hpp"
@@ -50,14 +51,21 @@ int main(int argc, char* argv[])
     TCPTransportDiscovery tcp{ctx};
     discovery.discover(tcp);
 
-    // Run the initial discovery and then claim the bus name.
-    ctx.spawn([](auto& ctx, auto& discovery) -> sdbusplus::async::task<> {
-        // Perform discovery
+    std::vector<std::unique_ptr<SPDMDBusResponder>> responders;
+
+    // Run the initial discovery, create D-Bus responders, then claim bus name.
+    ctx.spawn([](auto& ctx, auto& discovery,
+                 auto& responders) -> sdbusplus::async::task<> {
         co_await discovery.run();
+
+        for (const auto& device : discovery.devices())
+        {
+            responders.push_back(std::make_unique<SPDMDBusResponder>(device));
+        }
 
         // Request D-Bus name after initial discovery.
         ctx.request_name(dbusServiceName);
-    }(ctx, discovery));
+    }(ctx, discovery, responders));
 
     // Run the sdbusplus async context for parallel coroutine execution
     ctx.run();
