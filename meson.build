@@ -21,6 +21,7 @@ endif
 spdmd_deps = [
     dependency('phosphor-logging'),
     dependency('sdbusplus'),
+    dependency('phosphor-dbus-interfaces'),
     libspdm_dep,
 ]
 
@@ -31,6 +32,7 @@ spdmd_src = [
     'src/mctp_discovery.cpp',
     'src/spdm_dbus_responder.cpp',
     'src/spdm_device_secret_lib_stub.cpp',
+    'src/component_integrity_dbus.cpp',
 ]
 
 spdmd_includes = include_directories('spdmd')
