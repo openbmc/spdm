@@ -16,6 +16,23 @@
       "message": "This commit is unreviewable.  You\u0027ve got a design in mind so you put together some infrastructure that isn\u0027t even being used.  Please merge this at least into one commit that uses the infrastructure.\n\nAs written, I have no idea why we are creating a virtual class and prefer we do not.",
       "revId": "272277ef99a78b4fd9aad2cba65bdec3e9616189",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5821037c_279b8aa0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:47:49Z",
+      "side": 1,
+      "message": "At what point do you intend to have unit tests?  There isn\u0027t a single unit test in this entire stack.",
+      "revId": "272277ef99a78b4fd9aad2cba65bdec3e9616189",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
