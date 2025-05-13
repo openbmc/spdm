@@ -33,6 +33,24 @@
       "message": "At what point do you intend to have unit tests?  There isn\u0027t a single unit test in this entire stack.",
       "revId": "272277ef99a78b4fd9aad2cba65bdec3e9616189",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26dcb894_c885ba2c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-05-13T13:20:49Z",
+      "side": 1,
+      "message": "We will add it in the later commits, We have it in the downstream but I am just breaking and making the modification to align with the merged design and start using the libspdm, We have our own libspdmd but we are migrating to start using the dmtf libspdm.",
+      "parentUuid": "5821037c_279b8aa0",
+      "revId": "272277ef99a78b4fd9aad2cba65bdec3e9616189",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
