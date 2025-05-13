@@ -1,0 +1,369 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8a40fd8_1777850f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "Please remove the \"prototype\" subdirectory.",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4620bdc_38bd3902",
+        "filename": "spdm_prototype/.clang-format",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "Is this identical to the one in docs?  If not, please make sure it is copied from there.",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d54637f4_75603245",
+        "filename": "spdm_prototype/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "Why \u0027c\u0027?",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e83fb31_07120741",
+        "filename": "spdm_prototype/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "We need C++23.\n\nPlease make sure you\u0027re using `meson format` on these files.  I have no idea why this isn\u0027t flagged in CI right now for you.",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cecea0b_41549fc7",
+        "filename": "spdm_prototype/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "Drop.",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f743752d_ae29fcd4",
+        "filename": "spdm_prototype/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "Drop.",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bb4c965_4d6280f7",
+        "filename": "spdm_prototype/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "Please add wrap files as you include new dependencies.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 1
+      },
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82e88b96_dc485866",
+        "filename": "spdm_prototype/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "Why bindir and not libexec?",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "681aa78f_92932de0",
+        "filename": "spdm_prototype/spdmd/spdmd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "I\u0027m fine with a single SPDX line.  I\u0027m not fine with this big blob being expected in every file.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 3
+      },
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca717107_f0c10218",
+        "filename": "spdm_prototype/spdmd/spdmd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "If they are \"maybe_unused\", then leave them nameless.\n\nReally, there is no need to even have them.  Just use `int main()`.",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f52c0ffd_005b29dc",
+        "filename": "spdm_prototype/spdmd/spdmd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "You never need the `what` for lg2.  It is automatic.",
+      "range": {
+        "startLine": 32,
+        "startChar": 52,
+        "endLine": 32,
+        "endChar": 60
+      },
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88681576_d0c8ff8f",
+        "filename": "spdm_prototype/spdmd/spdmd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "Why catch?  Why not just let `std::terminate` do its thing?",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 5
+      },
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce57b7a4_a2a95443",
+        "filename": "spdm_prototype/spdmd/spdmd_app.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "Despite many daemons using it, `new_default` is rarely the preferred.  But when you switch to `async::context` it\u0027ll have a default parameter that is preferred anyhow so you\u0027ll be able to drop this.",
+      "range": {
+        "startLine": 26,
+        "startChar": 24,
+        "endLine": 26,
+        "endChar": 35
+      },
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58ff8964_423c701f",
+        "filename": "spdm_prototype/spdmd/spdmd_app.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "Make sure to use the async::context::request_name here also.",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "012e2599_ad135222",
+        "filename": "spdm_prototype/spdmd/spdmd_app.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "Why?  This is C++; use exceptions for errors.",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 3
+      },
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4c0f97c_3c2a4c93",
+        "filename": "spdm_prototype/spdmd/spdmd_app.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "nit: suggest using `PHOSPHOR_LOG2_USING` so that this can just be `info`.",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 33,
+        "endChar": 13
+      },
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b68f95e_32a1c4a8",
+        "filename": "spdm_prototype/spdmd/spdmd_app.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "Use sdbusplus::async::context on new daemons.",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbf5bb18_8055c3a0",
+        "filename": "spdm_prototype/spdmd/spdmd_app.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "I see nothing in the design document that suggests this path.  Protocols should not be exposed on dbus.\n\nIf this path is part of the design, please add it to the design document and to phosphor-dbus-interfaces as a constant path segment and use it from there.",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e87b3ff3_f0262e59",
+        "filename": "spdm_prototype/spdmd/spdmd_app.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-13T10:43:30Z",
+      "side": 1,
+      "message": "nit: I\u0027d prefer `xyz.openbmc_project.spdm.spdmd`",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
