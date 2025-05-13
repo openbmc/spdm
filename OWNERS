@@ -36,10 +36,14 @@ owners:
 - patrick@stwcx.xyz
 
 reviewers:
+- mine260309@gmail.com
 
 matchers:
 
 openbmc:
+- name: Lei Yu
+  email: mine260309@gmail.com
+  discord: LeiYU
 - name: Manojkiran Eda
   email: manojkiran.eda@gmail.com
   discord: manojkiran
