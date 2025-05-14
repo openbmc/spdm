@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c6766d2_8565d69d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2025-05-14T07:15:49Z",
+      "side": 1,
+      "message": "Better to add information about where this config comes from.",
+      "revId": "beecb0df7aa8b65f61344a9e156f76c5436fdb15",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
