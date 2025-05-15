@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4d5c420a_23298143",
+        "filename": "spdm_prototype/.clang-format",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-05-15T04:40:47Z",
+      "side": 1,
+      "message": "looks like its not from the docs repo. or may be this an older version from the docs. needs an update.",
+      "parentUuid": "a4620bdc_38bd3902",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d54637f4_75603245",
         "filename": "spdm_prototype/meson.build",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2025-05-13T10:43:30Z",
       "side": 1,
       "message": "Why \u0027c\u0027?",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d31fbca_fa7c6acc",
+        "filename": "spdm_prototype/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-05-15T04:40:47Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "d54637f4_75603245",
       "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -209,6 +245,30 @@
       "writtenOn": "2025-05-13T10:43:30Z",
       "side": 1,
       "message": "I\u0027m fine with a single SPDX line.  I\u0027m not fine with this big blob being expected in every file.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 3
+      },
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1fdf6fd_9daebd35",
+        "filename": "spdm_prototype/spdmd/spdmd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-05-15T04:40:47Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "681aa78f_92932de0",
       "range": {
         "startLine": 1,
         "startChar": 0,
@@ -624,6 +684,24 @@
       "side": 1,
       "message": "Please add to PDI also.",
       "parentUuid": "37d69cae_ca491207",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40cb9e1d_e557db16",
+        "filename": "spdm_prototype/spdmd/spdmd_app.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-05-15T04:40:47Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "058c7f55_2d4c4efc",
       "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },

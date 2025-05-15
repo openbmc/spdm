@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d99a074b_eabc1425",
+        "filename": ".clang-format",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-05-15T04:40:47Z",
+      "side": 1,
+      "message": "this is not the latest clang format file from the docs repo.",
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "0de4e499_47323e23",
@@ -32,6 +49,144 @@
       "side": 1,
       "message": "I don\u0027t know what this means.  I\u0027m not reviewing / merging code that has unaddressed comments.",
       "parentUuid": "0de4e499_47323e23",
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc429900_cbb4bfd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-05-15T04:40:47Z",
+      "side": 1,
+      "message": "I agree with all the comments , this needs a lot of clean up.",
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9845d271_95aceaf2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-05-15T04:40:47Z",
+      "side": 1,
+      "message": "@ratan - can you mark these commits as work in progress ? and mark them as ready only if you think they are ready ? I agree with all the comments that patrick has, this commit needs a lot of clean up.",
+      "parentUuid": "2fbda790_be956261",
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81e328c8_e899d12b",
+        "filename": "meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-05-15T04:40:47Z",
+      "side": 1,
+      "message": "also please add a project README.md, we will start adding the instructions to build, and any other details that would help people to understand what this repo does.",
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c9c317b_aaae5b73",
+        "filename": "meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-05-15T04:40:47Z",
+      "side": 1,
+      "message": "tabs, needs `meson format`.",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 2
+      },
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19f35581_ccf64680",
+        "filename": "meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-05-15T04:40:47Z",
+      "side": 1,
+      "message": "this is already added by buildtype, its redundant.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 45
+      },
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bf833e5_9fd3795b",
+        "filename": "meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-05-15T04:40:47Z",
+      "side": 1,
+      "message": "subproject support missing.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 28
+      },
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21748870_304d8886",
+        "filename": "meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-05-15T04:40:47Z",
+      "side": 1,
+      "message": "dont have this directiory in the tree.",
       "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
