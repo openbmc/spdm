@@ -189,6 +189,52 @@
       "message": "dont have this directiory in the tree.",
       "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0349b01_23754182",
+        "filename": "src/spdmd.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2025-05-15T05:12:57Z",
+      "side": 1,
+      "message": "Need to pass just the exception \u0027e\u0027 to the LG2. LG2 takes care of printing the error.",
+      "range": {
+        "startLine": 32,
+        "startChar": 52,
+        "endLine": 32,
+        "endChar": 60
+      },
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "501cd2ea_5a48a520",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2025-05-15T05:12:57Z",
+      "side": 1,
+      "message": "use shorter type alias sdbusplus::bus_t",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 33,
+        "endChar": 28
+      },
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
