@@ -34,6 +34,24 @@
       "parentUuid": "1855b97b_c87bfa93",
       "revId": "7a555df74628e7f978772b40ee38fc5ff2935477",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bbde4bc_a9cb982b",
+        "filename": "spdm_prototype/spdmd/mctp_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-16T15:55:18Z",
+      "side": 1,
+      "message": "PDI already generates dbus client code and has for like 2+ years now.",
+      "parentUuid": "0c7262a6_8a484b4f",
+      "revId": "7a555df74628e7f978772b40ee38fc5ff2935477",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
