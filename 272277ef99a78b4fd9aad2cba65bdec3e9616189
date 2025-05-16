@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "547fec19_530ff981",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-05-16T04:43:52Z",
+      "side": 1,
+      "message": "I am implementing the Strategy Design Pattern to make the transport layer easily extensible.",
+      "parentUuid": "73c9d972_e474801c",
+      "revId": "272277ef99a78b4fd9aad2cba65bdec3e9616189",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5821037c_279b8aa0",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
