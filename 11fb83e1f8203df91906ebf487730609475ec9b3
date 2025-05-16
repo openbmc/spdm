@@ -266,6 +266,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3b73d7cc_3b528f74",
+        "filename": "meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-16T10:22:22Z",
+      "side": 1,
+      "message": "This commit has no wrapfiles for these dependencies.",
+      "parentUuid": "5eb413cc_695ac0b0",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 28
+      },
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "21748870_304d8886",
         "filename": "meson.build",
         "patchSetId": 2
