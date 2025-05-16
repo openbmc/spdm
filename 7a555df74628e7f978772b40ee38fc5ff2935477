@@ -16,6 +16,24 @@
       "message": "90% of this code shouldn\u0027t exist.  Use the phosphor-dbus-interfaces generated client code.",
       "revId": "7a555df74628e7f978772b40ee38fc5ff2935477",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c7262a6_8a484b4f",
+        "filename": "spdm_prototype/spdmd/mctp_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-05-16T12:10:23Z",
+      "side": 1,
+      "message": "Patrick, I didn\u0027t understand this, How I can use the phosphor-dbus-interfaces generated client code here?",
+      "parentUuid": "1855b97b_c87bfa93",
+      "revId": "7a555df74628e7f978772b40ee38fc5ff2935477",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
