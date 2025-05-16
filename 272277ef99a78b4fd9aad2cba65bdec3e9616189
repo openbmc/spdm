@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "73c9d972_e474801c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-05-16T04:42:22Z",
+      "side": 1,
+      "message": "I agree that the commit in its current form doesn’t tells the usage of the infrastructure.\n\nDiscoveryProtocol (Abstract Class)\n\n  discoverDevices(): std::vector\u003cResponderInfo\u003e \u003d 0\n\n  getType(): TransportType \u003d 0\n\nConcrete Implementations\n\n   MCTPDiscoveryProtocol\n\n   TCPDiscoveryProtocol\n\n   PCIEDiscoveryProtocol\n  (All inherit from DiscoveryProtocol)\n\nSPDMDiscovery (Context)\n\n   SPDMDiscovery(std::unique_ptr\u003cDiscoveryProtocol\u003e)\n\n   discover(): bool\n\n\nBy following this design, adding a new transport simply requires creating a new class that inherits from DiscoveryProtocol. No changes are needed in the SPDMDiscovery class.\n\nlet me know your thoughts on this",
+      "parentUuid": "e546c19e_6ede7382",
+      "revId": "272277ef99a78b4fd9aad2cba65bdec3e9616189",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5821037c_279b8aa0",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
