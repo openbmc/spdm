@@ -105,6 +105,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26f67383_f7d9e954",
+        "filename": "meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-05-16T10:15:53Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "81e328c8_e899d12b",
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c9c317b_aaae5b73",
@@ -128,6 +146,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2b99f5e_65bb1e17",
+        "filename": "meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-05-16T10:15:53Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5c9c317b_aaae5b73",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 2
+      },
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19f35581_ccf64680",
@@ -141,6 +183,30 @@
       "writtenOn": "2025-05-15T04:40:47Z",
       "side": 1,
       "message": "this is already added by buildtype, its redundant.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 45
+      },
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "280e3bb4_00c658c8",
+        "filename": "meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-05-16T10:15:53Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "19f35581_ccf64680",
       "range": {
         "startLine": 13,
         "startChar": 0,
@@ -176,6 +242,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5eb413cc_695ac0b0",
+        "filename": "meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-05-16T10:15:53Z",
+      "side": 1,
+      "message": "I didn\u0027t understand this.We add the subproject for external packages.",
+      "parentUuid": "7bf833e5_9fd3795b",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 28
+      },
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "21748870_304d8886",
         "filename": "meson.build",
         "patchSetId": 2
@@ -187,6 +277,24 @@
       "writtenOn": "2025-05-15T04:40:47Z",
       "side": 1,
       "message": "dont have this directiory in the tree.",
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37bfdf08_035966a1",
+        "filename": "meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-05-16T10:15:53Z",
+      "side": 1,
+      "message": "It should have been src.",
+      "parentUuid": "21748870_304d8886",
       "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -227,6 +335,30 @@
       "writtenOn": "2025-05-15T05:12:57Z",
       "side": 1,
       "message": "use shorter type alias sdbusplus::bus_t",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 33,
+        "endChar": 28
+      },
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cc5277c_c117faae",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-05-16T10:15:53Z",
+      "side": 1,
+      "message": "This is individual choice, both are valid.",
+      "parentUuid": "501cd2ea_5a48a520",
       "range": {
         "startLine": 33,
         "startChar": 4,
