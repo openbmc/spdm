@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1156ae5_b7bf19c8",
+        "filename": "src/spdmd_app.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-05-20T07:33:02Z",
+      "side": 1,
+      "message": "nit: I think these comments in this file can be removed. Since it\u0027s self explanatory.",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6768dc27_f45624d8",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-05-20T07:33:02Z",
+      "side": 1,
+      "message": "spdmRooTObjectPath in this commit. D-Bus object is added in ComponentIntegrity commit. I think this path can be removed from this commit.",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0c64392_2e8ed7e0",
+        "filename": "subprojects/boost.wrap",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-05-20T07:33:02Z",
+      "side": 1,
+      "message": "Don\u0027t we need specific boot version?. In most of the openbmc app repos we have specific version called out and same is used in openbmc recipe.",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
