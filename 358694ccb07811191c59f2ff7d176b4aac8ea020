@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4a8fa56d_b69cba6a",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-05-21T06:34:02Z",
+      "side": 1,
+      "message": "Updating the README.md with every commit would be unnecessary overhead. Since we already know that this repository will eventually provide this functionality, I suggest holding off on merging this commit until the relevant functionality is introduced in later commits.",
+      "parentUuid": "08a5b0de_a2070898",
+      "revId": "358694ccb07811191c59f2ff7d176b4aac8ea020",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9a7e02ae_ff8e92d1",
         "filename": "README.md",
         "patchSetId": 2
