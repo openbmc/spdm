@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e09d9757_19d885e2",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-21T18:56:35Z",
+      "side": 1,
+      "message": "\u003e If we plan to replace it with sdbusplus::async, does sdbusplus::async provide support for MCTP socket communication?\n\u003e In MCTP-based communication with other devices, we rely on the in-kernel socket mechanism.\n\n`sdbusplus::async` works fine with file descriptors, which sockets are.  Jagpal was able to get it working with GPIO fairly easily.  We can build whatever we need there.\n\n\u003e Currently all the DMTF libspdm calls are blocking calls,we can go with sdbusplus asio now, but later when we have the asio implemenation in the libspdm, we need the support from sdbusplus or need to use the boost asio.\n\nI can\u0027t parse this.  What does libspdm being blocking have to do with {boost,sdbusplus}::asio vs sdbusplus::async?  To be clear we should use sdbusplus::async and not sdbusplus::asio.  I think you made a typo, but maybe not.\n\nHow are we going to use libspdm if it is blocking?  I would have thought the libspdm was like libpldm where it just helps with message pack/unpack operations.  Looking briefly at it, it looks like they are referencing \"libmctp\" but we aren\u0027t using \"libmctp\" anymore on OpenBMC.\n\nIf libspdm _is_ blocking, what is the plan for even integrating it here?  Are you planning on doing more development?  Are we going to run the libspdm interaction in a separate thread?  There are multiple directions and we should get alignment before we just start dropping code.\n\nCan we get some internal code design words from you rather than just code that I have to guess at where you\u0027re going?  I don\u0027t want to see you writing all kinds of code that is just going to be rejected because you\u0027re not aware of where the community has progressed in the last 3 years.",
+      "parentUuid": "bc251168_7e2aa397",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6768dc27_f45624d8",
         "filename": "src/spdmd_app.hpp",
         "patchSetId": 4
