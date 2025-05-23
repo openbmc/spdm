@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ffe037c1_fecc495c",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-05-23T08:18:14Z",
+      "side": 1,
+      "message": "Yes you are correct that I wanted to say the sdbusplus::async, Thanks for pointing it out.\n\n\u003e How are we going to use libspdm if it is blocking? I would have thought the libspdm was like libpldm where it just helps with message pack/unpack operations. Looking briefly at it, it looks like they are referencing \"libmctp\" but we aren\u0027t using \"libmctp\" anymore on OpenBMC.\n\nWe plan to use libspdm as it is for now, even though it\u0027s currently blocking. Since only one device will be sharing attestation data at a time, we’ll collect data from one device first, and then proceed to the next(Basically seralise).\n\nMoving forward, we are considering the following enhancements:\n\nCollect attestation data from each device in a separate thread.\nor\nEnhance libspdm itself to support asynchronous operations.\n\nOn that front(Enhancing libspdm), I’ve started a discussion with Steven Bellock (the maintainer of libspdm) to understand if there are any ongoing efforts or plans to support async operations in the library.\n\nAlso, just to clarify: libspdm is different from libpldm. While libpldm mainly handles message packing/unpacking, libspdm implements the full SPDM protocol stack, including state management and error handling.\n\n\u003e Can we get some internal code design words from you rather than just code that I have to guess at where you\u0027re going? I don\u0027t want to see you writing all kinds of code that is just going to be rejected because you\u0027re not aware of where the community has progressed in the last 3 years.\n\nI can put up the design doc, how I am planning to write the code.Do you want me to write the doc in the same repo?",
+      "parentUuid": "e09d9757_19d885e2",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6768dc27_f45624d8",
         "filename": "src/spdmd_app.hpp",
         "patchSetId": 4
