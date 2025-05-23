@@ -127,6 +127,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "93adabd3_7e1565b4",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-05-23T11:48:21Z",
+      "side": 1,
+      "message": "\u003eI regularly attend the DMTF SPDM WG as well as the Code TF calls. I never heard any discussion on this. Was there an open/active issue on this ?\n\nhttps://github.com/DMTF/libspdm/issues/2480\n\nHave you ever tried retrieving attestation data from multiple devices simultaneously?\n\nPlease take a look at the code snippet below. While it\u0027s specifically for the GetVersion command, this blocking behavior is common across all SPDM commands\n\nhttps://github.com/DMTF/libspdm/blob/main/library/spdm_requester_lib/libspdm_req_get_version.c#L40",
+      "parentUuid": "cdc9a241_6790914c",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6768dc27_f45624d8",
         "filename": "src/spdmd_app.hpp",
         "patchSetId": 4
