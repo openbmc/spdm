@@ -109,6 +109,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cdc9a241_6790914c",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-05-23T11:04:16Z",
+      "side": 1,
+      "message": "\u003e \u003e How are we going to use libspdm if it is blocking? I would have thought the libspdm was like libpldm where it just helps with message pack/unpack operations. Looking briefly at it, it looks like they are referencing \"libmctp\" but we aren\u0027t using \"libmctp\" anymore on OpenBMC.\n\u003e \n\u003e We plan to use libspdm as it is for now, even though it\u0027s currently blocking. Since only one device will be sharing attestation data at a time, we’ll collect data from one device first, and then proceed to the next(Basically seralise).\n\u003e \n\nCan you explain what is blocking in libspdm ?\n\n\n\u003e Moving forward, we are considering the following enhancements:\n\u003e \n\u003e Collect attestation data from each device in a separate thread.\n\u003e or\n\u003e Enhance libspdm itself to support asynchronous operations.\n\u003e \n\u003e On that front(Enhancing libspdm), I’ve started a discussion with Steven Bellock (the maintainer of libspdm) to understand if there are any ongoing efforts or plans to support async operations in the library.\n\u003e \n\nI regularly attend the DMTF SPDM WG as well as the Code TF calls. I never heard any discussion on this. Was there an open/active issue on this ?",
+      "parentUuid": "ffe037c1_fecc495c",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6768dc27_f45624d8",
         "filename": "src/spdmd_app.hpp",
         "patchSetId": 4
