@@ -235,6 +235,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "866833fa_636c1539",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-30T12:51:38Z",
+      "side": 1,
+      "message": "\u003e I do have one more question: even with this approach, we’re still effectively handling one request at a time — meaning the coroutine remains blocked until the thread finishes the SPDM blocking call.\n\nThe co-routine that initiated the \"request to do some SPDM stuff\" is blocked, yes, but it is blocked until you do the SPDM work anyhow.\n\n\u003e I was concerned about the performance impact. Our system has over 25 devices, and we need to retrieve attestation data from each of them approximately once per minute.\n\nAre these 25 devices all on different busses?  If not, aren\u0027t you going to block anyhow?\n\n\u003e Would you see any issues with creating a dedicated thread per device, so each device can be handled independently? This might help us achieve better concurrency and meet our timing requirements.\n\nI\u0027d rather see a straight-forward implementation and get measurements first.  Depending on what bus we\u0027re talking about, 25 devices once per minute still shouldn\u0027t be an issue.  A single 400kbps I2C bus can probably still get that done.\n\n(Having a \"requirement\" to re-gather the attestation information every minute off 25 sub-devices seems a bit strange to me though.)\n\nRather than a \"dedicated thread per device\", I think it would be way simpler to have a threadpool (which you could compile-time set to 25 if you needed on your system).  You need a workqueue of sorts anyhow in order to get the co-routine to block, dispatch the work to a SPDM worker, etc.  So, having this queue be acted on by multiple threads probably isn\u0027t a large lift.\n\nAt some point we do have to question how much work this is to do multi-threaded vs just doing the necessary in libspdm to make it async.",
+      "parentUuid": "fbeeb177_2f059e58",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6768dc27_f45624d8",
         "filename": "src/spdmd_app.hpp",
         "patchSetId": 4
