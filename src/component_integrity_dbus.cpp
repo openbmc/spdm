@@ -1,4 +1,3 @@
-
 #include "component_integrity_dbus.hpp"
 
 #include <phosphor-logging/lg2.hpp>
@@ -7,6 +6,16 @@
 
 namespace spdm
 {
+
+/**
+ * @brief Update the last update time to current time
+ */
+void ComponentIntegrity::updateLastUpdateTime()
+{
+    auto now = std::chrono::system_clock::now();
+    auto now_time_t = std::chrono::system_clock::to_time_t(now);
+    lastUpdate = now_time_t;
+}
 
 /**
  * @brief Initialize ComponentIntegrity properties
@@ -111,69 +120,36 @@ std::tuple<sdbusplus::message::object_path, std::string, std::string,
     }
     try
     {
-        // Convert hex nonce to bytes
-
-        lg2::info("Initializing SPDM connection for EID {EID}", "EID", eid);
-
         if (!m_transport)
         {
-            throw std::runtime_error("SPDM transport not set");
+            throw std::runtime_error("Transport not initialized");
         }
 
-        libspdm_return_t initStatus =
-            libspdm_init_connection(m_transport->getSpdmContext(), false);
+        // Use slotId as EID for now
+        const int eid = static_cast<int>(slotId);
+        auto task = get_digest_async(m_transport->getSpdmContext(), eid,
+                                     m_path);
 
-        if (LIBSPDM_STATUS_IS_ERROR(initStatus))
-        {
-            lg2::error(
-                "Failed to initialize SPDM connection for EID {EID}, status: 0x{STATUS:x}",
-                "EID", eid, "STATUS", initStatus);
-            throw std::runtime_error("SPDM connection initialization failed");
-        }
+        // If we implement the GetMeasurement D-Bus API as an asynchronous call,
+        // we can leverage coroutines to avoid blocking—even within the GetMeasurement API itself.
+        // For example, in the approach shown in the libspdm_async.hpp - launch function, the API can return immediately
+        // without waiting for the measurement to complete.
+        //
+        // Once the coroutine finishes execution in the background, it can update the measurement
+        // data and set a status property accordingly. Clients invoking this API can monitor the
+        // status property to determine the result whether it succeeded or failed—and then read
+        // the updated measurement data.
 
-        lg2::info("Getting certificate digests for EID {EID}", "EID", eid);
+        auto [objPath, certType, pubKeyPem, signedMeas,
+              description] = task.get();
 
-        // Buffer for digest response - each digest is 48 bytes based on SPDM
-        // trace analysis
-        constexpr size_t DIGEST_SIZE = 48; // Fixed size from SPDM trace
-        constexpr size_t MAX_SLOTS = 8;
-        std::vector<uint8_t> digestBuffer(MAX_SLOTS * DIGEST_SIZE);
-        uint8_t slotMask = 0;
-
-        auto status = libspdm_get_digest(
-            m_transport->getSpdmContext(), nullptr, // No session
-            &slotMask,            // Output: which slots have certificates
-            digestBuffer.data()); // Output: digest data buffer
-
-        if (LIBSPDM_STATUS_IS_ERROR(status))
-        {
-            lg2::error(
-                "libspdm_get_digest failed for EID {EID}, status: 0x{STATUS:X}",
-                "EID", eid, "STATUS", status);
-            return std::vector<uint8_t>{}; // Return empty on error
-        }
-
-        // Calculate actual digest data size
-        size_t numSlots = __builtin_popcount(slotMask);
-        size_t totalDigestSize = numSlots * DIGEST_SIZE;
-        totalDigestSize = std::min(totalDigestSize, digestBuffer.size());
-
-        lg2::info(
-            "libspdm_get_digest completed for EID {EID}, slotMask: 0x{MASK:X}, slots: {SLOTS}, size: {SIZE}",
-            "EID", eid, "MASK", static_cast<unsigned>(slotMask), "SLOTS",
-            numSlots, "SIZE", totalDigestSize);
-
-        std::string signedMeas{};
-
-        // Return the tuple
-        return std::make_tuple(sdbusplus::message::object_path(m_path), "Test",
-                               "public_key_pem", // TODO: Get from certificate
-                               signedMeas, "Test", typeVersion());
+        return std::make_tuple(sdbusplus::message::object_path(objPath), certType,
+                               pubKeyPem, signedMeas, description, typeVersion());
     }
     catch (const std::exception& e)
     {
-        lg2::error("SPDM Get Signed Measurements FAILED for EID {EID}: {ERROR}",
-                   "EID", eid, "ERROR", e.what());
+        lg2::error("SPDM Get Signed Measurements FAILED : {ERROR}", "ERROR",
+                   e.what());
         throw;
     }
 }

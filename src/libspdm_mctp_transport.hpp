@@ -41,12 +41,13 @@ class SpdmMctpTransport : public SpdmTransport
      * @param eid MCTP Endpoint ID
      * @param io Reference to MCTP IO instance
      */
-    SpdmMctpTransport(uint8_t eid, MctpIoClass& io) : m_eid(eid), m_mctpIo(io)
+    SpdmMctpTransport(uint8_t eid, std::unique_ptr<MctpIoClass> io) :
+        m_eid(eid), mctpIO(std::move(io))
     {}
 
     // Make these public so they can be accessed by static callback functions
     uint8_t m_eid;
-    MctpIoClass& m_mctpIo;
+    std::unique_ptr<MctpIoClass> mctpIO;
     MctpMessageTransport m_mctpMessageTransport;
 
     /**

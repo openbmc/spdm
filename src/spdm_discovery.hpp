@@ -18,7 +18,7 @@
 #pragma once
 
 #include "libspdm_transport.hpp"
-#include "spdm_dbus_responder.hpp"
+#include "responder_info.hpp"
 
 #include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/bus.hpp>
@@ -32,20 +32,6 @@
 
 namespace spdm
 {
-
-/**
- * @brief Information about a discovered SPDM responder
- * @details Contains identification and connection information for an SPDM
- * device
- */
-struct ResponderInfo
-{
-    size_t eid;             ///< Endpoint ID
-    std::string objectPath; ///< D-Bus object path
-    std::string uuid;       ///< Device UUID
-    std::unique_ptr<spdm::SpdmTransport> transport;
-    std::unique_ptr<spdm::SPDMDBusResponder> responder;
-};
 
 /**
  * @brief Supported transport types for SPDM

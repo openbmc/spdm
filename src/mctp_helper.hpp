@@ -22,14 +22,19 @@ extern "C"
 #include "library/spdm_return_status.h"
 }
 
+// Include system headers first
 #include <arpa/inet.h>
-#include <linux/if_arp.h>
-#include <linux/mctp.h>
+#include <net/if.h> // Must come before linux/if_arp.h for IFNAMSIZ
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/un.h>
 #include <unistd.h>
+
+// Define _LINUX_IF_H to prevent linux/if.h from being included again
+#define _LINUX_IF_H
+#include <linux/if_arp.h>
+#include <linux/mctp.h>
 
 #include <phosphor-logging/lg2.hpp>
 
