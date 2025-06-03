@@ -1,21 +1,6 @@
-/*
- * SPDX-FileCopyrightText: Copyright (c) 2022-2024 NVIDIA CORPORATION &
- * AFFILIATES. All rights reserved. SPDX-License-Identifier: Apache-2.0
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: Copyright OpenBMC Authors
 
-#include "libspdm_mctp_transport.hpp"
 #include "mctp_discovery.hpp"
 #include "spdm_dbus_responder.hpp"
 #include "spdm_discovery.hpp"
@@ -24,9 +9,10 @@
 #include <phosphor-logging/lg2.hpp>
 
 #include <iostream>
+#include <vector>
 
 // Main function must be in global namespace
-int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
+int main()
 {
     try
     {
@@ -42,6 +28,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
         // Create discovery instance
         spdm::SPDMDiscovery discovery(std::move(mctpDiscovery));
 
+        // Vector to store responders
+        std::vector<std::unique_ptr<spdm::SPDMDBusResponder>> responders;
+
         // Perform discovery
         if (discovery.discover())
         {
@@ -52,11 +41,42 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
                           << "  Path: " << device.objectPath << "\n"
                           << "  EID: " << device.eid << "\n"
                           << "  UUID: " << device.uuid << "\n";
-                auto initResult = device.transport->initialize();
-                if (!initResult)
+                try
                 {
-                    lg2::error("Failed to initialize SPDM transport");
-                    return EXIT_FAILURE;
+                    // Safety check for transport
+                    if (!device.transport)
+                    {
+                        lg2::error("Transport is null for device {PATH}",
+                                   "PATH", device.objectPath);
+                        continue;
+                    }
+
+                    lg2::info("Initializing transport for device {PATH}",
+                              "PATH", device.objectPath);
+                    if (!device.transport->initialize())
+                    {
+                        lg2::error(
+                            "Failed to initialize SPDM transport for device {PATH}",
+                            "PATH", device.objectPath);
+                        continue;
+                    }
+                    lg2::info("Creating D-Bus responder for device {PATH}",
+                              "PATH", device.objectPath);
+                    // Create SPDMDBusResponder with ResponderInfo and async
+                    // context for parallel execution
+                    auto responder = std::make_unique<spdm::SPDMDBusResponder>(
+                        bus, device, app.getAsyncContext());
+
+                    responders.push_back(std::move(responder));
+                    lg2::info(
+                        "Successfully created responder for device {PATH}",
+                        "PATH", device.objectPath);
+                }
+                catch (const std::exception& e)
+                {
+                    lg2::error("Error processing device {PATH}: {ERROR}",
+                               "PATH", device.objectPath, "ERROR", e.what());
+                    continue;
                 }
             }
         }
@@ -68,7 +88,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
     }
     catch (const std::exception& e)
     {
-        lg2::error("Fatal error: {ERROR}", "ERROR", e.what());
+        lg2::error("Fatal error: {ERROR}", "ERROR", e);
         return EXIT_FAILURE;
     }
 }

@@ -37,7 +37,7 @@ spdmd_src = [
     'src/libspdm_mctp_transport.cpp',
 ]
 
-spdmd_includes = include_directories('spdmd')
+spdmd_includes = include_directories('src')
 
 executable(
     'spdmd',

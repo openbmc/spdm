@@ -24,6 +24,7 @@ extern "C"
 #include "industry_standard/spdm.h"
 }
 
+#include "libspdm_transport.hpp"
 #include "xyz/openbmc_project/Attestation/ComponentIntegrity/server.hpp"
 #include "xyz/openbmc_project/Attestation/IdentityAuthentication/server.hpp"
 #include "xyz/openbmc_project/Attestation/MeasurementSet/server.hpp"
@@ -147,6 +148,12 @@ class ComponentIntegrity :
     void updateMeasurementSets(
         const std::vector<std::tuple<uint8_t, uint8_t, std::vector<uint8_t>>>&
             measurements);
+
+    /**
+     * @brief Set the transport object for this component
+     * @param transport Pointer to the transport object
+     */
+    void setTransport(SpdmTransport* transport);
 
   private:
     std::string m_path;
