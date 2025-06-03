@@ -34,31 +34,50 @@ bool SpdmMctpTransport::initialize()
         lg2::error("Failed to allocate SPDM context");
         return false;
     }
+
+    // Create socket for this transport's IO
+    if (!mctpIO->createSocket())
+    {
+        lg2::error("Failed to create MCTP socket");
+        free(m_spdm_context);
+        m_spdm_context = nullptr;
+        return false;
+    }
+
     libspdm_return_t status = libspdm_init_context(m_spdm_context);
     if (!m_spdm_context || status != LIBSPDM_STATUS_SUCCESS)
     {
         lg2::error("Failed to initialize SPDM context");
+        mctpIO->deleteSocket();
+        free(m_spdm_context);
+        m_spdm_context = nullptr;
         return false;
     }
+
     m_scratch_buffer = malloc(MAX_MCTP_PACKET_SIZE);
     if (!m_scratch_buffer)
     {
         lg2::error("Failed to allocate scratch buffer");
+        mctpIO->deleteSocket();
         libspdm_deinit_context(m_spdm_context);
         m_spdm_context = nullptr;
         return false;
     }
+
     libspdm_context_t* context =
         static_cast<libspdm_context_t*>(m_spdm_context);
     context->app_context_data_ptr = this;
+
     libspdm_register_device_io_func(m_spdm_context,
                                     &SpdmMctpTransport::device_send_message,
                                     &SpdmMctpTransport::device_receive_message);
+
     libspdm_register_transport_layer_func(
         m_spdm_context, LIBSPDM_MAX_SPDM_MSG_SIZE,
         LIBSPDM_TRANSPORT_HEADER_SIZE, LIBSPDM_TRANSPORT_TAIL_SIZE,
         libspdm_transport_mctp_encode_message,
         libspdm_transport_mctp_decode_message);
+
     libspdm_register_device_buffer_func(
         m_spdm_context, LIBSPDM_SENDER_BUFFER_SIZE,
         LIBSPDM_RECEIVER_BUFFER_SIZE,
@@ -66,6 +85,7 @@ bool SpdmMctpTransport::initialize()
         &SpdmMctpTransport::spdm_device_release_sender_buffer,
         &SpdmMctpTransport::spdm_device_acquire_receiver_buffer,
         &SpdmMctpTransport::spdm_device_release_receiver_buffer);
+
     size_t scratch_buffer_size =
         libspdm_get_sizeof_required_scratch_buffer(m_spdm_context);
     m_scratch_buffer = malloc(scratch_buffer_size);
@@ -118,36 +138,30 @@ libspdm_return_t SpdmMctpTransport::device_send_message(void* spdm_context,
                                                         const void* message,
                                                         uint64_t timeout)
 {
+    libspdm_context_t* context = static_cast<libspdm_context_t*>(spdm_context);
+    auto transport =
+        static_cast<SpdmMctpTransport*>(context->app_context_data_ptr);
+    if (!transport)
+    {
+        lg2::error("SpdmMctpTransport instance or IO is nullptr");
+        return LIBSPDM_STATUS_INVALID_STATE_LOCAL;
+    }
+
     try
     {
-        libspdm_context_t* context =
-            static_cast<libspdm_context_t*>(spdm_context);
-        auto transport =
-            static_cast<SpdmMctpTransport*>(context->app_context_data_ptr);
-        if (!transport)
-        {
-            lg2::error("SpdmMctpTransport instance is nullptr");
-            return LIBSPDM_STATUS_INVALID_STATE_LOCAL;
-        }
         std::vector<uint8_t> msg(static_cast<const uint8_t*>(message),
                                  static_cast<const uint8_t*>(message) +
                                      message_size);
-        timeout_us_t timeoutUs = static_cast<timeout_us_t>(timeout);
         std::vector<uint8_t> mctpMessage;
+
         if (transport->m_mctpMessageTransport.encode(
                 transport->m_eid, mctpMessage, msg) != LIBSPDM_STATUS_SUCCESS)
         {
             lg2::error("Failed to encode MCTP message");
             return LIBSPDM_STATUS_SEND_FAIL;
         }
-        libspdm_return_t ret = transport->m_mctpIo.write(mctpMessage,
-                                                         timeoutUs);
-        if (ret != LIBSPDM_STATUS_SUCCESS)
-        {
-            lg2::error("Failed to send SPDM message");
-            return LIBSPDM_STATUS_SEND_FAIL;
-        }
-        return LIBSPDM_STATUS_SUCCESS;
+
+        return transport->mctpIO->write(mctpMessage, timeout);
     }
     catch (const std::exception&)
     {
@@ -170,22 +184,17 @@ libspdm_return_t SpdmMctpTransport::device_receive_message(void* spdm_context,
         {
             return LIBSPDM_STATUS_INVALID_STATE_LOCAL;
         }
-        timeout_us_t timeoutUs = static_cast<timeout_us_t>(timeout);
+
         std::vector<uint8_t> response;
-        libspdm_return_t ret = transport->m_mctpIo.read(response, timeoutUs);
+        libspdm_return_t ret = transport->mctpIO->read(response, timeout);
         if (ret != LIBSPDM_STATUS_SUCCESS)
         {
             lg2::error("Failed to receive SPDM message");
             return LIBSPDM_STATUS_RECEIVE_FAIL;
         }
-        if (transport->m_mctpMessageTransport.decode(transport->m_eid, response,
-                                                     message, message_size) !=
-            LIBSPDM_STATUS_SUCCESS)
-        {
-            lg2::error("Failed to decode MCTP message");
-            return LIBSPDM_STATUS_RECEIVE_FAIL;
-        }
-        return LIBSPDM_STATUS_SUCCESS;
+
+        return transport->m_mctpMessageTransport.decode(
+            transport->m_eid, response, message, message_size);
     }
     catch (const std::exception&)
     {

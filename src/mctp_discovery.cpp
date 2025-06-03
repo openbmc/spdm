@@ -60,6 +60,7 @@ std::vector<ResponderInfo> MCTPDiscovery::discoverDevices()
                            objectPath);
                 continue;
             }
+
             auto uuid = getUUID(objectPath, service);
             if (uuid.empty())
             {
@@ -67,23 +68,19 @@ std::vector<ResponderInfo> MCTPDiscovery::discoverDevices()
                            objectPath);
                 continue;
             }
-            if (!mctpIo.createSocket())
-            {
-                lg2::error("Failed to create MCTP socket");
-                return devices;
-            }
 
-            auto transport = std::make_unique<spdm::SpdmMctpTransport>(eid,
-                                                                       mctpIo);
-            std::string deviceName = std::to_string(eid);
-            std::string inventoryPath =
-                "/xyz/openbmc_project/inventory/system/chassis/" + deviceName;
-            auto responder = std::make_unique<spdm::SPDMDBusResponder>(
-                bus, deviceName, inventoryPath);
-            ResponderInfo info{eid, objectPath, uuid, std::move(transport),
-                               std::move(responder)};
-            devices.emplace_back(std::move(info));
-            lg2::info("Found SPDM device: {PATH}", "PATH", objectPath);
+            // Create a unique IO instance for this device
+            auto deviceIO = std::make_unique<MctpIoClass>();
+
+            // Create transport with its own IO instance
+            auto transport = std::make_unique<spdm::SpdmMctpTransport>(
+                static_cast<uint8_t>(eid),
+                std::move(
+                    deviceIO) // Move the unique IO instance into transport
+            );
+
+            devices.push_back(
+                ResponderInfo(objectPath, eid, uuid, std::move(transport)));
         }
     }
     catch (const std::exception& e)

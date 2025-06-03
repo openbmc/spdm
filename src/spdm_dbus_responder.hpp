@@ -18,9 +18,11 @@
 #pragma once
 
 #include "component_integrity_dbus.hpp"
+#include "responder_info.hpp"
 #include "trusted_component_dbus.hpp"
 
 #include <phosphor-logging/lg2.hpp>
+#include <sdbusplus/async.hpp>
 #include <sdbusplus/server/object.hpp>
 
 namespace spdm
@@ -45,14 +47,12 @@ class SPDMDBusResponder
     SPDMDBusResponder& operator=(SPDMDBusResponder&&) = delete;
 
     /**
-     * @brief Construct a new SPDM DBus Responder
-     * @param bus D-Bus connection
-     * @param deviceName Object path for this responder
-     * @param eid MCTP Endpoint ID
-     * @param inventoryPath Associated inventory object path
+     * @brief Construct a new SPDM DBus Responder with async context
+     * @param info ResponderInfo containing device details
+     * @param ctx Async context for parallel coroutine execution
      */
-    SPDMDBusResponder(sdbusplus::bus::bus& bus, const std::string& deviceName,
-                      const std::string& inventoryPath);
+    SPDMDBusResponder(sdbusplus::bus::bus& bus, const ResponderInfo& info,
+                      sdbusplus::async::context& ctx);
 
     /**
      * @brief Virtual destructor
@@ -71,12 +71,17 @@ class SPDMDBusResponder
   private:
     /** @brief Device name */
     std::string m_deviceName;
-
     /** @brief Associated inventory object path */
     std::string m_inventoryPath;
 
+    /** @brief Component integrity interface */
     std::unique_ptr<ComponentIntegrity> componentIntegrity;
+
+    /** @brief Trusted component interface */
     std::unique_ptr<TrustedComponent> trustedComponent;
+
+    /** @brief Responder information */
+    const ResponderInfo& m_info;
 };
 
 } // namespace spdm

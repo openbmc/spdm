@@ -1,30 +1,31 @@
-project('spdmcpp',
-	'cpp', 'c',
-	version: '0.1.0',
-	meson_version: '>=0.58.0',
-	default_options: [
-		'cpp_std=c++20',
-		'warning_level=3',
-		'buildtype=debugoptimized'
-	]
+project(
+    'spdm',
+    'cpp',
+    version: '1.0',
+    default_options: [
+        'buildtype=debugoptimized',
+        'cpp_std=c++23',
+        'warning_level=3',
+    ],
 )
 
-# Add optimization flag
-add_project_arguments('-O2', language: 'cpp')
+# Dependencies
+sdbusplus_dep = dependency('sdbusplus')
+phosphor_logging_dep = dependency('phosphor-logging')
+phosphor_dbus_interfaces_dep = dependency('phosphor-dbus-interfaces')
 
-libspdm_dep = dependency('libspdm', required: true)
+# Add libspdm dependency
+sdk_path = '/home/guptar/openBMC/SDK/develop/06-03-25/sysroots/armv7ahf-vfpv4d16-openbmc-linux-gnueabi'
+libspdm_inc = include_directories(
+    sdk_path + '/usr/include/libspdm',
+    sdk_path + '/usr/include/libspdm/include'
+)
+libspdm_dep = declare_dependency(
+    include_directories: libspdm_inc,
+    link_args: ['-L' + sdk_path + '/usr/lib', '-lspdm', '-lspdm_crypto', '-lspdm_platform']
+)
 
-if not libspdm_dep.found()
-  error('libspdm not found . Please ensure libspdm is installed.')
-endif
-
-spdmd_deps = [
-    dependency('phosphor-logging'),
-    dependency('sdbusplus'),
-    dependency('phosphor-dbus-interfaces'),
-    libspdm_dep,
-]
-
+# Source files
 spdmd_src = [
     'src/spdmd.cpp',
     'src/spdmd_app.cpp',
@@ -37,13 +38,21 @@ spdmd_src = [
     'src/libspdm_mctp_transport.cpp',
 ]
 
-spdmd_includes = include_directories('spdmd')
+# Include directories
+spdmd_includes = include_directories('src')
 
+# Executable
 executable(
     'spdmd',
     spdmd_src,
-    dependencies: spdmd_deps,
     include_directories: spdmd_includes,
+    dependencies: [
+        sdbusplus_dep,
+        phosphor_logging_dep,
+        phosphor_dbus_interfaces_dep,
+        libspdm_dep,
+    ],
     install: true,
-    install_dir: get_option('bindir')
+    install_dir: get_option('libexecdir'),
 )
+

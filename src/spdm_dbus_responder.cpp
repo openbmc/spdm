@@ -17,22 +17,38 @@
 
 #include "spdm_dbus_responder.hpp"
 
+#include <phosphor-logging/lg2.hpp>
+
 namespace spdm
 {
+
 SPDMDBusResponder::SPDMDBusResponder(sdbusplus::bus::bus& bus,
-                                     const std::string& deviceName,
-                                     const std::string& inventoryPath) :
-    m_deviceName(deviceName), m_inventoryPath(inventoryPath)
+                                     const ResponderInfo& info,
+                                     sdbusplus::async::context& /* ctx */) :
+    m_deviceName(std::to_string(info.eid)), m_inventoryPath(info.objectPath),
+    m_info(info)
 {
+    // Create ComponentIntegrity interface
     std::string componentIntegrityPath =
-        "/xyz/openbmc_project/ComponentIntegrity/" + deviceName;
+        "/xyz/openbmc_project/ComponentIntegrity/" + m_deviceName;
+    // Create component integrity interface
     componentIntegrity =
         std::make_unique<ComponentIntegrity>(bus, componentIntegrityPath);
 
+    // Create TrustedComponent interface
     std::string trustedComponentPath =
-        "/xyz/openbmc_project/TrustedComponent/" + deviceName;
-    trustedComponent = std::make_unique<TrustedComponent>(bus,
-                                                          trustedComponentPath);
+        "/xyz/openbmc_project/TrustedComponent/" + m_deviceName;
+    trustedComponent = std::make_unique<TrustedComponent>(
+        bus,
+        trustedComponentPath); // Create trusted component interface
+
+    // Set transport if available
+    if (info.transport)
+    {
+        lg2::info("Setting transport for device {DEVICE}", "DEVICE",
+                  m_deviceName);
+        componentIntegrity->setTransport(info.transport.get());
+    }
 }
 
 } // namespace spdm

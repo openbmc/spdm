@@ -57,7 +57,6 @@ class MCTPDiscovery : public DiscoveryProtocol
     }
 
   private:
-    MctpIoClass mctpIo;
     /**
      * @brief Get list of MCTP services from D-Bus
      * @return Vector of pairs containing object path and service name

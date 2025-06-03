@@ -1,4 +1,3 @@
-
 /*
  * SPDX-FileCopyrightText: Copyright (c) 2022-2024 NVIDIA CORPORATION &
  * AFFILIATES. All rights reserved. SPDX-License-Identifier: Apache-2.0
@@ -17,16 +16,8 @@
  */
 
 #pragma once
+#include <libspdm_async.hpp>
 #include <phosphor-logging/lg2.hpp>
-
-extern "C"
-{
-#include "internal/libspdm_common_lib.h"
-#include "library/spdm_common_lib.h"
-#include "library/spdm_requester_lib.h"
-#include "library/spdm_return_status.h"
-#include "library/spdm_transport_mctp_lib.h"
-}
 
 #define LIBSPDM_MAX_SPDM_MSG_SIZE 0x1200
 #define LIBSPDM_TRANSPORT_HEADER_SIZE 64
@@ -68,7 +59,7 @@ class SpdmTransport
     }
     uint8_t m_send_receive_buffer[LIBSPDM_MAX_SENDER_RECEIVER_BUFFER_SIZE];
     bool m_send_receive_buffer_acquired = false;
-    uint8_t m_use_version = SPDM_MESSAGE_VERSION_11;
+    uint8_t m_use_version = 0; // Let the responder choose the version
     uint32_t m_use_requester_capability_flags = 0;
     uint8_t m_use_req_slot_id = 0xFF;
     uint32_t m_use_capability_flags = 0;
@@ -111,6 +102,14 @@ class SpdmTransport
      */
     virtual bool initialize() = 0;
 
+    /**
+     * @brief Get the SPDM context
+     * @return void* Pointer to the SPDM context
+     */
+    void* getSpdmContext() const
+    {
+        return m_spdm_context;
+    }
 };
 
 } // namespace spdm
