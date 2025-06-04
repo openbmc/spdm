@@ -271,6 +271,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "18f4e2cc_4d27aaa0",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-06-04T08:33:52Z",
+      "side": 1,
+      "message": "Yesterday in the SPDM WG call we discussed on the blocking behavior of the requester calls in libspdm \u0026 what they mentioned was it\u0027s not really complex work, its just matter of splitting the API\u0027s into multiple so that we can get the non-blocking behavior as done in https://github.com/DMTF/libspdm/pull/2406 - all they are saying is if we need that - we can work on it since they don\u0027t have ways to test it. If splitting works for one command, we can do the same pattern for every command that we need \u0026 they are okay with that.",
+      "parentUuid": "57601f0b_000a203a",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6768dc27_f45624d8",
         "filename": "src/spdmd_app.hpp",
         "patchSetId": 4
