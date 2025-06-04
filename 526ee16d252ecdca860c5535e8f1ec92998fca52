@@ -253,6 +253,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "57601f0b_000a203a",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-06-04T06:42:43Z",
+      "side": 1,
+      "message": "\u003eAre these 25 devices all on different busses? If not, aren\u0027t you going to block anyhow?\nNo, It is on the same bus, but in MCTP it is not a blocking implementation, They semd the packet asynchronously to multiple endpoints.\n\n\u003eRather than a \"dedicated thread per device\", I think it would be way simpler to have a threadpool (which you could compile-time set to 25 if you needed on your system). You need a workqueue of sorts anyhow in order to get the co-routine to block, dispatch the work to a SPDM worker, etc. So, having this queue be acted on by multiple threads probably isn\u0027t a large lift.\n\nI am implementing both approaches to do the performance test.\n\nImplementation 1 :\nUses pure coroutine/co_await pattern\nDirect integration with SPDM calls\nNo explicit thread management\nUses std::async with proper coroutine suspension/resumption\n\nImplementation 2 :\nHad threads inside coroutines\nUsed explicit thread management with std::unique_ptr\u003cstd::thread\u003e\nMore complex resource management\n\nI plan to create two prototype commits that will allow us to:\nCompare the performance and behavior of both approaches.\n\nI have tested both implementations on VCA with three devices so far. I now plan to extend the testing to include Certificate and Measurement support, along with a few additional devices.\n\nHowever, I will be pushing both prototype commits so that you can review them and get the feedback early on the issues.",
+      "parentUuid": "866833fa_636c1539",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6768dc27_f45624d8",
         "filename": "src/spdmd_app.hpp",
         "patchSetId": 4
