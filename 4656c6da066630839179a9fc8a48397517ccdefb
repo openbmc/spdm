@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a2e7a3b_5a1ee012",
+        "filename": "src/component_integrity_dbus.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002307
+      },
+      "writtenOn": "2025-06-06T08:09:14Z",
+      "side": 1,
+      "message": "In one of the review patches there was some issue with the LICENSE\nhttps://gerrit.openbmc.org/c/openbmc/openbmc/+/79992/10/meta-nvidia/meta-gb200nvl-obmc/recipes-kernel/linux/linux-aspeed/0005-Adding-Mctp-Over-Spi-Driver.patch",
+      "revId": "4656c6da066630839179a9fc8a48397517ccdefb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c15ad642_66b0cd07",
+        "filename": "src/component_integrity_dbus.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002307
+      },
+      "writtenOn": "2025-06-06T08:09:14Z",
+      "side": 1,
+      "message": "Can this include be moved to component_integrity_dbus.cpp ?",
+      "revId": "4656c6da066630839179a9fc8a48397517ccdefb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aafd5f28_9490936d",
+        "filename": "src/component_integrity_dbus.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1002307
+      },
+      "writtenOn": "2025-06-06T08:09:14Z",
+      "side": 1,
+      "message": "Should this be camel case https://github.com/openbmc/docs/blob/master/cpp-style-and-conventions.md#style-recommendations ?",
+      "revId": "4656c6da066630839179a9fc8a48397517ccdefb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
