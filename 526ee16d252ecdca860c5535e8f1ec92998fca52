@@ -3,6 +3,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "800d2f23_4e0c472a",
+        "filename": "meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002307
+      },
+      "writtenOn": "2025-06-06T07:13:03Z",
+      "side": 1,
+      "message": "Should we format this ? Because more files will be added\n``` \nspdmd_src \u003d [\u0027src/spdmd.cpp\u0027,\n             \u0027src/spdmd_app.cpp\u0027,\n             ]\n```",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e19d183d_4d077fa8",
+        "filename": "meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1002307
+      },
+      "writtenOn": "2025-06-06T07:13:03Z",
+      "side": 1,
+      "message": "As this is a spdm-requester application should we rename to `spdm_requesterd` as it would help responder daemon if there is a use case in future ?",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d1156ae5_b7bf19c8",
         "filename": "src/spdmd_app.cpp",
         "patchSetId": 4
@@ -301,6 +335,23 @@
       "side": 1,
       "message": "Manoj, we need to ensure support for all API versions—not just 1.1, but also 1.2 and 1.3.\n\nThis can be taken up as a parallel effort after we complete the approach suggested above.\n\nAlso, was there any discussion around chunking? While VCA is a relatively small task, the bigger challenge seems to be with chunking. Even Steven Bellock confirmed this.",
       "parentUuid": "18f4e2cc_4d27aaa0",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bbdc7d3_1d8ff13e",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1002307
+      },
+      "writtenOn": "2025-06-06T07:13:03Z",
+      "side": 1,
+      "message": "Should we specify if this is requester application ?",
       "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
