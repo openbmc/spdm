@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23403d4f_9bda9781",
+        "filename": "src/component_integrity_dbus.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002307
+      },
+      "writtenOn": "2025-06-09T04:23:14Z",
+      "side": 1,
+      "message": "Should we use std::map or std::unordered_map here ?",
+      "revId": "49a3e551a2ef4ffa7a862c10a08000fbf64b0bef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3df1e0c_6b0cbc7b",
+        "filename": "src/component_integrity_dbus.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1002307
+      },
+      "writtenOn": "2025-06-09T04:23:14Z",
+      "side": 1,
+      "message": "Should this be debug log ?",
+      "revId": "49a3e551a2ef4ffa7a862c10a08000fbf64b0bef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2a275a2_38724056",
+        "filename": "src/component_integrity_dbus.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1002307
+      },
+      "writtenOn": "2025-06-09T04:23:14Z",
+      "side": 1,
+      "message": "Are we printing spdm responder information here ?",
+      "revId": "49a3e551a2ef4ffa7a862c10a08000fbf64b0bef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d3b9afe_84f7febd",
+        "filename": "src/libspdm_transport.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1002307
+      },
+      "writtenOn": "2025-06-09T04:23:14Z",
+      "side": 1,
+      "message": "Should we use camel-case variable declaration here ?",
+      "revId": "49a3e551a2ef4ffa7a862c10a08000fbf64b0bef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04f9dae8_0990798f",
+        "filename": "src/libspdm_transport.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1002307
+      },
+      "writtenOn": "2025-06-09T04:23:14Z",
+      "side": 1,
+      "message": "We are repetitively performing sizeof() and libspdm_get_data. Can we have a function for the same and call that from here which performs sizeof operations and get the required data ?",
+      "revId": "49a3e551a2ef4ffa7a862c10a08000fbf64b0bef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
