@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f9097d56_5325cdd9",
+        "filename": "meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-06-09T13:02:14Z",
+      "side": 1,
+      "message": "Always do whatever `meson format` does.  That\u0027s what is required in order to pass CI.",
+      "parentUuid": "800d2f23_4e0c472a",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e19d183d_4d077fa8",
         "filename": "meson.build",
         "patchSetId": 4
