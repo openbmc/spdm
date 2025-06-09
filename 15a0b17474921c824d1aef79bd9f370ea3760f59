@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f663fb85_d02c62fd",
+        "filename": "src/libspdm_mctp_transport.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1002307
+      },
+      "writtenOn": "2025-06-09T04:32:45Z",
+      "side": 1,
+      "message": "Can we use m_spdm_context \u003d (void*)allocate_pool(libspdm_get_context_size()); ?",
+      "revId": "15a0b17474921c824d1aef79bd9f370ea3760f59",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8327e96_b08b3dd6",
+        "filename": "src/libspdm_mctp_transport.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002307
+      },
+      "writtenOn": "2025-06-09T04:32:45Z",
+      "side": 1,
+      "message": "We could use `allocate_buffer` here",
+      "revId": "15a0b17474921c824d1aef79bd9f370ea3760f59",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54e87ae2_8e7f1ac8",
+        "filename": "src/libspdm_mctp_transport.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1002307
+      },
+      "writtenOn": "2025-06-09T04:32:45Z",
+      "side": 1,
+      "message": "We can use `allocate_pool` function from libspdm here",
+      "revId": "15a0b17474921c824d1aef79bd9f370ea3760f59",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62247a40_ae7307d4",
+        "filename": "src/libspdm_mctp_transport.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1002307
+      },
+      "writtenOn": "2025-06-09T04:32:45Z",
+      "side": 1,
+      "message": "We can use reinterpret_cast here",
+      "revId": "15a0b17474921c824d1aef79bd9f370ea3760f59",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c85fefe_6bb5072c",
+        "filename": "src/libspdm_mctp_transport.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1002307
+      },
+      "writtenOn": "2025-06-09T04:32:45Z",
+      "side": 1,
+      "message": "Should we have the function names as camel case ?",
+      "revId": "15a0b17474921c824d1aef79bd9f370ea3760f59",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
