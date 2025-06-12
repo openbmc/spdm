@@ -22,6 +22,7 @@
 
 namespace spdm
 {
+class SpdmTransport;
 
 /** @class ComponentIntegrity
  *  @brief OpenBMC ComponentIntegrity entry implementation.
@@ -69,6 +70,15 @@ class ComponentIntegrity :
     virtual ~ComponentIntegrity() = default;
 
     /**
+     * @brief Set the SPDM transport reference
+     * @param transport SPDM transport instance
+     */
+    void setTransport(spdm::SpdmTransport* transportIn)
+    {
+        transport = transportIn;
+    }
+
+    /**
      * @brief Request stop of the async context
      */
     void stopAsyncContext()
@@ -85,7 +95,6 @@ class ComponentIntegrity :
                          std::chrono::system_clock::now().time_since_epoch())
                          .count());
     }
-
     /**
      * @brief Get signed measurements from SPDM device
      * @param measurementIndices Array of measurement indices to sign
@@ -109,6 +118,9 @@ class ComponentIntegrity :
 
     /** @brief Object path for this component */
     std::string path;
+
+  private:
+    spdm::SpdmTransport* transport{nullptr};
 
     /** @brief Async context for D-Bus operations */
     sdbusplus::async::context& asyncCtx;
