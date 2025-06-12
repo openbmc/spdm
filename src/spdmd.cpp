@@ -70,7 +70,7 @@ int main()
                 catch (const std::exception& e)
                 {
                     error("Error processing device {PATH}: {ERROR}", "PATH",
-                          device.objectPath, "ERROR", e.what());
+                          device.objectPath, "ERROR", e);
                     continue;
                 }
             }
