@@ -109,36 +109,72 @@ std::tuple<sdbusplus::message::object_path, std::string, std::string,
             throw InvalidArgument();
         }
     }
-
     try
     {
-        // Get current certificate path
-        auto certPath = sdbusplus::message::object_path(
-            "/xyz/openbmc_project/certs/spdm/slot" + std::to_string(slotId));
+        // Convert hex nonce to bytes
 
-        // Get current algorithms
-        auto hashAlgoStr = getHashingAlgorithmStr(hashAlgo);
-        auto signAlgoStr = getSigningAlgorithmStr(signAlgo);
+        lg2::info("Initializing SPDM connection for EID {EID}", "EID", eid);
 
-        // Get current version
-        auto version = typeVersion();
+        if (!m_transport)
+        {
+            throw std::runtime_error("SPDM transport not set");
+        }
 
-        // Get public key and signed measurements
-        // Note: In a real implementation, these would come from the SPDM device
-        std::string pubKey = "";     // Get from device
-        std::string signedMeas = ""; // Get from device
+        libspdm_return_t initStatus =
+            libspdm_init_connection(m_transport->getSpdmContext(), false);
 
-        lg2::info("Got signed measurements for path {OBJ_PATH}, slot {SLOT}",
-                  "OBJ_PATH", m_path, "SLOT", slotId);
+        if (LIBSPDM_STATUS_IS_ERROR(initStatus))
+        {
+            lg2::error(
+                "Failed to initialize SPDM connection for EID {EID}, status: 0x{STATUS:x}",
+                "EID", eid, "STATUS", initStatus);
+            throw std::runtime_error("SPDM connection initialization failed");
+        }
 
-        return std::make_tuple(std::move(certPath), hashAlgoStr, pubKey,
-                               signedMeas, signAlgoStr, version);
+        lg2::info("Getting certificate digests for EID {EID}", "EID", eid);
+
+        // Buffer for digest response - each digest is 48 bytes based on SPDM
+        // trace analysis
+        constexpr size_t DIGEST_SIZE = 48; // Fixed size from SPDM trace
+        constexpr size_t MAX_SLOTS = 8;
+        std::vector<uint8_t> digestBuffer(MAX_SLOTS * DIGEST_SIZE);
+        uint8_t slotMask = 0;
+
+        auto status = libspdm_get_digest(
+            m_transport->getSpdmContext(), nullptr, // No session
+            &slotMask,            // Output: which slots have certificates
+            digestBuffer.data()); // Output: digest data buffer
+
+        if (LIBSPDM_STATUS_IS_ERROR(status))
+        {
+            lg2::error(
+                "libspdm_get_digest failed for EID {EID}, status: 0x{STATUS:X}",
+                "EID", eid, "STATUS", status);
+            return std::vector<uint8_t>{}; // Return empty on error
+        }
+
+        // Calculate actual digest data size
+        size_t numSlots = __builtin_popcount(slotMask);
+        size_t totalDigestSize = numSlots * DIGEST_SIZE;
+        totalDigestSize = std::min(totalDigestSize, digestBuffer.size());
+
+        lg2::info(
+            "libspdm_get_digest completed for EID {EID}, slotMask: 0x{MASK:X}, slots: {SLOTS}, size: {SIZE}",
+            "EID", eid, "MASK", static_cast<unsigned>(slotMask), "SLOTS",
+            numSlots, "SIZE", totalDigestSize);
+
+        std::string signedMeas{};
+
+        // Return the tuple
+        return std::make_tuple(sdbusplus::message::object_path(m_path), "Test",
+                               "public_key_pem", // TODO: Get from certificate
+                               signedMeas, "Test", typeVersion());
     }
     catch (const std::exception& e)
     {
-        lg2::error("Failed to get signed measurements: {ERROR}", "ERROR",
-                   e.what());
-        throw InternalFailure();
+        lg2::error("SPDM Get Signed Measurements FAILED for EID {EID}: {ERROR}",
+                   "EID", eid, "ERROR", e.what());
+        throw;
     }
 }
 
