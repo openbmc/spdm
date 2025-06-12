@@ -8,18 +8,43 @@ extern "C"
 #include "library/spdm_return_status.h"
 }
 
+// Include net/if.h first for IFNAMSIZ and IF_NAMESIZE
+#include <net/if.h>
+
+// Save and undefine conflicting macros
+#undef IFF_UP
+#undef IFF_BROADCAST
+#undef IFF_DEBUG
+#undef IFF_LOOPBACK
+#undef IFF_POINTOPOINT
+#undef IFF_NOTRAILERS
+#undef IFF_RUNNING
+#undef IFF_NOARP
+#undef IFF_PROMISC
+#undef IFF_ALLMULTI
+#undef IFF_MASTER
+#undef IFF_SLAVE
+#undef IFF_MULTICAST
+#undef IFF_PORTSEL
+#undef IFF_AUTOMEDIA
+#undef IFF_DYNAMIC
+
+// Other system headers
 #include <arpa/inet.h>
-#include <linux/if_arp.h>
-#include <linux/mctp.h>
-#include <net/if.h> // Include this first to define IFNAMSIZ
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/un.h>
 #include <unistd.h>
 
+// Define _LINUX_IF_H to prevent linux/if.h from being included again
+#define _LINUX_IF_H
+#include <linux/if_arp.h>
+#include <linux/mctp.h>
+
 #include <phosphor-logging/lg2.hpp>
 
+// Standard library headers
 #include <array>
 #include <cstdint>
 #include <cstdio>
