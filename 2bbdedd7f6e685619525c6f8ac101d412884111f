@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b7759e9_09a2442a",
+        "filename": "src/libspdm_async.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-06-25T12:46:53Z",
+      "side": 1,
+      "message": "Here we are showing that how the measurements will gets pulled up, I just implemented till getting the digest. after the digest it needs to call the get certificate followed by the get measurement.",
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
