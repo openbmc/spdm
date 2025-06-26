@@ -37,6 +37,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "98de4a7f_5c1285b3",
+        "filename": "meson.build",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-06-26T14:43:58Z",
+      "side": 1,
+      "message": "This needs to be removed. We can add explicit dependency and also a wrapper for cmake dependency.",
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67d27d53_9c9aafa4",
+        "filename": "src/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-06-26T14:43:58Z",
+      "side": 1,
+      "message": "Ran 2 get-meas requests 2 for devices and confirmed it\u0027s running parallel.\n\nlibspdm_send_spdm_request[0] msg SPDM_GET_VERSION(0x84), size (0x4):\n0000: 10 84 00 00\nlibspdm_receive_spdm_response[0] msg SPDM_VERSION(0x4), size (0x8):\n0000: 10 04 00 00 00 01 00 11\nlibspdm_send_spdm_request[0] msg SPDM_GET_CAPABILITIES(0xe1), size (0xc):\n0000: 11 e1 00 00 00 00 00 00 00 00 00 00\nlibspdm_receive_spdm_response[0] msg SPDM_CAPABILITIES(0x61), size (0xc):\n0000: 11 61 00 00 00 1a 00 00 32 00 00 00\nlibspdm_send_spdm_request[0] msg SPDM_NEGOTIATE_ALGORITHMS(0xe3), size (0x20):\n0000: 11 e3 00 00 20 00 01 00 90 01 00 00 07 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\nlibspdm_receive_spdm_response[0] msg SPDM_ALGORITHMS(0x63), size (0x24):\n0000: 11 63 00 00 24 00 01 00 04 00 00 00 80 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n0020: 00 00 00 00\nlibspdm_send_spdm_request[0] msg SPDM_GET_DIGESTS(0x81), size (0x4):\n0000: 11 81 00 00\nlibspdm_receive_spdm_response[0] msg SPDM_DIGESTS(0x1), size (0x64):\n0000: 11 01 00 03 02 d4 ca 05 99 41 ed d5 3d 90 af 5f d4 8f a8 c0 b7 42 b2 d6 02 e4 50 33 0b bf 47 1e\n0020: 0b 1e 95 96 e8 65 e1 6a 25 5f f3 43 84 78 99 ec 27 7c 74 18 26 3f 4d 3f d8 1a 69 69 60 89 dd 3b\n0040: 7f 7d 98 c5 bf b9 ff 10 8e 51 33 21 1c 74 e3 65 70 a7 85 b4 74 93 32 08 44 3d 30 9e 0d 24 87 56\n0060: 18 11 e2 be\nprovisioned_slot_mask - 0x03\ndigest (0x0) - 02 d4 ca 05 99 41 ed d5 3d 90 af 5f d4 8f a8 c0 b7 42 b2 d6 02 e4 50 33 0b bf 47 1e 0b 1e 95 96 e8 65 e1 6a 25 5f f3 43 84 78 99 ec 27 7c 74 18\ndigest (0x1) - 26 3f 4d 3f d8 1a 69 69 60 89 dd 3b 7f 7d 98 c5 bf b9 ff 10 8e 51 33 21 1c 74 e3 65 70 a7 85 b4 74 93 32 08 44 3d 30 9e 0d 24 87 56 18 11 e2 be\nlibspdm_get_digest completed, slotMask: 0x3, slots: 2, size: 96\n\u003c6\u003e libspdm_get_digest completed, slotMask: 0x{MASK:X}, slots: 2, size: 96\nlibspdm_send_spdm_request[0] msg SPDM_GET_VERSION(0x84), size (0x4):\n0000: 10 84 00 00\nlibspdm_receive_spdm_response[0] msg SPDM_VERSION(0x4), size (0x8):\n0000: 10 04 00 00 00 01 00 11",
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3931f62f_d5570f26",
         "filename": "src/libspdm_async.hpp",
         "patchSetId": 3
@@ -112,6 +146,23 @@
       "side": 1,
       "message": "the get certificate \u0026 get measurement will be spanned in another thread ? or will it be in this same thread ?",
       "parentUuid": "4b7759e9_09a2442a",
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c08c35ed_cd253aa5",
+        "filename": "src/libspdm_async.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-06-26T14:43:58Z",
+      "side": 1,
+      "message": "@ratankgupta31@gmail.com We will have to generate this id dynamically right?. Currently it\u0027s hardcoded as an example?",
       "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
