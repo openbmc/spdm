@@ -84,6 +84,24 @@
       "message": "Should we have the function names as camel case ?",
       "revId": "15a0b17474921c824d1aef79bd9f370ea3760f59",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1daf9da8_78689060",
+        "filename": "src/libspdm_mctp_transport.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-06-27T17:39:33Z",
+      "side": 1,
+      "message": "Ack.",
+      "parentUuid": "1c85fefe_6bb5072c",
+      "revId": "15a0b17474921c824d1aef79bd9f370ea3760f59",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
