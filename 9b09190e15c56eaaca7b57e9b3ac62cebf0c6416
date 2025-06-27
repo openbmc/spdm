@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62cd2f12_5fa45416",
+        "filename": "src/mctp_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-06-27T17:48:15Z",
+      "side": 1,
+      "message": "e.what() --\u003e e",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3e692a8_dd6e2de7",
+        "filename": "src/mctp_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-06-27T17:48:15Z",
+      "side": 1,
+      "message": "uint32_t",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89a56576_e7051dbc",
+        "filename": "src/mctp_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-06-27T17:48:15Z",
+      "side": 1,
+      "message": "In mctp code construct data type for EID is uint32, we can remove uint8.",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b324f55a_52c127c2",
+        "filename": "src/mctp_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-06-27T17:48:15Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bdfe5c8_8d5cf5ee",
+        "filename": "src/mctp_discovery.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-06-27T17:48:15Z",
+      "side": 1,
+      "message": "uint32_t",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13f36119_3af3e0fb",
+        "filename": "src/mctp_discovery.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-06-27T17:48:15Z",
+      "side": 1,
+      "message": "We should be able to use type header from libspdm here.",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
