@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebef9bc5_e979cd7f",
+        "filename": "src/spdm_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-06-27T17:38:12Z",
+      "side": 1,
+      "message": "We can directly use `e` with lg2",
+      "revId": "62522f2110d7b1122938e729722b2a8b16c27ec6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52825773_72d7a9c9",
+        "filename": "src/spdm_discovery.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-06-27T17:38:12Z",
+      "side": 1,
+      "message": "We are not using type anywhere, i think we can remove this. Or it\u0027s added for any future scope?",
+      "revId": "62522f2110d7b1122938e729722b2a8b16c27ec6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
