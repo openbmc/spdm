@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c84747c_bb2b31d9",
+        "filename": "src/mctp_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2025-06-27T22:24:30Z",
+      "side": 1,
+      "message": "This path is only ever going to be hosted by mctpd; why the indirection through the mapper? I suggest you rather use mctpd\u0027s bus name directly and call GetManagedObjects\n\nAlso I don\u0027t see that you\u0027re setting a match to watch for endpoints coming and going?",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "62cd2f12_5fa45416",
         "filename": "src/mctp_discovery.cpp",
         "patchSetId": 5
@@ -65,6 +82,23 @@
       "writtenOn": "2025-06-27T17:48:15Z",
       "side": 1,
       "message": "Same as above.",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cf3699c_a2ef6fa6",
+        "filename": "src/mctp_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2025-06-27T22:24:30Z",
+      "side": 1,
+      "message": "There\u0027s no such interface?",
       "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
