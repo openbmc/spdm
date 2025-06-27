@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f0900583_8d8352c0",
+        "filename": "src/component_integrity_dbus.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-06-27T17:50:32Z",
+      "side": 1,
+      "message": "yes, there is similar discussion in earlier patches well.",
+      "parentUuid": "3a2e7a3b_5a1ee012",
+      "revId": "4656c6da066630839179a9fc8a48397517ccdefb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c15ad642_66b0cd07",
         "filename": "src/component_integrity_dbus.hpp",
         "patchSetId": 3
