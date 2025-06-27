@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "08affb22_00d16933",
+        "filename": "src/libspdm_transport.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-06-27T17:54:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6a054dd1_09b95c13",
+      "revId": "09079d4000746a348d90ceffc5f983023fbac18a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dbb6a912_b64c1d2d",
         "filename": "src/libspdm_transport.hpp",
         "patchSetId": 3
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e09e6017_1341796a",
+        "filename": "src/libspdm_transport.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-06-27T17:54:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "dbb6a912_b64c1d2d",
+      "revId": "09079d4000746a348d90ceffc5f983023fbac18a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9956f95a_6b7e8223",
         "filename": "src/libspdm_transport.hpp",
         "patchSetId": 3
@@ -65,6 +101,24 @@
       "writtenOn": "2025-06-06T08:08:41Z",
       "side": 1,
       "message": "Should all these configuration be part of EM config ? \nAs the configuration may vary from platform to platform ?",
+      "revId": "09079d4000746a348d90ceffc5f983023fbac18a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "766608ac_a838a11a",
+        "filename": "src/libspdm_transport.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-06-27T17:54:14Z",
+      "side": 1,
+      "message": "Currently for the simplicity we plan to keep this in header for 1.1, may be with 1.2 we can provide an option for requester to choose specific SPDM version. Individual flags provided by libspdm is an exhaustive list.",
+      "parentUuid": "9956f95a_6b7e8223",
       "revId": "09079d4000746a348d90ceffc5f983023fbac18a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
