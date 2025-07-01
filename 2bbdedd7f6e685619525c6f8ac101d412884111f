@@ -182,6 +182,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eb617d0e_e5c14bdd",
+        "filename": "src/libspdm_async.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-01T08:01:27Z",
+      "side": 1,
+      "message": "Yes, Exactly",
+      "parentUuid": "e6190df4_d4326054",
+      "range": {
+        "startLine": 204,
+        "startChar": 4,
+        "endLine": 205,
+        "endChar": 62
+      },
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4b7759e9_09a2442a",
         "filename": "src/libspdm_async.hpp",
         "patchSetId": 3
@@ -217,6 +241,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cee37c90_e7c9818a",
+        "filename": "src/libspdm_async.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-01T08:01:27Z",
+      "side": 1,
+      "message": "No, it is in the same thread, the whole get measuremenyt in the same thread.",
+      "parentUuid": "ea23e8c4_fb11abc5",
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c08c35ed_cd253aa5",
         "filename": "src/libspdm_async.hpp",
         "patchSetId": 3
@@ -228,6 +270,24 @@
       "writtenOn": "2025-06-26T14:43:58Z",
       "side": 1,
       "message": "@ratankgupta31@gmail.com We will have to generate this id dynamically right?. Currently it\u0027s hardcoded as an example?",
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "619364c5_e57fb46e",
+        "filename": "src/libspdm_async.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-01T08:01:27Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "c08c35ed_cd253aa5",
       "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
