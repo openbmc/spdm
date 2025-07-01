@@ -193,6 +193,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b4aae671_e3ccca93",
+        "filename": "src/libspdm_async.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-07-01T16:32:32Z",
+      "side": 1,
+      "message": "The sdbusplus code has multiple examples of sender/receivers.  You can also watch videos by Eric Niebler, who has given multiple talks on them.",
+      "parentUuid": "1e3e0def_c0d53c03",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 18
+      },
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "677a1d08_dba695fd",
         "filename": "src/libspdm_async.hpp",
         "patchSetId": 3
