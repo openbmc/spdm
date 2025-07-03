@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "085aa0e2_28568b20",
+        "filename": "src/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-03T05:18:43Z",
+      "side": 1,
+      "message": "Hi Abhilash,   ComponentIntegrity::spdmGetSignedMeasurements is a D-bus API which is synchronised D-bus API, so we need to wait till the libspdm completes it\u0027s job and return the measurement data.",
+      "parentUuid": "8ed866b9_276000c4",
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6327c814_51fb99a2",
         "filename": "src/component_integrity_dbus.cpp",
         "patchSetId": 3
@@ -234,6 +252,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f867eecd_90a7340e",
+        "filename": "src/libspdm_async.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-03T05:18:43Z",
+      "side": 1,
+      "message": "\u003eIs spawning a thread to make libspdm asynchronous a good idea?\nCan you propose some other solution, considering the libspdm API is synchronus?",
+      "parentUuid": "677a1d08_dba695fd",
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6190df4_d4326054",
         "filename": "src/libspdm_async.hpp",
         "patchSetId": 3
@@ -380,6 +416,24 @@
       "writtenOn": "2025-07-01T14:43:51Z",
       "side": 1,
       "message": "what does this code mean? it looks like fire and forget pattern . starting a coroutine but not waiting for it to complete? I am not able to figure out how coroutine is better for this? Why don\u0027t you just start a thread ,dettach from it and check for the global variable to see if work done.",
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "304e8dc2_91d6c034",
+        "filename": "src/libspdm_async.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-03T05:18:43Z",
+      "side": 1,
+      "message": "Although we are not using this piece of code, But that could have been used in the way I described above if we had the GetMeasurement D-Bus API as an asynchrnous one.",
+      "parentUuid": "bca4be94_527bc229",
       "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
