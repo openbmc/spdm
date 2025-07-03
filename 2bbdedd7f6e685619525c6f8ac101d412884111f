@@ -106,6 +106,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bbb7630b_d0313297",
+        "filename": "src/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-03T09:10:18Z",
+      "side": 1,
+      "message": "You are correct, it blocks the current thread here. I don\u0027see any breakthrough until we make the GET signed measurememnts as a asynchronus API.\n\nPatrick, Are you convinced with that? If you are ok we can propose the GET Signed measurment API as asynchrnious one.",
+      "parentUuid": "6327c814_51fb99a2",
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "67d27d53_9c9aafa4",
         "filename": "src/component_integrity_dbus.cpp",
         "patchSetId": 3
