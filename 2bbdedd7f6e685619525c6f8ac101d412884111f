@@ -360,6 +360,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "287c6d2a_4aac8726",
+        "filename": "src/libspdm_async.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1001762
+      },
+      "writtenOn": "2025-07-04T15:26:02Z",
+      "side": 1,
+      "message": "After reviewing the libspdm code, it appears that it is not currently designed for asynchronous programming. If MCTP and DOE sockets support non-blocking modes, we could potentially leverage this to create an asynchronous SPDM library. Since the workload is mostly I/O bound, a single-threaded (main thread) approach could be used to implement concurrent measurement processes. However, the existing SPDM APIs do not seem to support this model. Specifically, `spdm_device_send_message` would need to be converted into a coroutine function, which would require rewriting it in C++ using either `sdbusplus::context` or `asio::context`.\n\nI\u0027m also uncertain whether using threads, as you have suggested, would result in a cleaner solution. Is `spdm_context` designed to be thread-safe? Can we perform parallel measurement retrievals using a single `spdm_context` instance? Personally, I would prefer the asynchronous approach over a threading-based solution.",
+      "parentUuid": "f867eecd_90a7340e",
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6190df4_d4326054",
         "filename": "src/libspdm_async.hpp",
         "patchSetId": 3
