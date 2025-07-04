@@ -301,6 +301,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "51788520_78848dc7",
+        "filename": "src/libspdm_async.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-04T09:30:34Z",
+      "side": 1,
+      "message": "https://gerrit.openbmc.org/c/openbmc/spdm/+/81124/3/src/component_integrity_dbus.cpp#90 \nI have two options here from this D-bus function\n\nOption 1: Change D-Bus API to Return sdbusplus::async::task\u003c\u003e\n           Co_await on the function which does the libspdm_stuff\n\n\neg: \nauto spdmGetSignedMeasurements(\n    std::vector\u003csize_t\u003e measurementIndices, \n    std::string nonce,\n    size_t slotId) -\u003e sdbusplus::async::task\u003cstd::tuple\u003csdbusplus::message::object_path, std::string, std::string, std::string, std::string, std::string\u003e\u003e\n{\n    // Validate inputs...\n    \n    // Use co_await with the async function\n    auto result \u003d co_await requester::get_digest_async(m_transport-\u003egetSpdmContext(), slotId, m_path);\n    \n    // Process result and return\n    auto [objPath, certType, pubKeyPem, signedMeas, description] \u003d result;\n    co_return std::make_tuple(sdbusplus::message::object_path(objPath), certType, \n                              pubKeyPem, signedMeas, description, typeVersion());\n}\n\nOption 2: Use task.get() (Blocking Call)\n\nstd::tuple\u003csdbusplus::message::object_path, std::string, std::string,\n           std::string, std::string, std::string\u003e\n    ComponentIntegrity::spdmGetSignedMeasurements(\n        std::vector\u003csize_t\u003e measurementIndices, std::string nonce,\n        size_t slotId)\n{\n    // Validate inputs...\n    \n    // Create async task\n    auto task \u003d [this, slotId]() -\u003e sdbusplus::async::task\u003cstd::tuple\u003cstd::string, std::string, std::string, std::string, std::string\u003e\u003e {\n        co_return co_await requester::get_digest_async(m_transport-\u003egetSpdmContext(), slotId, m_path);\n    }();\n    \n    // Block to get result\n    auto result \u003d task.get(); // This blocks!\n    \n    // Process and return\n    auto [objPath, certType, pubKeyPem, signedMeas, description] \u003d result;\n    return std::make_tuple(sdbusplus::message::object_path(objPath), certType, \n                          pubKeyPem, signedMeas, description, typeVersion());\n}\n\n\nAny other way which I am missing, Even I tried it with sender/reciever way but even in that we need to block it in the main thread until the other thread finishes.\nOption 3:\n\n        auto sender \u003d requester::get_digest_async(m_transport-\u003egetSpdmContext(), eid, m_path) |\n                     sdbusplus::async::execution::then([\u0026promise, this](auto result) {\n                         std::cout \u003c\u003c \"[DEBUG] spdmGetSignedMeasurements: Sender completed, setting promise\" \u003c\u003c std::endl;\n                         promise.set_value(result);\n                         std::cout \u003c\u003c \"[DEBUG] spdmGetSignedMeasurements: Requesting async context stop from within async execution\" \u003c\u003c std::endl;\n                         m_asyncCtx-\u003erequest_stop();\n                     });\n\n   \n        // Spawn the sender in the async context\n        m_asyncCtx-\u003espawn(std::move(sender));\n\n      \n        std::thread asyncThread([this]() {\n           \n            try {\n                m_asyncCtx-\u003erun();  // This will block until request_stop() is called\n                \n            } catch (const std::exception\u0026 e) {\n              \n            }\n        });\n\n      \n        // Non-blocking check approach that doesn\u0027t sleep the main thread\n        auto result \u003d wait_for_future_non_blocking_no_sleep(future, std::chrono::seconds(3));",
+      "parentUuid": "b5a29789_b879a30d",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 18
+      },
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "677a1d08_dba695fd",
         "filename": "src/libspdm_async.hpp",
         "patchSetId": 3
