@@ -343,6 +343,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d599b836_e4a51600",
+        "filename": "src/libspdm_async.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-07-04T18:58:57Z",
+      "side": 1,
+      "message": "I have no idea what you mean by \"Change D-Bus API to return task\".  You can\u0027t change the YAML to return a task.  A task is a co-routine.  You can\u0027t send a co-routine across processes.\n\n```\nOption 1: Change D-Bus API to Return sdbusplus::async::task\u003c\u003e\nCo_await on the function which does the libspdm_stuff\n\neg:\nauto spdmGetSignedMeasurements(\nstd::vector\u003csize_t\u003e measurementIndices,\nstd::string nonce,\nsize_t slotId) -\u003e sdbusplus::async::task\u003cstd::tuple\u003csdbusplus::message::object_path, std::string, std::string, std::string, std::string, std::string\u003e\u003e\n```\n\nThis is code from the generated bindings in `xyz/openbmc_project/Attestation/MeasurementSet/aserver.hpp`: https://gist.github.com/williamspatrick/4dc6bed5e6370b806b27a9bc00ccdd9c\n\nYou need to implement a method call `auto method_call(spdm_get_signed_measurements_t, ...)` that either returns the `tuple` (sync, blocking) or the `task\u003ctuple\u003e` (async, nonblocking) and the bindings automatically do the right thing.  If that method_call returns a task, the message handling for the method call becomes async.\n\nThe sdbusplus examples have this exact scenario: https://github.com/openbmc/sdbusplus/blob/master/example/calculator-aserver.cpp#L14 .  `multiple` is implemented as a synchronous method, `divide` is implemented as an asynchronous method.",
+      "parentUuid": "51788520_78848dc7",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 18
+      },
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "677a1d08_dba695fd",
         "filename": "src/libspdm_async.hpp",
         "patchSetId": 3
