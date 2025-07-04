@@ -89,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b9b84e41_a8c6ea92",
+        "filename": "src/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1001762
+      },
+      "writtenOn": "2025-07-04T15:34:21Z",
+      "side": 1,
+      "message": "I\u0027m trying to understand how to implement an asynchronous D-Bus Method. I read that a D-Bus Method call can be asynchronous if the object is hosted by another service. \n\nI\u0027m confused by the statement: \"If we implement the GetMeasurement D-Bus API as an asynchronous call.\" \n\nWho is responsible for implementing GetMeasurement—this service, or an external service?",
+      "parentUuid": "085aa0e2_28568b20",
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6327c814_51fb99a2",
         "filename": "src/component_integrity_dbus.cpp",
         "patchSetId": 3
