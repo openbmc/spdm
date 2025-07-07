@@ -604,6 +604,24 @@
       "parentUuid": "304e8dc2_91d6c034",
       "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cc86a81_96afc398",
+        "filename": "src/libspdm_async.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-07T14:32:00Z",
+      "side": 1,
+      "message": "Hi Abhilash, \n\nWe will be having the Dbus API for each device so we don\u0027t need to call like above.\nWhat we are trying here while you call the Get Signed Mesaurenment for a device (/xyz/openbmc_project/SPDM/\u003cDevice 1\u003e) and while it is busy in libspdm aspect.\n\nUser should be able to call the Get Signed Mesaurenment for a device2 (/xyz/openbmc_project/SPDM/\u003cDevice 2\u003e)\n\nPlease look at the code from here.\nhttps://gerrit.openbmc.org/c/openbmc/spdm/+/81124/3/src/component_integrity_dbus.cpp#90\n\nPatrick,\n\u003eI have no idea what you mean by \"Change D-Bus API to return task\". You can\u0027t change the YAML to return a task. A task is a co-routine. You can\u0027t send a co-routine across processes.\n\nOhh Sorry Patrick, I was not aware of this async binding   Looks like that should solve the issue.\nThanks for pointing this out.",
+      "parentUuid": "13a9cf9a_3c06776c",
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
