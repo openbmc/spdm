@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32165fb3_ee76af29",
+        "filename": "src/mctp_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-16T05:34:09Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4c84747c_bb2b31d9",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62cd2f12_5fa45416",
@@ -31,6 +49,24 @@
       "writtenOn": "2025-06-27T17:48:15Z",
       "side": 1,
       "message": "e.what() --\u003e e",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2891a54c_e61cfb48",
+        "filename": "src/mctp_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-16T05:34:09Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "62cd2f12_5fa45416",
       "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fcd9f633_b1d71ea4",
+        "filename": "src/mctp_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-16T05:34:09Z",
+      "side": 1,
+      "message": "https://github.com/openbmc/phosphor-dbus-interfaces/blob/master/yaml/xyz/openbmc_project/MCTP/Endpoint.interface.yaml#L18, It is byte here",
+      "parentUuid": "a3e692a8_dd6e2de7",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "89a56576_e7051dbc",
         "filename": "src/mctp_discovery.cpp",
         "patchSetId": 5
@@ -65,6 +119,24 @@
       "writtenOn": "2025-06-27T17:48:15Z",
       "side": 1,
       "message": "In mctp code construct data type for EID is uint32, we can remove uint8.",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d485f0e0_24ad9691",
+        "filename": "src/mctp_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-16T05:34:09Z",
+      "side": 1,
+      "message": "It is byte in the d-bus interfaces.https://github.com/openbmc/phosphor-dbus-interfaces/blob/master/yaml/xyz/openbmc_project/MCTP/Endpoint.interface.yaml#L18",
+      "parentUuid": "89a56576_e7051dbc",
       "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -86,6 +158,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7271d17a_d21221e5",
+        "filename": "src/mctp_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-16T05:34:09Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b324f55a_52c127c2",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0cf3699c_a2ef6fa6",
@@ -99,6 +189,24 @@
       "writtenOn": "2025-06-27T22:24:30Z",
       "side": 1,
       "message": "There\u0027s no such interface?",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0f4490a_e7226b4b",
+        "filename": "src/mctp_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-16T05:34:09Z",
+      "side": 1,
+      "message": "Yes it was in downstream and based on the old design, But it is not required now with in kernel socket",
+      "parentUuid": "0cf3699c_a2ef6fa6",
       "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
