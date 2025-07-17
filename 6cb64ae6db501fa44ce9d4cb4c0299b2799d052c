@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3d73066_f98165fe",
+        "filename": "src/mctp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2025-07-17T23:53:53Z",
+      "side": 1,
+      "message": "Do you really want to fetch from the root? I expect you\u0027re only interested in endpoint devices, not other objects like interfaces and networks.",
+      "range": {
+        "startLine": 181,
+        "startChar": 59,
+        "endLine": 181,
+        "endChar": 62
+      },
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc46a256_6219b264",
+        "filename": "src/mctp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2025-07-17T23:53:53Z",
+      "side": 1,
+      "message": "This blocks. Shouldn\u0027t it be async?",
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61e190aa_47cc2949",
+        "filename": "src/mctp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2025-07-17T23:53:53Z",
+      "side": 1,
+      "message": "Are we just doing this once? You should have a match on mctpd\u0027s object tree, and react to the coming and going of endpoints, right?",
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
