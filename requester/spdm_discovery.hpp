@@ -67,10 +67,10 @@ class DiscoveryProtocol
 
     /**
      * @brief Discover SPDM-capable devices on this transport
-     * @return Vector of discovered device information
-     * @throws std::runtime_error on discovery failure
+     * @param callback Callback function to handle the discovered devices
      */
-    virtual std::vector<ResponderInfo> discoverDevices() = 0;
+    virtual void discoverDevices(
+        std::function<void(std::vector<ResponderInfo>)> callback) = 0;
 
     /**
      * @brief Get the transport type
@@ -95,12 +95,10 @@ class SPDMDiscovery
 
     /**
      * @brief Start device discovery
-     * @return true if devices were found, false otherwise
+     * @param callback Callback function to handle the discovered devices
      */
-    bool discover();
-
-    /** @brief Discovered devices */
-    std::vector<ResponderInfo> responderInfos;
+    void discover(
+        std::function<void(std::vector<ResponderInfo> devices)> callback);
 
   private:
     std::vector<std::unique_ptr<DiscoveryProtocol>>
