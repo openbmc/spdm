@@ -4,6 +4,7 @@
 #pragma once
 
 #include "spdm_discovery.hpp"
+#include "utils.hpp"
 
 #include <sdbusplus/async.hpp>
 
@@ -21,16 +22,25 @@ class MCTPTransportDiscovery : public DiscoveryProtocol
   public:
     /**
      * @brief Construct a new MCTP Transport object
-     * @param asyncCtx Reference to async D-Bus context
+     * @param ctx Reference to async D-Bus context
      */
-    explicit MCTPTransportDiscovery(sdbusplus::async::context& asyncCtx);
+    explicit MCTPTransportDiscovery(sdbusplus::async::context& ctx);
 
     /**
      * @brief Discover SPDM devices over MCTP
-     * @return Vector of discovered device information
-     * @throws sdbusplus::exception::SdBusError on D-Bus errors
+     * @param callback Callback function to handle the discovered devices
      */
-    std::vector<ResponderInfo> discoverDevices() override;
+    void discoverDevices(
+        std::function<void(std::vector<ResponderInfo>)> callback) override;
+
+  private:
+    /**
+     * @brief Process managed objects to extract SPDM device information
+     * @param managedObjects Map of managed objects from D-Bus
+     * @return Vector of discovered SPDM devices
+     */
+    std::vector<ResponderInfo> processManagedObjects(
+        const ManagedObjects& managedObjects);
 
     /**
      * @brief Get the transport type
@@ -42,7 +52,50 @@ class MCTPTransportDiscovery : public DiscoveryProtocol
     }
 
   private:
-    sdbusplus::async::context& asyncCtx; ///< Async D-Bus context
+    /**
+     * @brief Check if endpoint supports SPDM message type
+     * @param mctpInterface MCTP interface properties
+     * @param objectPath Object path for logging
+     * @return true if endpoint supports SPDM, false otherwise
+     */
+    bool supportsSpdm(const DbusInterface& mctpInterface,
+                      const std::string& objectPath);
+
+    /**
+     * @brief Extract EID from MCTP interface
+     * @param mctpInterface MCTP interface properties
+     * @param objectPath Object path for logging
+     * @return EID value if valid, invalid_eid otherwise
+     */
+    size_t extractEid(const DbusInterface& mctpInterface,
+                      const std::string& objectPath);
+
+    /**
+     * @brief Extract UUID from interfaces
+     * @param interfaces All interfaces for the object
+     * @param objectPath Object path for logging
+     * @return UUID string if valid, empty string otherwise
+     */
+    std::string extractUuid(const DbusInterfaces& interfaces,
+                            const std::string& objectPath);
+
+    /// MCTP endpoint interface name
+    static constexpr auto mctpEndpointIntfName =
+        "xyz.openbmc_project.MCTP.Endpoint";
+
+    /// UUID interface name
+    static constexpr auto uuidIntfName = "xyz.openbmc_project.Common.UUID";
+
+    /// MCTP service name
+    static constexpr auto mctpService = "au.com.codeconstruct.MCTP1";
+
+    /// MCTP message type for SPDM
+    static constexpr uint8_t MCTP_MESSAGE_TYPE_SPDM = 0x05;
+
+    /// Invalid EID marker
+    static constexpr size_t invalid_eid = 255;
+
+    sdbusplus::async::context* asyncCtx = nullptr; ///< Async D-Bus context
 };
 
 } // namespace spdm

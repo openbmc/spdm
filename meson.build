@@ -15,6 +15,7 @@ spdmd_src = [
     'requester/spdmd.cpp',
     'requester/spdm_discovery.cpp',
     'requester/mctp_transport_discovery.cpp',
+    'requester/utils.cpp',
 ]
 
 spdmd_includes = include_directories('requester')
@@ -26,3 +27,4 @@ executable(
     install: true,
     install_dir: get_option('libexecdir'),
 )
+
