@@ -31,20 +31,22 @@ int main()
     spdm::SPDMDiscovery discovery(std::move(discoveryProtocol));
 
     // Perform discovery
-    if (discovery.discover())
-    {
-        // Log discovered devices
-        for (const auto& device : discovery.respInfos)
+    discovery.discover([](std::vector<spdm::ResponderInfo> devices) {
+        if (devices.empty())
         {
-            info("Found SPDM device: PATH={PATH}, EID={EID}, UUID={UUID}",
-                 "PATH", device.objectPath, "EID", device.eid, "UUID",
-                 device.uuid);
+            error("No SPDM devices found");
         }
-    }
-    else
-    {
-        error("No SPDM devices found");
-    }
+        else
+        {
+            // Log discovered devices
+            for (const auto& device : devices)
+            {
+                info("Found SPDM device: PATH={PATH}, EID={EID}, UUID={UUID}",
+                     "PATH", device.objectPath, "EID", device.eid, "UUID",
+                     device.uuid);
+            }
+        }
+    });
     // Run the sdbusplus async context for parallel coroutine execution
     ctx.run();
 
