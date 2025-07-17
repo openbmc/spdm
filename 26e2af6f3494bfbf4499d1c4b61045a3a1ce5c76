@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cff3010_b249028a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-17T09:41:59Z",
+      "side": 1,
+      "message": "This threshold value is very low, Even the following line can not fit in 60 characters.\n\nstd::vector\u003cResponderInfo\u003e MCTPTransportDiscovery::discoverDevices()\n\nline.\n-   key: readability-function-size.LineThreshold\n    value: 60\n\nProposing it to 80  characters/line.\n\nIf ok, I can push the commit.",
+      "revId": "26e2af6f3494bfbf4499d1c4b61045a3a1ce5c76",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
