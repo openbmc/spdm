@@ -6,9 +6,11 @@
 #include "spdm_discovery.hpp"
 
 #include <sdbusplus/bus.hpp>
+#include <sdbusplus/message.hpp>
 
-
-
+#include <map>
+#include <string>
+#include <variant>
 #include <vector>
 
 namespace spdm
@@ -44,6 +46,71 @@ class MCTPTransportDiscovery : public DiscoveryProtocol
     }
 
   private:
+    /**
+     * @brief Get all managed objects for a service
+     * @param service D-Bus service name
+     * @return Map of object paths to their interfaces and properties
+     */
+    std::map<
+        std::string,
+        std::map<std::string,
+                 std::map<std::string, std::variant<std::string, uint8_t,
+                                                    std::vector<uint8_t>>>>>
+        getManagedObjects(const std::string& service);
+
+    /**
+     * @brief Check if endpoint supports SPDM message type
+     * @param mctpInterface MCTP interface properties
+     * @param objectPath Object path for logging
+     * @return true if endpoint supports SPDM, false otherwise
+     */
+    bool supportsSpdm(
+        const std::map<std::string, std::variant<std::string, uint8_t,
+                                                 std::vector<uint8_t>>>&
+            mctpInterface,
+        const std::string& objectPath);
+
+    /**
+     * @brief Extract EID from MCTP interface
+     * @param mctpInterface MCTP interface properties
+     * @param objectPath Object path for logging
+     * @return EID value if valid, invalid_eid otherwise
+     */
+    size_t extractEid(
+        const std::map<std::string, std::variant<std::string, uint8_t,
+                                                 std::vector<uint8_t>>>&
+            mctpInterface,
+        const std::string& objectPath);
+
+    /**
+     * @brief Extract UUID from interfaces
+     * @param interfaces All interfaces for the object
+     * @param objectPath Object path for logging
+     * @return UUID string if valid, empty string otherwise
+     */
+    std::string extractUuid(
+        const std::map<
+            std::string,
+            std::map<std::string,
+                     std::variant<std::string, uint8_t, std::vector<uint8_t>>>>&
+            interfaces,
+        const std::string& objectPath);
+
+    /// MCTP endpoint interface name
+    static constexpr auto mctpEndpointIntfName =
+        "xyz.openbmc_project.MCTP.Endpoint";
+
+    /// UUID interface name
+    static constexpr auto uuidIntfName = "xyz.openbmc_project.Common.UUID";
+
+    /// MCTP service name
+    static constexpr auto mctpService = "au.com.codeconstruct.MCTP1";
+
+    /// SPDM message type constant
+    static constexpr uint8_t MCTP_MESSAGE_TYPE_SPDM = 0x05;
+
+    /// Invalid EID marker
+    static constexpr size_t invalid_eid = 255;
 
     sdbusplus::bus::bus& bus; ///< D-Bus connection
 };
