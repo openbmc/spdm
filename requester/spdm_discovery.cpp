@@ -25,21 +25,24 @@ SPDMDiscovery::SPDMDiscovery(
  * @brief Performs device discovery
  * @details Initiates discovery process using configured transport
  *
- * @return true if devices were found, false otherwise
- * @throws std::runtime_error on discovery failure
+ * @param callback Callback function to handle the discovery result
  */
-bool SPDMDiscovery::discover()
+void SPDMDiscovery::discover(
+    std::function<void(std::vector<ResponderInfo> devices)> callback)
 {
-    try
-    {
-        respInfos = discoveryProtocol->discoverDevices();
-        return !respInfos.empty();
-    }
-    catch (const std::exception& e)
-    {
-        error("Discovery failed: {ERROR}", "ERROR", e);
-        return false;
-    }
+    discoveryProtocol->discoverDevices([callback = std::move(callback)](
+                                           std::vector<ResponderInfo> devices) {
+        if (devices.empty())
+        {
+            info("No SPDM devices discovered");
+        }
+        else
+        {
+            info("Discovered {COUNT} SPDM devices", "COUNT", devices.size());
+        }
+
+        callback(std::move(devices));
+    });
 }
 
 } // namespace spdm
