@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8cad165_3b73dca8",
+        "filename": "src/spdm_discovery.hpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2025-07-18T02:31:51Z",
+      "side": 1,
+      "message": "nit: responderInfos",
+      "revId": "f419e490e83c6c4260264c5514153bc345fd26d7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "284dc971_fb3049b1",
+        "filename": "src/spdmd.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2025-07-18T02:31:51Z",
+      "side": 1,
+      "message": "This is the reason why I prefer to move `context` from spdmd into main(), as mentioned in the previous patch.\nThen you do not need to create SPDMDaemon to get the bus, it\u0027s in the main().",
+      "revId": "f419e490e83c6c4260264c5514153bc345fd26d7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8e0872e_8393682c",
+        "filename": "src/spdmd.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2025-07-18T02:31:51Z",
+      "side": 1,
+      "message": "Use lg2 API",
+      "revId": "f419e490e83c6c4260264c5514153bc345fd26d7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
