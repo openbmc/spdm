@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d3cdbce6_3ad7b153",
+        "filename": "src/mctp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2025-07-18T03:08:03Z",
+      "side": 1,
+      "message": "This is \"sync\" call. As the daemon itself is using async sdbusplus, prefer to make the whole daemon async.",
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cc46a256_6219b264",
         "filename": "src/mctp_transport_discovery.cpp",
         "patchSetId": 6
@@ -54,6 +71,97 @@
       "writtenOn": "2025-07-17T23:53:53Z",
       "side": 1,
       "message": "Are we just doing this once? You should have a match on mctpd\u0027s object tree, and react to the coming and going of endpoints, right?",
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e8873b1_2977e532",
+        "filename": "src/mctp_transport_discovery.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2025-07-18T03:08:03Z",
+      "side": 1,
+      "message": "Define an alias for this complicated data.",
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ee8e34c_661af6a4",
+        "filename": "src/mctp_transport_discovery.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2025-07-18T03:08:03Z",
+      "side": 1,
+      "message": "And possibly create a \"utils.cpp\" to put the generic dbus call\u0027s wrappers.",
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fc774e0_cfc769a2",
+        "filename": "src/mctp_transport_discovery.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2025-07-18T03:08:03Z",
+      "side": 1,
+      "message": "Define an alias",
+      "range": {
+        "startLine": 68,
+        "startChar": 14,
+        "endLine": 69,
+        "endChar": 71
+      },
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "621757f4_45c2e302",
+        "filename": "src/mctp_transport_discovery.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2025-07-18T03:08:03Z",
+      "side": 1,
+      "message": "The 3 functions here are more like \"util\" functions that is not supposed to be a member function, possibly make them static or move them to \"utils\" as well?",
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2d8d5ba_ac590ef3",
+        "filename": "src/mctp_transport_discovery.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2025-07-18T03:08:03Z",
+      "side": 1,
+      "message": "Prefer to move there constexpr values into cpp and put them in a namespace.",
       "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
