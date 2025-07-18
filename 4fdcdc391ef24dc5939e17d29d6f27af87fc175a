@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "718aea00_59cdc701",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2025-07-18T02:32:50Z",
+      "side": 1,
+      "message": "There is no .clang-tidy in this commit.\nPrefer to add a minimal .clang-tidy here.",
+      "range": {
+        "startLine": 17,
+        "startChar": 43,
+        "endLine": 17,
+        "endChar": 53
+      },
+      "revId": "4fdcdc391ef24dc5939e17d29d6f27af87fc175a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "20e0bb6a_74b5c4fd",
         "filename": "src/spdmd_app.hpp",
         "patchSetId": 10
