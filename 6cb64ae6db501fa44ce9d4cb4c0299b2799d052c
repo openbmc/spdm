@@ -41,6 +41,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94cdb437_af7ce189",
+        "filename": "src/mctp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-20T16:31:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f3d73066_f98165fe",
+      "range": {
+        "startLine": 181,
+        "startChar": 59,
+        "endLine": 181,
+        "endChar": 62
+      },
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc46a256_6219b264",
@@ -77,6 +101,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6807c72f_cb919aff",
+        "filename": "src/mctp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-20T16:31:24Z",
+      "side": 1,
+      "message": "Yes but this is for only for the start up and yes the matches are also required, will bring it in later commit. these are the initial commits.",
+      "parentUuid": "61e190aa_47cc2949",
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0e8873b1_2977e532",
         "filename": "src/mctp_transport_discovery.hpp",
         "patchSetId": 6
@@ -88,6 +130,24 @@
       "writtenOn": "2025-07-18T03:08:03Z",
       "side": 1,
       "message": "Define an alias for this complicated data.",
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c002eced_6e730d3c",
+        "filename": "src/mctp_transport_discovery.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-20T16:31:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0e8873b1_2977e532",
       "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -105,6 +165,24 @@
       "writtenOn": "2025-07-18T03:08:03Z",
       "side": 1,
       "message": "And possibly create a \"utils.cpp\" to put the generic dbus call\u0027s wrappers.",
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "031ae741_37825ae8",
+        "filename": "src/mctp_transport_discovery.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-20T16:31:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1ee8e34c_661af6a4",
       "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -132,6 +210,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec768393_c0260b09",
+        "filename": "src/mctp_transport_discovery.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-20T16:31:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7fc774e0_cfc769a2",
+      "range": {
+        "startLine": 68,
+        "startChar": 14,
+        "endLine": 69,
+        "endChar": 71
+      },
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "621757f4_45c2e302",
@@ -149,6 +251,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fba07bef_5d62b608",
+        "filename": "src/mctp_transport_discovery.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-20T16:31:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "621757f4_45c2e302",
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2d8d5ba_ac590ef3",
@@ -162,6 +282,24 @@
       "writtenOn": "2025-07-18T03:08:03Z",
       "side": 1,
       "message": "Prefer to move there constexpr values into cpp and put them in a namespace.",
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cad0163_4aba8476",
+        "filename": "src/mctp_transport_discovery.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-20T16:31:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d2d8d5ba_ac590ef3",
       "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
