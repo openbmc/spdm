@@ -43,6 +43,42 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b176c820_b584d529",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-21T11:22:33Z",
+      "side": 1,
+      "message": "Even we can do it from here too, Means we can get the context from this calss and pass it wherever we want",
+      "parentUuid": "20e0bb6a_74b5c4fd",
+      "revId": "4fdcdc391ef24dc5939e17d29d6f27af87fc175a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ece74c2e_cd22526b",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-21T11:22:33Z",
+      "side": 1,
+      "message": "I am not getting the use of creating the async context in main and pass it here as a reference, Or create it here and pass it as a reference in main or main directly access it.",
+      "parentUuid": "20e0bb6a_74b5c4fd",
+      "revId": "4fdcdc391ef24dc5939e17d29d6f27af87fc175a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6d0dcc40_afffbe2a",
         "filename": "src/spdmd_app.hpp",
         "patchSetId": 10
@@ -54,6 +90,24 @@
       "writtenOn": "2025-07-18T02:17:26Z",
       "side": 1,
       "message": "This is not really private.\n\nPossibly move this iinto cpp and put them in a namespace.",
+      "revId": "4fdcdc391ef24dc5939e17d29d6f27af87fc175a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fec320e_03e6dea3",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-21T11:22:33Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6d0dcc40_afffbe2a",
       "revId": "4fdcdc391ef24dc5939e17d29d6f27af87fc175a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }

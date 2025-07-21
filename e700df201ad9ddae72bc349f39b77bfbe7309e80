@@ -229,6 +229,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8581ae33_a371c549",
+        "filename": "spdm_prototype/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-21T11:22:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cecea0b_41549fc7",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f743752d_ae29fcd4",
@@ -242,6 +260,24 @@
       "writtenOn": "2025-05-13T10:43:30Z",
       "side": 1,
       "message": "Drop.",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "826f2c83_f6719224",
+        "filename": "spdm_prototype/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-21T11:22:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f743752d_ae29fcd4",
       "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -401,6 +437,30 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "681aa78f_92932de0",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 3
+      },
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9e63522_3889448c",
+        "filename": "spdm_prototype/spdmd/spdmd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-21T11:22:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1fdf6fd_9daebd35",
       "range": {
         "startLine": 1,
         "startChar": 0,
