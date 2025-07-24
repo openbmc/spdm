@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b2398661_c09e63d6",
+        "filename": "src/spdmd_app.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-24T11:49:27Z",
+      "side": 1,
+      "message": "It was while I was debugging it, as I wanted to make sure that it picked up my changes 😊",
+      "parentUuid": "6616b0a6_0e379d6f",
+      "range": {
+        "startLine": 20,
+        "startChar": 30,
+        "endLine": 20,
+        "endChar": 59
+      },
+      "revId": "4fdcdc391ef24dc5939e17d29d6f27af87fc175a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "20e0bb6a_74b5c4fd",
         "filename": "src/spdmd_app.hpp",
         "patchSetId": 10
@@ -123,6 +147,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "218740ac_6c760890",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-24T11:49:27Z",
+      "side": 1,
+      "message": "Yes, I have removed in the new code.I am going to push",
+      "parentUuid": "754bb15d_c1652837",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 45
+      },
+      "revId": "4fdcdc391ef24dc5939e17d29d6f27af87fc175a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d0dcc40_afffbe2a",
@@ -177,6 +225,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ee3b65d0_f432555a",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-24T11:49:27Z",
+      "side": 1,
+      "message": "we can have /xyz/openbmc_project/attestation, Is that ok?",
+      "parentUuid": "236cd912_3abdf87b",
+      "revId": "4fdcdc391ef24dc5939e17d29d6f27af87fc175a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0ed1da31_c5803fc7",
         "filename": "src/spdmd_app.hpp",
         "patchSetId": 10
@@ -188,6 +254,30 @@
       "writtenOn": "2025-07-21T22:49:26Z",
       "side": 1,
       "message": "nit: switch these.  \u003cproject\u003e.\u003crepo\u003e.\u003cdaemon\u003e",
+      "range": {
+        "startLine": 33,
+        "startChar": 61,
+        "endLine": 33,
+        "endChar": 71
+      },
+      "revId": "4fdcdc391ef24dc5939e17d29d6f27af87fc175a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7d2882d_9f9cdec2",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-24T11:49:27Z",
+      "side": 1,
+      "message": "xyz.openbmc_project.spdm.spdmd",
+      "parentUuid": "0ed1da31_c5803fc7",
       "range": {
         "startLine": 33,
         "startChar": 61,
