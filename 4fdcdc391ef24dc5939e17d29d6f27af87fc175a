@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82526440_deb13d88",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-25T12:05:49Z",
+      "side": 1,
+      "message": "It is already in the repo.",
+      "parentUuid": "718aea00_59cdc701",
+      "range": {
+        "startLine": 17,
+        "startChar": 43,
+        "endLine": 17,
+        "endChar": 53
+      },
+      "revId": "4fdcdc391ef24dc5939e17d29d6f27af87fc175a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6616b0a6_0e379d6f",
@@ -120,6 +144,24 @@
       "side": 1,
       "message": "I am not getting the use of creating the async context in main and pass it here as a reference, Or create it here and pass it as a reference in main or main directly access it.",
       "parentUuid": "20e0bb6a_74b5c4fd",
+      "revId": "4fdcdc391ef24dc5939e17d29d6f27af87fc175a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0420f0f1_ebbac5d5",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-25T12:05:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ece74c2e_cd22526b",
       "revId": "4fdcdc391ef24dc5939e17d29d6f27af87fc175a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -255,6 +297,24 @@
       "side": 1,
       "message": "If you\u0027re going to propose random paths and expect them to have meaning, please contribute them to phosphor-dbus-interfaces.  That\u0027s where path constants belong now.",
       "parentUuid": "ee3b65d0_f432555a",
+      "revId": "4fdcdc391ef24dc5939e17d29d6f27af87fc175a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d630470_37b885d7",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-25T12:05:49Z",
+      "side": 1,
+      "message": "ok, will propose it in d-bus interface too, but till that time we can keep it same.I will add TODO here.",
+      "parentUuid": "3847686a_9bba026b",
       "revId": "4fdcdc391ef24dc5939e17d29d6f27af87fc175a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
