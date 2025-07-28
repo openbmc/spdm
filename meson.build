@@ -17,6 +17,14 @@ sdbusplus_dep = dependency('sdbusplus')
 systemd_dep = dependency('systemd')
 
 spdmd_deps = [phosphor_dbus_interfaces_dep, phosphor_logging_dep, sdbusplus_dep]
+
+sanitizer_flags = []
+
+# Add coverage flags if enabled
+if get_option('coverage')
+    sanitizer_flags += ['--coverage']
+endif
+
 spdmd_src = [
     'requester/spdmd.cpp',
     'requester/spdm_discovery.cpp',
@@ -34,6 +42,15 @@ executable(
     'spdmd',
     spdmd_src,
     dependencies: spdmd_deps,
+    include_directories: spdmd_includes,
+    cpp_args: sanitizer_flags,
     install: true,
     install_dir: get_option('libexecdir') / 'spdm',
 )
+
+# Test subdirectory
+if get_option('tests')
+    # Pass sanitizer flags to tests
+    sanitizer_flags_for_tests = sanitizer_flags
+    subdir('tests')
+endif
