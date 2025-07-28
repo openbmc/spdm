@@ -66,12 +66,10 @@ std::vector<ResponderInfo> MCTPTransportDiscovery::processManagedObjects(
 
     std::vector<ResponderInfo> devices;
 
-    // Use the member variable mctpIo for socket creation
     bool socketCreated = mctpIo.createSocket();
     if (!socketCreated)
     {
-        warning(
-            "Failed to create MCTP socket, transport objects will not be created");
+        warning("Failed to create MCTP socket, no transports will be created");
     }
 
     for (const auto& [objectPath, interfaces] : managedObjects)
