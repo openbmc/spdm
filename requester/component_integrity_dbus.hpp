@@ -16,6 +16,12 @@
 
 namespace spdm
 {
+class SpdmTransport;
+
+namespace test
+{
+class ComponentIntegrityTest;
+}
 
 class ComponentIntegrity;
 
@@ -64,6 +70,15 @@ class ComponentIntegrity : public ComponentIntegrityServer
     ~ComponentIntegrity() = default;
 
     /**
+     * @brief Set the SPDM transport reference
+     * @param transportIn SPDM transport instance
+     */
+    void setTransport(std::shared_ptr<spdm::SpdmTransport> transportIn)
+    {
+        transport = transportIn;
+    }
+
+    /**
      * @brief Update the last updated timestamp
      */
     void updateLastUpdateTime()
@@ -72,7 +87,6 @@ class ComponentIntegrity : public ComponentIntegrityServer
                          std::chrono::system_clock::now().time_since_epoch())
                          .count());
     }
-
     /**
      * @brief Get signed measurements from SPDM device
      * @param measurementIndices Array of measurement indices to sign
@@ -98,12 +112,39 @@ class ComponentIntegrity : public ComponentIntegrityServer
     /** @brief Object path for this component */
     std::string path;
 
+  protected:
+    /**
+     * @brief Validate measurement indices
+     * @param measurementIndices Vector of measurement indices to validate
+     * @throws InvalidArgument if any index is invalid
+     */
+    void validateMeasurementIndices(
+        const std::vector<size_t>& measurementIndices);
+
+    /**
+     * @brief Initialize SPDM connection
+     * @throws std::runtime_error if initialization fails
+     */
+    void initializeSpdmConnection();
+
+    /**
+     * @brief Get certificate digests from SPDM device
+     * @return Tuple of (slotMask, digestBuffer, totalDigestSize)
+     */
+    std::tuple<uint8_t, std::vector<uint8_t>, size_t> getCertificateDigests();
+
+  private:
+    std::shared_ptr<spdm::SpdmTransport> transport;
+
     /**
      * @brief Initialize ComponentIntegrity properties
      * @details Sets initial values for all ComponentIntegrity interface
      * properties
      */
     void initializeProperties();
+
+    // Friend declaration for testing
+    friend class spdm::test::ComponentIntegrityTest;
 };
 
 } // namespace spdm
