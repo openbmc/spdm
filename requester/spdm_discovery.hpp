@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <string>
+#include <utility>
 #include <variant>
 #include <vector>
 
@@ -76,6 +77,8 @@ concept DiscoveryType = requires(T t, SPDMDiscovery& discovery) {
  */
 class SPDMDiscovery
 {
+    friend class SPDMDiscovery_TestPeer;
+
   public:
     /**
      * Construct a new SPDM Discovery object
@@ -113,6 +116,18 @@ class SPDMDiscovery
      * @param The D-Bus object path of the device to remove.
      */
     void remove(const sdbusplus::object_path&);
+
+    /**
+     * Invoke f for each discovered responder (read-only).
+     */
+    template <typename F>
+    void forEachResponder(F&& f) const
+    {
+        for (const auto& r : responderInfos)
+        {
+            std::forward<F>(f)(r);
+        }
+    }
 
   private:
     sdbusplus::async::async_scope initialDiscovery;
