@@ -11,23 +11,29 @@ test_deps = [
     libspdm_dep,
 ]
 
-# Test source files
-test_src = [
-    'test_mctp_transport_discovery.cpp',
+# Common source files needed by multiple tests
+common_src = [
     '../requester/mctp_transport_discovery.cpp',
     '../requester/utils.cpp',
     '../requester/libspdm_mctp_transport.cpp',
     '../requester/spdm_device_secret_lib_stub.cpp',
 ]
 
-# Test executable
-test_executable = executable(
-    'test_mctp_transport_discovery',
-    test_src,
-    dependencies: test_deps,
-    include_directories: include_directories('../requester'),
-    cpp_args: sanitizer_flags_for_tests + ['-DTESTING'],
-)
+# Define test executables
+tests = ['mctp_transport_discovery', 'mctp_helper']
 
-# Register test
-test('MCTP Transport Discovery Tests', test_executable)
+# Build and register each test
+foreach t : tests
+    test(
+        t,
+        executable(
+            t.underscorify(),
+            'test_' + t + '.cpp',
+            common_src,
+            implicit_include_directories: false,
+            dependencies: test_deps,
+            include_directories: include_directories('../requester'),
+            cpp_args: sanitizer_flags_for_tests + ['-DTESTING'],
+        ),
+    )
+endforeach

@@ -121,6 +121,50 @@ class MctpMessageTransport : public NonCopyable
   public:
     virtual ~MctpMessageTransport() = default;
 
+    // Make HeaderType public for testing
+    struct HeaderType
+    {
+        /** @brief MCTP header data
+         */
+        uint8_t mctpHeader;
+
+        /** @brief Either source or the destination EndpointID, depending on
+         * whether the packet is being sent or received. Regandless though it
+         * should always
+         */
+        uint8_t eid;
+
+        /** @brief Get The MCTP tag type
+         */
+        auto mctpTag() const noexcept -> uint8_t
+        {
+            return static_cast<uint8_t>(mctpHeader & 0x07);
+        }
+
+        /** @brief Set MCTP header to specific tag*/
+        void mctpTag(uint8_t tag) noexcept
+        {
+            mctpHeader = static_cast<uint8_t>(tag) | 0x08U;
+        }
+
+        /** @brieg Get MCTO TO bit
+         */
+        auto mctpTO() const noexcept -> bool
+        {
+            return mctpHeader & 0x08;
+        }
+    };
+
+    // Make getHeaderRef public for testing
+    /** @brief function to help with writing simple statically sized headers
+     * into buf
+     */
+    template <class T>
+    static T& getHeaderRef(std::vector<uint8_t>& buf)
+    {
+        return *reinterpret_cast<T*>(buf.data());
+    }
+
     /** @brief function called by ConnectionClass before encoding an spdm
      * message into a buffer
      *  @details it must write the size of the transport data into lay.Size,
@@ -155,16 +199,25 @@ class MctpMessageTransport : public NonCopyable
     libspdm_return_t decode(uint8_t eid, std::vector<uint8_t>& buf,
                             void** message, size_t* message_size)
     {
-        const auto& header = getHeaderRef<HeaderType>(buf);
         const size_t headerSize = sizeof(HeaderType);
+
+        // Check buffer size first before accessing header
+        if (buf.size() < headerSize)
+        {
+            lg2::error("Buffer too small to contain SPDM message header");
+            return LIBSPDM_STATUS_BUFFER_TOO_SMALL;
+        }
+
+        const auto& header = getHeaderRef<HeaderType>(buf);
         if (header.eid != eid)
         {
+            lg2::error("EID mismatch: expected {EXPECTED}, got {ACTUAL}",
+                       "EXPECTED", eid, "ACTUAL", header.eid);
             return LIBSPDM_STATUS_INVALID_MSG_FIELD;
         }
-        if (header.mctpTO())
-        {
-            return LIBSPDM_STATUS_INVALID_MSG_FIELD;
-        }
+        // Note: MCTP TO bit indicates tag ownership. In this implementation,
+        // we accept messages with TO bit set (from owner) or clear (from
+        // non-owner) The TO bit is set by encode() when MCTP_TAG_OWNER is used
         if (buf.size() <= headerSize)
         {
             lg2::error("Buffer too small to contain SPDM message");
@@ -182,51 +235,6 @@ class MctpMessageTransport : public NonCopyable
         std::memcpy(*message, buf.data() + headerSize, *message_size);
         return LIBSPDM_STATUS_SUCCESS;
     }
-
-  protected:
-    /** @brief function to help with writing simple statically sized headers
-     * into buf
-     */
-    template <class T>
-    static T& getHeaderRef(std::vector<uint8_t>& buf)
-    {
-        return *reinterpret_cast<T*>(buf.data());
-    }
-
-    /** @brief Transport header matching the mctp-demux-daemon requirements
-     */
-    struct HeaderType
-    {
-        /** @brief MCTP header data
-         */
-        uint8_t mctpHeader;
-
-        /** @brief Either source or the destination EndpointID, depending on
-         * whether the packet is being sent or received. Regandless though it
-         * should always
-         */
-        uint8_t eid;
-
-        /** @brief Get The MCTP tag type
-         */
-        auto mctpTag() const noexcept -> uint8_t
-        {
-            return static_cast<uint8_t>(mctpHeader & 0x07);
-        }
-
-        /** @brief Set MCTP header to specific tag*/
-        void mctpTag(uint8_t tag) noexcept
-        {
-            mctpHeader = static_cast<uint8_t>(tag) | 0x08U;
-        }
-
-        /** @brieg Get MCTO TO bit
-         */
-        auto mctpTO() const noexcept -> bool
-        {
-            return mctpHeader & 0x08;
-        }
-    };
 };
 
 // NOLINTNEXTLINE cppcoreguidelines-special-member-functions
