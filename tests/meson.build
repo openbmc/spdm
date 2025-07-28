@@ -1,0 +1,40 @@
+# Test dependencies
+test_deps = [
+    phosphor_logging_dep,
+    sdbusplus_dep,
+    dependency('gtest', required: true),
+    dependency('gtest_main', required: true),
+    dependency('gmock', required: true),
+]
+
+# Test source files
+test_src = [
+    'test_mctp_transport_discovery.cpp',
+    '../requester/mctp_transport_discovery.cpp',
+    '../requester/spdm_discovery.cpp',
+    '../requester/utils/mapper.cpp',
+]
+
+# Test executable
+test_executable = executable(
+    'test_mctp_transport_discovery',
+    test_src,
+    dependencies: test_deps,
+    include_directories: include_directories('../requester'),
+)
+
+# Register test
+test('spdm_discovery_and_mctp_transport', test_executable)
+
+# Valgrind test setup
+# Sets ASAN_OPTIONS to suppress ASan/Valgrind incompatibility when the build
+# is instrumented with -fsanitize=address (e.g. via -Db_sanitize=address).
+valgrind = find_program('valgrind', required: false)
+if valgrind.found()
+    add_test_setup(
+        'valgrind',
+        exe_wrapper: [valgrind, '--error-exitcode=1', '--leak-check=full'],
+        env: ['ASAN_OPTIONS=verify_asan_link_order=0:detect_leaks=0'],
+        timeout_multiplier: 10,
+    )
+endif
