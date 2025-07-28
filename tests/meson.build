@@ -14,6 +14,7 @@ test_deps = [
 # Test source files
 test_src = [
     'test_mctp_transport_discovery.cpp',
+    'test_mctp_helper.cpp',
     '../requester/mctp_transport_discovery.cpp',
     '../requester/utils.cpp',
     '../requester/libspdm_mctp_transport.cpp',
@@ -22,7 +23,7 @@ test_src = [
 
 # Test executable
 test_executable = executable(
-    'test_mctp_transport_discovery',
+    'test_spdm',
     test_src,
     dependencies: test_deps,
     include_directories: include_directories('../requester'),
@@ -30,4 +31,4 @@ test_executable = executable(
 )
 
 # Register test
-test('MCTP Transport Discovery Tests', test_executable)
+test('SPDM Tests', test_executable)
