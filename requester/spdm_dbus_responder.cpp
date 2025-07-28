@@ -19,6 +19,10 @@ SPDMDBusResponder::SPDMDBusResponder(const ResponderInfo& responderInfo,
         "/xyz/openbmc_project/ComponentIntegrity/" + deviceName;
     componentIntegrity =
         std::make_unique<ComponentIntegrity>(ctx, componentIntegrityPath);
+    if (responderInfo.transport)
+    {
+        componentIntegrity->setTransport(responderInfo.transport);
+    }
 
     std::string trustedComponentPath =
         "/xyz/openbmc_project/TrustedComponent/" + deviceName;
