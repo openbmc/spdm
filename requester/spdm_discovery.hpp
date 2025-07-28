@@ -76,6 +76,8 @@ concept DiscoveryType = requires(T t, SPDMDiscovery& discovery) {
  */
 class SPDMDiscovery
 {
+    friend class SPDMDiscoveryTestPeer;
+
   public:
     /**
      * Construct a new SPDM Discovery object
