@@ -3,6 +3,8 @@
 
 #include "spdm_dbus_responder.hpp"
 
+#include "libspdm_mctp_transport.hpp"
+
 #include <phosphor-logging/lg2.hpp>
 
 PHOSPHOR_LOG2_USING;
@@ -33,6 +35,16 @@ SPDMDBusResponder::SPDMDBusResponder(sdbusplus::async::context& ctx,
         "/xyz/openbmc_project/ComponentIntegrity/" + deviceName;
     componentIntegrity =
         std::make_unique<ComponentIntegrity>(ctx, componentIntegrityPath);
+    std::visit(
+        [this](const auto& info) {
+            using T = std::decay_t<decltype(info)>;
+            if constexpr (std::is_same_v<T, MctpResponderInfo>)
+            {
+                componentIntegrity->setTransport(
+                    std::make_shared<SpdmMctpTransport>(info.eid));
+            }
+        },
+        responderInfo.info);
 
     std::string trustedComponentPath =
         "/xyz/openbmc_project/TrustedComponent/" + deviceName;
