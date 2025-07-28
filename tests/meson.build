@@ -13,14 +13,19 @@ test_deps = [
 
 # Common source files needed by multiple tests
 common_src = [
+    'test_mctp_transport_discovery.cpp',
+    'test_mctp_helper.cpp',
+    'test_component_integrity.cpp',
+    'mock_libspdm.cpp',
     '../requester/mctp_transport_discovery.cpp',
     '../requester/utils.cpp',
     '../requester/libspdm_mctp_transport.cpp',
     '../requester/spdm_device_secret_lib_stub.cpp',
+    '../requester/component_integrity_dbus.cpp',
 ]
 
 # Define test executables
-tests = ['mctp_transport_discovery', 'mctp_helper']
+tests = ['mctp_transport_discovery', 'mctp_helper', 'component_integrity']
 
 # Build and register each test
 foreach t : tests
