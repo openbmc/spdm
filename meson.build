@@ -16,7 +16,13 @@ phosphor_logging_dep = dependency('phosphor-logging')
 sdbusplus_dep = dependency('sdbusplus')
 systemd_dep = dependency('systemd')
 
-spdmd_deps = [phosphor_dbus_interfaces_dep, phosphor_logging_dep, sdbusplus_dep]
+spdmd_deps = [
+    phosphor_dbus_interfaces_dep,
+    phosphor_logging_dep,
+    sdbusplus_dep,
+]
+spdmd_includes = include_directories('requester')
+
 spdmd_src = [
     'requester/spdmd.cpp',
     'requester/spdm_discovery.cpp',
@@ -34,6 +40,12 @@ executable(
     'spdmd',
     spdmd_src,
     dependencies: spdmd_deps,
+    include_directories: spdmd_includes,
     install: true,
     install_dir: get_option('libexecdir') / 'spdm',
 )
+
+# Test subdirectory
+if get_option('tests')
+    subdir('tests')
+endif
