@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright OpenBMC Authors
+
+# Build and run tests
+option('tests', type: 'boolean', value: true, description: 'Build and run tests')
+
+# Enable coverage
+option('coverage', type: 'boolean', value: false, description: 'Enable code coverage reporting') 
