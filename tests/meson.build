@@ -5,10 +5,15 @@ test_deps = [
     libspdm_dep,
 ]
 
+common_src = [
+    'mock_libspdm.cpp',
+]
+
 tests = [
     'test_mctp_transport_discovery',
     'test_mctp_helper',
     'test_spdm_discovery',
+    'test_component_integrity',
 ]
 
 foreach t : tests
@@ -17,6 +22,7 @@ foreach t : tests
         executable(
             t,
             t + '.cpp',
+            common_src,
             link_with: spdmd_lib,
             dependencies: spdmd_deps + test_deps,
             include_directories: spdmd_includes,
