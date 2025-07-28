@@ -33,15 +33,6 @@ class MCTPTransportDiscovery : public DiscoveryProtocol
     void discoverDevices(
         std::function<void(std::vector<ResponderInfo>)> callback) override;
 
-  private:
-    /**
-     * @brief Process managed objects to extract SPDM device information
-     * @param managedObjects Map of managed objects from D-Bus
-     * @return Vector of discovered SPDM devices
-     */
-    std::vector<ResponderInfo> processManagedObjects(
-        const ManagedObjects& managedObjects);
-
     /**
      * @brief Get the transport type
      * @return TransportType::MCTP
@@ -50,6 +41,15 @@ class MCTPTransportDiscovery : public DiscoveryProtocol
     {
         return TransportType::MCTP;
     }
+
+  public:
+    /**
+     * @brief Process managed objects to extract SPDM device information
+     * @param managedObjects Map of managed objects from D-Bus
+     * @return Vector of discovered SPDM devices
+     */
+    std::vector<ResponderInfo> processManagedObjects(
+        const ManagedObjects& managedObjects);
 
   private:
     /**
