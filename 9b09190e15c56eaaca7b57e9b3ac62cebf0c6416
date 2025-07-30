@@ -106,6 +106,42 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dba4cbc1_4e162903",
+        "filename": "src/mctp_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-30T15:43:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcd9f633_b1d71ea4",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc784249_34c03e54",
+        "filename": "src/mctp_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-30T15:43:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcd9f633_b1d71ea4",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89a56576_e7051dbc",
@@ -137,6 +173,42 @@
       "side": 1,
       "message": "It is byte in the d-bus interfaces.https://github.com/openbmc/phosphor-dbus-interfaces/blob/master/yaml/xyz/openbmc_project/MCTP/Endpoint.interface.yaml#L18",
       "parentUuid": "89a56576_e7051dbc",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8f281f0_503a69ce",
+        "filename": "src/mctp_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-30T15:43:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d485f0e0_24ad9691",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcb66060_a640885e",
+        "filename": "src/mctp_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-30T15:43:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d485f0e0_24ad9691",
       "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -211,6 +283,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "40eec5dc_84faff0a",
+        "filename": "src/mctp_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-30T15:43:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0f4490a_e7226b4b",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8bdfe5c8_8d5cf5ee",
@@ -228,6 +318,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "360cabc0_9c5f7b94",
+        "filename": "src/mctp_discovery.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-30T15:43:22Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8bdfe5c8_8d5cf5ee",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13f36119_3af3e0fb",
@@ -241,6 +349,24 @@
       "writtenOn": "2025-06-27T17:48:15Z",
       "side": 1,
       "message": "We should be able to use type header from libspdm here.",
+      "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3ff4f4c_9374ad7a",
+        "filename": "src/mctp_discovery.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-30T15:43:22Z",
+      "side": 1,
+      "message": "Not in this commit, we can do it in this commit : 80267",
+      "parentUuid": "13f36119_3af3e0fb",
       "revId": "9b09190e15c56eaaca7b57e9b3ac62cebf0c6416",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
