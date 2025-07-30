@@ -65,6 +65,48 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "63cd8b9c_4ea3ac61",
+        "filename": "src/mctp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-30T07:07:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3cdbce6_3ad7b153",
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "edd0519d_82780b38",
+        "filename": "src/mctp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-30T07:07:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94cdb437_af7ce189",
+      "range": {
+        "startLine": 181,
+        "startChar": 59,
+        "endLine": 181,
+        "endChar": 62
+      },
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc46a256_6219b264",
@@ -78,6 +120,24 @@
       "writtenOn": "2025-07-17T23:53:53Z",
       "side": 1,
       "message": "This blocks. Shouldn\u0027t it be async?",
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e8014e2_06e59b7e",
+        "filename": "src/mctp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-30T07:07:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc46a256_6219b264",
       "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -113,6 +173,24 @@
       "side": 1,
       "message": "Yes but this is for only for the start up and yes the matches are also required, will bring it in later commit. these are the initial commits.",
       "parentUuid": "61e190aa_47cc2949",
+      "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c3625b4_a2c0ad35",
+        "filename": "src/mctp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-07-30T07:07:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6807c72f_cb919aff",
       "revId": "6cb64ae6db501fa44ce9d4cb4c0299b2799d052c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
