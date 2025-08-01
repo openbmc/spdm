@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "92a4b39e_ea56eccf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000938
+      },
+      "writtenOn": "2025-08-01T07:00:46Z",
+      "side": 1,
+      "message": "Can we have the commit message formatted to 72 characters-\nhttps://github.com/openbmc/docs/blob/master/CONTRIBUTING.md#formatting-commit-messages",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 1
+      },
+      "revId": "4b297612ed9dca64548b58ce46827f6b8eb8de77",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a55580dc_58155bc8",
         "filename": "requester/spdmd.cpp",
         "patchSetId": 10
