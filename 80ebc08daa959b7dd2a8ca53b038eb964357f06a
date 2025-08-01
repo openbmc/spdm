@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68aa5609_2e2d1b2f",
+        "filename": "meson.build",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000938
+      },
+      "writtenOn": "2025-08-01T07:12:11Z",
+      "side": 1,
+      "message": "nit:extra line",
+      "revId": "80ebc08daa959b7dd2a8ca53b038eb964357f06a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68507dd3_0fe05e17",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000938
+      },
+      "writtenOn": "2025-08-01T07:12:11Z",
+      "side": 1,
+      "message": "can we use contains? \n`if (!interfaces.contains(mctpEndpointIntfName))`",
+      "range": {
+        "startLine": 68,
+        "startChar": 8,
+        "endLine": 69,
+        "endChar": 39
+      },
+      "revId": "80ebc08daa959b7dd2a8ca53b038eb964357f06a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7fa19e7_ed7aa666",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000938
+      },
+      "writtenOn": "2025-08-01T07:12:11Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 105,
+        "startChar": 3,
+        "endLine": 106,
+        "endChar": 46
+      },
+      "revId": "80ebc08daa959b7dd2a8ca53b038eb964357f06a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d2a7842_de8bb786",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000938
+      },
+      "writtenOn": "2025-08-01T07:12:11Z",
+      "side": 1,
+      "message": "same as above and throughout the patch",
+      "range": {
+        "startLine": 129,
+        "startChar": 3,
+        "endLine": 130,
+        "endChar": 37
+      },
+      "revId": "80ebc08daa959b7dd2a8ca53b038eb964357f06a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "692537b4_7d46d8de",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000938
+      },
+      "writtenOn": "2025-08-01T07:12:11Z",
+      "side": 1,
+      "message": "can we rename it something better? `eidValue`",
+      "range": {
+        "startLine": 136,
+        "startChar": 9,
+        "endLine": 136,
+        "endChar": 13
+      },
+      "revId": "80ebc08daa959b7dd2a8ca53b038eb964357f06a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
