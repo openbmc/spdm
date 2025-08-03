@@ -622,6 +622,24 @@
       "parentUuid": "13a9cf9a_3c06776c",
       "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "187785f0_17e65a00",
+        "filename": "src/libspdm_async.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1001762
+      },
+      "writtenOn": "2025-08-03T12:12:21Z",
+      "side": 1,
+      "message": "Given that the D-Bus method is already part of the same SPDM service, what is the preference for an indirect call? Couldn\u0027t the API be called directly?",
+      "parentUuid": "7cc86a81_96afc398",
+      "revId": "2bbdedd7f6e685619525c6f8ac101d412884111f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
