@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bf56f3de_f0310eb1",
+        "filename": "meson.build",
+        "patchSetId": 11
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-08-04T10:39:15Z",
+      "side": 1,
+      "message": "can you also add `werror\u003dtrue` , `buildtype\u003ddebugoptimized` as defaults as well ?",
+      "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cecb3113_6fc5a4b4",
         "filename": "meson.build",
         "patchSetId": 11
@@ -37,6 +54,63 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "525e11e2_7ead60bd",
+        "filename": "meson.build",
+        "patchSetId": 11
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-08-04T10:39:15Z",
+      "side": 1,
+      "message": "dont need `required:true` , since we have a wrap if its not present in the system it will use the subproject support to pull the dependency.",
+      "range": {
+        "startLine": 11,
+        "startChar": 28,
+        "endLine": 11,
+        "endChar": 42
+      },
+      "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a512948_3db203d1",
+        "filename": "meson.build",
+        "patchSetId": 11
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-08-04T10:39:15Z",
+      "side": 1,
+      "message": "there are no header files present in this directory atleast in this patch, may be add this when we really have header files included ?",
+      "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b462a0f1_1ccf07e6",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-08-04T10:39:15Z",
+      "side": 1,
+      "message": "we can remove this comment ?",
+      "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "58e8bde7_128ce8c1",
         "filename": "requester/spdmd.cpp",
         "patchSetId": 11
@@ -48,6 +122,30 @@
       "writtenOn": "2025-08-01T06:47:33Z",
       "side": 1,
       "message": "Can we have the literals extract to constexpr?",
+      "range": {
+        "startLine": 17,
+        "startChar": 50,
+        "endLine": 17,
+        "endChar": 76
+      },
+      "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d4e2e1e_28c3dec2",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-08-04T10:39:15Z",
+      "side": 1,
+      "message": "The `service_names` and `paths` constants should come from phosphor-dbus-interface , and PDI should also be a dependency \u0026 need a wrap file for it as well.",
+      "parentUuid": "58e8bde7_128ce8c1",
       "range": {
         "startLine": 17,
         "startChar": 50,
@@ -94,6 +192,24 @@
       "writtenOn": "2025-08-01T06:47:33Z",
       "side": 1,
       "message": "do we need this info log?",
+      "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78a24b12_644cf4f2",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-08-04T10:39:15Z",
+      "side": 1,
+      "message": "+1, the demon start and stop will also be logged by the systemd right ? would this add any value \u003e",
+      "parentUuid": "19d33f18_46e225a9",
       "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
