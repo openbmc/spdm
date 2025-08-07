@@ -335,6 +335,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6c44202_624822f1",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-08-07T09:25:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "246cbd8b_21b0448b",
+      "range": {
+        "startLine": 20,
+        "startChar": 22,
+        "endLine": 20,
+        "endChar": 52
+      },
+      "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19d33f18_46e225a9",
