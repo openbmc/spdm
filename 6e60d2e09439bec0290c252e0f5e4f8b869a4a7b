@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f64f83b_dfd56c6d",
+        "filename": "meson.build",
+        "patchSetId": 11
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-08-07T09:14:20Z",
+      "side": 1,
+      "message": "werror \u003d true - Done\nbuildtype\u003ddebugoptimized : Patrick has given the comment above to drop it.",
+      "parentUuid": "bf56f3de_f0310eb1",
+      "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cecb3113_6fc5a4b4",
@@ -93,6 +111,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7629a97e_2df753bd",
+        "filename": "meson.build",
+        "patchSetId": 11
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-08-07T09:14:20Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "525e11e2_7ead60bd",
+      "range": {
+        "startLine": 11,
+        "startChar": 28,
+        "endLine": 11,
+        "endChar": 42
+      },
+      "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a512948_3db203d1",
@@ -123,6 +165,24 @@
       "writtenOn": "2025-08-04T10:39:15Z",
       "side": 1,
       "message": "we can remove this comment ?",
+      "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fcbe6f3_83b20635",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-08-07T09:14:20Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b462a0f1_1ccf07e6",
       "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -164,6 +224,30 @@
       "side": 1,
       "message": "The `service_names` and `paths` constants should come from phosphor-dbus-interface , and PDI should also be a dependency \u0026 need a wrap file for it as well.",
       "parentUuid": "58e8bde7_128ce8c1",
+      "range": {
+        "startLine": 17,
+        "startChar": 50,
+        "endLine": 17,
+        "endChar": 76
+      },
+      "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd5e3e21_27d76776",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-08-07T09:14:20Z",
+      "side": 1,
+      "message": "I came across an example in the state manager where each PDI corresponded to a single daemon. However, in our current scenario, we have multiple interfaces involved—Component Integrity, Identity Authentication, and the Measurement Set interface. If each interface adds its own path and service name, which one should we use for the path and service reference?",
+      "parentUuid": "7d4e2e1e_28c3dec2",
       "range": {
         "startLine": 17,
         "startChar": 50,
@@ -228,6 +312,24 @@
       "side": 1,
       "message": "+1, the demon start and stop will also be logged by the systemd right ? would this add any value \u003e",
       "parentUuid": "19d33f18_46e225a9",
+      "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b71d1a33_e6b7a7f9",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-08-07T09:14:20Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "78a24b12_644cf4f2",
       "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
