@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2198c35a_e11310c2",
+        "filename": ".clang-format",
+        "patchSetId": 11
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-08-07T09:18:25Z",
+      "side": 1,
+      "message": "Without new line clang-format is throwing errors.\n\n```\nchinmays@:spdm$ clang-format-19 -i $(git ls-files | grep \".*\\.[ch]\\(pp\\)\\?$\")\n/home/chinmays/Desktop/work/opensource/spdm/.clang-format:135:1: error: unknown key \u0027...\u0027\n...\n^~~\nError reading /home/chinmays/Desktop/work/opensource/spdm/.clang-format: Invalid argument\n\nWith new line\nchinmays@:spdm$ clang-format-19 -i $(git ls-files | grep \".*\\.[ch]\\(pp\\)\\?$\")\nchinmays@:spdm$ \n```",
+      "parentUuid": "62e0bf44_3f22d6b7",
+      "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf56f3de_f0310eb1",
         "filename": "meson.build",
         "patchSetId": 11
