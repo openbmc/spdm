@@ -411,6 +411,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c3099ff_dbdc501d",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-08-07T11:45:31Z",
+      "side": 1,
+      "message": "Async design opens are closed, decided to use sdbus async and changes are part of other commits in the chain.",
+      "parentUuid": "31d47502_141b92b3",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7bbdc7d3_1d8ff13e",
