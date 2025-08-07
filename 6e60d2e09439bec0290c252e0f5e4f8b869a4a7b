@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c206f665_04bf32aa",
+        "filename": "meson.build",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-08-07T09:10:44Z",
+      "side": 1,
+      "message": "Is this a new ask?. I don\u0027t see license in other repo in openbmc in project arguments.",
+      "parentUuid": "cecb3113_6fc5a4b4",
+      "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "525e11e2_7ead60bd",
         "filename": "meson.build",
         "patchSetId": 11
