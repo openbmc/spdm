@@ -106,6 +106,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac57b7fa_ee5b4ff3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-08-07T10:46:59Z",
+      "side": 1,
+      "message": "commits are ready.",
+      "parentUuid": "9845d271_95aceaf2",
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81e328c8_e899d12b",
@@ -420,6 +438,30 @@
       "side": 1,
       "message": "Patrick commented on why we are catching the exception. I would suggest extracting the debug information from the exception and then re-throwing it. However, I will make sure to include the exception object in the log.",
       "parentUuid": "f0349b01_23754182",
+      "range": {
+        "startLine": 32,
+        "startChar": 52,
+        "endLine": 32,
+        "endChar": 60
+      },
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35058b34_ac7bff52",
+        "filename": "src/spdmd.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-08-07T10:46:59Z",
+      "side": 1,
+      "message": "removed.",
+      "parentUuid": "74a96a20_c40c2689",
       "range": {
         "startLine": 32,
         "startChar": 52,

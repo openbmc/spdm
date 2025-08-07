@@ -95,6 +95,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab78c25c_a2b7437f",
+        "filename": "src/spdmd_app.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-08-07T10:46:59Z",
+      "side": 1,
+      "message": "removed.",
+      "parentUuid": "b2398661_c09e63d6",
+      "range": {
+        "startLine": 20,
+        "startChar": 30,
+        "endLine": 20,
+        "endChar": 59
+      },
+      "revId": "4fdcdc391ef24dc5939e17d29d6f27af87fc175a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20e0bb6a_74b5c4fd",

@@ -106,6 +106,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93a72421_505b9529",
+        "filename": "src/spdmd_app.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-08-07T10:46:59Z",
+      "side": 1,
+      "message": "removed.",
+      "parentUuid": "d1156ae5_b7bf19c8",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f0435466_287cf2cf",
@@ -410,6 +428,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37f02ed1_3a76da74",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-08-07T10:46:59Z",
+      "side": 1,
+      "message": "we can decide that later when we add responder.",
+      "parentUuid": "7bbdc7d3_1d8ff13e",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6768dc27_f45624d8",
@@ -427,6 +463,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7dd35254_fa8f7fb0",
+        "filename": "src/spdmd_app.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-08-07T10:46:59Z",
+      "side": 1,
+      "message": "removed.",
+      "parentUuid": "6768dc27_f45624d8",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f0c64392_2e8ed7e0",
@@ -440,6 +494,24 @@
       "writtenOn": "2025-05-20T07:33:02Z",
       "side": 1,
       "message": "Don\u0027t we need specific boot version?. In most of the openbmc app repos we have specific version called out and same is used in openbmc recipe.",
+      "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9fd0b5a_8e55189c",
+        "filename": "subprojects/boost.wrap",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-08-07T10:46:59Z",
+      "side": 1,
+      "message": "removed.",
+      "parentUuid": "f0c64392_2e8ed7e0",
       "revId": "526ee16d252ecdca860c5535e8f1ec92998fca52",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }

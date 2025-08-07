@@ -488,6 +488,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cc166fd_612a1693",
+        "filename": "spdm_prototype/spdmd/spdmd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-08-07T10:46:59Z",
+      "side": 1,
+      "message": "removed.",
+      "parentUuid": "6eefcdae_e49cf0d6",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca717107_f0c10218",
@@ -788,6 +806,24 @@
       "writtenOn": "2025-05-14T05:07:38Z",
       "side": 1,
       "message": "nit: missing doc string",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bfe1338_bfbb632e",
+        "filename": "spdm_prototype/spdmd/spdmd_app.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-08-07T10:46:59Z",
+      "side": 1,
+      "message": "moved.",
+      "parentUuid": "65776c89_93183607",
       "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
