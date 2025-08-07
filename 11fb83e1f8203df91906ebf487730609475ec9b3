@@ -306,6 +306,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebb8e90e_bcc0a909",
+        "filename": "meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-08-07T09:24:09Z",
+      "side": 1,
+      "message": "wrap files are added.",
+      "parentUuid": "3b73d7cc_3b528f74",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 28
+      },
+      "revId": "11fb83e1f8203df91906ebf487730609475ec9b3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21748870_304d8886",
