@@ -699,6 +699,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1a3080a_afd60914",
+        "filename": "spdm_prototype/spdmd/spdmd_app.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-08-07T10:47:39Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "58ff8964_423c701f",
+      "revId": "e700df201ad9ddae72bc349f39b77bfbe7309e80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "012e2599_ad135222",
