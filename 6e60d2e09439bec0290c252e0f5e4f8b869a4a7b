@@ -142,6 +142,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14a5cacc_d4f11fa9",
+        "filename": "meson.build",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-08-08T11:02:39Z",
+      "side": 1,
+      "message": "I think we can handle this once if we decide this format for all repos in openbmc.",
+      "parentUuid": "e4939316_ea003e21",
+      "revId": "6e60d2e09439bec0290c252e0f5e4f8b869a4a7b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "525e11e2_7ead60bd",
