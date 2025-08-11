@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c705e51_75b91112",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2025-08-11T02:13:52Z",
+      "side": 1,
+      "message": "See comments on the header.",
+      "revId": "0c9155581a6e719fa195f3eb775523eb0e52af9e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47397350_98802450",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2025-08-11T02:13:52Z",
+      "side": 1,
+      "message": "`std::expected` or `std::optional` here too.",
+      "revId": "0c9155581a6e719fa195f3eb775523eb0e52af9e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "813b8599_ba985f25",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2025-08-11T02:13:52Z",
+      "side": 1,
+      "message": "The `invalid_eid` concept doesn\u0027t seem right. Use `std::expected`? Or `std::optional`?",
+      "revId": "0c9155581a6e719fa195f3eb775523eb0e52af9e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96aee92d_4799f034",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2025-08-11T02:13:52Z",
+      "side": 1,
+      "message": "This seems ... surprising. Why do we need an in-band value? Can we not rather use `std::optional`?",
+      "revId": "0c9155581a6e719fa195f3eb775523eb0e52af9e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
