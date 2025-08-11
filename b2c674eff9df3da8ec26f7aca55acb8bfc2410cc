@@ -3,6 +3,63 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "736e5692_4e69d764",
+        "filename": "meson.build",
+        "patchSetId": 15
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-08-11T20:18:46Z",
+      "side": 1,
+      "message": "Should we add a meson.build for the requester subdirectory?  I guess right now it is just one cpp part so maybe it isn\u0027t necessary.\n\nI don\u0027t want to see us having to add subdirectories as specific include_directories.  Use `#include \"requester/...\"` directly in your code.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 49
+      },
+      "revId": "b2c674eff9df3da8ec26f7aca55acb8bfc2410cc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df8ee719_4c88541f",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-08-11T20:18:46Z",
+      "side": 1,
+      "message": "Drop.",
+      "revId": "b2c674eff9df3da8ec26f7aca55acb8bfc2410cc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59ad8141_e7ee2655",
+        "filename": "requester/spdmd.hpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-08-11T20:18:46Z",
+      "side": 1,
+      "message": "Drop.",
+      "revId": "b2c674eff9df3da8ec26f7aca55acb8bfc2410cc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "451b7ded_7c304d48",
         "filename": "requester/spdmd.hpp",
         "patchSetId": 15
@@ -38,6 +95,30 @@
       "side": 1,
       "message": "I responded above: I came across an example in the state manager where each PDI corresponded to a single daemon. However, in our current scenario, we have multiple interfaces involved—Component Integrity, Identity Authentication, and the Measurement Set interface. If each interface adds its own path and service name, which one should we use for the path and service reference?\n\nI can see that in logging most of the interfaces is pointing the same path and service but if the interface can be implemented by multiple D-Bus services, should we put all the service and object names in the intreface yaml?",
       "parentUuid": "451b7ded_7c304d48",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 73
+      },
+      "revId": "b2c674eff9df3da8ec26f7aca55acb8bfc2410cc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8994b9e_da09be95",
+        "filename": "requester/spdmd.hpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-08-11T20:18:46Z",
+      "side": 1,
+      "message": "Please use constexpr auto.\n\nObject manager path should be coming from a phosphor-dbus-interfaces path, right?  I don\u0027t think `spdmd` is appropriate for the object manager path.",
+      "parentUuid": "26d84935_fd3d4e6b",
       "range": {
         "startLine": 4,
         "startChar": 0,
