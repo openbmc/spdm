@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "451b7ded_7c304d48",
+        "filename": "requester/spdmd.hpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-08-11T05:53:09Z",
+      "side": 1,
+      "message": "this is not what i was expecting. \n\nyou should add something like https://github.com/openbmc/phosphor-dbus-interfaces/blob/master/yaml/xyz/openbmc_project/Logging/Event.interface.yaml#L32\n\nand this\nhttps://github.com/openbmc/phosphor-dbus-interfaces/blob/master/yaml/xyz/openbmc_project/Logging/Event.interface.yaml#L35\n\nadded to the SPDM interfaces , so that you can derive these strings from PDI.",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 73
+      },
+      "revId": "b2c674eff9df3da8ec26f7aca55acb8bfc2410cc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
