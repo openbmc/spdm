@@ -85,6 +85,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "15116c91_843fa796",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-08-19T12:06:04Z",
+      "side": 1,
+      "message": "This is not something pervasive in our source code and is not specified by any project-level doc.  Why did you add it?\n\nI suspect this isn\u0027t even a valid copyright statement.  Copyrights are by an individual or assigned to an organization.  \"OpenBMC Authors\" is neither.",
+      "parentUuid": "94c2755b_8eed30b9",
+      "revId": "b2c674eff9df3da8ec26f7aca55acb8bfc2410cc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "59ad8141_e7ee2655",
         "filename": "requester/spdmd.hpp",
         "patchSetId": 15
