@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e3ea2be_c0b2a383",
+        "filename": "meson.build",
+        "patchSetId": 15
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-08-19T07:47:03Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "736e5692_4e69d764",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 49
+      },
+      "revId": "b2c674eff9df3da8ec26f7aca55acb8bfc2410cc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df8ee719_4c88541f",
@@ -43,6 +67,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "94c2755b_8eed30b9",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-08-19T07:47:03Z",
+      "side": 1,
+      "message": "Why to drop the copy right text?",
+      "parentUuid": "df8ee719_4c88541f",
+      "revId": "b2c674eff9df3da8ec26f7aca55acb8bfc2410cc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "59ad8141_e7ee2655",
         "filename": "requester/spdmd.hpp",
         "patchSetId": 15
@@ -54,6 +96,24 @@
       "writtenOn": "2025-08-11T20:18:46Z",
       "side": 1,
       "message": "Drop.",
+      "revId": "b2c674eff9df3da8ec26f7aca55acb8bfc2410cc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b9ff62e_297ee0c7",
+        "filename": "requester/spdmd.hpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-08-19T07:47:03Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "59ad8141_e7ee2655",
       "revId": "b2c674eff9df3da8ec26f7aca55acb8bfc2410cc",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -119,6 +179,30 @@
       "side": 1,
       "message": "Please use constexpr auto.\n\nObject manager path should be coming from a phosphor-dbus-interfaces path, right?  I don\u0027t think `spdmd` is appropriate for the object manager path.",
       "parentUuid": "26d84935_fd3d4e6b",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 73
+      },
+      "revId": "b2c674eff9df3da8ec26f7aca55acb8bfc2410cc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f579342_9c2773b6",
+        "filename": "requester/spdmd.hpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-08-19T07:47:03Z",
+      "side": 1,
+      "message": "Created a seprate MR in PDI, Can you take a look on this?",
+      "parentUuid": "e8994b9e_da09be95",
       "range": {
         "startLine": 4,
         "startChar": 0,
