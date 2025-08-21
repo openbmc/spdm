@@ -145,6 +145,35 @@ class ComponentIntegrity :
      */
     std::tuple<uint8_t, std::vector<uint8_t>, size_t> getCertificateDigests();
 
+    /**
+     * @brief Get certificate from SPDM device
+     * @param slotId Certificate slot ID
+     * @return Tuple of (certificate, certificateSize)
+     */
+    std::tuple<std::string, std::vector<uint8_t>, size_t> getCertificate(
+        size_t slotId);
+
+    /**
+     * @brief Convert DER certificates to PEM string
+     * @param derCerts Vector of DER-encoded certificate bytes
+     * @return std::string PEM-encoded certificate chain
+     */
+    std::string derCertsToPem(const std::vector<uint8_t>& derCerts);
+
+    /**
+     * @brief Convert hashing algorithm to string representation
+     * @param algo Algorithm enumeration value
+     * @return String representation of algorithm
+     */
+    std::string getHashingAlgorithmStr(uint16_t algo);
+
+    /**
+     * @brief Convert signing algorithm to string representation
+     * @param algo Algorithm enumeration value
+     * @return String representation of algorithm
+     */
+    std::string getSigningAlgorithmStr(uint16_t algo);
+
   private:
     std::shared_ptr<spdm::SpdmTransport> transport;
 
