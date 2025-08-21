@@ -167,14 +167,20 @@ auto ComponentIntegrity::method_call(
 
         auto [slotMask, digestBuffer,
               totalDigestSize] = getCertificateDigests();
+        auto [certPem, certRaw, certRawSize] = getCertificate(slotId);
 
         std::string signedMeas{};
+        auto objectPath = sdbusplus::message::object_path(path);
+        auto* spdmCtx =
+            reinterpret_cast<libspdm_context_t*>(transport->spdmContext);
+        auto hashAlgoStr = getHashingAlgorithmStr(
+            spdmCtx->connection_info.algorithm.base_hash_algo);
+        auto signAlgoStr = getSigningAlgorithmStr(
+            spdmCtx->connection_info.algorithm.base_asym_algo);
+        auto versionStr = type_version();
 
-        // Return the tuple
-        co_return std::make_tuple(
-            sdbusplus::message::object_path(path), std::string("Test"),
-            std::string("public_key_pem"), // TODO: Get from certificate
-            signedMeas, std::string("Test"), type_version());
+        co_return std::make_tuple(objectPath, hashAlgoStr, certPem, signedMeas,
+                                  signAlgoStr, versionStr);
     }
     catch (const std::exception& e)
     {
@@ -183,6 +189,178 @@ auto ComponentIntegrity::method_call(
         co_return std::make_tuple(
             sdbusplus::message::object_path(path), std::string(""),
             std::string(""), std::string(""), std::string(""), type_version());
+    }
+}
+
+/**
+ * @brief Helper to convert DER certificate(s) to PEM string(s).
+ * @param derCerts Vector of DER-encoded certificate bytes.
+ * @return std::string PEM-encoded certificate chain.
+ */
+std::string ComponentIntegrity::derCertsToPem(
+    const std::vector<uint8_t>& derCerts)
+{
+    std::string pemChain;
+    size_t index = 0;
+    size_t currentCertLen = 0;
+    while (currentCertLen < derCerts.size())
+    {
+        const uint8_t* certPtr = nullptr;
+        size_t certLen = 0;
+        auto ret = libspdm_x509_get_cert_from_cert_chain(
+            derCerts.data(), derCerts.size(), index, &certPtr, &certLen);
+        if (!ret)
+        {
+            lg2::info("No more certs found in certificate chain");
+            break; // No more certs
+        }
+        std::string base64;
+        static const char b64_table[] =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+        size_t i = 0;
+        for (; i + 2 < certLen; i += 3)
+        {
+            uint32_t n = (certPtr[i] << 16) | (certPtr[i + 1] << 8) |
+                         certPtr[i + 2];
+            base64 += b64_table[(n >> 18) & 63];
+            base64 += b64_table[(n >> 12) & 63];
+            base64 += b64_table[(n >> 6) & 63];
+            base64 += b64_table[n & 63];
+        }
+        if (i < certLen)
+        {
+            uint32_t n = certPtr[i] << 16;
+            base64 += b64_table[(n >> 18) & 63];
+            if (i + 1 < certLen)
+            {
+                n |= certPtr[i + 1] << 8;
+                base64 += b64_table[(n >> 12) & 63];
+                base64 += b64_table[(n >> 6) & 63];
+                base64 += '=';
+            }
+            else
+            {
+                base64 += b64_table[(n >> 12) & 63];
+                base64 += "==";
+            }
+        }
+        std::string base64Lines;
+        for (size_t j = 0; j < base64.size(); j += 64)
+        {
+            base64Lines += base64.substr(j, 64) + "\n";
+        }
+        std::string pem = "-----BEGIN CERTIFICATE-----\n" + base64Lines +
+                          "-----END CERTIFICATE-----\n";
+        pemChain += pem;
+        ++index;
+        currentCertLen += certLen;
+    }
+    return pemChain;
+}
+
+/**
+ * @brief Get the certificate chain from the SPDM device and return as PEM
+ * string and raw bytes.
+ * @param slotId The slot ID to fetch the certificate from.
+ * @return std::tuple<std::string, std::vector<uint8_t>, size_t> PEM certificate
+ * chain string, raw bytes, and size.
+ */
+std::tuple<std::string, std::vector<uint8_t>, size_t>
+    ComponentIntegrity::getCertificate(size_t slotId)
+{
+    if (!transport)
+    {
+        lg2::error("Transport is null");
+        throw std::runtime_error("SPDM transport not initialized");
+    }
+
+    if (!transport->spdmContext)
+    {
+        lg2::error("SPDM context is null");
+        throw std::runtime_error("SPDM context not initialized");
+    }
+    std::vector<uint8_t> certChain(LIBSPDM_MAX_CERT_CHAIN_SIZE);
+    size_t certChainSize = certChain.size();
+
+    libspdm_return_t status =
+        libspdm_get_certificate(transport->spdmContext, nullptr, slotId,
+                                &certChainSize, certChain.data());
+
+    if (LIBSPDM_STATUS_IS_ERROR(status))
+    {
+        lg2::error("libspdm_get_certificate failed, status: 0x{STATUS:X}",
+                   "STATUS", status);
+        throw std::runtime_error("Failed to get certificate chain");
+    }
+    certChain.resize(certChainSize);
+    size_t hash_size = 0;
+    if (transport && transport->spdmContext)
+    {
+        hash_size = libspdm_get_hash_size(
+            reinterpret_cast<libspdm_context_t*>(transport->spdmContext)
+                ->connection_info.algorithm.base_hash_algo);
+    }
+    else
+    {
+        lg2::error(
+            "SPDM transport or context is null when extracting hash size");
+        throw std::runtime_error("SPDM transport or context is null");
+    }
+    constexpr size_t spdm_cert_chain_header_size =
+        4; // 2 bytes Length + 2 bytes Reserved
+    if (certChain.size() < spdm_cert_chain_header_size + hash_size)
+    {
+        lg2::error(
+            "Certificate chain too small for header+hash: size={SIZE}, header+hash={HDRHASH}",
+            "SIZE", certChain.size(), "HDRHASH",
+            spdm_cert_chain_header_size + hash_size);
+        throw std::runtime_error("Certificate chain too small");
+    }
+    std::vector<uint8_t> derCerts(
+        certChain.begin() + spdm_cert_chain_header_size + hash_size,
+        certChain.end());
+    std::string pemChain = derCertsToPem(derCerts);
+    return {pemChain, certChain, certChainSize};
+}
+
+/**
+ * @brief Convert hashing algorithm to string representation
+ * @param algo Algorithm enumeration value
+ * @return String representation of algorithm
+ */
+std::string ComponentIntegrity::getHashingAlgorithmStr(uint16_t algo)
+{
+    switch (algo)
+    {
+        case SPDM_ALGORITHMS_BASE_HASH_ALGO_TPM_ALG_SHA_256:
+            return "SHA256";
+        case SPDM_ALGORITHMS_BASE_HASH_ALGO_TPM_ALG_SHA_384:
+            return "SHA384";
+        case SPDM_ALGORITHMS_BASE_HASH_ALGO_TPM_ALG_SHA_512:
+            return "SHA512";
+        default:
+            lg2::error("Unknown hashing algorithm: {ALGO}", "ALGO", algo);
+            return "NONE";
+    }
+}
+
+std::string ComponentIntegrity::getSigningAlgorithmStr(uint16_t algo)
+{
+    switch (algo)
+    {
+        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSASSA_2048:
+            return "RSASSA2048";
+        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSAPSS_2048:
+            return "RSAPSS2048";
+        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_ECDSA_ECC_NIST_P256:
+            return "ECDSA_P256";
+        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_ECDSA_ECC_NIST_P384:
+            return "ECDSA_P384";
+        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_ECDSA_ECC_NIST_P521:
+            return "ECDSA_P521";
+        default:
+            lg2::error("Unknown signing algorithm: {ALGO}", "ALGO", algo);
+            return "NONE";
     }
 }
 
