@@ -152,8 +152,8 @@ class ComponentIntegrityTest : public ::testing::Test
         return componentIntegrity->getCertificateDigests();
     }
 
-    std::tuple<std::string, std::vector<uint8_t>, size_t> getCertificate(
-        size_t slotId)
+    std::tuple<std::string, std::vector<uint8_t>, std::vector<uint8_t>>
+        getCertificate(size_t slotId)
     {
         return componentIntegrity->getCertificate(slotId);
     }
@@ -596,10 +596,10 @@ TEST_F(ComponentIntegrityTest, GetCertificateSuccessTest)
     mockTransport->setAsCurrentMock();
     std::string pemChain;
     std::vector<uint8_t> rawBytes;
-    size_t rawSize = 0;
+    std::vector<uint8_t> leafCert;
     try
     {
-        std::tie(pemChain, rawBytes, rawSize) = getCertificate(0);
+        std::tie(pemChain, rawBytes, leafCert) = getCertificate(0);
     }
     catch (const std::exception& ex)
     {
@@ -610,7 +610,7 @@ TEST_F(ComponentIntegrityTest, GetCertificateSuccessTest)
 
     // The rawBytes should match the mockCertChain
     EXPECT_EQ(rawBytes, mockTransport->mockCertChain);
-    EXPECT_EQ(rawSize, mockTransport->mockCertChain.size());
+    EXPECT_EQ(rawBytes.size(), mockTransport->mockCertChain.size());
 
     // The PEM should contain a base64 encoding of 0x01,0x02,0x03
     // (which is AQID in base64)
@@ -627,7 +627,7 @@ TEST_F(ComponentIntegrityTest, GetCertificateMultipleDerCertsTest)
     mockTransport->mockCertChain = makeMockSpdmCertChain();
     mockTransport->setAsCurrentMock();
 
-    auto [pemChain, rawBytes, rawSize] = getCertificate(0);
+    auto [pemChain, rawBytes, leafCert] = getCertificate(0);
 
     // Should contain three PEM blocks
     size_t first = pemChain.find("-----BEGIN CERTIFICATE-----");
@@ -644,7 +644,7 @@ TEST_F(ComponentIntegrityTest, GetCertificateMultipleDerCertsTest)
 
     // Raw bytes should match
     EXPECT_EQ(rawBytes, mockTransport->mockCertChain);
-    EXPECT_EQ(rawSize, mockTransport->mockCertChain.size());
+    EXPECT_EQ(rawBytes.size(), mockTransport->mockCertChain.size());
 }
 
 // Note: method_call tests are omitted because they require async testing
