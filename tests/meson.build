@@ -14,6 +14,7 @@ tests = [
     'test_mctp_helper',
     'test_spdm_discovery',
     'test_component_integrity',
+    'test_certificate_dbus',
 ]
 
 foreach t : tests
