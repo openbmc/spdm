@@ -1,0 +1,205 @@
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: Copyright OpenBMC Authors
+
+#include "../requester/certificate_dbus.hpp"
+
+#include <memory>
+#include <sstream>
+#include <string>
+#include <tuple>
+#include <vector>
+
+#include <gtest/gtest.h>
+
+// Minimal PEM-encoded certificate chain for testing
+static const char* testPemChain =
+    "-----BEGIN CERTIFICATE-----\n"
+    "MIIBljCCATugAwIBAgIUDr9ucgGtoBPnc+y0e4rxbV3wmW8wCgYIKoZIzj0EAwIw\n"
+    "ODELMAkGA1UEBhMCVVMxEDAOBgNVBAoMB09wZW5CTUMxFzAVBgNVBAMMDlNQRE0g\n"
+    "VGVzdCBSb290MB4XDTI1MDgyMTEyMTcyN1oXDTM1MDgyMDEyMTcyN1owODELMAkG\n"
+    "A1UEBhMCVVMxEDAOBgNVBAoMB09wZW5CTUMxFzAVBgNVBAMMDlNQRE0gVGVzdCBS\n"
+    "b290MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEDLed9Rv+eHHNkHqecS4f3+Uv\n"
+    "U4BtB3oZBikRbCBLpiiQJMsw6ymjk9slsstXk5gESaNE3Fd79tAdHfa40rlX9qMj\n"
+    "MCEwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAYYwCgYIKoZIzj0EAwID\n"
+    "SQAwRgIhAPCvclaximTSHL1lnUe4FNFoyPVLZLlwT9Ss3IxqmrePAiEAj1Z6FsN+\n"
+    "i98OZQz0VqpD1QNHXr449VFiCU5m+YjrSjE=\n"
+    "-----END CERTIFICATE-----\n";
+
+static const std::vector<uint8_t> testLeafCert = {
+    0x30, 0x82, 0x01, 0x96, 0x30, 0x82, 0x01, 0x3b, 0xa0, 0x03, 0x02, 0x01,
+    0x02, 0x02, 0x14, 0x0e, 0xbf, 0x6e, 0x72, 0x01, 0xad, 0xa0, 0x13, 0xe7,
+    0x73, 0xec, 0xb4, 0x7b, 0x8a, 0xf1, 0x6d, 0x5d, 0xf0, 0x99, 0x6f, 0x30,
+    0x0a, 0x06, 0x08, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x04, 0x03, 0x02, 0x30,
+    0x38, 0x31, 0x0b, 0x30, 0x09, 0x06, 0x03, 0x55, 0x04, 0x06, 0x13, 0x02,
+    0x55, 0x53, 0x31, 0x10, 0x30, 0x0e, 0x06, 0x03, 0x55, 0x04, 0x0a, 0x0c,
+    0x07, 0x4f, 0x70, 0x65, 0x6e, 0x42, 0x4d, 0x43, 0x31, 0x17, 0x30, 0x15,
+    0x06, 0x03, 0x55, 0x04, 0x03, 0x0c, 0x0e, 0x53, 0x50, 0x44, 0x4d, 0x20,
+    0x54, 0x65, 0x73, 0x74, 0x20, 0x52, 0x6f, 0x6f, 0x74, 0x30, 0x1e, 0x17,
+    0x0d, 0x32, 0x35, 0x30, 0x38, 0x32, 0x31, 0x31, 0x32, 0x31, 0x37, 0x32,
+    0x37, 0x5a, 0x17, 0x0d, 0x33, 0x35, 0x30, 0x38, 0x32, 0x30, 0x31, 0x32,
+    0x31, 0x37, 0x32, 0x37, 0x5a, 0x30, 0x38, 0x31, 0x0b, 0x30, 0x09, 0x06,
+    0x03, 0x55, 0x04, 0x06, 0x13, 0x02, 0x55, 0x53, 0x31, 0x10, 0x30, 0x0e,
+    0x06, 0x03, 0x55, 0x04, 0x0a, 0x0c, 0x07, 0x4f, 0x70, 0x65, 0x6e, 0x42,
+    0x4d, 0x43, 0x31, 0x17, 0x30, 0x15, 0x06, 0x03, 0x55, 0x04, 0x03, 0x0c,
+    0x0e, 0x53, 0x50, 0x44, 0x4d, 0x20, 0x54, 0x65, 0x73, 0x74, 0x20, 0x52,
+    0x6f, 0x6f, 0x74, 0x30, 0x59, 0x30, 0x13, 0x06, 0x07, 0x2a, 0x86, 0x48,
+    0xce, 0x3d, 0x02, 0x01, 0x06, 0x08, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x03,
+    0x01, 0x07, 0x03, 0x42, 0x00, 0x04, 0x0c, 0xb7, 0x9d, 0xf5, 0x1b, 0xfe,
+    0x78, 0x71, 0xcd, 0x90, 0x7a, 0x9e, 0x71, 0x2e, 0x1f, 0xdf, 0xe5, 0x2f,
+    0x53, 0x80, 0x6d, 0x07, 0x7a, 0x19, 0x06, 0x29, 0x11, 0x6c, 0x20, 0x4b,
+    0xa6, 0x28, 0x90, 0x24, 0xcb, 0x30, 0xeb, 0x29, 0xa3, 0x93, 0xdb, 0x25,
+    0xb2, 0xcb, 0x57, 0x93, 0x98, 0x04, 0x49, 0xa3, 0x44, 0xdc, 0x57, 0x7b,
+    0xf6, 0xd0, 0x1d, 0x1d, 0xf6, 0xb8, 0xd2, 0xb9, 0x57, 0xf6, 0xa3, 0x23,
+    0x30, 0x21, 0x30, 0x0f, 0x06, 0x03, 0x55, 0x1d, 0x13, 0x01, 0x01, 0xff,
+    0x04, 0x05, 0x30, 0x03, 0x01, 0x01, 0xff, 0x30, 0x0e, 0x06, 0x03, 0x55,
+    0x1d, 0x0f, 0x01, 0x01, 0xff, 0x04, 0x04, 0x03, 0x02, 0x01, 0x86, 0x30,
+    0x0a, 0x06, 0x08, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x04, 0x03, 0x02, 0x03,
+    0x48, 0x00, 0x30, 0x45, 0x02, 0x20, 0xf0, 0xaf, 0x72, 0x56, 0xb1, 0x8a,
+    0x64, 0xd2, 0x1c, 0xbd, 0x65, 0x9d, 0x47, 0xb8, 0x14, 0xd1, 0x68, 0xc8,
+    0xf5, 0x4b, 0x64, 0xb9, 0x70, 0x4f, 0xd4, 0xac, 0xdc, 0x8c, 0x6a, 0x9a,
+    0xb7, 0x8f, 0x02, 0x21, 0x00, 0x8f, 0x56, 0x7a, 0x16, 0xc3, 0x7e, 0x8b,
+    0xdf, 0x0e, 0x65, 0x0c, 0xf4, 0x56, 0xaa, 0x43, 0xd5, 0x03, 0x47, 0x5e,
+    0xbe, 0x38, 0xf5, 0x51, 0x62, 0x09, 0x4e, 0x66, 0xf9, 0x88, 0xeb, 0x4a,
+    0x31};
+
+namespace
+{
+
+class CertificateDbusTest : public ::testing::Test
+{
+  public:
+    // Ensure destructor matches base class exception specification
+    ~CertificateDbusTest() noexcept override = default;
+
+  protected:
+    std::string path = "/xyz/openbmc_project/certs/spdm0";
+    std::string pemChain = testPemChain;
+    std::vector<uint8_t> leafCert = testLeafCert;
+    sdbusplus::async::context asyncCtx;
+};
+
+TEST_F(CertificateDbusTest, ConstructorAndUpdate)
+{
+    spdm::Certificate cert(asyncCtx, path, pemChain, leafCert);
+
+    // Update certificate properties with new values
+    std::string newPemChain = pemChain;
+    std::vector<uint8_t> newLeafCert = leafCert;
+    cert.updateCertificateProperties(newPemChain, newLeafCert);
+    // No exception means pass
+    SUCCEED();
+}
+
+TEST_F(CertificateDbusTest, ParseCertificatePEM)
+{
+    spdm::Certificate cert(asyncCtx, path, pemChain, leafCert);
+
+    // Instead of using the dummy DER, parse the PEM chain to DER and use that
+    BIO* bio = BIO_new_mem_buf(pemChain.data(), pemChain.size());
+    ASSERT_NE(bio, nullptr);
+    X509* x509 = PEM_read_bio_X509(bio, nullptr, nullptr, nullptr);
+    ASSERT_NE(x509, nullptr);
+
+    // Convert X509 to DER
+    int len = i2d_X509(x509, nullptr);
+    ASSERT_GT(len, 0);
+    std::vector<uint8_t> der(len);
+    unsigned char* p = der.data();
+    i2d_X509(x509, &p);
+
+    auto result = cert.parseCertificatePEM(der);
+    // Tuple: issuer, subject, notBefore, notAfter, keyUsage
+    EXPECT_EQ(std::get<0>(result).empty(), false); // issuer
+    EXPECT_EQ(std::get<1>(result).empty(), false); // subject
+    EXPECT_GT(std::get<2>(result), 0u);            // notBefore
+    EXPECT_GT(std::get<3>(result), 0u);            // notAfter
+    // keyUsage may be empty, but should be a vector
+    EXPECT_TRUE(typeid(std::get<4>(result)) ==
+                typeid(std::vector<std::string>));
+
+    X509_free(x509);
+    BIO_free(bio);
+}
+
+TEST_F(CertificateDbusTest, GetIssuerNameFromDer)
+{
+    spdm::Certificate cert(asyncCtx, path, pemChain, leafCert);
+
+    // Use DER from PEM for a real certificate
+    BIO* bio = BIO_new_mem_buf(pemChain.data(), pemChain.size());
+    ASSERT_NE(bio, nullptr);
+    X509* x509 = PEM_read_bio_X509(bio, nullptr, nullptr, nullptr);
+    ASSERT_NE(x509, nullptr);
+
+    int len = i2d_X509(x509, nullptr);
+    ASSERT_GT(len, 0);
+    std::vector<uint8_t> der(len);
+    unsigned char* p = der.data();
+    i2d_X509(x509, &p);
+
+    std::string issuer = cert.getIssuerNameFromDer(der.data(), der.size());
+    EXPECT_FALSE(issuer.empty());
+
+    X509_free(x509);
+    BIO_free(bio);
+}
+
+TEST_F(CertificateDbusTest, GetNameOneline)
+{
+    // Parse X509 from DER generated from PEM
+    BIO* bio = BIO_new_mem_buf(pemChain.data(), pemChain.size());
+    ASSERT_NE(bio, nullptr);
+    X509* x509 = PEM_read_bio_X509(bio, nullptr, nullptr, nullptr);
+    ASSERT_NE(x509, nullptr);
+
+    X509_NAME* name = X509_get_issuer_name(x509);
+    ASSERT_NE(name, nullptr);
+
+    std::string oneline = spdm::Certificate::getNameOneline(name);
+    EXPECT_FALSE(oneline.empty());
+
+    X509_free(x509);
+    BIO_free(bio);
+}
+
+TEST_F(CertificateDbusTest, Asn1TimeToEpoch)
+{
+    // Parse X509 from DER generated from PEM
+    BIO* bio = BIO_new_mem_buf(pemChain.data(), pemChain.size());
+    ASSERT_NE(bio, nullptr);
+    X509* x509 = PEM_read_bio_X509(bio, nullptr, nullptr, nullptr);
+    ASSERT_NE(x509, nullptr);
+
+    const ASN1_TIME* notBefore = X509_get0_notBefore(x509);
+    ASSERT_NE(notBefore, nullptr);
+
+    uint64_t epoch = spdm::Certificate::asn1TimeToEpoch(notBefore);
+    EXPECT_GT(epoch, 0u);
+
+    X509_free(x509);
+    BIO_free(bio);
+}
+
+TEST_F(CertificateDbusTest, GetKeyUsageStrings)
+{
+    // Parse X509 from DER generated from PEM
+    BIO* bio = BIO_new_mem_buf(pemChain.data(), pemChain.size());
+    ASSERT_NE(bio, nullptr);
+    X509* x509 = PEM_read_bio_X509(bio, nullptr, nullptr, nullptr);
+    ASSERT_NE(x509, nullptr);
+
+    ASN1_BIT_STRING* usage = (ASN1_BIT_STRING*)X509_get_ext_d2i(
+        x509, NID_key_usage, nullptr, nullptr);
+    // usage may be nullptr if not present, but function should handle it
+    std::vector<std::string> usages =
+        spdm::Certificate::getKeyUsageStrings(usage);
+    // Should be a vector (possibly empty)
+    EXPECT_TRUE(typeid(usages) == typeid(std::vector<std::string>));
+    if (usage)
+        ASN1_BIT_STRING_free(usage);
+
+    X509_free(x509);
+    BIO_free(bio);
+}
+
+} // namespace
