@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "certificate_dbus.hpp"
 #include "xyz/openbmc_project/Attestation/ComponentIntegrity/aserver.hpp"
 #include "xyz/openbmc_project/Attestation/IdentityAuthentication/aserver.hpp"
 #include "xyz/openbmc_project/Attestation/MeasurementSet/aserver.hpp"
@@ -148,17 +149,19 @@ class ComponentIntegrity :
     /**
      * @brief Get certificate from SPDM device
      * @param slotId Certificate slot ID
-     * @return Tuple of (certificate, certificateSize)
+     * @return Tuple of (certificate, certificateSize, leaf certificate)
      */
-    std::tuple<std::string, std::vector<uint8_t>, size_t> getCertificate(
-        size_t slotId);
+    std::tuple<std::string, std::vector<uint8_t>, std::vector<uint8_t>>
+        getCertificate(size_t slotId);
 
     /**
-     * @brief Convert DER certificates to PEM string
-     * @param derCerts Vector of DER-encoded certificate bytes
-     * @return std::string PEM-encoded certificate chain
+     * @brief Helper to convert DER certificate(s) to PEM string(s).
+     * @param derCerts Vector of DER-encoded certificate bytes.
+     * @return std::string PEM-encoded certificate chain and the last (leaf)
+     * certificate.
      */
-    std::string derCertsToPem(const std::vector<uint8_t>& derCerts);
+    std::tuple<std::string, std::vector<uint8_t>> derCertsToPem(
+        const std::vector<uint8_t>& derCerts);
 
     /**
      * @brief Convert hashing algorithm to string representation
@@ -173,6 +176,17 @@ class ComponentIntegrity :
      * @return String representation of algorithm
      */
     std::string getSigningAlgorithmStr(uint16_t algo);
+
+    /**
+     * @brief Update certificate object
+     * @param chassisId Chassis ID
+     * @param certPem PEM-encoded certificate chain
+     * @param leafCert Leaf certificate
+     * @return Object path of the certificate object
+     */
+    std::string updateCertificateObject(const std::string& chassisId,
+                                        const std::string& certPem,
+                                        const std::vector<uint8_t>& leafCert);
 
   private:
     std::shared_ptr<spdm::SpdmTransport> transport;
@@ -189,6 +203,9 @@ class ComponentIntegrity :
 
     // Friend declaration for testing
     friend class spdm::test::ComponentIntegrityTest;
+
+    /** @brief Certificate object */
+    std::shared_ptr<Certificate> certificateObject = nullptr;
 };
 
 } // namespace spdm

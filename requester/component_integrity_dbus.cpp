@@ -167,10 +167,12 @@ auto ComponentIntegrity::method_call(
 
         auto [slotMask, digestBuffer,
               totalDigestSize] = getCertificateDigests();
-        auto [certPem, certRaw, certRawSize] = getCertificate(slotId);
+        auto [certPem, certRaw, certLeaf] = getCertificate(slotId);
 
         std::string signedMeas{};
-        auto objectPath = sdbusplus::message::object_path(path);
+        std::string chassisId =
+            sdbusplus::message::object_path(path).filename();
+        auto objectPath = updateCertificateObject(chassisId, certPem, certLeaf);
         auto* spdmCtx =
             reinterpret_cast<libspdm_context_t*>(transport->spdmContext);
         auto hashAlgoStr = getHashingAlgorithmStr(
@@ -192,17 +194,13 @@ auto ComponentIntegrity::method_call(
     }
 }
 
-/**
- * @brief Helper to convert DER certificate(s) to PEM string(s).
- * @param derCerts Vector of DER-encoded certificate bytes.
- * @return std::string PEM-encoded certificate chain.
- */
-std::string ComponentIntegrity::derCertsToPem(
+std::tuple<std::string, std::vector<uint8_t>> ComponentIntegrity::derCertsToPem(
     const std::vector<uint8_t>& derCerts)
 {
     std::string pemChain;
     size_t index = 0;
     size_t currentCertLen = 0;
+    std::vector<uint8_t> lastCert;
     while (currentCertLen < derCerts.size())
     {
         const uint8_t* certPtr = nullptr;
@@ -214,6 +212,8 @@ std::string ComponentIntegrity::derCertsToPem(
             lg2::info("No more certs found in certificate chain");
             break; // No more certs
         }
+        lastCert.assign(certPtr, certPtr + certLen);
+
         std::string base64;
         static const char b64_table[] =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -255,7 +255,7 @@ std::string ComponentIntegrity::derCertsToPem(
         ++index;
         currentCertLen += certLen;
     }
-    return pemChain;
+    return {pemChain, lastCert};
 }
 
 /**
@@ -265,7 +265,7 @@ std::string ComponentIntegrity::derCertsToPem(
  * @return std::tuple<std::string, std::vector<uint8_t>, size_t> PEM certificate
  * chain string, raw bytes, and size.
  */
-std::tuple<std::string, std::vector<uint8_t>, size_t>
+std::tuple<std::string, std::vector<uint8_t>, std::vector<uint8_t>>
     ComponentIntegrity::getCertificate(size_t slotId)
 {
     if (!transport)
@@ -319,8 +319,8 @@ std::tuple<std::string, std::vector<uint8_t>, size_t>
     std::vector<uint8_t> derCerts(
         certChain.begin() + spdm_cert_chain_header_size + hash_size,
         certChain.end());
-    std::string pemChain = derCertsToPem(derCerts);
-    return {pemChain, certChain, certChainSize};
+    const auto [pemChain, leafCert] = derCertsToPem(derCerts);
+    return {pemChain, certChain, leafCert};
 }
 
 /**
@@ -362,6 +362,31 @@ std::string ComponentIntegrity::getSigningAlgorithmStr(uint16_t algo)
             lg2::error("Unknown signing algorithm: {ALGO}", "ALGO", algo);
             return "NONE";
     }
+}
+
+std::string ComponentIntegrity::updateCertificateObject(
+    const std::string& chassisId, const std::string& certPem,
+    const std::vector<uint8_t>& leafCert)
+{
+    std::string certId = "CertChain";
+    if (certPem.empty())
+    {
+        lg2::error("Certificate PEM is empty");
+        throw std::runtime_error("Certificate PEM is empty");
+    }
+    std::string objectPath =
+        "/xyz/openbmc_project/certs/devices/" + chassisId + "/" + certId;
+    if (certificateObject)
+    {
+        certificateObject->updateCertificateProperties(certPem, leafCert);
+    }
+    else
+    {
+        certificateObject = std::make_shared<Certificate>(asyncCtx, objectPath,
+                                                          certPem, leafCert);
+    }
+
+    return objectPath;
 }
 
 } // namespace spdm
