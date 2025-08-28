@@ -61,6 +61,22 @@ class MCTPTransportDiscovery : public DiscoveryProtocol
     std::optional<ResponderInfo> createDeviceFromInterfaces(
         const DbusInterfaces& interfaces, const std::string& objectPath);
 
+    /** parse SPDM EM configs
+     * @param devices Devices to get configs for
+     * @param emManagedObjects Managed objects for the EM service
+     */
+    void parseSpdmEMConfig(std::vector<ResponderInfo>& devices,
+                           const ManagedObjects& emManagedObjects);
+
+    /** process SPDM EM configs
+     * @param devices Devices to get configs for
+     * @param emManagedObjects Managed objects for the EM service
+     * @param callback Callback function to handle the result
+     */
+    void getSpdmEMConfigs(
+        std::vector<ResponderInfo> devices,
+        std::function<void(std::vector<ResponderInfo>)> callback);
+
   private:
     /**
      * @brief Check if endpoint supports SPDM message type

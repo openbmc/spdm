@@ -27,6 +27,7 @@ struct ResponderInfo
 {
     size_t eid;             ///< Endpoint ID
     std::string objectPath; ///< D-Bus object path
+    sdbusplus::message::object_path deviceObjectPath;
     std::string uuid;       ///< Device UUID
     std::shared_ptr<spdm::SpdmTransport> transport;
 };
