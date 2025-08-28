@@ -6,7 +6,10 @@
 
 #include <phosphor-logging/lg2.hpp>
 
+#include <future>
 #include <memory>
+#include <optional>
+#include <string>
 #include <vector>
 
 #include <gtest/gtest.h>
@@ -277,6 +280,162 @@ TEST_F(MCTPTransportDiscoveryWithMockTest, ProcessManagedObjectsEmpty)
     ManagedObjects managedObjects;
     auto devices = discovery->processManagedObjects(managedObjects);
     EXPECT_EQ(devices.size(), 0);
+}
+
+TEST_F(MCTPTransportDiscoveryWithMockTest, ParseSpdmEMConfig_Valid)
+{
+    MCTPTransportDiscovery discovery(*ctx);
+    // Simulate a valid managed objects map for EM config
+    ManagedObjects emManagedObjects;
+
+    // Create a mock EM endpoint with required properties
+    DbusInterface emEndpointInterface;
+    DbusInterface spdmMctpRequesterInterface;
+    spdmMctpRequesterInterface["Authenticating"] =
+        std::string{"/xyz/openbmc_project/inventory/system/chassis/device0"};
+    spdmMctpRequesterInterface["EID"] = uint64_t{0x42};
+    spdmMctpRequesterInterface["Name"] = std::string{"device0"};
+    spdmMctpRequesterInterface["Reporting"] = std::string{
+        "/xyz/openbmc_project/inventory/system/chassis/rot_device0"};
+    spdmMctpRequesterInterface["TrustedComponentType"] =
+        std::string{"discrete"};
+    spdmMctpRequesterInterface["Type"] = std::string{"SpdmMctpRequester"};
+    DbusInterfaces interfaces;
+    interfaces["xyz.openbmc_project.Configuration.SpdmMctpRequester"] =
+        spdmMctpRequesterInterface;
+
+    emManagedObjects[sdbusplus::message::object_path(
+        "/xyz/openbmc_project/inventory/system/chassis/rot_device0")] =
+        interfaces;
+
+    std::vector<spdm::ResponderInfo> devices;
+    devices.push_back(spdm::ResponderInfo{
+        0x42, "/au/com/codeconstruct/mctp1/networks/1/endpoints/42",
+        sdbusplus::message::object_path{}, "em-uuid-42", nullptr});
+    discovery.parseSpdmEMConfig(devices, emManagedObjects);
+
+    // There should be at least one entry in devices with the correct fields
+    ASSERT_FALSE(devices.empty());
+    const auto& info = devices.front();
+    EXPECT_EQ(info.eid, 0x42);
+    EXPECT_EQ(info.objectPath,
+              "/au/com/codeconstruct/mctp1/networks/1/endpoints/42");
+    EXPECT_EQ(static_cast<std::string>(info.deviceObjectPath),
+              "/xyz/openbmc_project/inventory/system/chassis/rot_device0");
+    EXPECT_EQ(info.transport, nullptr);
+    EXPECT_EQ(info.uuid, "em-uuid-42");
+}
+
+TEST_F(MCTPTransportDiscoveryWithMockTest, ParseSpdmEMConfig_MissingEid)
+{
+    MCTPTransportDiscovery discovery(*ctx);
+    ManagedObjects emManagedObjects;
+
+    DbusInterface spdmMctpRequesterInterface;
+    spdmMctpRequesterInterface["Name"] = std::string{"device0"};
+    spdmMctpRequesterInterface["Type"] = std::string{"SpdmMctpRequester"};
+    spdmMctpRequesterInterface["TrustedComponentType"] =
+        std::string{"discrete"};
+    spdmMctpRequesterInterface["Authenticating"] =
+        std::string{"/xyz/openbmc_project/inventory/system/chassis/device0"};
+    spdmMctpRequesterInterface["Reporting"] = std::string{
+        "/xyz/openbmc_project/inventory/system/chassis/rot_device0"};
+
+    DbusInterfaces interfaces;
+    interfaces["xyz.openbmc_project.Configuration.SpdmMctpRequester"] =
+        spdmMctpRequesterInterface;
+
+    emManagedObjects[sdbusplus::message::object_path(
+        "/xyz/openbmc_project/inventory/system/chassis/device0")] = interfaces;
+
+    std::vector<spdm::ResponderInfo> devices;
+    devices.push_back(spdm::ResponderInfo{
+        0x42, "/au/com/codeconstruct/mctp1/networks/1/endpoints/42",
+        sdbusplus::message::object_path{}, "", nullptr});
+    discovery.parseSpdmEMConfig(devices, emManagedObjects);
+
+    ASSERT_FALSE(devices.empty());
+    const auto& info = devices.front();
+    EXPECT_EQ(info.eid, 0x42);
+    EXPECT_EQ(info.objectPath,
+              "/au/com/codeconstruct/mctp1/networks/1/endpoints/42");
+    EXPECT_EQ(info.deviceObjectPath, sdbusplus::message::object_path{});
+    EXPECT_EQ(info.transport, nullptr);
+}
+
+TEST_F(MCTPTransportDiscoveryWithMockTest, ParseSpdmEMConfig_MultipleEids)
+{
+    MCTPTransportDiscovery discovery(*ctx);
+    // Simulate a valid managed objects map for EM config with 2 endpoints
+    ManagedObjects emManagedObjects;
+
+    // Endpoint 1
+    DbusInterface spdmMctpRequesterInterface1;
+    spdmMctpRequesterInterface1["Authenticating"] =
+        std::string{"/xyz/openbmc_project/inventory/system/chassis/device0"};
+    spdmMctpRequesterInterface1["EID"] = uint64_t{0x42};
+    spdmMctpRequesterInterface1["Name"] = std::string{"device0"};
+    spdmMctpRequesterInterface1["Reporting"] = std::string{
+        "/xyz/openbmc_project/inventory/system/chassis/rot_device0"};
+    spdmMctpRequesterInterface1["TrustedComponentType"] =
+        std::string{"discrete"};
+    spdmMctpRequesterInterface1["Type"] = std::string{"SpdmMctpRequester"};
+    DbusInterfaces interfaces1;
+    interfaces1["xyz.openbmc_project.Configuration.SpdmMctpRequester"] =
+        spdmMctpRequesterInterface1;
+
+    emManagedObjects[sdbusplus::message::object_path(
+        "/xyz/openbmc_project/inventory/system/chassis/rot_device0")] =
+        interfaces1;
+
+    // Endpoint 2
+    DbusInterface spdmMctpRequesterInterface2;
+    spdmMctpRequesterInterface2["Authenticating"] =
+        std::string{"/xyz/openbmc_project/inventory/system/chassis/device1"};
+    spdmMctpRequesterInterface2["EID"] = uint64_t{0x43};
+    spdmMctpRequesterInterface2["Name"] = std::string{"device1"};
+    spdmMctpRequesterInterface2["Reporting"] = std::string{
+        "/xyz/openbmc_project/inventory/system/chassis/rot_device1"};
+    spdmMctpRequesterInterface2["TrustedComponentType"] =
+        std::string{"discrete"};
+    spdmMctpRequesterInterface2["Type"] = std::string{"SpdmMctpRequester"};
+    DbusInterfaces interfaces2;
+    interfaces2["xyz.openbmc_project.Configuration.SpdmMctpRequester"] =
+        spdmMctpRequesterInterface2;
+
+    emManagedObjects[sdbusplus::message::object_path(
+        "/xyz/openbmc_project/inventory/system/chassis/rot_device1")] =
+        interfaces2;
+
+    std::vector<spdm::ResponderInfo> devices;
+    devices.push_back(spdm::ResponderInfo{
+        0x42, "/au/com/codeconstruct/mctp1/networks/1/endpoints/42",
+        sdbusplus::message::object_path{}, "em-uuid-42", nullptr});
+    devices.push_back(spdm::ResponderInfo{
+        0x43, "/au/com/codeconstruct/mctp1/networks/1/endpoints/43",
+        sdbusplus::message::object_path{}, "em-uuid-43", nullptr});
+    discovery.parseSpdmEMConfig(devices, emManagedObjects);
+
+    // There should be two entries in devices with the correct fields
+    ASSERT_EQ(devices.size(), 2);
+
+    const auto& info1 = devices[0];
+    EXPECT_EQ(info1.eid, 0x42);
+    EXPECT_EQ(info1.objectPath,
+              "/au/com/codeconstruct/mctp1/networks/1/endpoints/42");
+    EXPECT_EQ(static_cast<std::string>(info1.deviceObjectPath),
+              "/xyz/openbmc_project/inventory/system/chassis/rot_device0");
+    EXPECT_EQ(info1.transport, nullptr);
+    EXPECT_EQ(info1.uuid, "em-uuid-42");
+
+    const auto& info2 = devices[1];
+    EXPECT_EQ(info2.eid, 0x43);
+    EXPECT_EQ(info2.objectPath,
+              "/au/com/codeconstruct/mctp1/networks/1/endpoints/43");
+    EXPECT_EQ(static_cast<std::string>(info2.deviceObjectPath),
+              "/xyz/openbmc_project/inventory/system/chassis/rot_device1");
+    EXPECT_EQ(info2.transport, nullptr);
+    EXPECT_EQ(info2.uuid, "em-uuid-43");
 }
 
 } // namespace spdm
