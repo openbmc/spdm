@@ -103,6 +103,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "829bb433_a0993f8f",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-08-28T08:20:32Z",
+      "side": 1,
+      "message": "I can see here in some repo\u0027s https://github.com/openbmc/bmcweb/blob/master/src/boost_asio.cpp#L2 and also I see other copyright text as below // SPDX-FileCopyrightText: Copyright 2019 Intel Corporation\n\nWhich one you prefer or is there any project level doc which I should refer?",
+      "parentUuid": "15116c91_843fa796",
+      "revId": "b2c674eff9df3da8ec26f7aca55acb8bfc2410cc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "59ad8141_e7ee2655",
         "filename": "requester/spdmd.hpp",
         "patchSetId": 15
