@@ -50,16 +50,27 @@ void processDiscoveredDevices(
                       "PATH", device.objectPath);
                 continue;
             }
-            info("Creating D-Bus responder for device {PATH}", "PATH",
-                 device.objectPath);
-            // Create SPDMDBusResponder with ResponderInfo and async
-            // context for parallel execution
-            auto responder =
-                std::make_unique<spdm::SPDMDBusResponder>(device, ctx);
 
-            responders.push_back(std::move(responder));
-            info("Successfully created responder for device {PATH}", "PATH",
-                 device.objectPath);
+            if (static_cast<std::string>(device.deviceObjectPath) != "")
+            {
+                info("Creating D-Bus responder for device {PATH}", "PATH",
+                     device.objectPath);
+                // Create SPDMDBusResponder with ResponderInfo and async
+                // context for parallel execution
+                auto responder =
+                    std::make_unique<spdm::SPDMDBusResponder>(device, ctx);
+
+                responders.push_back(std::move(responder));
+                info("Successfully created responder for device {PATH}", "PATH",
+                     device.objectPath);
+            }
+            else
+            {
+                error(
+                    "DeviceObjectPath is empty for device {PATH}, skipping responder creation",
+                    "PATH", device.objectPath);
+                // TODO: event based discovery for SPDM devices
+            }
         }
         catch (const std::exception& e)
         {
