@@ -5,6 +5,7 @@
 
 #include "libspdm_mctp_transport.hpp"
 #include "mctp_helper.hpp"
+#include "utils.hpp"
 
 #include <phosphor-logging/lg2.hpp>
 
@@ -54,7 +55,7 @@ void MCTPTransportDiscovery::discoverDevices(
             }
 
             auto devices = processManagedObjects(managedObjects);
-            callback(std::move(devices));
+            getSpdmEMConfigs(std::move(devices), std::move(callback));
         });
 }
 
@@ -108,11 +109,10 @@ std::optional<ResponderInfo> MCTPTransportDiscovery::createDeviceFromInterfaces(
         return std::nullopt;
     }
 
-    ResponderInfo device{
-        objectPath, sdbusplus::message::object_path{objectPath},
-        std::variant<MctpResponderInfo, TcpResponderInfo>{
-            MctpResponderInfo{eid, uuid}},
-        TransportType::MCTP, nullptr};
+    ResponderInfo device{objectPath, sdbusplus::message::object_path{},
+                         std::variant<MctpResponderInfo, TcpResponderInfo>{
+                             MctpResponderInfo{eid, uuid}},
+                         TransportType::MCTP, nullptr};
     device.transport = std::make_unique<SpdmMctpTransport>(eid);
     info("Created transport for device {PATH} with EID {EID}", "PATH",
          objectPath, "EID", eid);
@@ -198,6 +198,69 @@ std::string MCTPTransportDiscovery::extractUuid(
     }
 
     return *uuid;
+}
+
+void MCTPTransportDiscovery::parseSpdmEMConfig(
+    std::vector<ResponderInfo>& devices, const ManagedObjects& emManagedObjects)
+{
+    for (auto& device : devices)
+    {
+        for (const auto& [emObjPath, emIfaces] : emManagedObjects)
+        {
+            auto requesterIt = emIfaces.find(
+                "xyz.openbmc_project.Configuration.SpdmMctpRequester");
+            if (requesterIt == emIfaces.end())
+            {
+                continue;
+            }
+            auto eidIt = requesterIt->second.find("EID");
+            if (eidIt == requesterIt->second.end())
+            {
+                continue;
+            }
+            auto eidVal = std::get_if<uint64_t>(&eidIt->second);
+            if (!eidVal)
+            {
+                error("EID property is not uint64_t for EM object: {OBJ_PATH}",
+                      "OBJ_PATH", static_cast<std::string>(emObjPath));
+                continue;
+            }
+            uint8_t deviceEid = 0;
+            if (auto* mctp =
+                    std::get_if<MctpResponderInfo>(&device.responderData))
+            {
+                deviceEid = mctp->eid;
+            }
+
+            if (*eidVal == static_cast<uint64_t>(deviceEid))
+            {
+                info("Match found for EID {EID} in EM object: {OBJ_PATH}",
+                     "EID", deviceEid, "OBJ_PATH",
+                     static_cast<std::string>(emObjPath));
+                device.deviceObjectPath = emObjPath;
+                break;
+            }
+        }
+    }
+}
+
+void MCTPTransportDiscovery::getSpdmEMConfigs(
+    std::vector<ResponderInfo> devices,
+    std::function<void(std::vector<ResponderInfo>)> callback)
+{
+    auto emCallback =
+        [this, devices = std::move(devices), callback = std::move(callback)](
+            bool success, ManagedObjects emManagedObjects) mutable {
+            if (!success)
+            {
+                error("Failed to get managed objects from entity manager");
+                callback({});
+                return;
+            }
+            parseSpdmEMConfig(devices, emManagedObjects);
+            callback(std::move(devices));
+        };
+    getManagedObjectsFromEMAsync(*asyncCtx, std::move(emCallback));
 }
 
 } // namespace spdm
