@@ -43,4 +43,35 @@ void getManagedObjectsAsync(
             }));
 }
 
+void getManagedObjectsFromEMAsync(
+    sdbusplus::async::context& asyncCtx,
+    std::function<void(bool success, ManagedObjects)> callback)
+{
+    // Create a proxy for the ObjectManager interface
+    auto objectManager = sdbusplus::async::proxy()
+                             .service("xyz.openbmc_project.EntityManager")
+                             .path("/xyz/openbmc_project/inventory")
+                             .interface("org.freedesktop.DBus.ObjectManager");
+
+    asyncCtx.spawn(
+        objectManager.call<ManagedObjects>(asyncCtx, "GetManagedObjects") |
+        stdexec::then([callback = std::move(callback)](
+                          ManagedObjects emManagedObjects) mutable {
+            callback(true, emManagedObjects);
+        }) |
+        stdexec::upon_error([callback = std::move(callback)](
+                                std::exception_ptr ep) {
+            try
+            {
+                std::rethrow_exception(ep);
+            }
+            catch (const std::exception& e)
+            {
+                error(
+                    "GetManagedObjects error for service xyz.openbmc_project.EntityManager: {ERROR}",
+                    "ERROR", e);
+                callback(false, {});
+            }
+        }));
+}
 } // namespace spdm
