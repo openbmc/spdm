@@ -16,7 +16,7 @@ namespace spdm
 
 // Type aliases for complex D-Bus structures
 using DbusPropertyValue =
-    std::variant<std::string, uint8_t, std::vector<uint8_t>>;
+    std::variant<std::string, uint8_t, std::vector<uint8_t>, uint64_t>;
 using DbusInterface = std::map<std::string, DbusPropertyValue>;
 using DbusInterfaces = std::map<std::string, DbusInterface>;
 using ManagedObjects =
@@ -30,6 +30,15 @@ using ManagedObjects =
  */
 void getManagedObjectsAsync(
     sdbusplus::async::context& asyncCtx, const std::string& service,
+    std::function<void(bool success, ManagedObjects)> callback);
+
+/**
+ * @brief Get all managed objects from the entity manager asynchronously
+ * @param asyncCtx Async D-Bus context
+ * @param callback Callback function to handle the result
+ */
+void getManagedObjectsFromEMAsync(
+    sdbusplus::async::context& asyncCtx,
     std::function<void(bool success, ManagedObjects)> callback);
 
 } // namespace spdm

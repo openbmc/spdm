@@ -12,7 +12,7 @@ namespace spdm
 
 SPDMDBusResponder::SPDMDBusResponder(const ResponderInfo& responderInfo,
                                      sdbusplus::async::context& ctx) :
-    deviceName(std::to_string(responderInfo.eid)),
+    deviceName(responderInfo.deviceObjectPath.filename()),
     inventoryPath(responderInfo.objectPath)
 {
     std::string componentIntegrityPath =
@@ -29,8 +29,10 @@ SPDMDBusResponder::SPDMDBusResponder(const ResponderInfo& responderInfo,
     trustedComponent =
         std::make_unique<TrustedComponent>(ctx, trustedComponentPath);
 
-    info("Created SPDM D-Bus responder for device {EID} at {PATH}", "EID",
-         responderInfo.eid, "PATH", responderInfo.objectPath);
+    info(
+        "Created SPDM D-Bus responder for device {EID} at {PATH}, device name {DEVICE_NAME}",
+        "EID", responderInfo.eid, "PATH", responderInfo.objectPath,
+        "DEVICE_NAME", deviceName);
 }
 
 } // namespace spdm
