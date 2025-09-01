@@ -1,0 +1,152 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b41c249d_04517b8d",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-01T15:28:30Z",
+      "side": 1,
+      "message": "bindDevicesToEMObjects?",
+      "range": {
+        "startLine": 219,
+        "startChar": 30,
+        "endLine": 219,
+        "endChar": 45
+      },
+      "revId": "5cc4c6523faba3811192f42429337ae0352df529",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e198a715_8e922ce8",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-01T15:28:30Z",
+      "side": 1,
+      "message": "Constexpr?",
+      "revId": "5cc4c6523faba3811192f42429337ae0352df529",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08f7f7c9_183bff97",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-01T15:28:30Z",
+      "side": 1,
+      "message": "If a device’s eid never matches any EM object, nothing is logged .\n\nDo you want to add like this as below?\nif (device.deviceObjectPath.empty()) {\n    warn(\"No matching EM object found for device EID {EID}\", \"EID\", device.eid);\n}",
+      "revId": "5cc4c6523faba3811192f42429337ae0352df529",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2583e8b_fdee6ec6",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-01T15:28:30Z",
+      "side": 1,
+      "message": "Pass devices by reference.",
+      "range": {
+        "startLine": 257,
+        "startChar": 3,
+        "endLine": 257,
+        "endChar": 39
+      },
+      "revId": "5cc4c6523faba3811192f42429337ae0352df529",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b23b5239_a08239b0",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-01T15:28:30Z",
+      "side": 1,
+      "message": "Do you need this function as a public?",
+      "revId": "5cc4c6523faba3811192f42429337ae0352df529",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d002693f_707b4899",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-01T15:28:30Z",
+      "side": 1,
+      "message": "inventoryObjectPath?",
+      "revId": "5cc4c6523faba3811192f42429337ae0352df529",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8a622a5_2965e511",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-01T15:28:30Z",
+      "side": 1,
+      "message": "Can we define constexpr?",
+      "revId": "5cc4c6523faba3811192f42429337ae0352df529",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f07298c7_dc57a07e",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-01T15:28:30Z",
+      "side": 1,
+      "message": "Do you want to log an error if managed objects is empty or it is taking care at the caller side?",
+      "revId": "5cc4c6523faba3811192f42429337ae0352df529",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
