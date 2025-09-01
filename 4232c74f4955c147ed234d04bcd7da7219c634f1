@@ -89,6 +89,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a6d4d6af_fc9b2c4c",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-01T16:15:37Z",
+      "side": 1,
+      "message": "why do we need to convert the der into PEM? I think as we need to trasnfer the certificate from redfish , Why don\u0027t we convert it over there?",
+      "revId": "4232c74f4955c147ed234d04bcd7da7219c634f1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "01b212cc_8a985318",
         "filename": "requester/component_integrity_dbus.cpp",
         "patchSetId": 1
