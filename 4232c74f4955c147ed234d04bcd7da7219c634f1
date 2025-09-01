@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4693b07e_fc99a2f4",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-01T16:10:10Z",
+      "side": 1,
+      "message": "This function can go in utility",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 205,
+        "endChar": 16
+      },
+      "revId": "4232c74f4955c147ed234d04bcd7da7219c634f1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ba9b2d7_77697d88",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-01T16:10:10Z",
+      "side": 1,
+      "message": "Can we use the EVP_EncodeBlock - libssl?",
+      "range": {
+        "startLine": 221,
+        "startChar": 4,
+        "endLine": 246,
+        "endChar": 9
+      },
+      "revId": "4232c74f4955c147ed234d04bcd7da7219c634f1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2040c522_3eb07570",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-01T16:10:10Z",
+      "side": 1,
+      "message": "Can we define ths using to define what is the string,vector\u003cuint8_t\u003e ?",
+      "range": {
+        "startLine": 268,
+        "startChar": 11,
+        "endLine": 268,
+        "endChar": 52
+      },
+      "revId": "4232c74f4955c147ed234d04bcd7da7219c634f1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7a65c92_2cdf7c5d",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-01T16:10:10Z",
+      "side": 1,
+      "message": "Do we need this check, we have already checked it at line no 271 and 277?",
+      "revId": "4232c74f4955c147ed234d04bcd7da7219c634f1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01b212cc_8a985318",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-01T16:10:10Z",
+      "side": 1,
+      "message": "RSA-SSA-2048?",
+      "revId": "4232c74f4955c147ed234d04bcd7da7219c634f1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
