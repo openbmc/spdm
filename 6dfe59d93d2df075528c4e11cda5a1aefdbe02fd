@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1003d2b8_ae03fec2",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-09-03T05:02:32Z",
+      "side": 1,
+      "message": "Can we add more than one supported type to cover mapping logic in the code.",
+      "revId": "6dfe59d93d2df075528c4e11cda5a1aefdbe02fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42c004f7_42e2d25f",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-09-03T05:02:32Z",
+      "side": 1,
+      "message": "/xyz/openbmc_project/mctp/endpoint/1 --\u003e /au/com/codeconstruct/mctp1/networks/1/endpoints/1 to align with code construct path.",
+      "revId": "6dfe59d93d2df075528c4e11cda5a1aefdbe02fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
