@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa3e941c_4370995e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-09-03T10:06:04Z",
+      "side": 1,
+      "message": "Tested section needs update.",
+      "revId": "637257a8aaaec7defd0809e6ff41a7e8a3815a60",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2efcf184_1bf10755",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-09-03T10:06:04Z",
+      "side": 1,
+      "message": "nit: use const expr for all",
+      "revId": "637257a8aaaec7defd0809e6ff41a7e8a3815a60",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91453824_9f4a38d9",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-09-03T10:06:04Z",
+      "side": 1,
+      "message": "same callback is moved twice, this will result in bad function call exception when error path is hit.",
+      "revId": "637257a8aaaec7defd0809e6ff41a7e8a3815a60",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
