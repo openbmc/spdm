@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f90cba5_3693b90a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T10:16:44Z",
+      "side": 1,
+      "message": "shouldn\u0027t the inventory daemon host this interface ? I don\u0027t think spdm should decide and host the trusted component dbus object.\n\nTypically, a TPM/PRoT would act as a Trusted component, right ?",
+      "revId": "dc92d477483cf1b2990bca9acb3a2e947622ffcf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
