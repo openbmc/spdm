@@ -16,6 +16,75 @@
       "message": "@hosmanechinmay@gmail.com / @ratankgupta31@gmail.com please test this chain on an upstream nvidia platform.",
       "revId": "c34de2171c50bb516695d59ca19766103af467f8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24a5984d_329e860e",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T10:11:23Z",
+      "side": 1,
+      "message": "cannot be first negotiate and then set the version based on the negotiation with the responder ? we probably should not limit openbmc implementation to just support 1.1 - shouldn\u0027t we target for 1.3 ?",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 23,
+        "endChar": 24
+      },
+      "revId": "c34de2171c50bb516695d59ca19766103af467f8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84b8bc2e_70a31b38",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T10:11:23Z",
+      "side": 1,
+      "message": "I dont think we can merge code that returns this dummy value. We should probably squash this with the implementation ? or may be we could just return null instead ? @patrick@stwcx.xyz - whats your thought on this ?",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 6
+      },
+      "revId": "c34de2171c50bb516695d59ca19766103af467f8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a76277d5_712d37a3",
+        "filename": "subprojects/phosphor-dbus-interfaces.wrap",
+        "patchSetId": 12
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T10:11:23Z",
+      "side": 1,
+      "message": "extra space",
+      "range": {
+        "startLine": 6,
+        "startChar": 55,
+        "endLine": 6,
+        "endChar": 56
+      },
+      "revId": "c34de2171c50bb516695d59ca19766103af467f8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
