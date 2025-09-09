@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f758d094_d33f7215",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T10:29:28Z",
+      "side": 1,
+      "message": "can we also add a test here to ensure that we can build code using subprojects ?",
+      "revId": "155201204d585da0f9b16688a8747590875c638d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b7f1edf_15313ac8",
+        "filename": "requester/spdm_device_secret_lib_stub.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T10:29:28Z",
+      "side": 1,
+      "message": "@ratankgupta31@gmail.com / @hosmanechinmay@gmail.com -  Instead of adding all the stub functions at once, could we add each function together with its implementation? Reviewing this commit as-is would require us to look ahead at future commits to confirm that none of these stubs end up as dead code, which makes it difficult to track completeness later.\n\nMerging this code without the follow-up patch would also leave the repo in a broken state functionally. @patrick@stwcx.xyz — what’s your take on this?",
+      "revId": "155201204d585da0f9b16688a8747590875c638d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
