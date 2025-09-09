@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55e9cbcf_d09fc067",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T08:25:22Z",
+      "side": 1,
+      "message": "wrapping issue.",
+      "range": {
+        "startLine": 21,
+        "startChar": 2,
+        "endLine": 21,
+        "endChar": 9
+      },
+      "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ccbb7e7_04851750",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T08:25:22Z",
+      "side": 1,
+      "message": "don\u0027t think eid is a common field across transports. it\u0027s an mctp specific attribute.\n\ntcp has ip address, and pcie DOE has something like BDF address. we should not generalize this in common infrastructure.",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 17
+      },
+      "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "572abcee_2960cc8c",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T08:25:22Z",
+      "side": 1,
+      "message": "why do we need the UUID ? do we expose this anywhere ?",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 20
+      },
+      "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a377121_6c0c061c",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T08:25:22Z",
+      "side": 1,
+      "message": "dont see pcie binding spec at https://www.dmtf.org/standards/spdm. where is this defined ?",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 44
+      },
+      "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a0fdc9b_ac053030",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T08:25:22Z",
+      "side": 1,
+      "message": "do we plan to do discovery over all the transports by default ?",
+      "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
