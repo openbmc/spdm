@@ -3,6 +3,144 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f93f7c1e_c2af0b95",
+        "filename": "meson_options.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T08:51:01Z",
+      "side": 1,
+      "message": "why do we need a special `code coverage` meson option. doesn\u0027t meson inherently support code coverage with out any code changes ?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 17
+      },
+      "revId": "6dfe59d93d2df075528c4e11cda5a1aefdbe02fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4ee839b_a5eb3048",
+        "filename": "meson_options.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T08:51:01Z",
+      "side": 1,
+      "message": "extra spacing.",
+      "range": {
+        "startLine": 8,
+        "startChar": 96,
+        "endLine": 8,
+        "endChar": 97
+      },
+      "revId": "6dfe59d93d2df075528c4e11cda5a1aefdbe02fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8b13eb2_4ba3b3c0",
+        "filename": "tests/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T08:51:01Z",
+      "side": 1,
+      "message": "this looks odd - I have never seen SPDX license information in meson files",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 51
+      },
+      "revId": "6dfe59d93d2df075528c4e11cda5a1aefdbe02fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05b03aea_97b04ad7",
+        "filename": "tests/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T08:51:01Z",
+      "side": 1,
+      "message": "would rather suggest we define these once in the main meson file and use the variables here instead of declaring dependency objects multiple times.",
+      "range": {
+        "startLine": 6,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 44
+      },
+      "revId": "6dfe59d93d2df075528c4e11cda5a1aefdbe02fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e395a07_ba65dd21",
+        "filename": "tests/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T08:51:01Z",
+      "side": 1,
+      "message": "meson wrap files missing for test dependencies.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 40
+      },
+      "revId": "6dfe59d93d2df075528c4e11cda5a1aefdbe02fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0b7f351_16705986",
+        "filename": "tests/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T08:51:01Z",
+      "side": 1,
+      "message": "what is this one ?",
+      "range": {
+        "startLine": 26,
+        "startChar": 39,
+        "endLine": 26,
+        "endChar": 56
+      },
+      "revId": "6dfe59d93d2df075528c4e11cda5a1aefdbe02fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1003d2b8_ae03fec2",
         "filename": "tests/test_mctp_transport_discovery.cpp",
         "patchSetId": 4
