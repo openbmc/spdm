@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1daf8d7a_98f6ab96",
+        "filename": "meson.build",
+        "patchSetId": 15
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T07:01:26Z",
+      "side": 1,
+      "message": "drop phosphor-logging dependency since we are not using it in this commit ? and like wise also the wrap file ?",
+      "range": {
+        "startLine": 13,
+        "startChar": 14,
+        "endLine": 13,
+        "endChar": 44
+      },
+      "revId": "b2c674eff9df3da8ec26f7aca55acb8bfc2410cc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "736e5692_4e69d764",
         "filename": "meson.build",
         "patchSetId": 15
@@ -115,6 +138,24 @@
       "side": 1,
       "message": "I can see here in some repo\u0027s https://github.com/openbmc/bmcweb/blob/master/src/boost_asio.cpp#L2 and also I see other copyright text as below // SPDX-FileCopyrightText: Copyright 2019 Intel Corporation\n\nWhich one you prefer or is there any project level doc which I should refer?",
       "parentUuid": "15116c91_843fa796",
+      "revId": "b2c674eff9df3da8ec26f7aca55acb8bfc2410cc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9114cb78_0eb1bc2f",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-09T07:01:26Z",
+      "side": 1,
+      "message": "@patrick@stwcx.xyz - per LF guidelines, it seems `OpenBMC Authors` seems to be a valid thing to do.\n\nhttps://www.linuxfoundation.org/blog/blog/copyright-notices-in-open-source-software-projects\n\nThe link says we can even give `project name` as well. This is what the link says:\n\n```\nInstead, many LF project communities recommend using a more general statement in a form similar to the following (where XYZ is the project’s name):\n\n    Copyright The XYZ Authors.\n    Copyright The XYZ Contributors.\n    Copyright Contributors to the XYZ project.\n\n```",
+      "parentUuid": "829bb433_a0993f8f",
       "revId": "b2c674eff9df3da8ec26f7aca55acb8bfc2410cc",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
