@@ -16,6 +16,24 @@
       "message": "shouldn\u0027t the inventory daemon host this interface ? I don\u0027t think spdm should decide and host the trusted component dbus object.\n\nTypically, a TPM/PRoT would act as a Trusted component, right ?",
       "revId": "dc92d477483cf1b2990bca9acb3a2e947622ffcf",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "110ada8e_d1f6b6ee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-09-10T07:00:45Z",
+      "side": 1,
+      "message": "This is inline with the design. For RoT(Internal or external root of trust) discovery is through SPDM. \n\n```\nFor each endpoint, which could be MCTP, PCIe-DOE or TCP, SPDM daemon query Entity Manger for the matching trusted component configuration. It then creates and initializes the corresponding D-Bus object for TrustedComponent and ComponentIntegrity with device specific information.\n```",
+      "parentUuid": "9f90cba5_3693b90a",
+      "revId": "dc92d477483cf1b2990bca9acb3a2e947622ffcf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
