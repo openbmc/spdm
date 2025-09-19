@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "239a3885_d1b212ba",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-19T08:18:54Z",
+      "side": 1,
+      "message": "Agree, and It needs to be enhanced when we bring other responders.\nCurrently it is only MCTP responder",
+      "parentUuid": "0ccbb7e7_04851750",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 17
+      },
+      "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "572abcee_2960cc8c",
         "filename": "requester/spdm_discovery.hpp",
         "patchSetId": 12
@@ -60,6 +84,30 @@
       "writtenOn": "2025-09-09T08:25:22Z",
       "side": 1,
       "message": "why do we need the UUID ? do we expose this anywhere ?",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 20
+      },
+      "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7f43ae6_79d80444",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-19T08:18:54Z",
+      "side": 1,
+      "message": "When the mCTP endpoint is discovered, we obtain its UUID and EID. We then need to associate the SPDM responder object with the corresponding inventory object using the UUID.",
+      "parentUuid": "572abcee_2960cc8c",
       "range": {
         "startLine": 27,
         "startChar": 4,
@@ -95,6 +143,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "53ee9172_a0e82fc3",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-19T08:18:54Z",
+      "side": 1,
+      "message": "Eevn I don\u0027t see it but libspdm supports it https://github.com/DMTF/libspdm/tree/3e973c58a594dfa6cf0bc7e53af37cce02cd544a/library/spdm_transport_pcidoe_lib",
+      "parentUuid": "1a377121_6c0c061c",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 44
+      },
+      "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7a0fdc9b_ac053030",
         "filename": "requester/spdmd.cpp",
         "patchSetId": 12
@@ -106,6 +178,24 @@
       "writtenOn": "2025-09-09T08:25:22Z",
       "side": 1,
       "message": "do we plan to do discovery over all the transports by default ?",
+      "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19281bc0_cb52511d",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-19T08:18:54Z",
+      "side": 1,
+      "message": "No. Look at the line no 27, Diacovery protocol instance is spdm::MCTPTransportDiscovery",
+      "parentUuid": "7a0fdc9b_ac053030",
       "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
