@@ -34,6 +34,24 @@
       "parentUuid": "dce6e2d9_47602316",
       "revId": "301b0e60bd81c6f4df82eaa08c3745d9f894b5af",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59747824_7cffc8b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-09-19T10:10:34Z",
+      "side": 1,
+      "message": "This seems to check if the VCA was successful . But wouldn\u0027t we need to do extra checking for the version number ? and disable certain commands that are not part of a specified version ?",
+      "parentUuid": "e8ec9869_20387419",
+      "revId": "301b0e60bd81c6f4df82eaa08c3745d9f894b5af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
