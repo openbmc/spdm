@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf53d842_4f39c29b",
+        "filename": "meson_options.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-23T10:27:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f93f7c1e_c2af0b95",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 17
+      },
+      "revId": "6dfe59d93d2df075528c4e11cda5a1aefdbe02fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4ee839b_a5eb3048",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-09-09T08:51:01Z",
       "side": 1,
       "message": "extra spacing.",
+      "range": {
+        "startLine": 8,
+        "startChar": 96,
+        "endLine": 8,
+        "endChar": 97
+      },
+      "revId": "6dfe59d93d2df075528c4e11cda5a1aefdbe02fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32a67ad5_3f4ec586",
+        "filename": "meson_options.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-23T10:27:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b4ee839b_a5eb3048",
       "range": {
         "startLine": 8,
         "startChar": 96,
@@ -70,6 +118,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "beffa504_e6d44f4f",
+        "filename": "tests/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-23T10:27:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d8b13eb2_4ba3b3c0",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 51
+      },
+      "revId": "6dfe59d93d2df075528c4e11cda5a1aefdbe02fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "05b03aea_97b04ad7",
@@ -93,6 +165,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "263c18fe_24a0e66a",
+        "filename": "tests/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-23T10:27:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "05b03aea_97b04ad7",
+      "range": {
+        "startLine": 6,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 44
+      },
+      "revId": "6dfe59d93d2df075528c4e11cda5a1aefdbe02fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e395a07_ba65dd21",
@@ -106,6 +202,30 @@
       "writtenOn": "2025-09-09T08:51:01Z",
       "side": 1,
       "message": "meson wrap files missing for test dependencies.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 40
+      },
+      "revId": "6dfe59d93d2df075528c4e11cda5a1aefdbe02fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae9e1bc4_48b4816e",
+        "filename": "tests/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-23T10:27:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7e395a07_ba65dd21",
       "range": {
         "startLine": 8,
         "startChar": 0,
@@ -169,6 +289,24 @@
       "writtenOn": "2025-09-03T05:02:32Z",
       "side": 1,
       "message": "/xyz/openbmc_project/mctp/endpoint/1 --\u003e /au/com/codeconstruct/mctp1/networks/1/endpoints/1 to align with code construct path.",
+      "revId": "6dfe59d93d2df075528c4e11cda5a1aefdbe02fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b9638fa_8f6e0bc9",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-23T10:27:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "42c004f7_42e2d25f",
       "revId": "6dfe59d93d2df075528c4e11cda5a1aefdbe02fd",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
