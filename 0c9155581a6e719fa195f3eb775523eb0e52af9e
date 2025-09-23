@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddd62f06_4946349e",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-23T10:12:29Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7c705e51_75b91112",
+      "revId": "0c9155581a6e719fa195f3eb775523eb0e52af9e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47397350_98802450",
@@ -31,6 +49,24 @@
       "writtenOn": "2025-08-11T02:13:52Z",
       "side": 1,
       "message": "`std::expected` or `std::optional` here too.",
+      "revId": "0c9155581a6e719fa195f3eb775523eb0e52af9e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb9594ae_6f34117d",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-23T10:12:29Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "47397350_98802450",
       "revId": "0c9155581a6e719fa195f3eb775523eb0e52af9e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -52,6 +88,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4643a6ce_5ffc773e",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-23T10:12:29Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "813b8599_ba985f25",
+      "revId": "0c9155581a6e719fa195f3eb775523eb0e52af9e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96aee92d_4799f034",
@@ -65,6 +119,24 @@
       "writtenOn": "2025-08-11T02:13:52Z",
       "side": 1,
       "message": "This seems ... surprising. Why do we need an in-band value? Can we not rather use `std::optional`?",
+      "revId": "0c9155581a6e719fa195f3eb775523eb0e52af9e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e1daa6a_a53b63f9",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-09-23T10:12:29Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "96aee92d_4799f034",
       "revId": "0c9155581a6e719fa195f3eb775523eb0e52af9e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
