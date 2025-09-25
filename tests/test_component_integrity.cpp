@@ -162,7 +162,7 @@ class ComponentIntegrityTest : public ::testing::Test
 // Test validateMeasurementIndices with valid indices
 TEST_F(ComponentIntegrityTest, ValidateMeasurementIndicesValidTest)
 {
-    std::vector<size_t> validIndices = {0, 1, 2, 255};
+    std::vector<size_t> validIndices = {1, 2, 3, 4, 5};
 
     // This should not throw
     EXPECT_NO_THROW(validateMeasurementIndices(validIndices));
@@ -300,8 +300,8 @@ TEST_F(ComponentIntegrityTest, ValidateMeasurementIndicesEmptyTest)
 // Test validateMeasurementIndices with large indices
 TEST_F(ComponentIntegrityTest, ValidateMeasurementIndicesLargeTest)
 {
-    std::vector<size_t> largeIndices = {0, 1, 2, 3,  4,   5,   6,
-                                        7, 8, 9, 10, 100, 200, 255};
+    std::vector<size_t> largeIndices = {1, 2, 3,  4,   5,   6,  7,
+                                        8, 9, 10, 100, 200, 254};
 
     // This should not throw
     EXPECT_NO_THROW(validateMeasurementIndices(largeIndices));
@@ -310,7 +310,8 @@ TEST_F(ComponentIntegrityTest, ValidateMeasurementIndicesLargeTest)
 // Test validateMeasurementIndices with boundary values
 TEST_F(ComponentIntegrityTest, ValidateMeasurementIndicesBoundaryTest)
 {
-    std::vector<size_t> boundaryIndices = {0, 255}; // Min and max valid values
+    std::vector<size_t> boundaryIndices = {
+        1, 254}; // Min and max valid regular indices
 
     // This should not throw
     EXPECT_NO_THROW(validateMeasurementIndices(boundaryIndices));
@@ -368,6 +369,59 @@ TEST_F(ComponentIntegrityTest, ValidateMeasurementIndicesVeryLargeInvalidTest)
     EXPECT_THROW(
         validateMeasurementIndices(veryLargeIndex),
         sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument);
+}
+
+// Test validateMeasurementIndices with mixing 0 and 255 (should be invalid)
+TEST_F(ComponentIntegrityTest, ValidateMeasurementIndicesMixZeroAnd255Test)
+{
+    std::vector<size_t> mixedIndices = {0, 255};
+
+    // This should throw InvalidArgument
+    EXPECT_THROW(
+        validateMeasurementIndices(mixedIndices),
+        sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument);
+}
+
+// Test validateMeasurementIndices with mixing 0 and regular indices (should be
+// invalid)
+TEST_F(ComponentIntegrityTest, ValidateMeasurementIndicesMixZeroAndRegularTest)
+{
+    std::vector<size_t> mixedIndices = {0, 1, 2, 3};
+
+    // This should throw InvalidArgument
+    EXPECT_THROW(
+        validateMeasurementIndices(mixedIndices),
+        sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument);
+}
+
+// Test validateMeasurementIndices with mixing 255 and regular indices (should
+// be invalid)
+TEST_F(ComponentIntegrityTest, ValidateMeasurementIndicesMix255AndRegularTest)
+{
+    std::vector<size_t> mixedIndices = {255, 1, 2, 3};
+
+    // This should throw InvalidArgument
+    EXPECT_THROW(
+        validateMeasurementIndices(mixedIndices),
+        sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument);
+}
+
+// Test validateMeasurementIndices with single index 0 (should be valid)
+TEST_F(ComponentIntegrityTest, ValidateMeasurementIndicesSingleZeroTest)
+{
+    std::vector<size_t> singleZero = {0};
+
+    // This should not throw
+    EXPECT_NO_THROW(validateMeasurementIndices(singleZero));
+}
+
+// Test validateMeasurementIndices with single index 255 (should be valid)
+TEST_F(ComponentIntegrityTest, ValidateMeasurementIndicesSingle255Test)
+{
+    std::vector<size_t> single255 = {255};
+
+    // This should not throw
+    EXPECT_NO_THROW(validateMeasurementIndices(single255));
 }
 
 // --- New tests for certificate get functionality ---
