@@ -4,8 +4,8 @@
 #include "spdm_discovery.hpp"
 
 #include <sdbusplus/async.hpp>
-#include <sdbusplus/message/types.hpp>
 
+#include <memory>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -39,15 +39,14 @@ struct MockTransport
 static_assert(details::DiscoveryType<MockTransport>,
               "MockTransport must satisfy DiscoveryType concept");
 
-// Helper: construct a ResponderInfo for testing.
+// Helper: build an MCTP ResponderInfo from a numeric id.
 static ResponderInfo makeResponder(int id)
 {
-    std::string path =
-        "/xyz/openbmc_project/mctp/endpoint/" + std::to_string(id);
-    std::string uuid = "test-uuid-" + std::to_string(id);
-    uint8_t eid = static_cast<uint8_t>(id * 0x10);
-    return ResponderInfo{sdbusplus::object_path(path),
-                         MctpResponderInfo{eid, uuid}, TransportType::MCTP};
+    return {sdbusplus::object_path(
+                "/xyz/openbmc_project/mctp/endpoint/" + std::to_string(id)),
+            MctpResponderInfo{static_cast<uint8_t>(id),
+                              "uuid-" + std::to_string(id)},
+            TransportType::MCTP};
 }
 
 // Helper: run a coroutine inside a temporary async context.
@@ -68,7 +67,7 @@ TEST_F(SPDMDiscoveryTest, DiscoverSingleDevice)
     SPDMDiscovery disc;
     MockTransport mock;
 
-    auto responder1 = makeResponder(1);
+    auto responder1 = makeResponder(0x10);
     mock.devicesToAdd.push_back(responder1);
 
     disc.discover(mock);
@@ -85,7 +84,7 @@ TEST_F(SPDMDiscoveryTest, DiscoverSingleDevice)
 
         const auto& mctp = std::get<MctpResponderInfo>(d.info);
         EXPECT_EQ(mctp.eid, 0x10);
-        EXPECT_EQ(mctp.uuid, "test-uuid-1");
+        EXPECT_EQ(mctp.uuid, "uuid-16");
     });
 }
 
