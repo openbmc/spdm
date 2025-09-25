@@ -4,6 +4,7 @@
 #include "component_integrity_dbus.hpp"
 
 #include "libspdm_transport.hpp"
+#include "utils.hpp"
 
 extern "C"
 {
@@ -15,6 +16,7 @@ extern "C"
 #include <phosphor-logging/lg2.hpp>
 
 #include <chrono>
+#include <set>
 
 namespace spdm
 {
@@ -45,20 +47,121 @@ void ComponentIntegrity::initializeProperties()
 /**
  * @brief Validate measurement indices
  * @param measurementIndices Vector of measurement indices to validate
- * @throws InvalidArgument if any index is invalid
+ * @throws InvalidArgument if any index is invalid or not unique
  */
 void ComponentIntegrity::validateMeasurementIndices(
     const std::vector<size_t>& measurementIndices)
 {
+    // Handle empty vector - treat as get all measurements
+    if (measurementIndices.empty())
+    {
+        lg2::info(
+            "No measurement indices specified, requesting all measurements (0xFF)");
+        return;
+    }
+
+    // Handle special cases
+    if (measurementIndices.size() == 1)
+    {
+        if (measurementIndices[0] == 0)
+        {
+            lg2::info("Requesting total number of measurements (0)");
+            return;
+        }
+        else if (measurementIndices[0] == 255)
+        {
+            lg2::info("Requesting all measurements (255)");
+            return;
+        }
+    }
+
+    // Validate special value combinations
+    validateSpecialValueCombinations(measurementIndices);
+
+    // Validate regular indices (1-254)
+    validateRegularIndices(measurementIndices);
+
+    // Check for duplicate indices
+    checkForDuplicateIndices(measurementIndices);
+
+    lg2::info("Validated {COUNT} unique measurement indices in range 1-254",
+              "COUNT", measurementIndices.size());
+}
+
+void ComponentIntegrity::validateSpecialValueCombinations(
+    const std::vector<size_t>& measurementIndices)
+{
     using namespace sdbusplus::xyz::openbmc_project::Common::Error;
+
+    // Check for special values that cannot be mixed with others
+    bool hasZero = false;
+    bool has255 = false;
+    bool hasRegularIndices = false;
 
     for (const auto& idx : measurementIndices)
     {
-        if (idx > 255)
+        if (idx == 0)
+            hasZero = true;
+        else if (idx == 255)
+            has255 = true;
+        else if (idx >= 1 && idx <= 254)
+            hasRegularIndices = true;
+    }
+
+    // Validate special value combinations
+    if (hasZero && has255)
+    {
+        lg2::error(
+            "Cannot mix index 0 (total count) and 255 (all measurements)");
+        throw InvalidArgument();
+    }
+
+    if (hasZero && hasRegularIndices)
+    {
+        lg2::error(
+            "Cannot mix index 0 (total count) with specific measurement indices");
+        throw InvalidArgument();
+    }
+
+    if (has255 && hasRegularIndices)
+    {
+        lg2::error(
+            "Cannot mix index 255 (all measurements) with specific measurement indices");
+        throw InvalidArgument();
+    }
+}
+
+void ComponentIntegrity::validateRegularIndices(
+    const std::vector<size_t>& measurementIndices)
+{
+    using namespace sdbusplus::xyz::openbmc_project::Common::Error;
+
+    // Validate regular indices (1-254)
+    for (const auto& idx : measurementIndices)
+    {
+        if (idx < 1 || idx > 254)
         {
-            lg2::error("Invalid measurement index: {INDEX}", "INDEX", idx);
+            lg2::error(
+                "Invalid measurement index: {INDEX}. Must be between 1-254",
+                "INDEX", idx);
             throw InvalidArgument();
         }
+    }
+}
+
+void ComponentIntegrity::checkForDuplicateIndices(
+    const std::vector<size_t>& measurementIndices)
+{
+    using namespace sdbusplus::xyz::openbmc_project::Common::Error;
+
+    // Check for duplicate indices
+    std::set<size_t> uniqueIndices(measurementIndices.begin(),
+                                   measurementIndices.end());
+    if (uniqueIndices.size() != measurementIndices.size())
+    {
+        lg2::error(
+            "Duplicate measurement indices found. All indices must be unique");
+        throw InvalidArgument();
     }
 }
 
@@ -145,6 +248,124 @@ std::tuple<uint8_t, std::vector<uint8_t>, size_t>
 }
 
 /**
+ * @brief Get signed measurements from SPDM device
+ * @param measurementIndices Vector of measurement indices to request
+ * @param nonce Nonce for freshness
+ * @param slotId Certificate slot ID for signing
+ * @return Base64 encoded signed measurements
+ */
+std::string ComponentIntegrity::getSignedMeasurements(
+    const std::vector<size_t>& measurementIndices, const std::string& nonce,
+    size_t slotId)
+{
+    lg2::info(
+        "Getting signed measurements for slot {SLOTID}, nonce length: {NONCE_LEN}",
+        "SLOTID", slotId, "NONCE_LEN", nonce.length());
+
+    if (!transport)
+    {
+        lg2::error("Transport is null");
+        throw std::runtime_error("SPDM transport not initialized");
+    }
+
+    if (!transport->spdmContext)
+    {
+        lg2::error("SPDM context is null");
+        throw std::runtime_error("SPDM context not initialized");
+    }
+
+    // If no specific indices requested, get all measurements
+    std::vector<size_t> indicesToProcess = measurementIndices;
+    if (indicesToProcess.empty())
+    {
+        lg2::info(
+            "No measurement indices specified, requesting all measurements");
+        indicesToProcess = {255}; // Request all measurements
+    }
+
+    // Buffer to collect all measurements
+    std::vector<uint8_t> allMeasurements;
+
+    // Loop through each measurement index and get measurements individually
+    for (const auto& idx : indicesToProcess)
+    {
+        auto [measurementData,
+              numberOfBlocks] = getSingleMeasurement(idx, slotId);
+        processMeasurementData(idx, measurementData, allMeasurements,
+                               numberOfBlocks);
+    }
+
+    // Convert combined measurements to base64 for D-Bus transport
+    std::string base64Measurement = spdm::base64Encode(allMeasurements);
+
+    lg2::info(
+        "Successfully retrieved {COUNT} measurements, total size: {SIZE} bytes",
+        "COUNT", indicesToProcess.size(), "SIZE", allMeasurements.size());
+
+    return base64Measurement;
+}
+
+std::pair<std::vector<uint8_t>, uint8_t>
+    ComponentIntegrity::getSingleMeasurement(size_t measurementIndex,
+                                             size_t slotId)
+{
+    uint8_t measurementOperation = static_cast<uint8_t>(measurementIndex);
+
+    // Buffer for single measurement response
+    constexpr size_t MAX_MEASUREMENT_SIZE = 4096;
+    std::vector<uint8_t> measurementBuffer(MAX_MEASUREMENT_SIZE);
+    uint32_t measurementSize = measurementBuffer.size();
+    uint8_t contentChanged = 0;
+    uint8_t numberOfBlocks = 0;
+
+    // Call libspdm to get single measurement
+    libspdm_return_t status = libspdm_get_measurement(
+        transport->spdmContext,
+        nullptr, // No session
+        0,       // request_attribute
+        measurementOperation, static_cast<uint8_t>(slotId), &contentChanged,
+        &numberOfBlocks, &measurementSize, measurementBuffer.data());
+
+    if (LIBSPDM_STATUS_IS_ERROR(status))
+    {
+        lg2::error(
+            "libspdm_get_measurement failed for index {INDEX}, status: 0x{STATUS:X}",
+            "INDEX", measurementIndex, "STATUS", status);
+        throw std::runtime_error("Failed to get signed measurements");
+    }
+
+    // Resize buffer to actual measurement size
+    measurementBuffer.resize(measurementSize);
+
+    return {measurementBuffer, numberOfBlocks};
+}
+
+void ComponentIntegrity::processMeasurementData(
+    size_t measurementIndex, const std::vector<uint8_t>& measurementData,
+    std::vector<uint8_t>& allMeasurements, uint8_t numberOfBlocks)
+{
+    // For index 0 (total count), we only get the count, not actual measurements
+    if (measurementIndex == 0)
+    {
+        lg2::info("Retrieved measurement count: {COUNT} blocks", "COUNT",
+                  numberOfBlocks);
+        // For count-only requests, we might want to return just the count info
+        // or handle it differently based on requirements
+    }
+    else
+    {
+        // Append this measurement to the combined buffer
+        allMeasurements.insert(allMeasurements.end(), measurementData.begin(),
+                               measurementData.end());
+
+        lg2::info(
+            "Retrieved measurement {INDEX}, size: {SIZE} bytes, blocks: {BLOCKS}",
+            "INDEX", measurementIndex, "SIZE", measurementData.size(), "BLOCKS",
+            numberOfBlocks);
+    }
+}
+
+/**
  * @brief Async D-Bus method that handles SPDM signed measurements requests
  *
  * This function uses sdbusplus async context to execute libspdm operations
@@ -169,7 +390,10 @@ auto ComponentIntegrity::method_call(
               totalDigestSize] = getCertificateDigests();
         auto [certPem, certRaw, certLeaf] = getCertificate(slotId);
 
-        std::string signedMeas{};
+        // Get signed measurements using libspdm
+        std::string signedMeas =
+            getSignedMeasurements(measurementIndices, nonce, slotId);
+
         std::string chassisId =
             sdbusplus::message::object_path(path).filename();
         auto objectPath = updateCertificateObject(chassisId, certPem, certLeaf);
