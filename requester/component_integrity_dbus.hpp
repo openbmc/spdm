@@ -135,6 +135,29 @@ class ComponentIntegrity :
         const std::vector<size_t>& measurementIndices);
 
     /**
+     * @brief Check for special value combinations in measurement indices
+     * @param measurementIndices Vector of measurement indices to check
+     * @throws InvalidArgument if invalid combinations are found
+     */
+    void validateSpecialValueCombinations(
+        const std::vector<size_t>& measurementIndices);
+
+    /**
+     * @brief Validate regular measurement indices (1-254)
+     * @param measurementIndices Vector of measurement indices to validate
+     * @throws InvalidArgument if any index is invalid
+     */
+    void validateRegularIndices(const std::vector<size_t>& measurementIndices);
+
+    /**
+     * @brief Check for duplicate measurement indices
+     * @param measurementIndices Vector of measurement indices to check
+     * @throws InvalidArgument if duplicates are found
+     */
+    void checkForDuplicateIndices(
+        const std::vector<size_t>& measurementIndices);
+
+    /**
      * @brief Initialize SPDM connection
      * @throws std::runtime_error if initialization fails
      */
@@ -187,6 +210,37 @@ class ComponentIntegrity :
     std::string updateCertificateObject(const std::string& chassisId,
                                         const std::string& certPem,
                                         const std::vector<uint8_t>& leafCert);
+
+    /**
+     * @brief Get signed measurements from SPDM device
+     * @param measurementIndices Vector of measurement indices to request
+     * @param nonce Nonce for freshness
+     * @param slotId Certificate slot ID for signing
+     * @return Base64 encoded signed measurements
+     */
+    std::string getSignedMeasurements(
+        const std::vector<size_t>& measurementIndices, const std::string& nonce,
+        size_t slotId);
+
+    /**
+     * @brief Get a single measurement from SPDM device
+     * @param measurementIndex Measurement index to request
+     * @param slotId Certificate slot ID for signing
+     * @return Pair of measurement data and number of blocks
+     */
+    std::pair<std::vector<uint8_t>, uint8_t> getSingleMeasurement(
+        size_t measurementIndex, size_t slotId);
+
+    /**
+     * @brief Process measurement data based on index type
+     * @param measurementIndex The measurement index
+     * @param measurementData The raw measurement data
+     * @param allMeasurements Buffer to append data to
+     * @param numberOfBlocks Number of blocks in the measurement
+     */
+    void processMeasurementData(
+        size_t measurementIndex, const std::vector<uint8_t>& measurementData,
+        std::vector<uint8_t>& allMeasurements, uint8_t numberOfBlocks);
 
   private:
     std::shared_ptr<spdm::SpdmTransport> transport;
