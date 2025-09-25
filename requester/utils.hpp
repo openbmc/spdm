@@ -10,6 +10,7 @@
 #include <map>
 #include <string>
 #include <variant>
+#include <vector>
 
 namespace spdm
 {
@@ -40,5 +41,12 @@ void getManagedObjectsAsync(
 void getManagedObjectsFromEMAsync(
     sdbusplus::async::context& asyncCtx,
     std::function<void(bool success, ManagedObjects)> callback);
+
+/**
+ * @brief Encode binary data to base64 string
+ * @param data Binary data to encode
+ * @return Base64 encoded string
+ */
+std::string base64Encode(const std::vector<uint8_t>& data);
 
 } // namespace spdm
