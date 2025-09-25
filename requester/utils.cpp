@@ -74,4 +74,43 @@ void getManagedObjectsFromEMAsync(
             }
         }));
 }
+
+std::string base64Encode(const std::vector<uint8_t>& data)
+{
+    static const char b64_table[] =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+    std::string base64;
+    size_t i = 0;
+
+    for (; i + 2 < data.size(); i += 3)
+    {
+        uint32_t n = (data[i] << 16) | (data[i + 1] << 8) | data[i + 2];
+        base64 += b64_table[(n >> 18) & 63];
+        base64 += b64_table[(n >> 12) & 63];
+        base64 += b64_table[(n >> 6) & 63];
+        base64 += b64_table[n & 63];
+    }
+
+    if (i < data.size())
+    {
+        uint32_t n = data[i] << 16;
+        base64 += b64_table[(n >> 18) & 63];
+        if (i + 1 < data.size())
+        {
+            n |= data[i + 1] << 8;
+            base64 += b64_table[(n >> 12) & 63];
+            base64 += b64_table[(n >> 6) & 63];
+            base64 += '=';
+        }
+        else
+        {
+            base64 += b64_table[(n >> 12) & 63];
+            base64 += "==";
+        }
+    }
+
+    return base64;
+}
+
 } // namespace spdm
