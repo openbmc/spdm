@@ -16,6 +16,74 @@
       "message": "How come many comments have been acknowledge and marked resolved but the code hasn\u0027t changed?",
       "revId": "e05758e8a31e9a8b01ddaccf8db4e76ec0a69198",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dacdd5de_5fa348ad",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001762
+      },
+      "writtenOn": "2025-09-29T15:38:57Z",
+      "side": 1,
+      "message": "Would it be possible to refactor all of these into coroutine functions? I believe that would improve readability.",
+      "revId": "e05758e8a31e9a8b01ddaccf8db4e76ec0a69198",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c86e5e4_4180ec3d",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001762
+      },
+      "writtenOn": "2025-09-29T15:38:57Z",
+      "side": 1,
+      "message": "What is the purpose of the interface hierarchy? If it is meant to enable extensibility to other device types, the responder info currently embeds MCTP‑specific assumptions and should be decoupled from MCTP details.",
+      "revId": "e05758e8a31e9a8b01ddaccf8db4e76ec0a69198",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84acae7b_3c4ee22f",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001762
+      },
+      "writtenOn": "2025-09-29T15:38:57Z",
+      "side": 1,
+      "message": "How should this handle other TCP-based devices? Do we need to modify ResponderInfo for each device type?",
+      "revId": "e05758e8a31e9a8b01ddaccf8db4e76ec0a69198",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "812b8b03_dd8db72f",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001762
+      },
+      "writtenOn": "2025-09-29T15:38:57Z",
+      "side": 1,
+      "message": "Can we use co_await to make the code look synchronous? make getManagedObjectsAsync a coroutine and you can drop the double-moved lambdas and nontrivial inline callbacks.",
+      "revId": "e05758e8a31e9a8b01ddaccf8db4e76ec0a69198",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
