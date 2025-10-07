@@ -73,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "30b84aa6_d60328a5",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-10-07T08:24:45Z",
+      "side": 1,
+      "message": "But this should be part of the common discovery code , mctp eid should be in the mctp_transport_discovery.",
+      "parentUuid": "239a3885_d1b212ba",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 17
+      },
+      "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "572abcee_2960cc8c",
         "filename": "requester/spdm_discovery.hpp",
         "patchSetId": 12
@@ -196,6 +220,24 @@
       "side": 1,
       "message": "No. Look at the line no 27, Diacovery protocol instance is spdm::MCTPTransportDiscovery",
       "parentUuid": "7a0fdc9b_ac053030",
+      "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb06469c_978cbbe8",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-10-07T08:24:45Z",
+      "side": 1,
+      "message": "Yeah , but what i meant is does every needs to have all the discoveries enabled by default ? for example if pcie is enabled by someone - does he also need to have mctp discovery code triggered as well (but probably just with no mctp endpoints) ?",
+      "parentUuid": "19281bc0_cb52511d",
       "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
