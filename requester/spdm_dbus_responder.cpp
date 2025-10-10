@@ -30,9 +30,8 @@ SPDMDBusResponder::SPDMDBusResponder(const ResponderInfo& responderInfo,
         std::make_unique<TrustedComponent>(ctx, trustedComponentPath);
 
     info(
-        "Created SPDM D-Bus responder for device {EID} at {PATH}, device name {DEVICE_NAME}",
-        "EID", responderInfo.eid, "PATH", responderInfo.objectPath,
-        "DEVICE_NAME", deviceName);
+        "Created SPDM D-Bus responder for device at {PATH}, device name {DEVICE_NAME}",
+        "PATH", responderInfo.objectPath, "DEVICE_NAME", deviceName);
 }
 
 } // namespace spdm
