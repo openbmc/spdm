@@ -108,8 +108,10 @@ std::optional<ResponderInfo> MCTPTransportDiscovery::createDeviceFromInterfaces(
         return std::nullopt;
     }
 
-    ResponderInfo device{eid, objectPath, sdbusplus::message::object_path{},
-                         uuid, nullptr};
+    MctpResponderInfo mctpInfo{eid, uuid};
+
+    ResponderInfo device{objectPath, sdbusplus::message::object_path{}, nullptr,
+                         mctpInfo, TransportType::MCTP};
     device.transport = std::make_unique<SpdmMctpTransport>(eid);
     info("Created transport for device {PATH} with EID {EID}", "PATH",
          objectPath, "EID", eid);
@@ -221,13 +223,20 @@ void MCTPTransportDiscovery::parseSpdmEMConfig(
                       "OBJ_PATH", static_cast<std::string>(emObjPath));
                 continue;
             }
-            if (*eidVal == static_cast<uint64_t>(device.eid))
+            if (device.transportType == spdm::TransportType::MCTP &&
+                std::holds_alternative<MctpResponderInfo>(device.responderData))
             {
-                info("Match found for EID {EID} in EM object: {OBJ_PATH}",
-                     "EID", device.eid, "OBJ_PATH",
-                     static_cast<std::string>(emObjPath));
-                device.deviceObjectPath = emObjPath;
-                break;
+                auto mctpData =
+                    std::get<MctpResponderInfo>(device.responderData);
+
+                if (*eidVal == static_cast<uint64_t>(mctpData.eid))
+                {
+                    info("Match found for EID {EID} in EM object: {OBJ_PATH}",
+                         "EID", mctpData.eid, "OBJ_PATH",
+                         static_cast<std::string>(emObjPath));
+                    device.deviceObjectPath = emObjPath;
+                    break;
+                }
             }
         }
     }

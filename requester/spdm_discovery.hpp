@@ -19,20 +19,6 @@ namespace spdm
 {
 
 /**
- * @brief Information about a discovered SPDM responder
- * @details Contains identification and connection information for an SPDM
- * device
- */
-struct ResponderInfo
-{
-    size_t eid;             ///< Endpoint ID
-    std::string objectPath; ///< D-Bus object path
-    sdbusplus::message::object_path deviceObjectPath;
-    std::string uuid;       ///< Device UUID
-    std::shared_ptr<spdm::SpdmTransport> transport;
-};
-
-/**
  * @brief Supported transport types for SPDM
  * @details Enumerates the different transport protocols that can be used
  *          for SPDM communication
@@ -42,6 +28,32 @@ enum class TransportType
     MCTP,     ///< Management Component Transport Protocol
     PCIE_DOE, ///< PCIe Data Object Exchange
     TCP       ///< TCP/IP Protocol
+};
+
+struct MctpResponderInfo
+{
+    size_t eid;       ///< Endpoint ID
+    std::string uuid; ///< Device UUID
+};
+
+struct tcpResponderInfo
+{
+    std::string ipAddr;
+    uint64_t port;
+};
+
+/**
+ * @brief Information about a discovered SPDM responder
+ * @details Contains identification and connection information for an SPDM
+ * device
+ */
+struct ResponderInfo
+{
+    std::string objectPath; ///< D-Bus object path
+    sdbusplus::message::object_path deviceObjectPath;
+    std::shared_ptr<spdm::SpdmTransport> transport;
+    std::variant<MctpResponderInfo, tcpResponderInfo> responderData;
+    TransportType transportType;
 };
 
 /**
