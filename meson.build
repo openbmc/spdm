@@ -19,11 +19,11 @@ if not libspdm_dep.found()
     # Try to find the library manually
     libspdm_lib = meson.get_compiler('cpp').find_library('spdm', required: false)
     libspdm_platform_lib = meson.get_compiler('cpp').find_library(
-        'spdm_platform',
+        'platform_lib',
         required: false,
     )
     libspdm_crypto_lib = meson.get_compiler('cpp').find_library(
-        'spdm_crypto',
+        'spdm_crypt_lib',
         required: false,
     )
 
@@ -42,6 +42,19 @@ if not libspdm_dep.found()
     else
         error('libspdm not found. Please ensure libspdm is installed.')
     endif
+endif
+
+filesystem = import('fs')
+if get_option('systemd').allowed()
+    systemd_system_unit_dir = dependency('systemd').get_variable(
+        'systemd_system_unit_dir',
+    )
+    filesystem.copyfile(
+        'service/attestation.service',
+        'attestation.service',
+        install: true,
+        install_dir: systemd_system_unit_dir,
+    )
 endif
 
 spdmd_deps = [
