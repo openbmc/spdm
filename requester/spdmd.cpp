@@ -6,6 +6,7 @@
 #include "mctp_transport_discovery.hpp"
 #include "spdm_dbus_responder.hpp"
 #include "spdm_discovery.hpp"
+#include "tcp_transport_discovery.hpp"
 
 #include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/async.hpp>
@@ -97,8 +98,12 @@ int main()
     auto discoveryProtocol =
         std::make_unique<spdm::MCTPTransportDiscovery>(ctx);
 
+    auto tcpDiscoveryProtocol =
+        std::make_unique<spdm::TCPTransportDiscovery>(ctx);
+
+    info("SPDM device discovery");
     // Assign the discovery protocol to the discovery object - Context
-    spdm::SPDMDiscovery discovery(std::move(discoveryProtocol));
+    spdm::SPDMDiscovery discovery(std::move(tcpDiscoveryProtocol));
     std::vector<std::unique_ptr<spdm::SPDMDBusResponder>> responders;
 
     // Perform discovery
