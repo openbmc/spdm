@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: Copyright OpenBMC Authors
 
+#include "mctp_transport_discovery.hpp"
+
 #include "libspdm_mctp_transport.hpp"
 #include "mctp_helper.hpp"
-#include "mctp_transport_discovery.hpp"
 #include "utils.hpp"
 
 #include <phosphor-logging/lg2.hpp>
