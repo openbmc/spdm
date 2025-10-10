@@ -1,127 +1,264 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: Copyright OpenBMC Authors
 
-#pragma once
+#include "mctp_transport_discovery.hpp"
 
+#include "libspdm_mctp_transport.hpp"
 #include "mctp_helper.hpp"
-#include "spdm_discovery.hpp"
 #include "utils.hpp"
 
-#include <sdbusplus/async.hpp>
+#include <phosphor-logging/lg2.hpp>
 
-#include <vector>
+#include <algorithm>
+#include <optional>
+
+PHOSPHOR_LOG2_USING;
 
 namespace spdm
 {
 
 /**
- * @brief MCTP-specific transport implementation
- * @details Handles discovery of SPDM devices over MCTP transport using D-Bus
+ * @brief Constructs MCTP transport object
+ * @param ctx Reference to async D-Bus context
  */
-class MCTPTransportDiscovery : public DiscoveryProtocol
+MCTPTransportDiscovery::MCTPTransportDiscovery(sdbusplus::async::context& ctx) :
+    asyncCtx(&ctx)
+{}
+
+/**
+ * @brief Discovers SPDM devices over MCTP
+ * @details Uses GetManagedObjects to efficiently get all MCTP endpoint data in
+ * one call
+ *
+ * @param callback Callback function to handle the discovered devices
+ */
+void MCTPTransportDiscovery::discoverDevices(
+    std::function<void(std::vector<ResponderInfo>)> callback)
 {
-  public:
-    /**
-     * @brief Construct a new MCTP Transport object
-     * @param ctx Reference to async D-Bus context
-     */
-    explicit MCTPTransportDiscovery(sdbusplus::async::context& ctx);
-
-    /**
-     * @brief Discover SPDM devices over MCTP
-     * @param callback Callback function to handle the discovered devices
-     */
-    void discoverDevices(
-        std::function<void(std::vector<ResponderInfo>)> callback) override;
-
-    /**
-     * @brief Get the transport type
-     * @return TransportType::MCTP
-     */
-    TransportType getType() const override
+    if (!asyncCtx)
     {
-        return TransportType::MCTP;
+        error("Async context not available for device discovery");
+        callback({});
+        return;
     }
 
-  public:
-    /**
-     * @brief Process managed objects to extract SPDM device information
-     * @param managedObjects Map of managed objects from D-Bus
-     * @return Vector of discovered SPDM devices
-     */
-    std::vector<ResponderInfo> processManagedObjects(
-        const ManagedObjects& managedObjects);
+    getManagedObjectsAsync(
+        *asyncCtx, mctpService,
+        [this,
+         callback = std::move(callback)](bool success, auto managedObjects) {
+            if (!success)
+            {
+                error("Failed to get managed objects for device discovery");
+                callback({});
+                return;
+            }
 
-    /**
-     * @brief Create a device from D-Bus interfaces
-     * @param interfaces D-Bus interfaces for the object
-     * @param objectPath Object path for logging
-     * @return Optional ResponderInfo if device is valid, nullopt otherwise
-     */
-    std::optional<ResponderInfo> createDeviceFromInterfaces(
-        const DbusInterfaces& interfaces, const std::string& objectPath);
+            auto devices = processManagedObjects(managedObjects);
+            getSpdmEMConfigs(std::move(devices), std::move(callback));
+        });
+}
 
-    /** parse SPDM EM configs
-     * @param devices Devices to get configs for
-     * @param emManagedObjects Managed objects for the EM service
-     */
-    void parseSpdmEMConfig(std::vector<ResponderInfo>& devices,
-                           const ManagedObjects& emManagedObjects);
+std::vector<ResponderInfo> MCTPTransportDiscovery::processManagedObjects(
+    const ManagedObjects& managedObjects)
+{
+    // TODO: Implement MCTP device discovery using asyncCtx
+    // For now, suppress unused field warning
+    (void)asyncCtx;
 
-    /** process SPDM EM configs
-     * @param devices Devices to get configs for
-     * @param emManagedObjects Managed objects for the EM service
-     * @param callback Callback function to handle the result
-     */
-    void getSpdmEMConfigs(
-        std::vector<ResponderInfo> devices,
-        std::function<void(std::vector<ResponderInfo>)> callback);
+    std::vector<ResponderInfo> devices;
 
-  private:
-    /**
-     * @brief Check if endpoint supports SPDM message type
-     * @param mctpInterface MCTP interface properties
-     * @param objectPath Object path for logging
-     * @return true if endpoint supports SPDM, false otherwise
-     */
-    bool supportsSpdm(const DbusInterface& mctpInterface,
-                      const std::string& objectPath);
+    for (const auto& [objectPath, interfaces] : managedObjects)
+    {
+        auto device = createDeviceFromInterfaces(interfaces, objectPath);
+        if (device.has_value())
+        {
+            devices.emplace_back(std::move(device.value()));
+        }
+    }
 
-    /**
-     * @brief Extract EID from MCTP interface
-     * @param mctpInterface MCTP interface properties
-     * @param objectPath Object path for logging
-     * @return EID value if valid, invalid_eid otherwise
-     */
-    size_t extractEid(const DbusInterface& mctpInterface,
-                      const std::string& objectPath);
+    return devices;
+}
 
-    /**
-     * @brief Extract UUID from interfaces
-     * @param interfaces All interfaces for the object
-     * @param objectPath Object path for logging
-     * @return UUID string if valid, empty string otherwise
-     */
-    std::string extractUuid(const DbusInterfaces& interfaces,
-                            const std::string& objectPath);
+std::optional<ResponderInfo> MCTPTransportDiscovery::createDeviceFromInterfaces(
+    const DbusInterfaces& interfaces, const std::string& objectPath)
+{
+    // Check if it supports MCTP endpoint interface
+    auto mctpIt = interfaces.find(mctpEndpointIntfName);
+    if (mctpIt == interfaces.end())
+    {
+        debug("Object does not implement MCTP endpoint interface: {PATH}",
+              "PATH", objectPath);
+        return std::nullopt;
+    }
 
-    /// MCTP endpoint interface name
-    static constexpr auto mctpEndpointIntfName =
-        "xyz.openbmc_project.MCTP.Endpoint";
+    if (!supportsSpdm(mctpIt->second, objectPath))
+    {
+        return std::nullopt;
+    }
 
-    /// UUID interface name
-    static constexpr auto uuidIntfName = "xyz.openbmc_project.Common.UUID";
+    size_t eid = extractEid(mctpIt->second, objectPath);
+    if (eid == invalid_eid)
+    {
+        return std::nullopt;
+    }
 
-    /// MCTP service name
-    static constexpr auto mctpService = "au.com.codeconstruct.MCTP1";
+    std::string uuid = extractUuid(interfaces, objectPath);
+    if (uuid.empty())
+    {
+        return std::nullopt;
+    }
 
-    /// MCTP message type for SPDM (already defined in libspdm headers)
-    static constexpr uint8_t MCTP_MESSAGE_TYPE_SPDM_VALUE = 0x05;
+    MctpResponderInfo mctpInfo{eid, uuid};
 
-    /// Invalid EID marker
-    static constexpr size_t invalid_eid = 255;
+    ResponderInfo device{objectPath, sdbusplus::message::object_path{}, nullptr,
+                         mctpInfo, TransportType::MCTP};
+    device.transport = std::make_unique<SpdmMctpTransport>(eid);
+    info("Created transport for device {PATH} with EID {EID}", "PATH",
+         objectPath, "EID", eid);
 
-    sdbusplus::async::context* asyncCtx = nullptr; ///< Async D-Bus context
-};
+    info("Found SPDM device: {PATH}", "PATH", objectPath);
+    return device;
+}
+
+bool MCTPTransportDiscovery::supportsSpdm(const DbusInterface& mctpInterface,
+                                          const std::string& objectPath)
+{
+    auto messageTypesIt = mctpInterface.find("SupportedMessageTypes");
+    if (messageTypesIt == mctpInterface.end())
+    {
+        debug("No SupportedMessageTypes property found: {PATH}", "PATH",
+              objectPath);
+        return false;
+    }
+
+    auto messageTypes =
+        std::get_if<std::vector<uint8_t>>(&messageTypesIt->second);
+    if (!messageTypes ||
+        std::find(messageTypes->begin(), messageTypes->end(),
+                  MCTP_MESSAGE_TYPE_SPDM_VALUE) == messageTypes->end())
+    {
+        debug("Endpoint does not support SPDM: {PATH}", "PATH", objectPath);
+        return false;
+    }
+
+    return true;
+}
+
+size_t MCTPTransportDiscovery::extractEid(const DbusInterface& mctpInterface,
+                                          const std::string& objectPath)
+{
+    auto eidIt = mctpInterface.find("EID");
+    if (eidIt == mctpInterface.end())
+    {
+        error("No EID property found: {PATH}", "PATH", objectPath);
+        return invalid_eid;
+    }
+
+    auto eid8 = std::get_if<uint8_t>(&eidIt->second);
+    if (!eid8)
+    {
+        error("Invalid EID type for object: {PATH}", "PATH", objectPath);
+        return invalid_eid;
+    }
+
+    size_t eid = *eid8;
+    if (eid == invalid_eid)
+    {
+        error("Invalid EID value for object: {PATH}", "PATH", objectPath);
+        return invalid_eid;
+    }
+
+    return eid;
+}
+
+std::string MCTPTransportDiscovery::extractUuid(
+    const DbusInterfaces& interfaces, const std::string& objectPath)
+{
+    auto uuidIt = interfaces.find(uuidIntfName);
+    if (uuidIt == interfaces.end())
+    {
+        error("No UUID interface found: {PATH}", "PATH", objectPath);
+        return "";
+    }
+
+    auto uuidPropIt = uuidIt->second.find("UUID");
+    if (uuidPropIt == uuidIt->second.end())
+    {
+        error("No UUID property found: {PATH}", "PATH", objectPath);
+        return "";
+    }
+
+    auto uuid = std::get_if<std::string>(&uuidPropIt->second);
+    if (!uuid || uuid->empty())
+    {
+        error("Invalid UUID for object: {PATH}", "PATH", objectPath);
+        return "";
+    }
+
+    return *uuid;
+}
+
+void MCTPTransportDiscovery::parseSpdmEMConfig(
+    std::vector<ResponderInfo>& devices, const ManagedObjects& emManagedObjects)
+{
+    for (auto& device : devices)
+    {
+        for (const auto& [emObjPath, emIfaces] : emManagedObjects)
+        {
+            auto requesterIt = emIfaces.find(
+                "xyz.openbmc_project.Configuration.SpdmMctpRequester");
+            if (requesterIt == emIfaces.end())
+            {
+                continue;
+            }
+            auto eidIt = requesterIt->second.find("EID");
+            if (eidIt == requesterIt->second.end())
+            {
+                continue;
+            }
+            auto eidVal = std::get_if<uint64_t>(&eidIt->second);
+            if (!eidVal)
+            {
+                error("EID property is not uint64_t for EM object: {OBJ_PATH}",
+                      "OBJ_PATH", static_cast<std::string>(emObjPath));
+                continue;
+            }
+            if (device.transportType == spdm::TransportType::MCTP &&
+                std::holds_alternative<MctpResponderInfo>(device.responderData))
+            {
+                auto mctpData =
+                    std::get<MctpResponderInfo>(device.responderData);
+
+                if (*eidVal == static_cast<uint64_t>(mctpData.eid))
+                {
+                    info("Match found for EID {EID} in EM object: {OBJ_PATH}",
+                         "EID", mctpData.eid, "OBJ_PATH",
+                         static_cast<std::string>(emObjPath));
+                    device.deviceObjectPath = emObjPath;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+void MCTPTransportDiscovery::getSpdmEMConfigs(
+    std::vector<ResponderInfo> devices,
+    std::function<void(std::vector<ResponderInfo>)> callback)
+{
+    auto emCallback =
+        [this, devices = std::move(devices), callback = std::move(callback)](
+            bool success, ManagedObjects emManagedObjects) mutable {
+            if (!success)
+            {
+                error("Failed to get managed objects from entity manager");
+                callback({});
+                return;
+            }
+            parseSpdmEMConfig(devices, emManagedObjects);
+            callback(std::move(devices));
+        };
+    getManagedObjectsFromEMAsync(*asyncCtx, std::move(emCallback));
+}
 
 } // namespace spdm
