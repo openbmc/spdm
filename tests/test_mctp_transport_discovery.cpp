@@ -137,10 +137,11 @@ TEST_F(MCTPTransportDiscoveryWithMockTest, ProcessManagedObjectsValidDevice)
     auto managedObjects = createMockManagedObjects();
     auto devices = discovery->processManagedObjects(managedObjects);
 
+    auto mctpData = std::get<MctpResponderInfo>(devices[0].responderData);
     ASSERT_EQ(devices.size(), 1);
-    EXPECT_EQ(devices[0].eid, 0x10);
+    EXPECT_EQ(mctpData.eid, 0x10);
     EXPECT_EQ(devices[0].objectPath, "/xyz/openbmc_project/mctp/endpoint/1");
-    EXPECT_EQ(devices[0].uuid, "test-uuid-1234");
+    EXPECT_EQ(mctpData.uuid, "test-uuid-1234");
 }
 
 // Test processManagedObjects with multiple devices
@@ -152,14 +153,16 @@ TEST_F(MCTPTransportDiscoveryWithMockTest, ProcessManagedObjectsMultipleDevices)
     ASSERT_EQ(devices.size(), 2);
 
     // Check first device
-    EXPECT_EQ(devices[0].eid, 0x10);
+    auto mctpData = std::get<MctpResponderInfo>(devices[0].responderData);
+    EXPECT_EQ(mctpData.eid, 0x10);
     EXPECT_EQ(devices[0].objectPath, "/xyz/openbmc_project/mctp/endpoint/1");
-    EXPECT_EQ(devices[0].uuid, "device-uuid-1");
+    EXPECT_EQ(mctpData.uuid, "device-uuid-1");
 
     // Check second device
-    EXPECT_EQ(devices[1].eid, 0x20);
+    mctpData = std::get<MctpResponderInfo>(devices[1].responderData);
+    EXPECT_EQ(mctpData.eid, 0x20);
     EXPECT_EQ(devices[1].objectPath, "/xyz/openbmc_project/mctp/endpoint/2");
-    EXPECT_EQ(devices[1].uuid, "device-uuid-2");
+    EXPECT_EQ(mctpData.uuid, "device-uuid-2");
 }
 
 // Test processManagedObjects with device that doesn't support SPDM
@@ -309,21 +312,24 @@ TEST_F(MCTPTransportDiscoveryWithMockTest, ParseSpdmEMConfig_Valid)
         interfaces;
 
     std::vector<spdm::ResponderInfo> devices;
+    MctpResponderInfo mctpRes{0x42, "em-uuid-42"};
     devices.push_back(spdm::ResponderInfo{
-        0x42, "/au/com/codeconstruct/mctp1/networks/1/endpoints/42",
-        sdbusplus::message::object_path{}, "em-uuid-42", nullptr});
+        "/au/com/codeconstruct/mctp1/networks/1/endpoints/42",
+        sdbusplus::message::object_path{}, nullptr, mctpRes,
+        spdm::TransportType::MCTP});
     discovery.parseSpdmEMConfig(devices, emManagedObjects);
 
     // There should be at least one entry in devices with the correct fields
     ASSERT_FALSE(devices.empty());
     const auto& info = devices.front();
-    EXPECT_EQ(info.eid, 0x42);
+    auto mctpData = std::get<MctpResponderInfo>(info.responderData);
+    EXPECT_EQ(mctpData.eid, 0x42);
     EXPECT_EQ(info.objectPath,
               "/au/com/codeconstruct/mctp1/networks/1/endpoints/42");
     EXPECT_EQ(static_cast<std::string>(info.deviceObjectPath),
               "/xyz/openbmc_project/inventory/system/chassis/rot_device0");
     EXPECT_EQ(info.transport, nullptr);
-    EXPECT_EQ(info.uuid, "em-uuid-42");
+    EXPECT_EQ(mctpData.uuid, "em-uuid-42");
 }
 
 TEST_F(MCTPTransportDiscoveryWithMockTest, ParseSpdmEMConfig_MissingEid)
@@ -349,14 +355,18 @@ TEST_F(MCTPTransportDiscoveryWithMockTest, ParseSpdmEMConfig_MissingEid)
         "/xyz/openbmc_project/inventory/system/chassis/device0")] = interfaces;
 
     std::vector<spdm::ResponderInfo> devices;
+    MctpResponderInfo mctpRes{0x42, ""};
     devices.push_back(spdm::ResponderInfo{
-        0x42, "/au/com/codeconstruct/mctp1/networks/1/endpoints/42",
-        sdbusplus::message::object_path{}, "", nullptr});
+        "/au/com/codeconstruct/mctp1/networks/1/endpoints/42",
+        sdbusplus::message::object_path{}, nullptr, mctpRes,
+        spdm::TransportType::MCTP});
     discovery.parseSpdmEMConfig(devices, emManagedObjects);
 
     ASSERT_FALSE(devices.empty());
     const auto& info = devices.front();
-    EXPECT_EQ(info.eid, 0x42);
+    auto mctpData = std::get<MctpResponderInfo>(info.responderData);
+    EXPECT_EQ(mctpData.uuid, "");
+    EXPECT_EQ(mctpData.eid, 0x42);
     EXPECT_EQ(info.objectPath,
               "/au/com/codeconstruct/mctp1/networks/1/endpoints/42");
     EXPECT_EQ(info.deviceObjectPath, sdbusplus::message::object_path{});
@@ -408,34 +418,40 @@ TEST_F(MCTPTransportDiscoveryWithMockTest, ParseSpdmEMConfig_MultipleEids)
         interfaces2;
 
     std::vector<spdm::ResponderInfo> devices;
+    MctpResponderInfo mctpDetails1{0x42, "em-uuid-42"};
+    MctpResponderInfo mctpDetails2{0x43, "em-uuid-43"};
     devices.push_back(spdm::ResponderInfo{
-        0x42, "/au/com/codeconstruct/mctp1/networks/1/endpoints/42",
-        sdbusplus::message::object_path{}, "em-uuid-42", nullptr});
+        "/au/com/codeconstruct/mctp1/networks/1/endpoints/42",
+        sdbusplus::message::object_path{}, nullptr, mctpDetails1,
+        spdm::TransportType::MCTP});
     devices.push_back(spdm::ResponderInfo{
-        0x43, "/au/com/codeconstruct/mctp1/networks/1/endpoints/43",
-        sdbusplus::message::object_path{}, "em-uuid-43", nullptr});
+        "/au/com/codeconstruct/mctp1/networks/1/endpoints/43",
+        sdbusplus::message::object_path{}, nullptr, mctpDetails2,
+        spdm::TransportType::MCTP});
     discovery.parseSpdmEMConfig(devices, emManagedObjects);
 
     // There should be two entries in devices with the correct fields
     ASSERT_EQ(devices.size(), 2);
 
     const auto& info1 = devices[0];
-    EXPECT_EQ(info1.eid, 0x42);
+    auto mctpData = std::get<MctpResponderInfo>(devices[0].responderData);
+    EXPECT_EQ(mctpData.eid, 0x42);
     EXPECT_EQ(info1.objectPath,
               "/au/com/codeconstruct/mctp1/networks/1/endpoints/42");
     EXPECT_EQ(static_cast<std::string>(info1.deviceObjectPath),
               "/xyz/openbmc_project/inventory/system/chassis/rot_device0");
     EXPECT_EQ(info1.transport, nullptr);
-    EXPECT_EQ(info1.uuid, "em-uuid-42");
+    EXPECT_EQ(mctpData.uuid, "em-uuid-42");
 
     const auto& info2 = devices[1];
-    EXPECT_EQ(info2.eid, 0x43);
+    mctpData = std::get<MctpResponderInfo>(devices[1].responderData);
+    EXPECT_EQ(mctpData.eid, 0x43);
     EXPECT_EQ(info2.objectPath,
               "/au/com/codeconstruct/mctp1/networks/1/endpoints/43");
     EXPECT_EQ(static_cast<std::string>(info2.deviceObjectPath),
               "/xyz/openbmc_project/inventory/system/chassis/rot_device1");
     EXPECT_EQ(info2.transport, nullptr);
-    EXPECT_EQ(info2.uuid, "em-uuid-43");
+    EXPECT_EQ(mctpData.uuid, "em-uuid-43");
 }
 
 } // namespace spdm
