@@ -92,7 +92,7 @@ int main()
     sdbusplus::server::manager_t objManager(ctx, objManagerPath);
 
     // Request D-Bus name
-    ctx.request_name(dbusServiceName);
+    ctx.request_name("xyz.openbmc_project.Attestation");
 
     // Create discovery protocol - Concrete Strategy
     auto discoveryProtocol =

@@ -1,0 +1,12 @@
+[Unit]
+Description=Phosphor SPDM Daemon
+Wants=xyz.openbmc_project.entity_manager.service
+
+[Service]
+Restart=always
+Type=dbus
+BusName=xyz.openbmc_project.Attestation
+ExecStart=/usr/libexec/spdmd
+
+[Install]
+WantedBy=multi-user.target
