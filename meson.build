@@ -63,6 +63,7 @@ spdmd_src = [
     'requester/component_integrity_dbus.cpp',
     'requester/trusted_component_dbus.cpp',
     'requester/spdm_device_secret_lib_stub.cpp',
+    'requester/tcp_transport_discovery.cpp',
     'requester/libspdm_mctp_transport.cpp',
     'requester/certificate_dbus.cpp',
 ]
