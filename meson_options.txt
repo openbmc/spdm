@@ -6,3 +6,10 @@ option('tests', type: 'boolean', value: true, description: 'Build and run tests'
 
 # Enable coverage
 option('coverage', type: 'boolean', value: false, description: 'Enable code coverage reporting') 
+
+option(
+    'systemd',
+    type: 'feature',
+    value: 'enabled',
+    description: 'Include systemd support',
+)
