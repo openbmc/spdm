@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4336f913_0355152f",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-10-13T09:56:54Z",
+      "side": 1,
+      "message": "Ack.",
+      "parentUuid": "b41c249d_04517b8d",
+      "range": {
+        "startLine": 219,
+        "startChar": 30,
+        "endLine": 219,
+        "endChar": 45
+      },
+      "revId": "5cc4c6523faba3811192f42429337ae0352df529",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e198a715_8e922ce8",
         "filename": "requester/mctp_transport_discovery.cpp",
         "patchSetId": 1
@@ -37,6 +61,24 @@
       "writtenOn": "2025-09-01T15:28:30Z",
       "side": 1,
       "message": "Constexpr?",
+      "revId": "5cc4c6523faba3811192f42429337ae0352df529",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16b5fb83_4507c272",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-10-13T09:56:54Z",
+      "side": 1,
+      "message": "Ack.",
+      "parentUuid": "e198a715_8e922ce8",
       "revId": "5cc4c6523faba3811192f42429337ae0352df529",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -134,6 +176,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d15a3a3d_2964ee0c",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-10-13T09:56:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f8a622a5_2965e511",
+      "revId": "5cc4c6523faba3811192f42429337ae0352df529",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f07298c7_dc57a07e",
         "filename": "requester/utils.cpp",
         "patchSetId": 1
@@ -145,6 +205,24 @@
       "writtenOn": "2025-09-01T15:28:30Z",
       "side": 1,
       "message": "Do you want to log an error if managed objects is empty or it is taking care at the caller side?",
+      "revId": "5cc4c6523faba3811192f42429337ae0352df529",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cb6d1a3_168c58b1",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-10-13T09:56:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f07298c7_dc57a07e",
       "revId": "5cc4c6523faba3811192f42429337ae0352df529",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
