@@ -240,6 +240,24 @@
       "parentUuid": "19281bc0_cb52511d",
       "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe3e9b79_ddd1ea09",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-10-17T12:34:49Z",
+      "side": 1,
+      "message": "No, it depends on the use case. For example, on a platform where we want discovery over both MCTP and TCP, we need to perform discovery through both channels. This behavior can be controlled through the Meson configuration.\n\nIf a platform requires discovery only through MCTP, then only MCTP discovery should be enabled. If it requires both, enable both. By default, only MCTP discovery is enabled.",
+      "parentUuid": "eb06469c_978cbbe8",
+      "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
