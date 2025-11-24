@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e26174bb_071ede6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-11-24T12:44:27Z",
+      "side": 1,
+      "message": "@archana.kakani@ibm.com Can you please check the last 3 commits pushed. Previous references for other commits seems not right after this push.\n\nhttps://gerrit.openbmc.org/c/openbmc/spdm/+/80260",
+      "revId": "5cc4a3e8c9b533fb6de0bcb05d3b5d29ff66dbd8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
