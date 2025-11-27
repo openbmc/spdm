@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a591fb61_d622a312",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-11-27T14:57:15Z",
+      "side": 1,
+      "message": "Archana, Looks like last push have broken the chain, Can you please rebase again?",
+      "revId": "90308f2a8c6e14af41087139e19e57dccde85b71",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
