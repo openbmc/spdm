@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bee0468_a493e922",
+        "filename": "meson.build",
+        "patchSetId": 15
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2025-11-27T14:08:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1daf8d7a_98f6ab96",
+      "range": {
+        "startLine": 13,
+        "startChar": 14,
+        "endLine": 13,
+        "endChar": 44
+      },
+      "revId": "b2c674eff9df3da8ec26f7aca55acb8bfc2410cc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "736e5692_4e69d764",
@@ -280,6 +304,30 @@
       "side": 1,
       "message": "Created a seprate MR in PDI, Can you take a look on this?",
       "parentUuid": "e8994b9e_da09be95",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 73
+      },
+      "revId": "b2c674eff9df3da8ec26f7aca55acb8bfc2410cc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24c1f288_78475eac",
+        "filename": "requester/spdmd.hpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2025-11-27T14:08:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f579342_9c2773b6",
       "range": {
         "startLine": 4,
         "startChar": 0,
