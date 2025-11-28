@@ -33,6 +33,23 @@
       "message": "CI will fail as the PDI changes are not merged",
       "revId": "a101fc02f6a93105f3cb055511558c31f85a9049",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba892560_0c014f8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2025-11-28T09:45:30Z",
+      "side": 1,
+      "message": "Looks good to me.",
+      "revId": "a101fc02f6a93105f3cb055511558c31f85a9049",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
