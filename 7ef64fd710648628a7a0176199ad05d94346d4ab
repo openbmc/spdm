@@ -142,6 +142,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2afd6cf6_408a2b9d",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-12-04T14:22:13Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b7f43ae6_79d80444",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 20
+      },
+      "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a377121_6c0c061c",
@@ -179,6 +203,30 @@
       "side": 1,
       "message": "Eevn I don\u0027t see it but libspdm supports it https://github.com/DMTF/libspdm/tree/3e973c58a594dfa6cf0bc7e53af37cce02cd544a/library/spdm_transport_pcidoe_lib",
       "parentUuid": "1a377121_6c0c061c",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 44
+      },
+      "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20b433fc_46ac398a",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-12-04T14:22:13Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "53ee9172_a0e82fc3",
       "range": {
         "startLine": 38,
         "startChar": 4,
@@ -256,6 +304,24 @@
       "side": 1,
       "message": "No, it depends on the use case. For example, on a platform where we want discovery over both MCTP and TCP, we need to perform discovery through both channels. This behavior can be controlled through the Meson configuration.\n\nIf a platform requires discovery only through MCTP, then only MCTP discovery should be enabled. If it requires both, enable both. By default, only MCTP discovery is enabled.",
       "parentUuid": "eb06469c_978cbbe8",
+      "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77bddb41_817d437a",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2025-12-04T14:22:13Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fe3e9b79_ddd1ea09",
       "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
