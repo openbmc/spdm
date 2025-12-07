@@ -6,6 +6,7 @@
 #include "mctp_transport_discovery.hpp"
 #include "spdm_dbus_responder.hpp"
 #include "spdm_discovery.hpp"
+#include "tcp_event_handler.hpp"
 #include "tcp_transport_discovery.hpp"
 
 #include <phosphor-logging/lg2.hpp>
@@ -111,6 +112,9 @@ int main()
         [&responders, &ctx](std::vector<spdm::ResponderInfo> devices) {
             processDiscoveredDevices(devices, responders, ctx);
         });
+
+    auto tcpEventHandler =
+        std::make_unique<spdm::TCPEventHandler>(ctx, responders, discovery);
 
     // Run the sdbusplus async context for parallel coroutine execution
     ctx.run();

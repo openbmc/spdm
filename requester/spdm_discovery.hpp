@@ -101,6 +101,11 @@ class SPDMDiscovery
     void discover(
         std::function<void(std::vector<ResponderInfo> devices)> callback);
 
+    inline DiscoveryProtocol* getDiscoveryProtocol()
+    {
+        return discoveryProtocol.get();
+    }
+
   private:
     std::unique_ptr<DiscoveryProtocol>
         discoveryProtocol; ///< Transport implementation
