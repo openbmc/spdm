@@ -13,6 +13,8 @@
 namespace spdm
 {
 
+class SpdmTcpTransport;
+
 /**
  * @brief TCP-specific transport implementation
  * @details Handles discovery of SPDM devices over TCP transport using D-Bus

@@ -80,6 +80,7 @@ spdmd_src = [
     'requester/tcp_event_handler.cpp',
     'requester/libspdm_mctp_transport.cpp',
     'requester/certificate_dbus.cpp',
+    'requester/libspdm_tcp_transport.cpp',
 ]
 
 spdmd_includes = include_directories('requester')
