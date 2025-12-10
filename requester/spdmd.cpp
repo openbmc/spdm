@@ -32,47 +32,54 @@ void processDiscoveredDevices(
         return;
     }
 
+    info("Processing {COUNT} discovered SPDM devices", "COUNT", devices.size());
+
     // Process discovered devices
     for (const auto& device : devices)
     {
         try
         {
-            if (!device.transport)
+            // Check if device object path is valid
+            if (static_cast<std::string>(device.deviceObjectPath).empty())
             {
-                error("Transport is null for device {PATH}", "PATH",
-                      device.objectPath);
-                continue;
+                warning(
+                    "DeviceObjectPath is empty for device {PATH}, using objectPath instead",
+                    "PATH", device.objectPath);
             }
 
-            info("Initializing transport for device {PATH}", "PATH",
-                 device.objectPath);
-            if (!device.transport->initialize())
+            if (device.transport)
             {
-                error("Failed to initialize SPDM transport for device {PATH}",
-                      "PATH", device.objectPath);
-                continue;
-            }
-
-            if (static_cast<std::string>(device.deviceObjectPath) != "")
-            {
-                info("Creating D-Bus responder for device {PATH}", "PATH",
+                info("Initializing transport for device {PATH}", "PATH",
                      device.objectPath);
-                // Create SPDMDBusResponder with ResponderInfo and async
-                // context for parallel execution
-                auto responder =
-                    std::make_unique<spdm::SPDMDBusResponder>(device, ctx);
 
-                responders.push_back(std::move(responder));
-                info("Successfully created responder for device {PATH}", "PATH",
-                     device.objectPath);
+                if (!device.transport->initialize())
+                {
+                    error(
+                        "Failed to initialize SPDM transport for device {PATH}",
+                        "PATH", device.objectPath);
+                    continue;
+                }
+                info("Transport initialized successfully for device {PATH}",
+                     "PATH", device.objectPath);
             }
             else
             {
-                error(
-                    "DeviceObjectPath is empty for device {PATH}, skipping responder creation",
-                    "PATH", device.objectPath);
+                warning("Transport is null for device {PATH}", "PATH",
+                        device.objectPath);
                 // TODO: event based discovery for SPDM devices
             }
+
+            info("Creating D-Bus responder for device {PATH}", "PATH",
+                 device.objectPath);
+
+            // Create SPDMDBusResponder with ResponderInfo and async
+            // context for parallel execution
+            auto responder =
+                std::make_unique<spdm::SPDMDBusResponder>(device, ctx);
+
+            responders.push_back(std::move(responder));
+            info("Successfully created responder for device {PATH}", "PATH",
+                 device.objectPath);
         }
         catch (const std::exception& e)
         {
@@ -81,11 +88,15 @@ void processDiscoveredDevices(
             continue;
         }
     }
+
+    info("Created {COUNT} D-Bus responders", "COUNT", responders.size());
 }
 
 // Main function must be in global namespace
 int main()
 {
+    info("Starting SPDM daemon");
+
     // Create async context for parallel coroutine execution
     sdbusplus::async::context ctx;
 
@@ -94,17 +105,25 @@ int main()
 
     // Request D-Bus name
     ctx.request_name(dbusServiceName);
+    info("Registered D-Bus service: {SERVICE}", "SERVICE", dbusServiceName);
 
     // Create discovery protocol - Concrete Strategy
-    auto discoveryProtocol =
+    auto mctpDiscoveryProtocol =
         std::make_unique<spdm::MCTPTransportDiscovery>(ctx);
 
     auto tcpDiscoveryProtocol =
         std::make_unique<spdm::TCPTransportDiscovery>(ctx);
 
-    info("SPDM device discovery");
-    // Assign the discovery protocol to the discovery object - Context
+#ifdef SPDM_USE_MCTP_TRANSPORT
+    info("Using MCTP transport discovery");
+    spdm::SPDMDiscovery discovery(std::move(mctpDiscoveryProtocol));
+#else
+    info("Using TCP transport discovery");
     spdm::SPDMDiscovery discovery(std::move(tcpDiscoveryProtocol));
+#endif
+
+    info("SPDM device discovery");
+
     std::vector<std::unique_ptr<spdm::SPDMDBusResponder>> responders;
 
     // Perform discovery
@@ -118,6 +137,11 @@ int main()
 
     // Run the sdbusplus async context for parallel coroutine execution
     ctx.run();
+
+    // Cleanup
+    responders.clear();
+
+    info("SPDM daemon shutting down");
 
     return EXIT_SUCCESS;
 }

@@ -171,6 +171,7 @@ void ComponentIntegrity::checkForDuplicateIndices(
  */
 void ComponentIntegrity::initializeSpdmConnection()
 {
+    lg2::info("Calling ComponentIntegrity::initializeSpdmConnection()");
     if (!transport)
     {
         lg2::error("Transport is null");

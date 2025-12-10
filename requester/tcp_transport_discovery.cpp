@@ -3,7 +3,7 @@
 
 #include "tcp_transport_discovery.hpp"
 
-// #include "libspdm_tcp_transport.hpp"
+#include "libspdm_tcp_transport.hpp"
 #include "utils.hpp"
 
 #include <phosphor-logging/lg2.hpp>
@@ -34,7 +34,7 @@ TCPTransportDiscovery::TCPTransportDiscovery(sdbusplus::async::context& ctx) :
 void TCPTransportDiscovery::discoverDevices(
     std::function<void(std::vector<ResponderInfo>)> callback)
 {
-    info("Discover Device");
+    info("Starting TCP SPDM device discovery");
     if (!asyncCtx)
     {
         error("Async context not available for device discovery");
@@ -42,7 +42,7 @@ void TCPTransportDiscovery::discoverDevices(
         return;
     }
 
-    info("Getobjects from EM");
+    info("Getting managed objects from EntityManager for TCP endpoints");
     getManagedObjectsFromEMAsync(
         *asyncCtx, [this, callback = std::move(callback)](bool success,
                                                           auto managedObjects) {
@@ -54,6 +54,8 @@ void TCPTransportDiscovery::discoverDevices(
             }
 
             auto devices = processManagedObjects(managedObjects);
+            info("TCP discovery found {COUNT} SPDM devices", "COUNT",
+                 devices.size());
             callback(std::move(devices));
         });
 }
@@ -61,11 +63,7 @@ void TCPTransportDiscovery::discoverDevices(
 std::vector<ResponderInfo> TCPTransportDiscovery::processManagedObjects(
     const ManagedObjects& managedObjects)
 {
-    // TODO: Implement TCP device discovery using asyncCtx
-    // For now, suppress unused field warning
-    (void)asyncCtx;
-
-    info("processManagedObjects");
+    info("Processing managed objects for TCP SPDM endpoints");
     std::vector<ResponderInfo> devices;
 
     for (const auto& [objectPath, interfaces] : managedObjects)
@@ -77,6 +75,8 @@ std::vector<ResponderInfo> TCPTransportDiscovery::processManagedObjects(
         }
     }
 
+    info("Processed {COUNT} TCP SPDM devices from managed objects", "COUNT",
+         devices.size());
     return devices;
 }
 
@@ -85,7 +85,7 @@ std::optional<ResponderInfo> TCPTransportDiscovery::createDeviceFromInterfaces(
 {
     // Check if it supports TCP endpoint interface
     auto tcpIt =
-        interfaces.find("xyz.openbmc_project.Configuration.SpdmTcpResponder");
+        interfaces.find("xyz.openbmc_project.Configuration.SpdmTcpEndpoint");
     if (tcpIt == interfaces.end())
     {
         debug("Object does not implement TCP endpoint interface: {PATH}",
@@ -100,32 +100,65 @@ std::optional<ResponderInfo> TCPTransportDiscovery::createDeviceFromInterfaces(
     tcpResponderInfo tcpInfo{};
     for (const auto& [propName, propValue] : properties)
     {
-        if (propName == "Hostname")
+        if (propName == "HostName")
         {
-            tcpInfo.ipAddr = std::get<std::string>(propValue);
+            // tcpInfo.ipAddr = std::get<std::string>(propValue);
+            auto* strVal = std::get_if<std::string>(&propValue);
+            if (strVal)
+            {
+                tcpInfo.ipAddr = *strVal;
+            }
+            else
+            {
+                error("HostName property is not a string for object: {PATH}",
+                      "PATH", objectPath);
+                return std::nullopt;
+            }
         }
         else if (propName == "Port")
         {
-            tcpInfo.port = std::get<uint64_t>(propValue);
+            // tcpInfo.port = std::get<uint64_t>(propValue);
+            auto* portVal = std::get_if<uint64_t>(&propValue);
+            if (portVal)
+            {
+                tcpInfo.port = *portVal;
+            }
+            else
+            {
+                error("Port property is not uint64_t for object: {PATH}",
+                      "PATH", objectPath);
+                return std::nullopt;
+            }
         }
     }
-    // TODO: Add error case  handling if IP address/port is empty
-    info("TCP Responder Ip: {IP} and Port: {PORT}", "IP", tcpInfo.ipAddr,
-         "PORT", tcpInfo.port);
-    ResponderInfo device{objectPath, sdbusplus::message::object_path{}, nullptr,
+
+    if (tcpInfo.ipAddr.empty())
+    {
+        error("Missing HostName/IP address for TCP endpoint: {PATH}", "PATH",
+              objectPath);
+        return std::nullopt;
+    }
+
+    if (tcpInfo.port == 0)
+    {
+        error("Missing or invalid Port for TCP endpoint: {PATH}", "PATH",
+              objectPath);
+        return std::nullopt;
+    }
+
+    info("Found TCP SPDM Responder - IP: {IP}, Port: {PORT}", "IP",
+         tcpInfo.ipAddr, "PORT", tcpInfo.port);
+
+    // Create TCP transport
+    auto transport = std::make_shared<SpdmTcpTransport>(
+        tcpInfo.ipAddr, static_cast<uint16_t>(tcpInfo.port));
+    ResponderInfo device{objectPath,
+                         sdbusplus::message::object_path{objectPath}, transport,
                          tcpInfo, TransportType::TCP};
-    // device.transport = std::make_unique<SpdmMctpTransport>(eid);
 
-    // eid, objectPath, sdbusplus::message::object_path{},
-    //                    uuid, nullptr};
-    info("Match found for TCP Responder in EM object: {OBJ_PATH}", "OBJ_PATH",
-         static_cast<std::string>(objectPath));
-    device.deviceObjectPath = objectPath;
+    info("Created TCP transport for device {PATH} with IP {IP}:{PORT}", "PATH",
+         objectPath, "IP", tcpInfo.ipAddr, "PORT", tcpInfo.port);
 
-    // device.transport = std::make_unique<SpdmTcpTransport>(eid);
-    info("Created transport for device {PATH} with EID", "PATH", objectPath);
-
-    info("Found SPDM device: {PATH}", "PATH", objectPath);
     return device;
 }
 
