@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0d73a36_be138eb8",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-01-28T10:49:42Z",
+      "side": 1,
+      "message": "DIGEST_SIZE is determined by the algorithm negotiated. Using LIBSPDM_SHA512_DIGEST_SIZE (64 bytes) provides a safe upper bound.",
+      "revId": "39d661a648d61b471745e56fc755b5ce6b46363b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
