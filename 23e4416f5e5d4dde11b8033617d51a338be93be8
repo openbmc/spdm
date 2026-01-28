@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b4f15d8_46b401af",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-01-28T08:24:29Z",
+      "side": 1,
+      "message": "Why not keep the discovery protocol under the guard macro as well? Having two separate protocols unnecessarily adds extra add_io calls in the event loop when we are only using one of them.",
+      "revId": "23e4416f5e5d4dde11b8033617d51a338be93be8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
