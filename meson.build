@@ -9,6 +9,14 @@ project(
 # Try to find libspdm using pkg-config first
 libspdm_dep = dependency('libspdm', required: false)
 
+
+cpp = meson.get_compiler('cpp')
+if cpp.has_header('CLI/CLI.hpp')
+    CLI11_dep = declare_dependency()
+else
+    CLI11_dep = dependency('CLI11', include_type: 'system')
+endif
+
 # If pkg-config doesn't work, try to find it manually
 if not libspdm_dep.found()
     # Try to find the library manually
@@ -56,6 +64,7 @@ spdmd_deps = [
     dependency('phosphor-logging'),
     dependency('sdbusplus'),
     dependency('phosphor-dbus-interfaces'),
+    CLI11_dep,
     libspdm_dep,
 ]
 

@@ -9,6 +9,7 @@
 #include "tcp_event_handler.hpp"
 #include "tcp_transport_discovery.hpp"
 
+#include <CLI/CLI.hpp>
 #include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/async.hpp>
 #include <sdbusplus/server/manager.hpp>
@@ -93,8 +94,17 @@ void processDiscoveredDevices(
 }
 
 // Main function must be in global namespace
-int main()
+int main(int argc, char** argv)
 {
+    std::unique_ptr<spdm::DiscoveryProtocol> discoveryProtocol = nullptr;
+    bool has_mctp = false;
+    bool has_tcp = false;
+
+    CLI::App app{"SPDM requester daemon"};
+    app.add_flag("--mctp", has_mctp, "Enable MCTP discovery protocol support");
+    app.add_flag("--tcp", has_tcp, "Enable TCP discovery protocol support");
+
+    CLI11_PARSE(app, argc, argv);
     info("Starting SPDM daemon");
 
     // Create async context for parallel coroutine execution
@@ -108,19 +118,23 @@ int main()
     info("Registered D-Bus service: {SERVICE}", "SERVICE", dbusServiceName);
 
     // Create discovery protocol - Concrete Strategy
-    auto mctpDiscoveryProtocol =
-        std::make_unique<spdm::MCTPTransportDiscovery>(ctx);
+    if (has_mctp)
+    {
+        discoveryProtocol = std::make_unique<spdm::MCTPTransportDiscovery>(ctx);
+    }
 
-    auto tcpDiscoveryProtocol =
-        std::make_unique<spdm::TCPTransportDiscovery>(ctx);
+    if (has_tcp)
+    {
+        discoveryProtocol = std::make_unique<spdm::TCPTransportDiscovery>(ctx);
+    }
 
-#ifdef SPDM_USE_MCTP_TRANSPORT
-    info("Using MCTP transport discovery");
-    spdm::SPDMDiscovery discovery(std::move(mctpDiscoveryProtocol));
-#else
-    info("Using TCP transport discovery");
-    spdm::SPDMDiscovery discovery(std::move(tcpDiscoveryProtocol));
-#endif
+    if (discoveryProtocol == nullptr)
+    {
+        error("No discovery proctocol selected");
+        return EXIT_FAILURE;
+    }
+
+    spdm::SPDMDiscovery discovery(std::move(discoveryProtocol));
 
     info("SPDM device discovery");
 
