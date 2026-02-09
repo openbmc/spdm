@@ -6,14 +6,23 @@
 #include "mctp_transport_discovery.hpp"
 #include "spdm_discovery.hpp"
 
+#include <CLI/CLI.hpp>
 #include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/async.hpp>
 #include <sdbusplus/server/manager.hpp>
 
 PHOSPHOR_LOG2_USING;
 
-int main()
+int main(int argc, char** argv)
 {
+    bool has_mctp = false;
+
+    CLI::App app{"SPDM requester daemon"};
+    app.add_flag("--mctp", has_mctp, "Enable MCTP discovery protocol support");
+
+    CLI11_PARSE(app, argc, argv);
+    info("Starting SPDM daemon");
+
     // Create async context for parallel coroutine execution
     sdbusplus::async::context ctx;
 
@@ -25,7 +34,11 @@ int main()
 
     std::vector<std::unique_ptr<spdm::DiscoveryProtocol>> protocols;
 
-    protocols.push_back(std::make_unique<spdm::MCTPTransportDiscovery>(ctx));
+    if (has_mctp)
+    {
+        protocols.push_back(
+            std::make_unique<spdm::MCTPTransportDiscovery>(ctx));
+    }
 
     // Assign the discovery protocol to the discovery object - Context
     spdm::SPDMDiscovery discovery(std::move(protocols));
