@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c89ddcfa_ebfa3308",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1002348
+      },
+      "writtenOn": "2026-02-09T10:26:30Z",
+      "side": 1,
+      "message": "Wouldn\u0027t \u0027else if\u0027 instead of just if the better choice here?",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 130,
+        "endChar": 0
+      },
+      "revId": "3f6d4bb6306ec9bd6e662f01baaf78ce5b6b29a4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31bd9a2b_5a6b7fe4",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1002348
+      },
+      "writtenOn": "2026-02-09T10:26:30Z",
+      "side": 1,
+      "message": "Protocol is misspelled.",
+      "revId": "3f6d4bb6306ec9bd6e662f01baaf78ce5b6b29a4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
