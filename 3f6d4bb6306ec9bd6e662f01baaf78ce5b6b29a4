@@ -26,6 +26,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "811de6de_ff648a90",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1002348
+      },
+      "writtenOn": "2026-02-09T10:32:10Z",
+      "side": 1,
+      "message": "Make this \u0027if (!discoveryProtocol)\u0027",
+      "range": {
+        "startLine": 131,
+        "startChar": 3,
+        "endLine": 131,
+        "endChar": 37
+      },
+      "revId": "3f6d4bb6306ec9bd6e662f01baaf78ce5b6b29a4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "31bd9a2b_5a6b7fe4",
         "filename": "requester/spdmd.cpp",
         "patchSetId": 1
