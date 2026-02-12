@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c2b94c0_94244c89",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-02-12T05:57:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55e9cbcf_d09fc067",
+      "range": {
+        "startLine": 21,
+        "startChar": 2,
+        "endLine": 21,
+        "endChar": 9
+      },
+      "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ccbb7e7_04851750",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "But this should be part of the common discovery code , mctp eid should be in the mctp_transport_discovery.",
       "parentUuid": "239a3885_d1b212ba",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 17
+      },
+      "revId": "7ef64fd710648628a7a0176199ad05d94346d4ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a407826_07cc8868",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-02-12T05:57:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30b84aa6_d60328a5",
       "range": {
         "startLine": 25,
         "startChar": 4,

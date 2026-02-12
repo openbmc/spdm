@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38bc2eee_762cc39b",
+        "filename": "src/spdm_discovery.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-02-12T05:57:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f0af732_0cfed35a",
+      "revId": "fbf7adaead80c93d841bf8e8e3f88b60dad30535",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6bfe6405_4d0beba6",
@@ -31,6 +49,24 @@
       "writtenOn": "2025-05-15T05:32:50Z",
       "side": 1,
       "message": "Same as above. uuid is specific to mctp transport. We need to have abstraction for this in MCTP responder object.",
+      "revId": "fbf7adaead80c93d841bf8e8e3f88b60dad30535",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d329f928_31f3dc27",
+        "filename": "src/spdm_discovery.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-02-12T05:57:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bfe6405_4d0beba6",
       "revId": "fbf7adaead80c93d841bf8e8e3f88b60dad30535",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
