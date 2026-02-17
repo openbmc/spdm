@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "094cdc34_fde66efb",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-02-17T05:04:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c89ddcfa_ebfa3308",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 130,
+        "endChar": 0
+      },
+      "revId": "3f6d4bb6306ec9bd6e662f01baaf78ce5b6b29a4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "811de6de_ff648a90",
@@ -47,6 +71,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15f95448_4ca09e53",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-02-17T05:04:54Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "811de6de_ff648a90",
+      "range": {
+        "startLine": 131,
+        "startChar": 3,
+        "endLine": 131,
+        "endChar": 37
+      },
+      "revId": "3f6d4bb6306ec9bd6e662f01baaf78ce5b6b29a4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31bd9a2b_5a6b7fe4",
@@ -60,6 +108,24 @@
       "writtenOn": "2026-02-09T10:26:30Z",
       "side": 1,
       "message": "Protocol is misspelled.",
+      "revId": "3f6d4bb6306ec9bd6e662f01baaf78ce5b6b29a4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b36d8d5d_20b0313e",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-02-17T05:04:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31bd9a2b_5a6b7fe4",
       "revId": "3f6d4bb6306ec9bd6e662f01baaf78ce5b6b29a4",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
