@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f66db3c_f7b5c269",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-02-19T03:51:40Z",
+      "side": 1,
+      "message": "This is a daemon started by a service file.  Isn\u0027t it still \"at compile time\" effectively because you need to bake it into the image?\n\nWhy aren\u0027t we using EM discovery for everything?  Why do we need any CLI or compile time options?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 57
+      },
+      "revId": "375d2ae8d71c2e5f54443255e65d301da2c0c4fe",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
