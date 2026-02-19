@@ -1,0 +1,7 @@
+Verified+1: OpenBMC CI <openbmcbump-ci@yahoo.com>
+Code-Review+2: Patrick Williams <patrick@stwcx.xyz>
+Submitted-by: Patrick Williams <patrick@stwcx.xyz>
+Submitted-at: Thu, 19 Feb 2026 13:24:26 +0000
+Reviewed-on: https://gerrit.openbmc.org/c/openbmc/spdm/+/87565
+Project: openbmc/spdm
+Branch: refs/heads/main
