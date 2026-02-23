@@ -14,14 +14,12 @@ project(
 phosphor_logging_dep = dependency('phosphor-logging')
 sdbusplus_dep = dependency('sdbusplus')
 
-spdmd_deps = [
-    phosphor_logging_dep,
-    sdbusplus_dep,
-]
+spdmd_deps = [phosphor_logging_dep, sdbusplus_dep]
 spdmd_src = [
     'requester/spdmd.cpp',
     'requester/spdm_discovery.cpp',
     'requester/mctp_transport_discovery.cpp',
+    'requester/tcp_transport_discovery.cpp',
 ]
 
 executable(

@@ -5,6 +5,7 @@
 
 #include "mctp_transport_discovery.hpp"
 #include "spdm_discovery.hpp"
+#include "tcp_transport_discovery.hpp"
 
 #include <sdbusplus/async.hpp>
 #include <sdbusplus/server/manager.hpp>
@@ -26,6 +27,10 @@ int main()
     // Start MCTP discovery
     MCTPTransportDiscovery mctp{ctx};
     discovery.discover(mctp);
+
+    // Start TCP discovery
+    TCPTransportDiscovery tcp{ctx};
+    discovery.discover(tcp);
 
     // Run the initial discovery and then claim the bus name.
     ctx.spawn([&]() -> sdbusplus::async::task<> {
