@@ -20,7 +20,7 @@ class MCTPTransportDiscovery
     explicit MCTPTransportDiscovery(sdbusplus::async::context& ctx) :
         ctx(ctx) {};
 
-    auto discovery() -> sdbusplus::async::task<>;
+    auto discovery() -> sdbusplus::async::task<std::vector<ResponderInfo>>;
 
     static auto type() -> TransportType
     {

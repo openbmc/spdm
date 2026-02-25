@@ -10,7 +10,8 @@
 namespace spdm
 {
 
-auto MCTPTransportDiscovery::discovery() -> sdbusplus::async::task<>
+auto MCTPTransportDiscovery::discovery()
+    -> sdbusplus::async::task<std::vector<ResponderInfo>>
 {
     using namespace std::literals;
     PHOSPHOR_LOG2_USING;
@@ -19,6 +20,7 @@ auto MCTPTransportDiscovery::discovery() -> sdbusplus::async::task<>
     co_await sdbusplus::async::sleep_for(ctx, 1s);
 
     debug("MCTPTransportDiscovery: discovery complete");
+    co_return {};
 }
 
 } // namespace spdm

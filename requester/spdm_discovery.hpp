@@ -61,12 +61,13 @@ namespace details
  *      - A static function to get the TransportType.
  **/
 template <typename T>
-concept DiscoveryType = requires(T t) {
-                            {
-                                t.discovery()
-                            } -> std::same_as<sdbusplus::async::task<>>;
-                            { T::type() } -> std::same_as<TransportType>;
-                        };
+concept DiscoveryType =
+    requires(T t) {
+        {
+            t.discovery()
+        } -> std::same_as<sdbusplus::async::task<std::vector<ResponderInfo>>>;
+        { T::type() } -> std::same_as<TransportType>;
+    };
 } // namespace details
 
 /**
@@ -93,8 +94,12 @@ class SPDMDiscovery
     template <details::DiscoveryType D>
     void discover(D& d)
     {
-        initialDiscovery.spawn([](D& d) -> sdbusplus::async::task<> {
-            co_await d.discovery();
+        initialDiscovery.spawn([this](D& d) -> sdbusplus::async::task<> {
+            auto devices = co_await d.discovery();
+            for (auto& device : devices)
+            {
+                add(std::move(device));
+            }
         }(d));
     }
 
