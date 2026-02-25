@@ -9,16 +9,51 @@
 
 namespace spdm
 {
+PHOSPHOR_LOG2_USING;
 
-auto TCPTransportDiscovery::discovery() -> sdbusplus::async::task<>
+auto TCPTransportDiscovery::discovery(SPDMDiscovery* spdmDiscovery)
+    -> sdbusplus::async::task<>
 {
-    using namespace std::literals;
-    PHOSPHOR_LOG2_USING;
+    constexpr auto entityManager = "xyz.openbmc_project.EntityManager";
+    constexpr auto spdmTcpInterface =
+        "xyz.openbmc_project.Configuration.SpdmTcpResponder";
 
-    // TODO: Add real discovery, for now just adding pause
-    co_await sdbusplus::async::sleep_for(ctx, 1s);
+    try
+    {
+        auto subtree = co_await getSubTree(ctx, spdmTcpInterface);
 
-    debug("TCPTransportDiscovery: discovery complete");
+        for (const auto& [objectPath, services] : subtree)
+        {
+            // Only process objects from EntityManager
+            if (services.find(entityManager) == services.end())
+            {
+                continue;
+            }
+
+            auto hostname = co_await getProperty<std::string>(
+                ctx, entityManager, objectPath, spdmTcpInterface, "Hostname");
+
+            auto port = co_await getProperty<uint64_t>(
+                ctx, entityManager, objectPath, spdmTcpInterface, "Port");
+
+            TcpResponderInfo tcpInfo{hostname, port};
+
+            debug("Found SPDM TCP Responder at {IP}:{PORT} for {PATH}", "IP",
+                 hostname, "PORT", port, "PATH", objectPath);
+
+            ResponderInfo device{objectPath, sdbusplus::message::object_path{},
+                                 tcpInfo, TransportType::TCP};
+
+            spdmDiscovery->add(std::move(device));
+        }
+
+        debug("TCPTransportDiscovery: discovery complete");
+    }
+    catch (const std::exception& e)
+    {
+        error("TCP Discovery failed {ERROR}", "ERROR", e);
+    }
+    co_return;
 }
 
 } // namespace spdm

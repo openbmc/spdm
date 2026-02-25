@@ -51,6 +51,8 @@ struct ResponderInfo
     std::variant<MctpResponderInfo, TcpResponderInfo> responderData;
     TransportType transportType;
 };
+// Forward declaration
+class SPDMDiscovery;
 
 namespace details
 {
@@ -61,9 +63,9 @@ namespace details
  *      - A static function to get the TransportType.
  **/
 template <typename T>
-concept DiscoveryType = requires(T t) {
+concept DiscoveryType = requires(T t, SPDMDiscovery* discovery) {
                             {
-                                t.discovery()
+                                t.discovery(discovery)
                             } -> std::same_as<sdbusplus::async::task<>>;
                             { T::type() } -> std::same_as<TransportType>;
                         };
@@ -93,8 +95,8 @@ class SPDMDiscovery
     template <details::DiscoveryType D>
     void discover(D& d)
     {
-        initialDiscovery.spawn([](D& d) -> sdbusplus::async::task<> {
-            co_await d.discovery();
+        initialDiscovery.spawn([this](D& d) -> sdbusplus::async::task<> {
+            co_await d.discovery(this);
         }(d));
     }
 

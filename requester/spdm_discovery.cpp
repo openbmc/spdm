@@ -16,10 +16,10 @@ auto SPDMDiscovery::run() -> sdbusplus::async::task<>
     PHOSPHOR_LOG2_USING;
 
     co_await initialDiscovery.on_empty();
-    debug("SPDMDiscovery: initial discovery complete.");
+    info("SPDMDiscovery: initial discovery complete.");
 
     // Check results.
-    if (responderInfos.empty())
+    if (!responderInfos.empty())
     {
         // Log discovered devices
         for (const auto& device : responderInfos)

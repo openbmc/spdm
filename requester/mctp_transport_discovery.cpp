@@ -10,7 +10,8 @@
 namespace spdm
 {
 
-auto MCTPTransportDiscovery::discovery() -> sdbusplus::async::task<>
+auto MCTPTransportDiscovery::discovery(
+    [[maybe_unused]] SPDMDiscovery* spdmDiscovery) -> sdbusplus::async::task<>
 {
     using namespace std::literals;
     PHOSPHOR_LOG2_USING;
@@ -19,6 +20,9 @@ auto MCTPTransportDiscovery::discovery() -> sdbusplus::async::task<>
     co_await sdbusplus::async::sleep_for(ctx, 1s);
 
     debug("MCTPTransportDiscovery: discovery complete");
+    // When devices are discovered, call: spdmDiscovery->add(std::move(device));
+
+    co_return;
 }
 
 } // namespace spdm
