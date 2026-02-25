@@ -10,7 +10,8 @@
 namespace spdm
 {
 
-auto MCTPTransportDiscovery::discovery() -> sdbusplus::async::task<>
+auto MCTPTransportDiscovery::discovery(
+    [[maybe_unused]] SPDMDiscovery& spdmDiscovery) -> sdbusplus::async::task<>
 {
     using namespace std::literals;
     PHOSPHOR_LOG2_USING;
