@@ -51,6 +51,8 @@ struct ResponderInfo
     std::variant<MctpResponderInfo, TcpResponderInfo> responderData;
     TransportType transportType;
 };
+// Forward declaration
+class SPDMDiscovery;
 
 // Forward declaration
 class SPDMDiscovery;

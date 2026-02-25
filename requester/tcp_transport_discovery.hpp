@@ -4,6 +4,7 @@
 #pragma once
 
 #include "spdm_discovery.hpp"
+#include "utils.hpp"
 
 #include <sdbusplus/async.hpp>
 
