@@ -4,6 +4,7 @@
 #pragma once
 
 #include "spdm_discovery.hpp"
+#include "utils.hpp"
 
 #include <sdbusplus/async.hpp>
 
@@ -20,7 +21,7 @@ class TCPTransportDiscovery
     explicit TCPTransportDiscovery(sdbusplus::async::context& ctx) :
         ctx(ctx) {};
 
-    auto discovery() -> sdbusplus::async::task<>;
+    auto discovery(SPDMDiscovery& spdmDiscovery) -> sdbusplus::async::task<>;
 
     static auto type() -> TransportType
     {

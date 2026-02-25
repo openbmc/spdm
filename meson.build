@@ -20,6 +20,7 @@ spdmd_src = [
     'requester/spdm_discovery.cpp',
     'requester/mctp_transport_discovery.cpp',
     'requester/tcp_transport_discovery.cpp',
+    'requester/utils.cpp',
 ]
 
 executable(
