@@ -4,21 +4,46 @@
 #include "tcp_transport_discovery.hpp"
 
 #include <phosphor-logging/lg2.hpp>
+#include <sdbusplus/async/client.hpp>
+#include <xyz/openbmc_project/Configuration/SpdmTcpResponder/client.hpp>
+#include <xyz/openbmc_project/ObjectMapper/client.hpp>
 
 #include <algorithm>
 
 namespace spdm
 {
+PHOSPHOR_LOG2_USING;
 
-auto TCPTransportDiscovery::discovery() -> sdbusplus::async::task<>
+auto TCPTransportDiscovery::discovery(SPDMDiscovery& spdmDiscovery)
+    -> sdbusplus::async::task<>
 {
-    using namespace std::literals;
-    PHOSPHOR_LOG2_USING;
+    using SpdmTcpResponder = sdbusplus::client::xyz::openbmc_project::
+        configuration::SpdmTcpResponder<>;
 
-    // TODO: Add real discovery, for now just adding pause
-    co_await sdbusplus::async::sleep_for(ctx, 1s);
+    auto subtree =
+        co_await getObjectsFromMapper(ctx, SpdmTcpResponder::interface);
 
-    debug("TCPTransportDiscovery: discovery complete");
+    for (const auto& [objectPath, services] : subtree)
+    {
+        for (const auto& [serviceName, interfaces] : services)
+        {
+            auto responder =
+                SpdmTcpResponder(ctx).service(serviceName).path(objectPath);
+
+            auto properties = co_await responder.properties();
+
+            debug("Found SPDM TCP Responder at {IP}:{PORT} for {PATH}", "IP",
+                  properties.hostname, "PORT", properties.port, "PATH",
+                  objectPath);
+
+            spdmDiscovery.add(ResponderInfo{
+                objectPath, sdbusplus::message::object_path{objectPath},
+                TcpResponderInfo{properties.hostname, properties.port},
+                TransportType::TCP});
+        }
+    }
+
+    debug("TCP transport discovery completed");
 }
 
 } // namespace spdm
