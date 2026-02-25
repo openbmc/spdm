@@ -11,15 +11,17 @@ project(
     meson_version: '>=1.1.1',
 )
 
+phosphor_dbus_interfaces_dep = dependency('phosphor-dbus-interfaces')
 phosphor_logging_dep = dependency('phosphor-logging')
 sdbusplus_dep = dependency('sdbusplus')
 
-spdmd_deps = [phosphor_logging_dep, sdbusplus_dep]
+spdmd_deps = [phosphor_dbus_interfaces_dep, phosphor_logging_dep, sdbusplus_dep]
 spdmd_src = [
     'requester/spdmd.cpp',
     'requester/spdm_discovery.cpp',
     'requester/mctp_transport_discovery.cpp',
     'requester/tcp_transport_discovery.cpp',
+    'requester/utils/mapper.cpp',
 ]
 
 executable(
