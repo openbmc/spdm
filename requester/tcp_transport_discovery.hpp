@@ -20,7 +20,7 @@ class TCPTransportDiscovery
     explicit TCPTransportDiscovery(sdbusplus::async::context& ctx) :
         ctx(ctx) {};
 
-    auto discovery() -> sdbusplus::async::task<>;
+    auto discovery(SPDMDiscovery&) -> sdbusplus::async::task<>;
 
     static auto type() -> TransportType
     {
