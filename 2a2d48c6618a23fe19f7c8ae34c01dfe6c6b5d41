@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0aeb3f32_6e3d6b2b",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-07T05:44:37Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "46fc166f_aa9db2d5",
+      "revId": "2a2d48c6618a23fe19f7c8ae34c01dfe6c6b5d41",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc905996_2fd11f11",
@@ -35,6 +53,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60919030_b04b15f3",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-07T05:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc905996_2fd11f11",
+      "revId": "2a2d48c6618a23fe19f7c8ae34c01dfe6c6b5d41",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "839f4a17_401a0f04",
@@ -48,6 +84,30 @@
       "writtenOn": "2026-03-04T21:15:01Z",
       "side": 1,
       "message": "We should not be using GetManagedObjects to parse everything from entity-manager.  Use object mapper to find your specific type.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 38
+      },
+      "revId": "2a2d48c6618a23fe19f7c8ae34c01dfe6c6b5d41",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "225f917c_bf1c4469",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-07T05:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "839f4a17_401a0f04",
       "range": {
         "startLine": 26,
         "startChar": 0,
@@ -81,6 +141,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae572e4a_56a64594",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-07T05:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80871012_e61b825a",
+      "range": {
+        "startLine": 36,
+        "startChar": 75,
+        "endLine": 36,
+        "endChar": 80
+      },
+      "revId": "2a2d48c6618a23fe19f7c8ae34c01dfe6c6b5d41",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32c3bf1b_d1360cf4",
@@ -98,6 +182,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43b2d780_5a89efcc",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-07T05:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32c3bf1b_d1360cf4",
+      "revId": "2a2d48c6618a23fe19f7c8ae34c01dfe6c6b5d41",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "907fbf75_b44d83ac",
@@ -111,6 +213,30 @@
       "writtenOn": "2026-03-04T21:15:01Z",
       "side": 1,
       "message": "Use generated bindings to get all the properties and access them via variable names.",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 5
+      },
+      "revId": "2a2d48c6618a23fe19f7c8ae34c01dfe6c6b5d41",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a811c76b_a6683594",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-07T05:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "907fbf75_b44d83ac",
       "range": {
         "startLine": 71,
         "startChar": 0,
@@ -144,6 +270,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f19b91b_05d8952c",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-07T05:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "924de610_28009b8b",
+      "range": {
+        "startLine": 85,
+        "startChar": 4,
+        "endLine": 85,
+        "endChar": 8
+      },
+      "revId": "2a2d48c6618a23fe19f7c8ae34c01dfe6c6b5d41",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce89dc8f_36571cf6",
@@ -157,6 +307,30 @@
       "writtenOn": "2026-03-04T21:15:01Z",
       "side": 1,
       "message": "Please use `auto function() -\u003e return` syntax.",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 31
+      },
+      "revId": "2a2d48c6618a23fe19f7c8ae34c01dfe6c6b5d41",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4432ab35_48a65b81",
+        "filename": "requester/tcp_transport_discovery.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-07T05:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce89dc8f_36571cf6",
       "range": {
         "startLine": 37,
         "startChar": 4,
