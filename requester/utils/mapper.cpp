@@ -15,7 +15,7 @@ using namespace std::string_literals;
 
 namespace instances
 {
-auto by_interface(sdbusplus::async::context& ctx, std::string interface)
+auto by_interface(sdbusplus::async::context& ctx, const std::string interface)
     -> sdbusplus::async::task<instances_t>
 {
     using Mapper = sdbusplus::client::xyz::openbmc_project::ObjectMapper<>;
