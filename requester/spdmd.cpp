@@ -41,6 +41,10 @@ int main()
         ctx.request_name(dbusServiceName);
     }());
 
+    // Start TCP Responder watchers
+    ctx.spawn(tcp.monitorSpdmTcpResponderAdded(discovery));
+    ctx.spawn(tcp.monitorSpdmTcpResponderRemoved(discovery));
+
     // Run the sdbusplus async context for parallel coroutine execution
     ctx.run();
 
