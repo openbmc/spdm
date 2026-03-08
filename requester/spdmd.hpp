@@ -5,4 +5,4 @@
 
 constexpr auto objManagerPath = sdbusplus::common::xyz::openbmc_project::
     attestation::ComponentIntegrity::namespace_path;
-constexpr auto dbusServiceName = "xyz.openbmc_project.spdm.requester";
+constexpr auto dbusServiceName = "xyz.openbmc_project.spdmd";
