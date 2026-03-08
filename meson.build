@@ -24,6 +24,10 @@ spdmd_src = [
     'requester/utils/mapper.cpp',
 ]
 
+systemd = dependency('systemd')
+systemd_unit_dir = systemd.get_variable('systemd_system_unit_dir')
+install_data('service/spdmd.service', install_dir: systemd_unit_dir)
+
 executable(
     'spdmd',
     spdmd_src,
