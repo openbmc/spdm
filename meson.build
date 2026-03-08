@@ -23,6 +23,14 @@ spdmd_src = [
     'requester/utils.cpp',
 ]
 
+systemd = dependency('systemd', required: false)
+
+if systemd.found()
+    systemd_unit_dir = systemd.get_variable('systemdsystemunitdir')
+
+    install_data('service/attestation.service', install_dir: systemd_unit_dir)
+endif
+
 executable(
     'spdmd',
     spdmd_src,
