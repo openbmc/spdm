@@ -14,6 +14,7 @@ project(
 phosphor_dbus_interfaces_dep = dependency('phosphor-dbus-interfaces')
 phosphor_logging_dep = dependency('phosphor-logging')
 sdbusplus_dep = dependency('sdbusplus')
+systemd_dep = dependency('systemd')
 
 spdmd_deps = [phosphor_dbus_interfaces_dep, phosphor_logging_dep, sdbusplus_dep]
 spdmd_src = [
@@ -23,6 +24,11 @@ spdmd_src = [
     'requester/tcp_transport_discovery.cpp',
     'requester/utils/mapper.cpp',
 ]
+
+install_data(
+    'service/spdmd.service',
+    systemd.get_variable('systemd_system_unit_dir'),
+)
 
 executable(
     'spdmd',
