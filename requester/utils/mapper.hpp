@@ -32,7 +32,7 @@ using instances_t =
  * @param interface Interface name to search for
  * @return Instances implementing the interface type.
  */
-auto by_interface(sdbusplus::async::context& ctx, const std::string& interface)
+auto by_interface(sdbusplus::async::context& ctx, const std::string interface)
     -> sdbusplus::async::task<instances_t>;
 
 /** Syntatic helper for by_interface. */
