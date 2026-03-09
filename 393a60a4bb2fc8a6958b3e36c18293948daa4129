@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ffd85357_d4011461",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:49:01Z",
+      "side": 1,
+      "message": "There is no reason to explicitly ask for the EM service here.  Other processes _could_ expose that configuration even if they don\u0027t today.  We generally do not want to hard-code service names.",
+      "range": {
+        "startLine": 28,
+        "startChar": 46,
+        "endLine": 28,
+        "endChar": 66
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88f6674d_26956e34",
         "filename": "requester/tcp_transport_discovery.cpp",
         "patchSetId": 6
@@ -26,6 +49,116 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3103a87c_b2b937bc",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:49:01Z",
+      "side": 1,
+      "message": "Why?  I\u0027d prefer we consider the \"likelihood of bug\" vs \"noise to the reader\".  It\u0027s not likely that someone inadvertently changes the values.",
+      "parentUuid": "88f6674d_26956e34",
+      "range": {
+        "startLine": 36,
+        "startChar": 1,
+        "endLine": 37,
+        "endChar": 50
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2810ab92_78df54d1",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:49:01Z",
+      "side": 1,
+      "message": "```cpp\nauto properties \u003d co_await responder.properties();\n...\nTcpResponderInfo tcpInfo{ properties.hostname , properties.port };\n```",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 50
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14116ee7_77f0fc59",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:49:01Z",
+      "side": 1,
+      "message": "Do you know what this is doing for us?  It seems like we only need the object path once; I don\u0027t know why the original structures had two different properties for the object path but I left it until I saw more code for clarity.  \n\nIs this suppose to be `object_path{objectPath}`?",
+      "range": {
+        "startLine": 44,
+        "startChar": 45,
+        "endLine": 44,
+        "endChar": 78
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b98e1a7c_9821fae7",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:49:01Z",
+      "side": 1,
+      "message": "nit: std::move?",
+      "range": {
+        "startLine": 45,
+        "startChar": 33,
+        "endLine": 45,
+        "endChar": 40
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d4ada47_a5fc6b55",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:49:01Z",
+      "side": 1,
+      "message": "Could we formulate this in one go?\n\n```\nspdmDiscovery.add(\n  ResponderInfo(objectPath, sdbusplus::message::object_path{}, \n    TcpResponderInfo(properties.hostname, properties.port),\n    TransportType::TCP));\n```",
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a3a6febf_132f300e",
         "filename": "requester/tcp_transport_discovery.cpp",
         "patchSetId": 6
@@ -43,6 +176,23 @@
         "endLine": 50,
         "endChar": 56
       },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "930535d5_7e0fe992",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:49:01Z",
+      "side": 1,
+      "message": "I\u0027d prefer not to have blanked catches like this.  Do we know what we\u0027re suppose to encounter?",
       "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -95,6 +245,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "12e6f6c1_39b11a1a",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:49:01Z",
+      "side": 1,
+      "message": "Do we need depth as an optional parameter?  Or do we think we\u0027ll always use 0?",
+      "range": {
+        "startLine": 30,
+        "startChar": 55,
+        "endLine": 30,
+        "endChar": 56
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "136a70d5_18a78292",
         "filename": "requester/utils.cpp",
         "patchSetId": 6
@@ -111,6 +284,92 @@
         "startChar": 20,
         "endLine": 42,
         "endChar": 17
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0f09902_cc16b1be",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:49:01Z",
+      "side": 1,
+      "message": "I really don\u0027t like these catch-all exceptions.  Especially early in development wouldn\u0027t it be better to just fail quickly and fix the errors than hiding them in the journal?",
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49edf9ab_168b236f",
+        "filename": "requester/utils.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:49:01Z",
+      "side": 1,
+      "message": "I don\u0027t see any users of these?",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 22
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe77966b_481e5a12",
+        "filename": "requester/utils.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:49:01Z",
+      "side": 1,
+      "message": "This seems relatively complicated to me.  What are we returning?  Can we be clear somewhere in the documentation.\n\nI think we just need one of these:\n\n- std::map\u003cobject_path, vector\u003cservice_names\u003e\u003e\n- std::map\u003cservice_names, vector\u003cobject_path\u003e\u003e",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 75
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e033693e_592fb726",
+        "filename": "requester/utils.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:49:01Z",
+      "side": 1,
+      "message": "No longer needed, right?",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 1
       },
       "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
