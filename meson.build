@@ -21,6 +21,8 @@ spdmd_src = [
     'requester/mctp_transport_discovery.cpp',
     'requester/tcp_transport_discovery.cpp',
     'requester/utils.cpp',
+    'requester/policy_manager.cpp',
+    'requester/policy_manager.hpp',
 ]
 
 systemd = dependency('systemd', required: false)
@@ -31,10 +33,13 @@ if systemd.found()
     install_data('service/attestation.service', install_dir: systemd_unit_dir)
 endif
 
+policy_cache_path = get_option('localstatedir') + '/lib/spdm/policy.json'
+
 executable(
     'spdmd',
     spdmd_src,
     dependencies: spdmd_deps,
     install: true,
     install_dir: get_option('libexecdir') / 'spdm',
+    cpp_args: ['-DPOLICY_CACHE_PATH="' + policy_cache_path + '"'],
 )
