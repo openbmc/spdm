@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54535bf8_49bf9235",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:56:58Z",
+      "side": 1,
+      "message": "No.  Do this as part of discovery.  Don\u0027t let this detail bleed out here.\n\nWe have to guarantee that the match for these is added before we run the EM queries anyhow (so that we don\u0027t miss them).  Spawning them later doesn\u0027t.",
+      "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d262ad6_e13c9ea0",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:56:58Z",
+      "side": 1,
+      "message": "We should not match on the EM service.  We should match on the configuration type we are looking for.",
+      "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2d1042f_e651115c",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:56:58Z",
+      "side": 1,
+      "message": "This try-catch is unnecessary.",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 9
+      },
+      "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59af674a_8165ac8c",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:56:58Z",
+      "side": 1,
+      "message": "Use `msg.unpack`.",
+      "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62e7352f_7a96424d",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:56:58Z",
+      "side": 1,
+      "message": "Are we sure the behavior is how we want it if entity-manager is restarted?  I\u0027ve heard some reports that you get a flurry of signals; we should be sure to test that case.",
+      "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78189b00_1a564a88",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:56:58Z",
+      "side": 1,
+      "message": "Don\u0027t expose private variable.  Add a remove function.",
+      "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "180c1a38_7347cdf6",
+        "filename": "requester/tcp_transport_discovery.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:56:58Z",
+      "side": 1,
+      "message": "Why can\u0027t these be local variables that are part of the co-routine?",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 72
+      },
+      "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
