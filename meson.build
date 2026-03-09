@@ -22,6 +22,9 @@ spdmd_src = [
     'requester/spdm_discovery.cpp',
     'requester/mctp_transport_discovery.cpp',
     'requester/tcp_transport_discovery.cpp',
+    'requester/utils.cpp',
+    'requester/policy_manager.cpp',
+    'requester/policy_manager.hpp',
     'requester/utils/mapper.cpp',
 ]
 
@@ -30,10 +33,13 @@ install_data(
     install_dir: systemd_dep.get_variable('systemd_system_unit_dir'),
 )
 
+policy_cache_path = get_option('localstatedir') + '/lib/spdm/policy.json'
+
 executable(
     'spdmd',
     spdmd_src,
     dependencies: spdmd_deps,
     install: true,
     install_dir: get_option('libexecdir') / 'spdm',
+    cpp_args: ['-DPOLICY_CACHE_PATH="' + policy_cache_path + '"'],
 )
