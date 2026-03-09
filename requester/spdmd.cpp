@@ -5,6 +5,7 @@
 
 #include "mctp_transport_discovery.hpp"
 #include "policy_manager.hpp"
+#include "secure_exchange.hpp"
 #include "spdm_discovery.hpp"
 #include "tcp_transport_discovery.hpp"
 
@@ -31,6 +32,8 @@ int main()
         lg2::error("Failed to load policy manager: {ERROR}", "ERROR", result.error());
         return EXIT_FAILURE;
     }
+
+    SecureExchange secureExchange(ctx, objManagerPath);
 
     SPDMDiscovery discovery{};
 
