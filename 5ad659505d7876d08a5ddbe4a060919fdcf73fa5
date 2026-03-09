@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf519f7a_9df2e29f",
+        "filename": "meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:26:09Z",
+      "side": 1,
+      "message": "The preference is `systemd_system_unit_dir` now.",
+      "range": {
+        "startLine": 29,
+        "startChar": 45,
+        "endLine": 29,
+        "endChar": 65
+      },
+      "revId": "5ad659505d7876d08a5ddbe4a060919fdcf73fa5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22a60315_bb13543f",
+        "filename": "service/attestation.service",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-09T20:26:09Z",
+      "side": 1,
+      "message": "Why does this need EM?  Having EM running doesn\u0027t mean that EM has actually probed the content.\n\nNo other repository-level service file in openbmc currently has a Wants on EM.",
+      "revId": "5ad659505d7876d08a5ddbe4a060919fdcf73fa5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
