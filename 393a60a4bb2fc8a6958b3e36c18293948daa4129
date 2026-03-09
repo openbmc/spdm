@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88f6674d_26956e34",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-03-09T14:14:26Z",
+      "side": 1,
+      "message": "make these `const` ?",
+      "range": {
+        "startLine": 36,
+        "startChar": 1,
+        "endLine": 37,
+        "endChar": 50
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3a6febf_132f300e",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-03-09T14:14:26Z",
+      "side": 1,
+      "message": "make it much more human friendly - `TCP transport discovery completed`",
+      "range": {
+        "startLine": 50,
+        "startChar": 15,
+        "endLine": 50,
+        "endChar": 56
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1b6668b_438260dc",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-03-09T14:14:26Z",
+      "side": 1,
+      "message": "This does not seems like a true util function to me - since its doing some filtering based on a service name ? would it be worth to leave it generic \u0026 put the check for EM where we consume the result ?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 42
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2868560c_6ace7790",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-03-09T14:14:26Z",
+      "side": 1,
+      "message": "Do we really need the search root from `/` ? can\u0027t we do it from atleast `/xyz/openbmc_project/` or `/xyz/openbmc_project/configuration` ?",
+      "range": {
+        "startLine": 29,
+        "startChar": 7,
+        "endLine": 30,
+        "endChar": 70
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "136a70d5_18a78292",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-03-09T14:14:26Z",
+      "side": 1,
+      "message": "copying the full map rather than emplace ?",
+      "range": {
+        "startLine": 41,
+        "startChar": 20,
+        "endLine": 42,
+        "endChar": 17
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
