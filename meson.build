@@ -23,6 +23,8 @@ spdmd_src = [
     'requester/utils.cpp',
     'requester/policy_manager.cpp',
     'requester/policy_manager.hpp',
+    'requester/secure_exchange.cpp',
+    'requester/secure_exchange.hpp',
 ]
 
 systemd = dependency('systemd', required: false)
