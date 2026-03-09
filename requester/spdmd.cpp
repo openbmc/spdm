@@ -4,8 +4,11 @@
 #include "spdmd.hpp"
 
 #include "mctp_transport_discovery.hpp"
+#include "policy_manager.hpp"
 #include "spdm_discovery.hpp"
 #include "tcp_transport_discovery.hpp"
+
+#include <phosphor-logging/lg2.hpp>
 
 #include <sdbusplus/async.hpp>
 #include <sdbusplus/server/manager.hpp>
@@ -21,6 +24,13 @@ int main()
 
     // Create object manager for D-Bus object registration
     sdbusplus::server::manager_t objManager(ctx, objManagerPath);
+
+    PolicyManager policyManager(ctx, objManagerPath);
+    if (const auto result = policyManager.load(); !result)
+    {
+        lg2::error("Failed to load policy manager: {ERROR}", "ERROR", result.error());
+        return EXIT_FAILURE;
+    }
 
     SPDMDiscovery discovery{};
 

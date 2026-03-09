@@ -21,6 +21,8 @@ spdmd_src = [
     'requester/mctp_transport_discovery.cpp',
     'requester/tcp_transport_discovery.cpp',
     'requester/utils.cpp',
+    'requester/policy_manager.cpp',
+    'requester/policy_manager.hpp',
 ]
 
 systemd = dependency('systemd', required: false)
