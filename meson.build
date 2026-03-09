@@ -15,6 +15,8 @@ phosphor_dbus_interfaces_dep = dependency('phosphor-dbus-interfaces')
 phosphor_logging_dep = dependency('phosphor-logging')
 sdbusplus_dep = dependency('sdbusplus')
 systemd_dep = dependency('systemd')
+gtest_proj = import('cmake').subproject('googletest')
+gtest_dep = gtest_proj.dependency('gtest_main')
 
 spdmd_deps = [
     phosphor_dbus_interfaces_dep,
@@ -27,6 +29,7 @@ spdmd_src = [
     'requester/spdm_discovery.cpp',
     'requester/mctp_transport_discovery.cpp',
     'requester/tcp_transport_discovery.cpp',
+    'requester/policy_manager.cpp',
     'requester/utils/mapper.cpp',
 ]
 
@@ -40,6 +43,16 @@ spdmd_lib = static_library(
 install_data(
     'service/spdmd.service',
     install_dir: systemd_dep.get_variable('systemd_system_unit_dir'),
+)
+
+policy_cache_path = get_option('localstatedir') + '/lib/spdm/policy.json'
+
+conf_data = configuration_data()
+conf_data.set_quoted('POLICY_CACHE_PATH', policy_cache_path)
+
+configure_file(
+    output: 'config.hpp',
+    configuration: conf_data,
 )
 
 executable(
