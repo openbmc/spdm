@@ -130,6 +130,30 @@
       },
       "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "180a7c69_7ad51c9d",
+        "filename": "requester/tcp_transport_discovery.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-10T14:34:09Z",
+      "side": 1,
+      "message": "You\u0027re probably going to want to use a barrier between the spawned match functions and the discovery function (which should do the spawning).  See https://gerrit.openbmc.org/c/openbmc/sdbusplus/+/88172",
+      "parentUuid": "180c1a38_7347cdf6",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 72
+      },
+      "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
