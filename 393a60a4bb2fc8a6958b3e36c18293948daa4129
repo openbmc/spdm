@@ -236,6 +236,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9ba9399_27582520",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-03-10T20:38:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b98e1a7c_9821fae7",
+      "range": {
+        "startLine": 45,
+        "startChar": 33,
+        "endLine": 45,
+        "endChar": 40
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d4ada47_a5fc6b55",
