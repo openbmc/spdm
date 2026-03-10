@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "860530d8_e2034684",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-10T18:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffd85357_d4011461",
+      "range": {
+        "startLine": 28,
+        "startChar": 46,
+        "endLine": 28,
+        "endChar": 66
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88f6674d_26956e34",
@@ -94,6 +118,54 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7997c0d9_c3f84f6e",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-10T18:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3103a87c_b2b937bc",
+      "range": {
+        "startLine": 36,
+        "startChar": 1,
+        "endLine": 37,
+        "endChar": 50
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "345c432e_811bfb41",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-10T18:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2810ab92_78df54d1",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 50
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14116ee7_77f0fc59",
@@ -107,6 +179,30 @@
       "writtenOn": "2026-03-09T20:49:01Z",
       "side": 1,
       "message": "Do you know what this is doing for us?  It seems like we only need the object path once; I don\u0027t know why the original structures had two different properties for the object path but I left it until I saw more code for clarity.  \n\nIs this suppose to be `object_path{objectPath}`?",
+      "range": {
+        "startLine": 44,
+        "startChar": 45,
+        "endLine": 44,
+        "endChar": 78
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3231124b_38c06da3",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-10T18:01:58Z",
+      "side": 1,
+      "message": "SPDM TCP responder will have same value in both objects path variables but for MCTP \nthere will be two object paths one comes from MCTP service and other from EM config.",
+      "parentUuid": "14116ee7_77f0fc59",
       "range": {
         "startLine": 44,
         "startChar": 45,
@@ -157,6 +253,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00595c00_3dae5378",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-10T18:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d4ada47_a5fc6b55",
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3a6febf_132f300e",
@@ -170,6 +284,30 @@
       "writtenOn": "2026-03-09T14:14:26Z",
       "side": 1,
       "message": "make it much more human friendly - `TCP transport discovery completed`",
+      "range": {
+        "startLine": 50,
+        "startChar": 15,
+        "endLine": 50,
+        "endChar": 56
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c932fe48_7f028fb8",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-10T18:01:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a3a6febf_132f300e",
       "range": {
         "startLine": 50,
         "startChar": 15,
@@ -197,6 +335,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af79ece4_71fc9229",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-10T18:01:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "930535d5_7e0fe992",
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1b6668b_438260dc",
@@ -210,6 +366,30 @@
       "writtenOn": "2026-03-09T14:14:26Z",
       "side": 1,
       "message": "This does not seems like a true util function to me - since its doing some filtering based on a service name ? would it be worth to leave it generic \u0026 put the check for EM where we consume the result ?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 42
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0887649f_a1d21f9b",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-10T18:01:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d1b6668b_438260dc",
       "range": {
         "startLine": 13,
         "startChar": 0,
@@ -266,6 +446,54 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6676fa9_1f2d44f9",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-10T18:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12e6f6c1_39b11a1a",
+      "range": {
+        "startLine": 30,
+        "startChar": 55,
+        "endLine": 30,
+        "endChar": 56
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a31dbcd_30fde02f",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-10T18:01:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "2868560c_6ace7790",
+      "range": {
+        "startLine": 29,
+        "startChar": 7,
+        "endLine": 30,
+        "endChar": 70
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "136a70d5_18a78292",
@@ -279,6 +507,30 @@
       "writtenOn": "2026-03-09T14:14:26Z",
       "side": 1,
       "message": "copying the full map rather than emplace ?",
+      "range": {
+        "startLine": 41,
+        "startChar": 20,
+        "endLine": 42,
+        "endChar": 17
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d8710d1_cd30e65c",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-10T18:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "136a70d5_18a78292",
       "range": {
         "startLine": 41,
         "startChar": 20,
@@ -306,6 +558,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9ef10ee_7962fdb8",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-10T18:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0f09902_cc16b1be",
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49edf9ab_168b236f",
@@ -319,6 +589,30 @@
       "writtenOn": "2026-03-09T20:49:01Z",
       "side": 1,
       "message": "I don\u0027t see any users of these?",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 22
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d542c7aa_23d3f570",
+        "filename": "requester/utils.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-10T18:01:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "49edf9ab_168b236f",
       "range": {
         "startLine": 18,
         "startChar": 0,
@@ -352,6 +646,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd603b34_0d1a7068",
+        "filename": "requester/utils.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-10T18:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe77966b_481e5a12",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 75
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e033693e_592fb726",
@@ -365,6 +683,30 @@
       "writtenOn": "2026-03-09T20:49:01Z",
       "side": 1,
       "message": "No longer needed, right?",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 1
+      },
+      "revId": "393a60a4bb2fc8a6958b3e36c18293948daa4129",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a714d4c_7987deb5",
+        "filename": "requester/utils.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-10T18:01:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e033693e_592fb726",
       "range": {
         "startLine": 39,
         "startChar": 0,
