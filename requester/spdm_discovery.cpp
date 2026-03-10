@@ -24,7 +24,7 @@ auto SPDMDiscovery::run() -> sdbusplus::async::task<>
         // Log discovered devices
         for (const auto& device : responderInfos)
         {
-            info("Found SPDM device: PATH={PATH}", "PATH", device.objectPath);
+            info("Found SPDM device: PATH={PATH}", "PATH", device.path);
         }
     }
     else

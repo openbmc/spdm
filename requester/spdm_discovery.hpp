@@ -46,10 +46,9 @@ struct TcpResponderInfo
  */
 struct ResponderInfo
 {
-    std::string objectPath; ///< D-Bus object path
-    sdbusplus::message::object_path deviceObjectPath;
-    std::variant<MctpResponderInfo, TcpResponderInfo> responderData;
-    TransportType transportType;
+    sdbusplus::message::object_path path;
+    std::variant<MctpResponderInfo, TcpResponderInfo> info;
+    TransportType transport;
 };
 
 // Forward declaration
