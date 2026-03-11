@@ -108,12 +108,30 @@ class SPDMDiscovery
     {
         responderInfos.emplace_back(std::move(r));
     }
+    
+    /**
+     * Remove a discovered device by object path.
+     * @param objectPath The D-Bus object path of the device to remove.
+     */
+    void remove(const std::string& objectPath)
+    {
+        auto it = std::ranges::find_if(
+            responderInfos, [&objectPath](const ResponderInfo& r) {
+                return r.objectPath == objectPath;
+            });
+
+        if (it != responderInfos.end())
+        {
+            responderInfos.erase(it);
+        }
+    }
+
+  private:
+    sdbusplus::async::async_scope initialDiscovery;
 
     /** @brief Discovered devices */
     std::vector<ResponderInfo> responderInfos;
 
-  private:
-    sdbusplus::async::async_scope initialDiscovery;
 };
 
 } // namespace spdm
