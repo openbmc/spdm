@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04172042_4b99eb03",
+        "filename": "meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-11T07:16:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf519f7a_9df2e29f",
+      "range": {
+        "startLine": 29,
+        "startChar": 45,
+        "endLine": 29,
+        "endChar": 65
+      },
+      "revId": "5ad659505d7876d08a5ddbe4a060919fdcf73fa5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22a60315_bb13543f",
@@ -37,6 +61,24 @@
       "writtenOn": "2026-03-09T20:26:09Z",
       "side": 1,
       "message": "Why does this need EM?  Having EM running doesn\u0027t mean that EM has actually probed the content.\n\nNo other repository-level service file in openbmc currently has a Wants on EM.",
+      "revId": "5ad659505d7876d08a5ddbe4a060919fdcf73fa5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f96064f_a4ea4076",
+        "filename": "service/attestation.service",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-11T07:16:02Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "22a60315_bb13543f",
       "revId": "5ad659505d7876d08a5ddbe4a060919fdcf73fa5",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
