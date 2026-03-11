@@ -3,10 +3,9 @@
 
 #pragma once
 
-// #include "libspdm_transport.hpp"
-
 #include <sdbusplus/async.hpp>
 
+#include <algorithm>
 #include <cstdint>
 #include <string>
 #include <variant>
@@ -109,11 +108,28 @@ class SPDMDiscovery
         responderInfos.emplace_back(std::move(r));
     }
 
-    /** @brief Discovered devices */
-    std::vector<ResponderInfo> responderInfos;
+    /**
+     * Remove a discovered device by object path.
+     * @param objectPath The D-Bus object path of the device to remove.
+     */
+    void remove(const std::string& objectPath)
+    {
+        auto it = std::ranges::find_if(
+            responderInfos, [&objectPath](const ResponderInfo& r) {
+                return r.path == objectPath;
+            });
+
+        if (it != responderInfos.end())
+        {
+            responderInfos.erase(it);
+        }
+    }
 
   private:
     sdbusplus::async::async_scope initialDiscovery;
+
+    /** @brief Discovered devices */
+    std::vector<ResponderInfo> responderInfos;
 };
 
 } // namespace spdm
