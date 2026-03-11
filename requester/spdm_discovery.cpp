@@ -33,4 +33,10 @@ auto SPDMDiscovery::run() -> sdbusplus::async::task<>
     }
 }
 
+void SPDMDiscovery::remove(const sdbusplus::message::object_path& path)
+{
+    std::erase_if(responderInfos,
+                  [&path](const auto& r) { return r.path == path; });
+}
+
 } // namespace spdm
