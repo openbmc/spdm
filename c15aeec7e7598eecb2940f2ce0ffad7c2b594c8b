@@ -1,0 +1,10 @@
+Code-Review+1: Archana Kakani <archana.kakani@ibm.com>
+Verified+1: OpenBMC CI <openbmcbump-ci@yahoo.com>
+Code-Review+1: ManojKiran Eda <manojkiran.eda@gmail.com>
+Code-Review+2: Patrick Williams <patrick@stwcx.xyz>
+Submitted-by: Patrick Williams <patrick@stwcx.xyz>
+Submitted-at: Wed, 11 Mar 2026 08:32:39 +0000
+Reviewed-on: https://gerrit.openbmc.org/c/openbmc/spdm/+/87999
+Comments-Total: 51
+Project: openbmc/spdm
+Branch: refs/heads/main
