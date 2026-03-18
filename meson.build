@@ -37,3 +37,8 @@ executable(
     install: true,
     install_dir: get_option('libexecdir') / 'spdm',
 )
+
+# Build tests if enabled
+if get_option('tests').allowed()
+    subdir('test')
+endif
