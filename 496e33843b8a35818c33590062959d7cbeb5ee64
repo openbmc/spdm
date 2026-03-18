@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17978c7a_7540d2de",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-18T04:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8be0eb39_a3e5a467",
+      "revId": "496e33843b8a35818c33590062959d7cbeb5ee64",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a4f48af_51ae2d33",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-03-17T19:09:59Z",
       "side": 1,
       "message": "This if condition isn\u0027t necessary.  You\u0027ll either get std::end(responderInfo), in which case calling erase is safe, or you\u0027ll get an iterator pointing to items to be erased.",
+      "revId": "496e33843b8a35818c33590062959d7cbeb5ee64",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21d5665d_08d44c8c",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-18T04:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a4f48af_51ae2d33",
       "revId": "496e33843b8a35818c33590062959d7cbeb5ee64",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
