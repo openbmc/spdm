@@ -28,6 +28,8 @@ using instances_t =
 
 /** Get instances by interface-type.
  *
+ * On failure (e.g. D-Bus error), logs and returns an empty list.
+ *
  * @param ctx Async context
  * @param interface Interface name to search for
  * @return Instances implementing the interface type.

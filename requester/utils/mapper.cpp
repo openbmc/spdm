@@ -6,6 +6,8 @@
 #include <phosphor-logging/lg2.hpp>
 #include <xyz/openbmc_project/ObjectMapper/client.hpp>
 
+#include <exception>
+
 namespace spdm::mapper
 {
 PHOSPHOR_LOG2_USING;
@@ -17,22 +19,32 @@ auto by_interface(sdbusplus::async::context& ctx, const std::string& interface)
 {
     using Mapper = sdbusplus::client::xyz::openbmc_project::ObjectMapper<>;
 
-    auto objects =
-        co_await Mapper(ctx)
-            .service(Mapper::default_service)
-            .path(Mapper::instance_path)
-            .get_sub_tree("/", 0, std::vector<std::string>{interface});
-
-    instances_t results{};
-    for (const auto& [path, services] : objects)
+    try
     {
-        for (const auto& [service, _] : services)
-        {
-            results.push_back({path, service});
-        }
-    }
+        auto objects =
+            co_await Mapper(ctx)
+                .service(Mapper::default_service)
+                .path(Mapper::instance_path)
+                .get_sub_tree("/", 0, std::vector<std::string>{interface});
 
-    co_return results;
+        instances_t results{};
+        for (const auto& [path, services] : objects)
+        {
+            for (const auto& [service, _] : services)
+            {
+                results.push_back({path, service});
+            }
+        }
+
+        co_return results;
+    }
+    catch (const std::exception& e)
+    {
+        error(
+            "ObjectMapper get_sub_tree failed for interface {IFACE}: {ERROR}",
+            "IFACE", interface, "ERROR", e);
+        co_return instances_t{};
+    }
 }
 
 } // namespace instances
