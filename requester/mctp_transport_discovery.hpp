@@ -17,11 +17,20 @@ namespace spdm
 class MCTPTransportDiscovery
 {
   public:
+    /** @brief Construct the MCTP transport discovery handler.
+     *  @param ctx Async D-Bus context used for service discovery.
+     */
     explicit MCTPTransportDiscovery(sdbusplus::async::context& ctx) :
         ctx(ctx) {};
 
-    auto discovery(SPDMDiscovery&) -> sdbusplus::async::task<>;
+    /** @brief Run the MCTP device discovery coroutine.
+     *  @param discovery SPDMDiscovery instance to register found devices with.
+     */
+    auto discovery(SPDMDiscovery& discovery) -> sdbusplus::async::task<>;
 
+    /** @brief Return the transport type handled by this class.
+     *  @return TransportType::MCTP
+     */
     static auto type() -> TransportType
     {
         return TransportType::MCTP;
