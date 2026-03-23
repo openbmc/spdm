@@ -7,8 +7,6 @@
 
 #include <sdbusplus/async.hpp>
 
-#include <vector>
-
 namespace spdm
 {
 
@@ -16,33 +14,21 @@ namespace spdm
  * @brief MCTP-specific transport implementation
  * @details Handles discovery of SPDM devices over MCTP transport using D-Bus
  */
-class MCTPTransportDiscovery : public DiscoveryProtocol
+class MCTPTransportDiscovery
 {
   public:
-    /**
-     * @brief Construct a new MCTP Transport object
-     * @param asyncCtx Reference to async D-Bus context
-     */
-    explicit MCTPTransportDiscovery(sdbusplus::async::context& asyncCtx);
+    explicit MCTPTransportDiscovery(sdbusplus::async::context& ctx) :
+        ctx(ctx) {};
 
-    /**
-     * @brief Discover SPDM devices over MCTP
-     * @return Vector of discovered device information
-     * @throws sdbusplus::exception::SdBusError on D-Bus errors
-     */
-    std::vector<ResponderInfo> discoverDevices() override;
+    auto discovery(SPDMDiscovery&) -> sdbusplus::async::task<>;
 
-    /**
-     * @brief Get the transport type
-     * @return TransportType::MCTP
-     */
-    TransportType getType() const override
+    static auto type() -> TransportType
     {
         return TransportType::MCTP;
     }
 
   private:
-    sdbusplus::async::context& asyncCtx; ///< Async D-Bus context
+    sdbusplus::async::context& ctx;
 };
 
 } // namespace spdm

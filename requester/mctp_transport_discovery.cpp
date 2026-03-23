@@ -3,35 +3,61 @@
 
 #include "mctp_transport_discovery.hpp"
 
+#include "utils/mapper.hpp"
+
+#include <phosphor-logging/lg2.hpp>
+#include <sdbusplus/async/proxy.hpp>
+
 #include <algorithm>
 
 namespace spdm
 {
+PHOSPHOR_LOG2_USING;
 
-/**
- * @brief Constructs MCTP transport object
- * @param asyncCtx Reference to async D-Bus context
- */
-MCTPTransportDiscovery::MCTPTransportDiscovery(
-    sdbusplus::async::context& asyncCtx) : asyncCtx(asyncCtx)
-{}
-
-/**
- * @brief Discovers SPDM devices over MCTP
- * @details Uses GetManagedObjects to efficiently get all MCTP endpoint data in
- * one call
- *
- * @return Vector of discovered SPDM devices
- * @throws sdbusplus::exception::SdBusError on D-Bus communication errors
- */
-std::vector<ResponderInfo> MCTPTransportDiscovery::discoverDevices()
+auto MCTPTransportDiscovery::discovery(SPDMDiscovery& discovery)
+    -> sdbusplus::async::task<>
 {
-    // TODO: Implement MCTP device discovery using asyncCtx
-    // For now, suppress unused field warning
-    (void)asyncCtx;
+    static constexpr auto mctpEndpointIntf =
+        "xyz.openbmc_project.MCTP.Endpoint";
+    static constexpr auto uuidIntf = "xyz.openbmc_project.Common.UUID";
+    static constexpr uint8_t spdmMessageType = 0x05;
 
-    std::vector<ResponderInfo> devices;
-    return devices;
+    auto instances =
+        co_await mapper::instances::by_interface(ctx, mctpEndpointIntf);
+
+    for (const auto& [path, service] : instances)
+    {
+        auto endpointProxy =
+            sdbusplus::async::proxy().service(service).path(path.str).interface(
+                mctpEndpointIntf);
+
+        auto messageTypes =
+            co_await endpointProxy.get_property<std::vector<uint8_t>>(
+                ctx, "SupportedMessageTypes");
+
+        if (std::find(messageTypes.begin(), messageTypes.end(),
+                      spdmMessageType) == messageTypes.end())
+        {
+            debug("Endpoint {PATH} does not support SPDM", "PATH", path);
+            continue;
+        }
+
+        auto eid = co_await endpointProxy.get_property<uint8_t>(ctx, "EID");
+
+        auto uuidProxy =
+            sdbusplus::async::proxy().service(service).path(path.str).interface(
+                uuidIntf);
+
+        auto uuid = co_await uuidProxy.get_property<std::string>(ctx, "UUID");
+
+        debug("Found SPDM MCTP device at {PATH}, EID={EID}", "PATH", path,
+              "EID", eid);
+
+        discovery.add(ResponderInfo{path, MctpResponderInfo{eid, uuid},
+                                    TransportType::MCTP});
+    }
+
+    debug("MCTP transport discovery completed");
 }
 
 } // namespace spdm

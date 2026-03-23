@@ -4,48 +4,39 @@
 #include "spdm_discovery.hpp"
 
 #include <phosphor-logging/lg2.hpp>
-
-PHOSPHOR_LOG2_USING;
+#include <sdbusplus/async.hpp>
 
 namespace spdm
 {
 
-/**
- * @brief Constructs the SPDM discovery object
- * @details Initializes discovery with provided transport implementation
- *
- * @param transportIn Unique pointer to transport implementation
- */
-SPDMDiscovery::SPDMDiscovery(
-    std::vector<std::unique_ptr<DiscoveryProtocol>> discoveryProtocolIn) :
-    discoveryProtocol(std::move(discoveryProtocolIn))
-{}
+SPDMDiscovery::SPDMDiscovery() {}
 
-/**
- * @brief Performs device discovery
- * @details Initiates discovery process using configured transport
- *
- * @return true if devices were found, false otherwise
- * @throws std::runtime_error on discovery failure
- */
-bool SPDMDiscovery::discover()
+auto SPDMDiscovery::run() -> sdbusplus::async::task<>
 {
-    try
+    PHOSPHOR_LOG2_USING;
+
+    co_await initialDiscovery.on_empty();
+    debug("SPDMDiscovery: initial discovery complete.");
+
+    // Check results.
+    if (!responderInfos.empty())
     {
-        for (auto& protocol : discoveryProtocol)
+        // Log discovered devices
+        for (const auto& device : responderInfos)
         {
-            auto discoveredDevices = protocol->discoverDevices();
-            responderInfos.insert(responderInfos.end(),
-                                  discoveredDevices.begin(),
-                                  discoveredDevices.end());
+            info("Found SPDM device: PATH={PATH}", "PATH", device.path);
         }
-        return !responderInfos.empty();
     }
-    catch (const std::exception& e)
+    else
     {
-        error("Discovery failed: {ERROR}", "ERROR", e);
-        return false;
+        warning("No SPDM devices found");
     }
+}
+
+void SPDMDiscovery::remove(const sdbusplus::message::object_path& path)
+{
+    std::erase_if(responderInfos,
+                  [&path](const auto& r) { return r.path == path; });
 }
 
 } // namespace spdm

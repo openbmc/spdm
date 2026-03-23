@@ -6,43 +6,34 @@
 #include "mctp_transport_discovery.hpp"
 #include "spdm_discovery.hpp"
 
-#include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/async.hpp>
 #include <sdbusplus/server/manager.hpp>
 
-PHOSPHOR_LOG2_USING;
-
 int main()
 {
+    using namespace spdm;
+
     // Create async context for parallel coroutine execution
     sdbusplus::async::context ctx;
 
     // Create object manager for D-Bus object registration
     sdbusplus::server::manager_t objManager(ctx, objManagerPath);
 
-    // Request D-Bus name
-    ctx.request_name(dbusServiceName);
+    SPDMDiscovery discovery{};
 
-    std::vector<std::unique_ptr<spdm::DiscoveryProtocol>> protocols;
+    // Start MCTP discovery
+    MCTPTransportDiscovery mctp{ctx};
+    discovery.discover(mctp);
 
-    protocols.push_back(std::make_unique<spdm::MCTPTransportDiscovery>(ctx));
+    // Run the initial discovery and then claim the bus name.
+    ctx.spawn([&]() -> sdbusplus::async::task<> {
+        // Perform discovery
+        co_await discovery.run();
 
-    // Assign the discovery protocol to the discovery object - Context
-    spdm::SPDMDiscovery discovery(std::move(protocols));
+        // Request D-Bus name after initial discovery.
+        ctx.request_name(dbusServiceName);
+    }());
 
-    // Perform discovery
-    if (discovery.discover())
-    {
-        // Log discovered devices
-        for (const auto& device : discovery.responderInfos)
-        {
-            info("Found SPDM device: PATH={PATH}", "PATH", device.objectPath);
-        }
-    }
-    else
-    {
-        error("No SPDM devices found");
-    }
     // Run the sdbusplus async context for parallel coroutine execution
     ctx.run();
 

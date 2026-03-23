@@ -3,16 +3,12 @@
 
 #pragma once
 
-// #include "libspdm_transport.hpp"
+#include <sdbusplus/async.hpp>
 
-#include <phosphor-logging/lg2.hpp>
-#include <sdbusplus/bus.hpp>
-#include <sdbusplus/server.hpp>
-
-#include <functional>
-#include <memory>
-#include <optional>
+#include <algorithm>
+#include <cstdint>
 #include <string>
+#include <variant>
 #include <vector>
 
 namespace spdm
@@ -27,7 +23,7 @@ enum class TransportType
 {
     MCTP,     ///< Management Component Transport Protocol
     PCIE_DOE, ///< PCIe Data Object Exchange
-    TCP       ///< TCP/IP Protocol
+    TCP,      ///< TCP/IP Protocol
 };
 
 struct MctpResponderInfo
@@ -49,35 +45,30 @@ struct TcpResponderInfo
  */
 struct ResponderInfo
 {
-    std::string objectPath; ///< D-Bus object path
-    sdbusplus::message::object_path deviceObjectPath;
-    std::variant<MctpResponderInfo, TcpResponderInfo> responderData;
-    TransportType transportType;
+    sdbusplus::message::object_path path;
+    std::variant<MctpResponderInfo, TcpResponderInfo> info;
+    TransportType transport;
 };
 
-/**
- * @brief Interface for SPDM transport protocols
- * @details Abstract base class defining the interface that all transport
- *          implementations must provide
- */
-class DiscoveryProtocol
+// Forward declaration
+class SPDMDiscovery;
+
+namespace details
 {
-  public:
-    virtual ~DiscoveryProtocol() = default;
-
-    /**
-     * @brief Discover SPDM-capable devices on this transport
-     * @return Vector of discovered device information
-     * @throws std::runtime_error on discovery failure
-     */
-    virtual std::vector<ResponderInfo> discoverDevices() = 0;
-
-    /**
-     * @brief Get the transport type
-     * @return Transport type identifier
-     */
-    virtual TransportType getType() const = 0;
-};
+/** Concept for transport discovery types.
+ *
+ * Discoveries are required to have two things:
+ *      - A co-routine named 'discovery'.
+ *      - A static function to get the TransportType.
+ **/
+template <typename T>
+concept DiscoveryType = requires(T t, SPDMDiscovery& discovery) {
+                            {
+                                t.discovery(discovery)
+                            } -> std::same_as<sdbusplus::async::task<>>;
+                            { T::type() } -> std::same_as<TransportType>;
+                        };
+} // namespace details
 
 /**
  * @brief Main SPDM device discovery class
@@ -87,24 +78,47 @@ class SPDMDiscovery
 {
   public:
     /**
-     * @brief Construct a new SPDM Discovery object
-     * @param transport Unique pointer to transport implementation
+     * Construct a new SPDM Discovery object
      */
-    explicit SPDMDiscovery(
-        std::vector<std::unique_ptr<DiscoveryProtocol>> discoveryProtocolIn);
+    SPDMDiscovery();
 
     /**
-     * @brief Start device discovery
-     * @return true if devices were found, false otherwise
+     * Ensure initial device discovery is complete.
      */
-    bool discover();
+    auto run() -> sdbusplus::async::task<>;
+
+    /**
+     * Start discovery for a specific transport type.
+     * @param d Transport to start discovery for.
+     */
+    template <details::DiscoveryType D>
+    void discover(D& d)
+    {
+        initialDiscovery.spawn([this](D& d) -> sdbusplus::async::task<> {
+            co_await d.discovery(*this);
+        }(d));
+    }
+
+    /**
+     * Add a discovered device's ResponderInfo.
+     * @param r The ResponderInfo.
+     */
+    void add(ResponderInfo&& r)
+    {
+        responderInfos.emplace_back(std::move(r));
+    }
+
+    /**
+     * Remove a discovered device by object path.
+     * @param The D-Bus object path of the device to remove.
+     */
+    void remove(const sdbusplus::message::object_path&);
+
+  private:
+    sdbusplus::async::async_scope initialDiscovery;
 
     /** @brief Discovered devices */
     std::vector<ResponderInfo> responderInfos;
-
-  private:
-    std::vector<std::unique_ptr<DiscoveryProtocol>>
-        discoveryProtocol; ///< Transport implementation
 };
 
 } // namespace spdm
