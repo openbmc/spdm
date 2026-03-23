@@ -26,7 +26,7 @@ namespace instances
 using instances_t =
     std::vector<std::tuple<sdbusplus::message::object_path, std::string>>;
 
-/** Get instances by interface-type.
+/** Get instances by interface name.
  *
  * @param ctx Async context
  * @param interface Interface name to search for
@@ -35,7 +35,7 @@ using instances_t =
 auto by_interface(sdbusplus::async::context& ctx, const std::string& interface)
     -> sdbusplus::async::task<instances_t>;
 
-/** Syntatic helper for by_interface. */
+/** Syntactic helper for by_interface. */
 template <Interface T>
 auto by_interface(sdbusplus::async::context& ctx)
     -> sdbusplus::async::task<instances_t>
