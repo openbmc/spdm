@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d00db35_2f162528",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-25T19:42:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54535bf8_49bf9235",
+      "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d262ad6_e13c9ea0",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-03-09T20:56:58Z",
       "side": 1,
       "message": "We should not match on the EM service.  We should match on the configuration type we are looking for.",
+      "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57ca25c8_91b3f59e",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-25T19:42:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d262ad6_e13c9ea0",
       "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -58,6 +94,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d16bc84b_94725549",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-25T19:42:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2d1042f_e651115c",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 9
+      },
+      "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59af674a_8165ac8c",
@@ -71,6 +131,24 @@
       "writtenOn": "2026-03-09T20:56:58Z",
       "side": 1,
       "message": "Use `msg.unpack`.",
+      "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65877d1a_301b6bb7",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-25T19:42:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59af674a_8165ac8c",
       "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -105,6 +183,24 @@
       "writtenOn": "2026-03-09T20:56:58Z",
       "side": 1,
       "message": "Don\u0027t expose private variable.  Add a remove function.",
+      "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfc2e2ec_3bd50af4",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-25T19:42:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78189b00_1a564a88",
       "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -146,6 +242,30 @@
       "side": 1,
       "message": "You\u0027re probably going to want to use a barrier between the spawned match functions and the discovery function (which should do the spawning).  See https://gerrit.openbmc.org/c/openbmc/sdbusplus/+/88172",
       "parentUuid": "180c1a38_7347cdf6",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 72
+      },
+      "revId": "8c2b63a84ec032e0cc2c03df3bf350c830f83cc2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb4863a5_0e5eea31",
+        "filename": "requester/tcp_transport_discovery.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-03-25T19:42:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "180a7c69_7ad51c9d",
       "range": {
         "startLine": 61,
         "startChar": 0,
