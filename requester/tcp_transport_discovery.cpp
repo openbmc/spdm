@@ -22,25 +22,34 @@ auto TCPTransportDiscovery::discovery(SPDMDiscovery& discovery)
     using Configuration = sdbusplus::client::xyz::openbmc_project::
         configuration::SpdmTcpResponder<>;
 
-    auto instances =
-        co_await mapper::instances::by_interface<Configuration>(ctx);
-
-    for (const auto& [path, service] : instances)
+    try
     {
-        auto properties = co_await Configuration(ctx)
-                              .service(service)
-                              .path(path.str)
-                              .properties();
+        auto instances =
+            co_await mapper::instances::by_interface<Configuration>(ctx);
 
-        debug("Found SPDM TCP Responder at {IP}:{PORT} for {PATH}", "IP",
-              properties.hostname, "PORT", properties.port, "PATH", path);
+        for (const auto& [path, service] : instances)
+        {
+            auto properties = co_await Configuration(ctx)
+                                  .service(service)
+                                  .path(path.str)
+                                  .properties();
 
-        discovery.add(ResponderInfo{
-            path, TcpResponderInfo{properties.hostname, properties.port},
-            TransportType::TCP});
+            debug("Found SPDM TCP Responder at {IP}:{PORT} for {PATH}", "IP",
+                  properties.hostname, "PORT", properties.port, "PATH", path);
+
+            discovery.add(ResponderInfo{
+                path, TcpResponderInfo{properties.hostname, properties.port},
+                TransportType::TCP});
+        }
+
+        debug("TCP transport discovery completed");
     }
-
-    debug("TCP transport discovery completed");
+    catch (const sdbusplus::exception::SdBusError& e)
+    {
+        error(
+            "Mapper query to SpdmTcpResponder interface failed, Initial tcp dicovery failed: {ERROR}",
+            "ERROR", e);
+    }
 }
 
 } // namespace spdm
