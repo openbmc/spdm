@@ -4,6 +4,7 @@
 #include "tcp_transport_discovery.hpp"
 
 #include "utils/mapper.hpp"
+#include "utils/utils.hpp"
 
 #include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/async/client.hpp>
@@ -22,15 +23,32 @@ auto TCPTransportDiscovery::discovery(SPDMDiscovery& discovery)
     using Configuration = sdbusplus::client::xyz::openbmc_project::
         configuration::SpdmTcpResponder<>;
 
-    auto instances =
-        co_await mapper::instances::by_interface<Configuration>(ctx);
+    spdm::mapper::instances::instances_t instances{};
+    try
+    {
+        instances =
+            co_await mapper::instances::by_interface<Configuration>(ctx);
+    }
+    catch (const sdbusplus::exception::SdBusError& e)
+    {
+        info(
+            "No TCP SPDM responders found during initial discovery: {ERROR}", "ERROR", e);
+        co_return;
+    }
 
     for (const auto& [path, service] : instances)
     {
-        auto properties = co_await Configuration(ctx)
-                              .service(service)
-                              .path(path.str)
-                              .properties();
+        auto propertiesOpt = co_await utils::fetchProperties<Configuration>(
+            ctx, service, path);
+
+        if (!propertiesOpt)
+        {
+            warning("Couldn't get properties for responder {PATH}", "PATH",
+                    path);
+            continue;
+        }
+
+        const auto& properties = *propertiesOpt;
 
         debug("Found SPDM TCP Responder at {IP}:{PORT} for {PATH}", "IP",
               properties.hostname, "PORT", properties.port, "PATH", path);

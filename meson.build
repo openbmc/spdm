@@ -23,6 +23,7 @@ spdmd_src = [
     'requester/mctp_transport_discovery.cpp',
     'requester/tcp_transport_discovery.cpp',
     'requester/utils/mapper.cpp',
+    'requester/utils/utils.cpp',
 ]
 
 install_data(
