@@ -40,15 +40,28 @@ class SPDMResponderManager
         -> sdbusplus::async::task<>;
 
     /**
-     * @brief Handle a newly discovered device
-     * @param device The newly discovered device to process
-     * @return Async task for coroutine execution
+     * @brief Notify manager of a removed device (called by SPDMDiscovery)
+     * @param path The D-Bus object path of the removed device
      */
-    auto handleDeviceAdded(const ResponderInfo& device)
-        -> sdbusplus::async::task<>;
+    void notifyDeviceRemoved(const sdbusplus::message::object_path& path);
+
+    /**
+     * @brief Get the async context for spawning tasks
+     * @return Reference to the async context
+     */
+    sdbusplus::async::context& getContext()
+    {
+        return ctx;
+    }
 
   private:
-    [[maybe_unused]] sdbusplus::async::context& ctx;
+    /**
+     * @brief Handle a removed device
+     * @param path The D-Bus object path of the removed device
+     */
+    void handleDeviceRemoved(const sdbusplus::message::object_path& path);
+
+    sdbusplus::async::context& ctx;
 
     /**
      * @brief Connect to SPDM device and perform attestation

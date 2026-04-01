@@ -59,7 +59,6 @@ auto TCPTransportDiscovery::monitorSpdmTcpResponderAdded(
             continue;
         }
 
-        info("TCP SPDM Responder added at path: {PATH}", "PATH", path.str);
         auto service = msg.get_sender();
 
         auto properties = co_await Configuration(ctx)
@@ -70,9 +69,11 @@ auto TCPTransportDiscovery::monitorSpdmTcpResponderAdded(
         debug("Found SPDM TCP Responder at {IP}:{PORT} for {PATH}", "IP",
               properties.hostname, "PORT", properties.port, "PATH", path);
 
-        discovery.add(ResponderInfo{
-            path, TcpResponderInfo{properties.hostname, properties.port},
-            TransportType::TCP});
+        discovery.add(
+            ResponderInfo{
+                path, TcpResponderInfo{properties.hostname, properties.port},
+                TransportType::TCP},
+            true);
     }
 
     debug("TCP transport discovery completed");
@@ -152,8 +153,8 @@ auto TCPTransportDiscovery::initialDeviceDiscovery(SPDMDiscovery& discovery)
 
         const auto& properties = *propertiesOpt;
 
-        debug("Found SPDM TCP Responder at {IP}:{PORT} for {PATH}", "IP",
-              properties.hostname, "PORT", properties.port, "PATH", path);
+        info("Found SPDM TCP Responder at {IP}:{PORT} for {PATH}", "IP",
+             properties.hostname, "PORT", properties.port, "PATH", path);
 
         discovery.add(ResponderInfo{
             path, TcpResponderInfo{properties.hostname, properties.port},
