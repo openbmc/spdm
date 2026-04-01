@@ -16,50 +16,45 @@ SPDMResponderManager::SPDMResponderManager(sdbusplus::async::context& ctx) :
 auto SPDMResponderManager::processDiscoveredDevices(
     const std::vector<ResponderInfo>& devices) -> sdbusplus::async::task<>
 {
-    info("Processing {COUNT} initially discovered SPDM devices", "COUNT",
-         devices.size());
+    info("Processing {COUNT} SPDM devices", "COUNT", devices.size());
 
     // Process each device sequentially
     for (const auto& device : devices)
     {
-        co_await handleDeviceAdded(device);
-    }
+        const auto& devicePath = device.path.str;
 
-    info("Initial SPDM device processing complete");
+        // Connect and perform attestation
+        co_await connectSPDMDevice(device);
+
+        debug("SPDM device ready: {PATH}", "PATH", devicePath);
+    }
+}
+
+void SPDMResponderManager::notifyDeviceRemoved(
+    const sdbusplus::message::object_path& path)
+{
+    debug("Dynamic device removed notification: {PATH}", "PATH", path.str);
+
+    // Handle removal synchronously
+    handleDeviceRemoved(path);
 }
 
 auto SPDMResponderManager::connectSPDMDevice(const ResponderInfo& device)
     -> sdbusplus::async::task<>
 {
-    // TODO: Implement actual SPDM connection
-    debug("Connecting to SPDM device: {PATH}", "PATH", device.path.str);
-
-    // TODO: Perform protocol discovery
-    debug("Performing SPDM protocol discovery: {PATH}", "PATH",
-          device.path.str);
+    info(
+        "Connect to SPDM responder and perform SPDM protocol discovery: {PATH}",
+        "PATH", device.path.str);
 
     co_return;
 }
 
-auto SPDMResponderManager::handleDeviceAdded(const ResponderInfo& device)
-    -> sdbusplus::async::task<>
+void SPDMResponderManager::handleDeviceRemoved(
+    const sdbusplus::message::object_path& path)
 {
-    const auto& devicePath = device.path.str;
+    const auto& devicePath = path.str;
 
-    info("Processing SPDM device: {PATH}", "PATH", devicePath);
-
-    try
-    {
-        // Connect and perform attestation
-        co_await connectSPDMDevice(device);
-
-        info("SPDM device ready: {PATH}", "PATH", devicePath);
-    }
-    catch (const std::exception& e)
-    {
-        error("Failed to process SPDM device {PATH}: {ERROR}", "PATH",
-              devicePath, "ERROR", e);
-    }
+    info("Removing SPDM device: {PATH}", "PATH", devicePath);
 }
 
 } // namespace spdm
