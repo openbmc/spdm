@@ -36,6 +36,9 @@ int main()
     // Create responder manager
     SPDMResponderManager responderManager{ctx};
 
+    // Enable dynamic device notifications
+    discovery.setResponderManager(&responderManager);
+
     // Spawn main task
     ctx.spawn([&]() -> sdbusplus::async::task<> {
         // Wait for initial discovery to complete

@@ -3,6 +3,8 @@
 
 #include "spdm_discovery.hpp"
 
+#include "spdm_responder_manager.hpp"
+
 #include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/async.hpp>
 
@@ -33,10 +35,28 @@ auto SPDMDiscovery::run() -> sdbusplus::async::task<>
     }
 }
 
-void SPDMDiscovery::remove(const sdbusplus::object_path& path)
+void SPDMDiscovery::add(ResponderInfo&& r, bool isRuntimeDiscovered)
+{
+    // Always add to the vector first to maintain the list of discovered devices
+    responderInfos.emplace_back(std::move(r));
+
+    if (isRuntimeDiscovered && responderManager)
+    {
+        // Notify the responder manager about the newly added device
+        const auto& lastDevice = responderInfos.back();
+        responderManager->notifyDeviceAdded(lastDevice);
+    }
+}
+
+void SPDMDiscovery::remove(const sdbusplus::message::object_path& path)
 {
     std::erase_if(responderInfos,
                   [&path](const auto& r) { return r.path == path; });
+
+    if (responderManager)
+    {
+        responderManager->notifyDeviceRemoved(path);
+    }
 }
 
 } // namespace spdm

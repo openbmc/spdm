@@ -38,6 +38,18 @@ class SPDMResponderManager
     auto processDiscoveredDevices(const std::vector<ResponderInfo>& devices)
         -> sdbusplus::async::task<>;
 
+    /**
+     * @brief Notify manager of a newly discovered runtime device
+     * @param device The discovered device to process
+     */
+    void notifyDeviceAdded(const ResponderInfo& device);
+
+    /**
+     * @brief Notify manager of a removed device (called by SPDMDiscovery)
+     * @param path The D-Bus object path of the removed device
+     */
+    void notifyDeviceRemoved(const sdbusplus::message::object_path& path);
+
   private:
     sdbusplus::async::context& asyncCtx;
     sdbusplus::async::async_scope manageResponders;
