@@ -17,9 +17,12 @@ sdbusplus_dep = dependency('sdbusplus')
 systemd_dep = dependency('systemd')
 
 spdmd_deps = [phosphor_dbus_interfaces_dep, phosphor_logging_dep, sdbusplus_dep]
+
 spdmd_src = [
     'requester/spdmd.cpp',
     'requester/spdm_discovery.cpp',
+    'requester/spdm_responder.cpp',
+    'requester/spdm_responder_manager.cpp',
     'requester/mctp_transport_discovery.cpp',
     'requester/tcp_transport_discovery.cpp',
     'requester/utils/mapper.cpp',
