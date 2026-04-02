@@ -76,7 +76,7 @@ TEST_F(SPDMDiscoveryTest, DiscoverSingleDevice)
     runAsync([&]() -> sdbusplus::async::task<> {
         co_await disc.run();
 
-        const auto& devs = disc.devices();
+        const auto& devs = disc.responderInfos;
         EXPECT_EQ(devs.size(), 1u);
 
         const auto& d = devs[0];
@@ -101,7 +101,7 @@ TEST_F(SPDMDiscoveryTest, DiscoverMultipleDevices)
 
     runAsync([&]() -> sdbusplus::async::task<> {
         co_await disc.run();
-        const auto& devs = disc.devices();
+        const auto& devs = disc.responderInfos;
         EXPECT_EQ(devs.size(), 2u);
 
         std::unordered_map<std::string, MctpResponderInfo> byPath;
@@ -128,7 +128,7 @@ TEST_F(SPDMDiscoveryTest, DiscoverNoDevices)
 
     runAsync([&]() -> sdbusplus::async::task<> {
         co_await disc.run();
-        EXPECT_EQ(disc.devices().size(), 0u);
+        EXPECT_EQ(disc.responderInfos.size(), 0u);
     });
 }
 
@@ -145,11 +145,11 @@ TEST_F(SPDMDiscoveryTest, RemoveDevice)
 
     runAsync([&]() -> sdbusplus::async::task<> {
         co_await disc.run();
-        EXPECT_EQ(disc.devices().size(), 2u);
+        EXPECT_EQ(disc.responderInfos.size(), 2u);
 
         disc.remove(responders[0].path);
 
-        const auto& after = disc.devices();
+        const auto& after = disc.responderInfos;
         EXPECT_EQ(after.size(), 1u);
         EXPECT_EQ(after[0].path, responders[1].path);
     });
@@ -165,10 +165,10 @@ TEST_F(SPDMDiscoveryTest, RemoveNonExistentDeviceIsNoOp)
 
     runAsync([&]() -> sdbusplus::async::task<> {
         co_await disc.run();
-        EXPECT_EQ(disc.devices().size(), 1u);
+        EXPECT_EQ(disc.responderInfos.size(), 1u);
 
         disc.remove(makeResponder(5).path);
-        EXPECT_EQ(disc.devices().size(), 1u);
+        EXPECT_EQ(disc.responderInfos.size(), 1u);
     });
 }
 
@@ -188,7 +188,7 @@ TEST_F(SPDMDiscoveryTest, ParallelTransports)
 
     runAsync([&]() -> sdbusplus::async::task<> {
         co_await disc.run();
-        const auto& devs = disc.devices();
+        const auto& devs = disc.responderInfos;
         EXPECT_EQ(devs.size(), 2u);
 
         std::unordered_set<std::string> paths;

@@ -4,10 +4,7 @@ test_deps = [
     dependency('gtest_main', required: true),
 ]
 
-tests = [
-    'test_mctp_transport_discovery',
-    'test_spdm_discovery',
-]
+tests = ['test_mctp_transport_discovery', 'test_spdm_discovery']
 
 foreach t : tests
     test(

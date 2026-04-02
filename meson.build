@@ -16,15 +16,12 @@ phosphor_logging_dep = dependency('phosphor-logging')
 sdbusplus_dep = dependency('sdbusplus')
 systemd_dep = dependency('systemd')
 
-spdmd_deps = [
-    phosphor_dbus_interfaces_dep,
-    phosphor_logging_dep,
-    sdbusplus_dep,
-]
+spdmd_deps = [phosphor_dbus_interfaces_dep, phosphor_logging_dep, sdbusplus_dep]
 spdmd_includes = include_directories('requester')
 
 spdmd_src = [
     'requester/spdm_discovery.cpp',
+    'requester/spdm_responder_manager.cpp',
     'requester/mctp_transport_discovery.cpp',
     'requester/tcp_transport_discovery.cpp',
     'requester/policy_manager.cpp',
@@ -49,10 +46,7 @@ policy_cache_path = get_option('localstatedir') + '/lib/spdm/policy.json'
 conf_data = configuration_data()
 conf_data.set_quoted('POLICY_CACHE_PATH', policy_cache_path)
 
-configure_file(
-    output: 'config.hpp',
-    configuration: conf_data,
-)
+configure_file(output: 'config.hpp', configuration: conf_data)
 
 executable(
     'spdmd',

@@ -28,27 +28,27 @@ class SPDMDBusResponder
 
     /**
      * @brief Construct a new SPDM D-Bus Responder
+     * @param ctx Reference to the async context for D-Bus operations
      * @param responderInfo ResponderInfo containing device details
      */
-    explicit SPDMDBusResponder(const ResponderInfo& responderInfo);
+    explicit SPDMDBusResponder(sdbusplus::async::context& ctx,
+                               const ResponderInfo& responderInfo);
 
     ~SPDMDBusResponder() = default;
-
-    /** @brief Device name */
-    const std::string& name() const
-    {
-        return deviceName;
-    }
-
-    /** @brief Associated inventory object path */
-    const std::string& path() const
-    {
-        return inventoryPath;
-    }
+    /**
+     * @brief Perform async operations for this responder
+     * @details Contains the async logic for device connection and attestation.
+     *          The manager is responsible for spawning this coroutine.
+     * @return Async task for coroutine execution
+     */
+    auto run() -> sdbusplus::async::task<>;
 
   private:
-    std::string deviceName;
-    std::string inventoryPath;
+    /** @brief Reference to the async context for D-Bus operations */
+    [[maybe_unused]] sdbusplus::async::context& asyncCtx;
+
+    /** @brief Device information from discovery */
+    ResponderInfo responderInfo;
 };
 
 } // namespace spdm
