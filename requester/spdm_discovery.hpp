@@ -114,11 +114,11 @@ class SPDMDiscovery
      */
     void remove(const sdbusplus::object_path&);
 
-  private:
-    sdbusplus::async::async_scope initialDiscovery;
-
     /** @brief Discovered devices */
     std::vector<ResponderInfo> responderInfos;
+
+  private:
+    sdbusplus::async::async_scope initialDiscovery;
 };
 
 } // namespace spdm
