@@ -70,6 +70,9 @@ concept DiscoveryType = requires(T t, SPDMDiscovery& discovery) {
                         };
 } // namespace details
 
+// Forward declaration (after ResponderInfo is defined)
+class SPDMResponderManager;
+
 /**
  * @brief Main SPDM device discovery class
  * @details Manages the discovery of SPDM devices using a configured transport
@@ -88,6 +91,15 @@ class SPDMDiscovery
     auto run() -> sdbusplus::async::task<>;
 
     /**
+     * Set the responder manager for dynamic device notifications
+     * @param manager Pointer to the SPDMResponderManager
+     */
+    void setResponderManager(SPDMResponderManager* manager)
+    {
+        responderManager = manager;
+    }
+
+    /**
      * Start discovery for a specific transport type.
      * @param d Transport to start discovery for.
      */
@@ -102,11 +114,11 @@ class SPDMDiscovery
     /**
      * Add a discovered device's ResponderInfo.
      * @param r The ResponderInfo.
+     * @param isRuntimeDiscovered Flag indicating if device was discovered at
+     *                            runtime (true for interface added signal,
+     *                            false for initial discovery)
      */
-    void add(ResponderInfo&& r)
-    {
-        responderInfos.emplace_back(std::move(r));
-    }
+    void add(ResponderInfo&& r, bool isRuntimeDiscovered = false);
 
     /**
      * Remove a discovered device by object path.
@@ -114,11 +126,23 @@ class SPDMDiscovery
      */
     void remove(const sdbusplus::object_path&);
 
+    /**
+     * Get current list of discovered devices.
+     * @return Reference to the vector of ResponderInfo.
+     */
+    const std::vector<ResponderInfo>& getDevices() const
+    {
+        return responderInfos;
+    }
+
   private:
     sdbusplus::async::async_scope initialDiscovery;
 
     /** @brief Discovered devices */
     std::vector<ResponderInfo> responderInfos;
+
+    /** @brief Pointer to responder manager for dynamic notifications */
+    SPDMResponderManager* responderManager{nullptr};
 };
 
 } // namespace spdm
