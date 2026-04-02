@@ -6,6 +6,7 @@
 #include "mctp_transport_discovery.hpp"
 #include "policy_manager.hpp"
 #include "spdm_discovery.hpp"
+#include "spdm_responder_manager.hpp"
 #include "tcp_transport_discovery.hpp"
 
 #include <phosphor-logging/lg2.hpp>
@@ -42,13 +43,19 @@ int main()
     TCPTransportDiscovery tcp{ctx};
     discovery.discover(tcp);
 
-    // Run the initial discovery and then claim the bus name.
+    // Create responder manager
+    SPDMResponderManager responderMgr(ctx);
+
+    // Spawn main task
     ctx.spawn([&]() -> sdbusplus::async::task<> {
-        // Perform discovery
+        // Wait for initial discovery to complete
         co_await discovery.run();
 
-        // Request D-Bus name after initial discovery.
+        // Request D-Bus name after discovery completes
         ctx.request_name(dbusServiceName);
+
+        // Process discovered devices after claiming bus name
+        co_await responderMgr.processDiscoveredDevices(discovery.getDevices());
     }());
 
     // Run the sdbusplus async context for parallel coroutine execution

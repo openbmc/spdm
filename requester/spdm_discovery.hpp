@@ -114,6 +114,15 @@ class SPDMDiscovery
      */
     void remove(const sdbusplus::message::object_path&);
 
+    /**
+     * Get current list of discovered devices.
+     * @return Reference to the vector of ResponderInfo.
+     */
+    const std::vector<ResponderInfo>& getDevices() const
+    {
+        return responderInfos;
+    }
+
   private:
     sdbusplus::async::async_scope initialDiscovery;
 
