@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b073f61a_4341fe6d",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-04-02T13:30:59Z",
+      "side": 1,
+      "message": "I think we could modernize this a bit by tightening the scope of the try/catch blocks like isolating the mapper call and handling per-instance failures separately, or even moving toward a small helper that returns std::optional/std::expected instead of relying on exceptions in the main flow. But I don’t have a strong preference here, both approaches seem reasonable depending on what style we want to standardize on.\n\n@patrick@stwcx.xyz - do you have any guidance or preference for how best we should handle this pattern going forward since this pattern would probably repeat alot ?",
+      "revId": "4f4c554907eff05175d7c334bfac0471ecc03b96",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83e77926_122db3b3",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-04-02T13:30:59Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 50,
+        "startChar": 76,
+        "endLine": 50,
+        "endChar": 83
+      },
+      "revId": "4f4c554907eff05175d7c334bfac0471ecc03b96",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
