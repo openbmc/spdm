@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "189d10f3_37061ae4",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-04-07T10:48:29Z",
+      "side": 1,
+      "message": "The failure to load the persisted policy file should not always be treated as an error. On the first run, the file may not exist, which is a valid scenario, and we can fall back to default values. However, if the file exists but cannot be read or parsed, then it should be handled as an error.",
+      "revId": "8a1a6bd008e39177e015cb337f150b1c279a19b9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "416097da_6396c9da",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-04-07T10:48:29Z",
+      "side": 1,
+      "message": "Do you have any case where the returned error is getting used ? Can we not handle the errors inside the same function?",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 65
+      },
+      "revId": "8a1a6bd008e39177e015cb337f150b1c279a19b9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4c926c8_50940bb9",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-04-07T10:48:29Z",
+      "side": 1,
+      "message": "Can we ignore failure in opening the persisted policy file? Failure in parsing the config file should be handled.",
+      "revId": "8a1a6bd008e39177e015cb337f150b1c279a19b9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1aa74a38_1b350b56",
+        "filename": "requester/policy_manager.hpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-04-07T10:48:29Z",
+      "side": 1,
+      "message": "missing doxygen comment",
+      "revId": "8a1a6bd008e39177e015cb337f150b1c279a19b9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d6bb00e_0f396738",
+        "filename": "requester/policy_manager.hpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-04-07T10:48:29Z",
+      "side": 1,
+      "message": "Add doxygen comments all over the file",
+      "revId": "8a1a6bd008e39177e015cb337f150b1c279a19b9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "034eef29_1c2db42d",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-04-07T10:48:29Z",
+      "side": 1,
+      "message": "Can we move this to policy manager constructor? We can set the default policy values and later once the load is successful we can update those values.",
+      "range": {
+        "startLine": 28,
+        "startChar": 2,
+        "endLine": 33,
+        "endChar": 5
+      },
+      "revId": "8a1a6bd008e39177e015cb337f150b1c279a19b9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
