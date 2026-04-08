@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b907ab29_f95adc6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-08T07:59:28Z",
+      "side": 1,
+      "message": "Normaly I ack then I push - hence you see this",
+      "parentUuid": "1cd34f96_4bb4dce5",
+      "revId": "e05758e8a31e9a8b01ddaccf8db4e76ec0a69198",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dacdd5de_5fa348ad",
@@ -31,6 +49,24 @@
       "writtenOn": "2025-09-29T15:38:57Z",
       "side": 1,
       "message": "Would it be possible to refactor all of these into coroutine functions? I believe that would improve readability.",
+      "revId": "e05758e8a31e9a8b01ddaccf8db4e76ec0a69198",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45404aed_a2cb8bed",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-08T07:59:28Z",
+      "side": 1,
+      "message": "Changed as per the new design",
+      "parentUuid": "dacdd5de_5fa348ad",
       "revId": "e05758e8a31e9a8b01ddaccf8db4e76ec0a69198",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -54,6 +90,42 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2e156a4c_0630484d",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-08T07:59:28Z",
+      "side": 1,
+      "message": "Changed as per the new design",
+      "parentUuid": "3c86e5e4_4180ec3d",
+      "revId": "e05758e8a31e9a8b01ddaccf8db4e76ec0a69198",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4af8a296_3fd69c2b",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-08T07:59:28Z",
+      "side": 1,
+      "message": "Changed as per the new design",
+      "parentUuid": "3c86e5e4_4180ec3d",
+      "revId": "e05758e8a31e9a8b01ddaccf8db4e76ec0a69198",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "84acae7b_3c4ee22f",
         "filename": "requester/spdmd.cpp",
         "patchSetId": 11
@@ -71,6 +143,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6fb4436b_1006a568",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-08T07:59:28Z",
+      "side": 1,
+      "message": "Yes we need to define the responder info for each device type eg:\nstruct ResponderInfo\n{\n    sdbusplus::message::object_path path;\n    std::variant\u003cMctpResponderInfo, TcpResponderInfo\u003e info;\n    TransportType transport;\n};",
+      "parentUuid": "84acae7b_3c4ee22f",
+      "revId": "e05758e8a31e9a8b01ddaccf8db4e76ec0a69198",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "812b8b03_dd8db72f",
         "filename": "requester/utils.cpp",
         "patchSetId": 11
@@ -82,6 +172,24 @@
       "writtenOn": "2025-09-29T15:38:57Z",
       "side": 1,
       "message": "Can we use co_await to make the code look synchronous? make getManagedObjectsAsync a coroutine and you can drop the double-moved lambdas and nontrivial inline callbacks.",
+      "revId": "e05758e8a31e9a8b01ddaccf8db4e76ec0a69198",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98c717ad_c6e6cb76",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-08T07:59:28Z",
+      "side": 1,
+      "message": "Changed as per the new design",
+      "parentUuid": "812b8b03_dd8db72f",
       "revId": "e05758e8a31e9a8b01ddaccf8db4e76ec0a69198",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
