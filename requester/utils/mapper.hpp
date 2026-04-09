@@ -24,7 +24,7 @@ namespace instances
 
 /** Instances by path and hosting service. */
 using instances_t =
-    std::vector<std::tuple<sdbusplus::message::object_path, std::string>>;
+    std::vector<std::tuple<sdbusplus::object_path, std::string>>;
 
 /** Get instances by interface-type.
  *

@@ -45,7 +45,7 @@ struct TcpResponderInfo
  */
 struct ResponderInfo
 {
-    sdbusplus::message::object_path path;
+    sdbusplus::object_path path;
     std::variant<MctpResponderInfo, TcpResponderInfo> info;
     TransportType transport;
 };
@@ -112,7 +112,7 @@ class SPDMDiscovery
      * Remove a discovered device by object path.
      * @param The D-Bus object path of the device to remove.
      */
-    void remove(const sdbusplus::message::object_path&);
+    void remove(const sdbusplus::object_path&);
 
   private:
     sdbusplus::async::async_scope initialDiscovery;
