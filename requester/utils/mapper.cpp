@@ -17,11 +17,11 @@ auto by_interface(sdbusplus::async::context& ctx, const std::string& interface)
 {
     using Mapper = sdbusplus::client::xyz::openbmc_project::ObjectMapper<>;
 
-    auto objects = co_await Mapper(ctx)
-                       .service(Mapper::default_service)
-                       .path(Mapper::instance_path)
-                       .get_sub_tree("/xyz/openbmc_project", 0,
-                                     std::vector<std::string>{interface});
+    auto objects =
+        co_await Mapper(ctx)
+            .service(Mapper::default_service)
+            .path(Mapper::instance_path)
+            .get_sub_tree("/", 0, std::vector<std::string>{interface});
 
     instances_t results{};
     for (const auto& [path, services] : objects)
