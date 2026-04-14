@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7a1f803_b2272713",
+        "filename": "requester/spdm_responder_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-04-14T14:24:23Z",
+      "side": 1,
+      "message": "Is there a warning?. In which case it\u0027s not used?",
+      "revId": "c977a7b1be8b753af19ac65b8ed65c06cea2fbf1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}

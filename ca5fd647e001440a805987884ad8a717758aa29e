@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6059cb7_a8391ce2",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-04-14T14:24:23Z",
+      "side": 1,
+      "message": "This will make it serialized, and will block until device attestation is complete to move on to next device.\nCan we run this in parallel ?.",
+      "revId": "ca5fd647e001440a805987884ad8a717758aa29e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12c6e483_87af0c9a",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-04-14T14:24:23Z",
+      "side": 1,
+      "message": "Plan is to use VCA negotiation which is present as part of this commit?\n\nhttps://gerrit.openbmc.org/c/openbmc/spdm/+/80358/1\n\nmeans\n\n```\n                auto initResult \u003d device.transport-\u003einitialize();\n                if (!initResult)\n                {\n                    lg2::error(\"Failed to initialize SPDM transport\");\n                    return EXIT_FAILURE;\n                }\n                auto vcaResult \u003d device.transport-\u003edoVcaNegotiation();\n                if (!vcaResult)\n                {\n                    lg2::error(\"Failed to perform SPDM VCA negotiation\");\n                    return EXIT_FAILURE;\n                }\n```",
+      "revId": "ca5fd647e001440a805987884ad8a717758aa29e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50b61bce_80a56c4a",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-04-14T14:24:23Z",
+      "side": 1,
+      "message": "Whats the exception we are expecting here? connectSPDMDevice does not throw exception",
+      "revId": "ca5fd647e001440a805987884ad8a717758aa29e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b330d630_80018168",
+        "filename": "requester/spdm_responder_manager.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-04-14T14:24:23Z",
+      "side": 1,
+      "message": "Some of these headers are unused.\n\n```\n  #include \u003csdbusplus/bus.hpp\u003e   // unused\n  #include \u003cmemory\u003e              // unused\n  #include \u003cset\u003e                 // unused\n  #include \u003cstring\u003e              // unused\n  #include \u003cunordered_map\u003e       // unused\n```",
+      "revId": "ca5fd647e001440a805987884ad8a717758aa29e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
