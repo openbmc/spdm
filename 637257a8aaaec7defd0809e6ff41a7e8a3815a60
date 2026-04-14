@@ -77,6 +77,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f0c7e2c_880fbfc1",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-14T11:38:26Z",
+      "side": 1,
+      "message": "MCTP discovery happens through EID and there will an associated inventory object which is having UUID, so to link these two objects we need UUID.",
+      "parentUuid": "f46751c0_74a73916",
+      "range": {
+        "startLine": 153,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 47
+      },
+      "revId": "637257a8aaaec7defd0809e6ff41a7e8a3815a60",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23cb899f_9d7cf1a3",
@@ -90,6 +114,30 @@
       "writtenOn": "2025-09-09T08:43:39Z",
       "side": 1,
       "message": "using std::optional\u003cstd::string\u003e - with returning an std::nullopt is better rather than passing empty strings and having string empty checks everywhere.",
+      "range": {
+        "startLine": 174,
+        "startChar": 8,
+        "endLine": 174,
+        "endChar": 18
+      },
+      "revId": "637257a8aaaec7defd0809e6ff41a7e8a3815a60",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53369687_b2c2191e",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-14T11:38:26Z",
+      "side": 1,
+      "message": "code has been restructured.",
+      "parentUuid": "23cb899f_9d7cf1a3",
       "range": {
         "startLine": 174,
         "startChar": 8,
@@ -123,6 +171,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf53e085_026ba7a9",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-14T11:38:26Z",
+      "side": 1,
+      "message": "I ran it in the latest patchset - hence resolved",
+      "parentUuid": "0355e1ef_6609fef2",
+      "range": {
+        "startLine": 56,
+        "startChar": 3,
+        "endLine": 59,
+        "endChar": 62
+      },
+      "revId": "637257a8aaaec7defd0809e6ff41a7e8a3815a60",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2efcf184_1bf10755",
@@ -136,6 +208,24 @@
       "writtenOn": "2025-09-03T10:06:04Z",
       "side": 1,
       "message": "nit: use const expr for all",
+      "revId": "637257a8aaaec7defd0809e6ff41a7e8a3815a60",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b1ae925_c796dd9f",
+        "filename": "requester/utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-14T11:38:26Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "2efcf184_1bf10755",
       "revId": "637257a8aaaec7defd0809e6ff41a7e8a3815a60",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },

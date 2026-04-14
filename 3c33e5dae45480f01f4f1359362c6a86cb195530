@@ -41,6 +41,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e12bd615_b56bc81f",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-14T11:38:26Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "927a9bf1_0278d853",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 71
+      },
+      "revId": "3c33e5dae45480f01f4f1359362c6a86cb195530",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f13afc6f_6248ed94",
@@ -64,6 +88,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2244cd5a_8de8cbe2",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-14T11:38:26Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f13afc6f_6248ed94",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 72
+      },
+      "revId": "3c33e5dae45480f01f4f1359362c6a86cb195530",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "718fca2c_d6ad9f88",
@@ -77,6 +125,30 @@
       "writtenOn": "2026-04-13T03:52:41Z",
       "side": 1,
       "message": "Use generated bindings to get all the properties and access them via variable names.",
+      "range": {
+        "startLine": 34,
+        "startChar": 8,
+        "endLine": 42,
+        "endChar": 72
+      },
+      "revId": "3c33e5dae45480f01f4f1359362c6a86cb195530",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "296b6cdd_dbdccf15",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-14T11:38:26Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "718fca2c_d6ad9f88",
       "range": {
         "startLine": 34,
         "startChar": 8,
