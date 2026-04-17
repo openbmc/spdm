@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0476638_67fc2196",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-04-17T14:05:47Z",
+      "side": 1,
+      "message": "This query may throw an exception on a freshly booted system if no MCTP endpoints are present.\nPlease handle this case gracefully to avoid failures during initialization.",
+      "range": {
+        "startLine": 28,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 68
+      },
+      "revId": "b6690acc35eff6a933693d0dbdb7a0e978290339",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
