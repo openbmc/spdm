@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42c89eab_47e53ccd",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-04-19T14:22:03Z",
+      "side": 1,
+      "message": "This exception is expected during system boot when no SPDM TCP endpoints are available. The daemon handles this condition gracefully and continues operation, so logging it at info level is intentional.",
+      "parentUuid": "95de59e2_bec2f1f5",
+      "range": {
+        "startLine": 34,
+        "startChar": 8,
+        "endLine": 34,
+        "endChar": 12
+      },
+      "revId": "0c5e1d05f1ee5e25f73e5ef80aba8f27fb440c2c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a353aa9_cd79ea96",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-04-16T07:14:22Z",
       "side": 1,
       "message": "We already have similar error traces below in utils.hpp at lines 46 \u0026 50.Can we remove it?",
+      "range": {
+        "startLine": 46,
+        "startChar": 11,
+        "endLine": 47,
+        "endChar": 26
+      },
+      "revId": "0c5e1d05f1ee5e25f73e5ef80aba8f27fb440c2c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6985c032_6971ccab",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-04-19T14:22:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a353aa9_cd79ea96",
       "range": {
         "startLine": 46,
         "startChar": 11,
