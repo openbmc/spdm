@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a085cfdc_9fe57947",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-04-20T09:46:13Z",
+      "side": 1,
+      "message": "Change lgtm. See failure with clang-format needs fix",
+      "revId": "9e01409ee0b13af08ad395278ab96e6b385e952d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
