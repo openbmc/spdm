@@ -46,6 +46,30 @@
       },
       "revId": "b6690acc35eff6a933693d0dbdb7a0e978290339",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd3b0455_84331d4a",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-20T09:45:35Z",
+      "side": 1,
+      "message": "Responded above",
+      "parentUuid": "91b54b71_81548ca3",
+      "range": {
+        "startLine": 28,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 68
+      },
+      "revId": "b6690acc35eff6a933693d0dbdb7a0e978290339",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
