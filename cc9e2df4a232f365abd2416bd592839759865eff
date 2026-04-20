@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98a562e6_41be4431",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-20T10:10:50Z",
+      "side": 1,
+      "message": "what is the use of this function if it is just returning the respoderinfo as it is ?\nwe could have made the responderInfos public.",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 5
+      },
+      "revId": "cc9e2df4a232f365abd2416bd592839759865eff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a11fadfb_537873a4",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-20T10:10:50Z",
+      "side": 1,
+      "message": "what is connectSPDM device? Can you briefly explain?",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 1
+      },
+      "revId": "cc9e2df4a232f365abd2416bd592839759865eff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebe67d1c_a889af2e",
+        "filename": "requester/spdm_responder_manager.hpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-20T10:10:50Z",
+      "side": 1,
+      "message": "Why it should be public functions?",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 74
+      },
+      "revId": "cc9e2df4a232f365abd2416bd592839759865eff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
