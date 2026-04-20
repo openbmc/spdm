@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4098cd74_8a1de00c",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-04-20T10:52:25Z",
+      "side": 1,
+      "message": "Can you please check commit, https://gerrit.openbmc.org/c/openbmc/spdm/+/80262/23/requester/utils/mapper.cpp\n\nNow it\u0027s handled in that function itself, so empty response needs to be handled",
+      "revId": "1356670944fd646df66a772105b24eaca43297a9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a961d1d_b68fda51",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-04-20T10:52:25Z",
+      "side": 1,
+      "message": "Should this be treated as an error or warning?. Name in typed arg is not matching with log level --\u003e info(..{ERROR})",
+      "revId": "1356670944fd646df66a772105b24eaca43297a9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f5bf13d_829c7520",
+        "filename": "requester/utils/utils.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-04-20T10:52:25Z",
+      "side": 1,
+      "message": "This is inconsistent with the rest of the codebase which uses it at namespace scope in .cpp",
+      "revId": "1356670944fd646df66a772105b24eaca43297a9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
