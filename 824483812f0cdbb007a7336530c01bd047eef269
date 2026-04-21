@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ccf9e5f_ddbb53b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-04-21T20:33:38Z",
+      "side": 1,
+      "message": "Overall looks good — sdbusplus::aserver template, clean file layout, reasonable integration in spdmd.cpp.Two main concerns:(1) the interface defined in phosphor-dbus-interfaces commit 0d84eaf4 has eight properties, and this change implements only Enabled and SecureSessionEnabled. The six missing are VerifyCertificate,AllowExtendedAlgorithms, AllowedVersions, AllowedAlgorithmsAEAD,AllowedAlgorithmsBaseHash, and AllowedAlgorithmsBaseAsym.The commit message reads as if the PDI is fully covered — could you restate the scope as \"initial subset\" so the intent is clear? This also would answer Ratan\u0027s PS15 question: AllowedVersions isn\u0027t implemented yet, which should probably be the explicit reply on that thread.(2) persistence looks one-way. load() reads from disk, dump() writes to disk, but nothing calls dump() — not from spdmd.cpp, not from any set_property override, not on shutdown. Runtime property changes via D-Bus are lost on daemon restart. Either call dump() from set_property after every change, or add an explicit Dump() D-Bus method callers invoke.",
+      "revId": "824483812f0cdbb007a7336530c01bd047eef269",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
