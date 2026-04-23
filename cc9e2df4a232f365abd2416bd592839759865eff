@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "424aa2c2_a1976968",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-04-23T15:47:04Z",
+      "side": 1,
+      "message": "Two manageResponders.spawn(...) sites in requester/spdm_responder_manager.cpp look unsafe — one in the processDiscoveredDevices loop body, one in notifyDeviceAdded. Both have the form:\n\n  manageResponders.spawn([this, device]() -\u003e sdbusplus::async::task\u003c\u003e {\n      co_await handleDeviceAdded(device);\n      co_return;                                                           \n  }());\n                         \nThe lambda is a temporary that\u0027s destroyed at the end of the full-expression — spawn(...) returns immediately after taking the coroutine handle. The coroutine frame\u0027s this then references the freed lambda, and the captured device is read at the first co_await against memory that\u0027s already been returned to the allocator. For a ResponderInfo (which holds a std::variant\u003cMctpResponderInfo, TcpResponderInfo\u003e with std::string inside), this can manifest as std::bad_variant_access: variant is valueless once the freed lambda storage gets reused.                                 \n                                                                                                                                             \nI hit this exact pattern when refactoring locally — wrote a small gtest fixture against SPDMResponderManager (one runtime-add of an MctpResponderInfo, then drain ctx) and got the valueless_by_exception trap reliably until I switched the spawn to                                                                         pass device as a coroutine parameter.   \n                                                                                                                                             \n89179 PS4\u0027s SPDMDiscovery::add already uses the safe form for the same reason — would suggest mirroring it here:\n\nmanageResponders.spawn(\n    [](SPDMResponderManager* self, ResponderInfo dev)\n        -\u003e sdbusplus::async::task\u003c\u003e {\n        co_await self-\u003ehandleDeviceAdded(std::move(dev));\n        co_return;\n    }(this, device));",
+      "revId": "cc9e2df4a232f365abd2416bd592839759865eff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "98a562e6_41be4431",
         "filename": "requester/spdm_discovery.hpp",
         "patchSetId": 7
@@ -20,6 +37,40 @@
         "endLine": 124,
         "endChar": 5
       },
+      "revId": "cc9e2df4a232f365abd2416bd592839759865eff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b9bf48b_e5501807",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-04-23T15:47:04Z",
+      "side": 1,
+      "message": "Lambda is a temporary; its captured `device` is read after the lambda\ndies once the spawned coroutine resumes. Suggest passing `device` as\na coroutine parameter (matching 89179 PS4\u0027s `SPDMDiscovery::add`\npattern). See patchset comment for details.",
+      "revId": "cc9e2df4a232f365abd2416bd592839759865eff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "193980d7_66ec5d4c",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-04-23T15:47:04Z",
+      "side": 1,
+      "message": "Lambda is a temporary; its captured `device` is read after the lambda\ndies once the spawned coroutine resumes. Suggest passing `device` as\na coroutine parameter (matching 89179 PS4\u0027s `SPDMDiscovery::add`\npattern). See patchset comment for details.",
       "revId": "cc9e2df4a232f365abd2416bd592839759865eff",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
