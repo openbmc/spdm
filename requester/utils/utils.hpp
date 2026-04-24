@@ -26,7 +26,7 @@ namespace spdm::utils
  */
 template <mapper::Interface Configuration>
 auto fetchProperties(sdbusplus::async::context& ctx, const std::string& service,
-                     const sdbusplus::message::object_path& path)
+                     const sdbusplus::object_path& path)
     -> sdbusplus::async::task<
         std::optional<typename Configuration::properties_t>>
 {
