@@ -4,7 +4,6 @@
 #include "tcp_transport_discovery.hpp"
 
 #include "utils/mapper.hpp"
-#include "utils/utils.hpp"
 
 #include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/async/client.hpp>
@@ -28,15 +27,10 @@ auto TCPTransportDiscovery::discovery(SPDMDiscovery& discovery)
 
     for (const auto& [path, service] : instances)
     {
-        auto propertiesOpt =
-            co_await utils::fetchProperties<Configuration>(ctx, service, path);
-
-        if (!propertiesOpt)
-        {
-            continue;
-        }
-
-        const auto& properties = *propertiesOpt;
+        auto properties = co_await Configuration(ctx)
+                              .service(service)
+                              .path(path.str)
+                              .properties();
 
         debug("Found SPDM TCP Responder at {IP}:{PORT} for {PATH}", "IP",
               properties.hostname, "PORT", properties.port, "PATH", path);
