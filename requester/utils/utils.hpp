@@ -41,17 +41,17 @@ auto fetchProperties(sdbusplus::async::context& ctx, const std::string& service,
 
         co_return properties;
     }
-    catch (const sdbusplus::exception::SdBusError& e)
-    {
-        error(
-            "Failed to fetch properties from D-Bus under path {PATH} : {ERROR}",
-            "PATH", path.str, "ERROR", e);
-        co_return std::nullopt;
-    }
     catch (const sdbusplus::exception::UnpackPropertyError& e)
     {
         error("Failed to unpack properties under path {PATH} : {ERROR}", "PATH",
               path.str, "ERROR", e);
+        co_return std::nullopt;
+    }
+    catch (const sdbusplus::exception::internal_exception& e)
+    {
+        error(
+            "Failed to fetch properties from D-Bus under path {PATH} : {ERROR}",
+            "PATH", path.str, "ERROR", e);
         co_return std::nullopt;
     }
 }
