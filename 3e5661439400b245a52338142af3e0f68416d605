@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d73e5e4_7b2b76bf",
+        "filename": "requester/utils/mapper.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-04-24T09:48:32Z",
+      "side": 1,
+      "message": "It is better to handle exceptions at the caller level where you have more context on how to handle the failure",
+      "revId": "3e5661439400b245a52338142af3e0f68416d605",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
