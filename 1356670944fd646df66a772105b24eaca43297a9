@@ -36,6 +36,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f73df59_4f6eba44",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-04-24T09:18:45Z",
+      "side": 1,
+      "message": "I agree with archana, I dont think its a good practice to mask exceptions in a util function.Its good to leave it to the caller to decide how can they handle them.",
+      "parentUuid": "48c8479f_e9e06321",
+      "revId": "1356670944fd646df66a772105b24eaca43297a9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a961d1d_b68fda51",
