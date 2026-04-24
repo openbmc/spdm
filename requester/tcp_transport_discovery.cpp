@@ -29,7 +29,7 @@ auto TCPTransportDiscovery::discovery(SPDMDiscovery& discovery)
         instances =
             co_await mapper::instances::by_interface<Configuration>(ctx);
     }
-    catch (const sdbusplus::exception::SdBusError& e)
+    catch (const sdbusplus::exception::internal_exception& e)
     {
         info("No TCP SPDM responders found during initial discovery: {ERROR}",
              "ERROR", e);
