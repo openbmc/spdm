@@ -41,7 +41,7 @@ auto fetchProperties(sdbusplus::async::context& ctx, const std::string& service,
 
         co_return properties;
     }
-    catch (const sdbusplus::exception::SdBusError& e)
+    catch (const sdbusplus::exception::internal_exception& e)
     {
         error(
             "Failed to fetch properties from D-Bus under path {PATH} : {ERROR}",
