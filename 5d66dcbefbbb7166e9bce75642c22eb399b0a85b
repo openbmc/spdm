@@ -1,4 +1,39 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c341e75_afad838c",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-04-24T10:45:38Z",
+      "side": 1,
+      "message": "Sorry I wasn\u0027t super responsive on this.  I would prefer we get this fixed in the mapper utility and was working on https://gerrit.openbmc.org/c/openbmc/sdbusplus/+/89540 in order to give us some machinery that we need to make that happen.  I\u0027ll do the refactoring necessary there.",
+      "revId": "5d66dcbefbbb7166e9bce75642c22eb399b0a85b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "666df3fe_4604fc1d",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-04-24T10:45:38Z",
+      "side": 1,
+      "message": "I don\u0027t really understand the conditions when we need to do this.  I get we are trying to be \"safe\" but it means we\u0027re also silently hiding errors in, as a primary culprit, entity-manager.  I think that just makes debug more difficult rather than a hard-failure in, hopefully, the early testing.\n\nIt\u0027s relatively easy to get an entity-manager config surfaced in QEMU and if our service is crashing we can easily catch that in Robot.  Detecting the missing SPDM interface is a much harder problem.",
+      "revId": "5d66dcbefbbb7166e9bce75642c22eb399b0a85b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ],
   "submitRequirementResults": []
 }
