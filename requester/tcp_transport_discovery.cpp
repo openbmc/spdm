@@ -23,18 +23,8 @@ auto TCPTransportDiscovery::discovery(SPDMDiscovery& discovery)
     using Configuration = sdbusplus::client::xyz::openbmc_project::
         configuration::SpdmTcpResponder<>;
 
-    spdm::mapper::instances::instances_t instances{};
-    try
-    {
-        instances =
-            co_await mapper::instances::by_interface<Configuration>(ctx);
-    }
-    catch (const sdbusplus::exception::SdBusError& e)
-    {
-        info("No TCP SPDM responders found during initial discovery: {ERROR}",
-             "ERROR", e);
-        co_return;
-    }
+    spdm::mapper::instances::instances_t instances =
+        co_await mapper::instances::by_interface<Configuration>(ctx);
 
     for (const auto& [path, service] : instances)
     {
