@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1da333cf_e209a747",
+        "filename": "requester/utils/utils.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-04-27T07:59:53Z",
+      "side": 0,
+      "message": "This is file is getting removed as part of https://gerrit.openbmc.org/c/openbmc/spdm/+/89648. This commit is not needed.",
+      "revId": "4653d3126b66ea215cd314f6025dc6bbb5177d53",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
