@@ -16,6 +16,24 @@
       "message": "It is better to handle exceptions at the caller level where you have more context on how to handle the failure",
       "revId": "3e5661439400b245a52338142af3e0f68416d605",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74cce5d4_e2fba170",
+        "filename": "requester/utils/mapper.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-27T08:10:58Z",
+      "side": 1,
+      "message": "There could be two scenario:\n   Mapper is down / call failed -\u003e returns {}\n   Mapper succeeded but no endpoints exist -\u003e also returns {}\n\n\nIn both cases, discovery has nothing to act on and doesn\u0027t need to distinguish between them. If the mapper call fails, the error is already logged with full context (interface name, error details) at the by_interface catch.\n\nLet\u0027s get the view of the maintainers too.\n@patrick@stwcx.xyz: What is your suggestion?",
+      "parentUuid": "3d73e5e4_7b2b76bf",
+      "revId": "3e5661439400b245a52338142af3e0f68416d605",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
