@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c8259c9_7c023191",
+        "filename": "meson_options.txt",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-04-30T12:02:26Z",
+      "side": 1,
+      "message": "`meson.options` is the standard file used to define custom, project-specific build options from meson 1.1 version. It replaces the older meson_options.txt filename. Please change it to meson.options",
+      "revId": "d5a9a5f7a76fde09d192d96cac0f4c074977dd68",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2a1ef3c_37cb152a",
+        "filename": "meson_options.txt",
+        "patchSetId": 22
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-04-30T12:02:26Z",
+      "side": 1,
+      "message": "can we make this a `feature` instead ? of a bool ?",
+      "range": {
+        "startLine": 1,
+        "startChar": 15,
+        "endLine": 1,
+        "endChar": 31
+      },
+      "revId": "d5a9a5f7a76fde09d192d96cac0f4c074977dd68",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd58c9c6_30037080",
+        "filename": "tests/meson.build",
+        "patchSetId": 22
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-04-30T12:02:26Z",
+      "side": 1,
+      "message": "these aren\u0027t the test sources right ? why are they being included here ?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 1
+      },
+      "revId": "d5a9a5f7a76fde09d192d96cac0f4c074977dd68",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16c4fb7d_448f112d",
+        "filename": "tests/meson.build",
+        "patchSetId": 22
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-04-30T12:02:26Z",
+      "side": 1,
+      "message": "can you make this than array ? use the main daemon dependencies and also the test dependencies separate rather than merge them into another array.",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 22,
+        "endChar": 28
+      },
+      "revId": "d5a9a5f7a76fde09d192d96cac0f4c074977dd68",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78645542_db933c91",
+        "filename": "tests/meson.build",
+        "patchSetId": 22
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-04-30T12:02:26Z",
+      "side": 1,
+      "message": "Not really sure why we need this ? I dont see this in any other repo as of today - The CI takes care of running all the sanitizers - any reason why we need this here ?",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 5
+      },
+      "revId": "d5a9a5f7a76fde09d192d96cac0f4c074977dd68",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e57291b5_402d139b",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-04-30T12:02:26Z",
+      "side": 1,
+      "message": "The comments in this file looks really odd - as if they are from LLM. Can we ensure all the needed comments atleast be in the doxygen format ?",
+      "revId": "d5a9a5f7a76fde09d192d96cac0f4c074977dd68",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
