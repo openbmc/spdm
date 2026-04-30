@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cb6a54e_af24192a",
+        "filename": "meson_options.txt",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-30T16:29:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "9c8259c9_7c023191",
+      "revId": "d5a9a5f7a76fde09d192d96cac0f4c074977dd68",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2a1ef3c_37cb152a",
@@ -31,6 +49,30 @@
       "writtenOn": "2026-04-30T12:02:26Z",
       "side": 1,
       "message": "can we make this a `feature` instead ? of a bool ?",
+      "range": {
+        "startLine": 1,
+        "startChar": 15,
+        "endLine": 1,
+        "endChar": 31
+      },
+      "revId": "d5a9a5f7a76fde09d192d96cac0f4c074977dd68",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38830d0c_2759e96d",
+        "filename": "meson_options.txt",
+        "patchSetId": 22
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-30T16:29:46Z",
+      "side": 1,
+      "message": "Because OpenBMC CI infrastructure dependency? or openBMC convention?",
+      "parentUuid": "c2a1ef3c_37cb152a",
       "range": {
         "startLine": 1,
         "startChar": 15,
@@ -64,6 +106,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "225bf601_784dc0dc",
+        "filename": "tests/meson.build",
+        "patchSetId": 22
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-30T16:29:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fd58c9c6_30037080",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 1
+      },
+      "revId": "d5a9a5f7a76fde09d192d96cac0f4c074977dd68",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16c4fb7d_448f112d",
@@ -77,6 +143,30 @@
       "writtenOn": "2026-04-30T12:02:26Z",
       "side": 1,
       "message": "can you make this than array ? use the main daemon dependencies and also the test dependencies separate rather than merge them into another array.",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 22,
+        "endChar": 28
+      },
+      "revId": "d5a9a5f7a76fde09d192d96cac0f4c074977dd68",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18516167_21bb59bb",
+        "filename": "tests/meson.build",
+        "patchSetId": 22
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-30T16:29:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "16c4fb7d_448f112d",
       "range": {
         "startLine": 22,
         "startChar": 4,
@@ -112,6 +202,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ae5d7ed4_f7254e43",
+        "filename": "tests/meson.build",
+        "patchSetId": 22
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-30T16:29:46Z",
+      "side": 1,
+      "message": "if a project supports Valgrind, it requires an add_test_setup with Valgrind. \n\nHowever, when I added this, the CI started failing due to conflicts between ASAN and Valgrind. \n\nI verified in the build scripts that ASAN and Valgrind run sequentially first ASAN, then Valgrind so they are not  supposed to run concurrently but was not able to debug why it was happening.\n\nFor now, I have removed the Valgrind setup and will reintroduce Valgrind support later.",
+      "parentUuid": "78645542_db933c91",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 5
+      },
+      "revId": "d5a9a5f7a76fde09d192d96cac0f4c074977dd68",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e57291b5_402d139b",
         "filename": "tests/test_mctp_transport_discovery.cpp",
         "patchSetId": 22
@@ -123,6 +237,24 @@
       "writtenOn": "2026-04-30T12:02:26Z",
       "side": 1,
       "message": "The comments in this file looks really odd - as if they are from LLM. Can we ensure all the needed comments atleast be in the doxygen format ?",
+      "revId": "d5a9a5f7a76fde09d192d96cac0f4c074977dd68",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dac66e4_3819e21c",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-04-30T16:29:46Z",
+      "side": 1,
+      "message": "since this a is a test file, do you want to just leave them as plain // (no docs needed for tests). \nDoxygen is not appropriate — tests aren\u0027t public API",
+      "parentUuid": "e57291b5_402d139b",
       "revId": "d5a9a5f7a76fde09d192d96cac0f4c074977dd68",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
