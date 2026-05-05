@@ -6,7 +6,6 @@
 #include "utils/mapper.hpp"
 
 #include <phosphor-logging/lg2.hpp>
-#include <sdbusplus/async/client.hpp>
 #include <xyz/openbmc_project/Common/UUID/client.hpp>
 #include <xyz/openbmc_project/MCTP/Endpoint/client.hpp>
 
@@ -15,16 +14,12 @@
 namespace spdm
 {
 PHOSPHOR_LOG2_USING;
+using MctpEndpoint = sdbusplus::client::xyz::openbmc_project::mctp::Endpoint<>;
+using CommonUUID = sdbusplus::client::xyz::openbmc_project::common::UUID<>;
 
 auto MCTPTransportDiscovery::discovery(SPDMDiscovery& discovery)
     -> sdbusplus::async::task<>
 {
-    using MctpEndpoint =
-        sdbusplus::client::xyz::openbmc_project::mctp::Endpoint<>;
-    using CommonUUID = sdbusplus::client::xyz::openbmc_project::common::UUID<>;
-
-    static constexpr uint8_t spdmMessageType = 0x05;
-
     auto instances =
         co_await mapper::instances::by_interface<MctpEndpoint>(ctx);
 
@@ -36,7 +31,7 @@ auto MCTPTransportDiscovery::discovery(SPDMDiscovery& discovery)
                                  .properties();
 
         if (!std::ranges::contains(endpointProps.supported_message_types,
-                                   spdmMessageType))
+                                   spdm_message_type))
         {
             debug("Endpoint {PATH} does not support SPDM", "PATH", path);
             continue;

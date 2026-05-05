@@ -29,6 +29,8 @@ class MCTPTransportDiscovery
 
   private:
     sdbusplus::async::context& ctx;
+
+    static constexpr uint8_t spdm_message_type = 0x5;
 };
 
 } // namespace spdm
