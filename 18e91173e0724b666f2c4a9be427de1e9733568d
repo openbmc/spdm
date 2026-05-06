@@ -16,6 +16,24 @@
       "message": "Is there a sample json which can be referred?",
       "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4cfd5f7_17f677fc",
+        "filename": "meson.build",
+        "patchSetId": 12
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-06T06:56:32Z",
+      "side": 1,
+      "message": "[Updated] Please refer to the PolicyManager.hpp:23 config for the expected JSON format:\n\n```cpp\nconfig \u003d {\n    {\"enabled\", enabled_},\n    {\"secure_session_enabled\", secure_session_enabled_},\n};\n```",
+      "parentUuid": "1070eb6e_6f1e5845",
+      "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }

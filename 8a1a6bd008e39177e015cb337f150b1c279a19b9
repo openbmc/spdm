@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0d8155bc_a3441382",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-06T06:56:32Z",
+      "side": 1,
+      "message": "I\u0027m handling both cases: if the file doesn\u0027t exist, we fall back to defaults without error (dbus defaults). If it exists but fails to open/read/parse, that\u0027s treated as an error. \nThe check covers file existence first, then attempts to read and parse via read_cache, only if present.",
+      "parentUuid": "189d10f3_37061ae4",
+      "revId": "8a1a6bd008e39177e015cb337f150b1c279a19b9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "416097da_6396c9da",
         "filename": "requester/policy_manager.cpp",
         "patchSetId": 14
@@ -75,6 +93,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "acf1655f_82168824",
+        "filename": "requester/policy_manager.hpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-06T06:56:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1aa74a38_1b350b56",
+      "revId": "8a1a6bd008e39177e015cb337f150b1c279a19b9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d6bb00e_0f396738",
@@ -92,6 +128,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4c017b4_fc2ea059",
+        "filename": "requester/policy_manager.hpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-06T06:56:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d6bb00e_0f396738",
+      "revId": "8a1a6bd008e39177e015cb337f150b1c279a19b9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "034eef29_1c2db42d",
@@ -105,6 +159,30 @@
       "writtenOn": "2026-04-07T10:48:29Z",
       "side": 1,
       "message": "Can we move this to policy manager constructor? We can set the default policy values and later once the load is successful we can update those values.",
+      "range": {
+        "startLine": 28,
+        "startChar": 2,
+        "endLine": 33,
+        "endChar": 5
+      },
+      "revId": "8a1a6bd008e39177e015cb337f150b1c279a19b9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94936485_a19df1e9",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-06T06:56:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "034eef29_1c2db42d",
       "range": {
         "startLine": 28,
         "startChar": 2,

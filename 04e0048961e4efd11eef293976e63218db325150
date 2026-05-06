@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6e2c30ae_f24a9e76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-06T06:56:32Z",
+      "side": 1,
+      "message": "Default values is currently taken only from PDI. This is the initial MR introducing the structure with a subset of properties only.",
+      "parentUuid": "3f4b82f9_febfaa88",
+      "revId": "04e0048961e4efd11eef293976e63218db325150",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "032ef464_c84ed3cf",
         "filename": "requester/spdmd.cpp",
         "patchSetId": 15
@@ -49,6 +67,24 @@
       "writtenOn": "2026-04-08T07:35:38Z",
       "side": 1,
       "message": "Is there a related MR which can be referred to understand how this policies are used?",
+      "revId": "04e0048961e4efd11eef293976e63218db325150",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf0267a0_49d7e1d6",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-06T06:56:32Z",
+      "side": 1,
+      "message": "No related MR at the moment; this is the first MR introducing these policies.",
+      "parentUuid": "032ef464_c84ed3cf",
       "revId": "04e0048961e4efd11eef293976e63218db325150",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
