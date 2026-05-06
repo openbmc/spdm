@@ -36,6 +36,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e2893c4_865b9305",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-06T06:59:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d8155bc_a3441382",
+      "revId": "8a1a6bd008e39177e015cb337f150b1c279a19b9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "416097da_6396c9da",
@@ -59,6 +77,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f23559dc_fb91b48a",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-06T06:59:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "416097da_6396c9da",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 65
+      },
+      "revId": "8a1a6bd008e39177e015cb337f150b1c279a19b9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4c926c8_50940bb9",
@@ -72,6 +114,24 @@
       "writtenOn": "2026-04-07T10:48:29Z",
       "side": 1,
       "message": "Can we ignore failure in opening the persisted policy file? Failure in parsing the config file should be handled.",
+      "revId": "8a1a6bd008e39177e015cb337f150b1c279a19b9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7cead96_b9437d86",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-06T06:59:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4c926c8_50940bb9",
       "revId": "8a1a6bd008e39177e015cb337f150b1c279a19b9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
