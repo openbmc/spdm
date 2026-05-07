@@ -1,0 +1,175 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22e321b9_643ef68a",
+        "filename": "meson.build",
+        "patchSetId": 33
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T10:58:31Z",
+      "side": 1,
+      "message": "Please generate a config.hpp.",
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "232ed0af_40cd0850",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T10:58:31Z",
+      "side": 1,
+      "message": "What are we going to do about this?  We\u0027re now just going to not parse a file forever?  Should we erase the file?",
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a104ccd_af46fd5a",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T10:58:31Z",
+      "side": 1,
+      "message": "Never use `.what()` in a lg2 call.",
+      "range": {
+        "startLine": 38,
+        "startChar": 19,
+        "endLine": 38,
+        "endChar": 26
+      },
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36a2b877_e01a33af",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T10:58:31Z",
+      "side": 1,
+      "message": "Do we need any kind of versioning identifier?",
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8a3ce51_dd355e15",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T10:58:31Z",
+      "side": 1,
+      "message": "What are we doing about all the \"Allowed*\" properties?",
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26fa7584_6e5f9ddb",
+        "filename": "requester/policy_manager.hpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T10:58:31Z",
+      "side": 1,
+      "message": "No need for \u0027common\u0027 if you already have \u0027aserver\u0027.",
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a70f096_00370ab3",
+        "filename": "requester/policy_manager.hpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T10:58:31Z",
+      "side": 1,
+      "message": "I\u0027d prefer not to use \"expected\".",
+      "range": {
+        "startLine": 32,
+        "startChar": 24,
+        "endLine": 32,
+        "endChar": 32
+      },
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33b133ea_9fe41476",
+        "filename": "requester/policy_manager.hpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T10:58:31Z",
+      "side": 1,
+      "message": "Is all this indirection really necessary?  We\u0027re basically talking about 3 lines of code:\n\n```\nif (current \u003d\u003d value) return false;\nfoo \u003d new_value;\ndump();\n```",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 5
+      },
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf0d5338_96749576",
+        "filename": "requester/policy_manager.hpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T10:58:31Z",
+      "side": 1,
+      "message": "What are we going to do about a warning like this?  It\u0027s just going to sit in a BMC forever and nobody is ever going to do anything about it.\n\nShouldn\u0027t we just crash the daemon?  What are reasons why the `dump` operation is going to fail?  Is there something we should do to recover from that?",
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
