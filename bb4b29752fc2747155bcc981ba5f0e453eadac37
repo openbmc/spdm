@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b194ec31_ea0c6b12",
+        "filename": "requester/spdm_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1002348
+      },
+      "writtenOn": "2026-05-07T11:36:00Z",
+      "side": 1,
+      "message": "Take the reference during emplace_back and then pass it directly to notifyDeviceAdded,as it\u0027s clearer and avoids an explicit back().\n\n\n```suggestion\n    const auto\u0026 added \u003d responderInfos.emplace_back(std::move(r));\n    if (isRuntimeDiscovered \u0026\u0026 responderManager) {\n    \tresponderManager-\u003enotifyDeviceAdded(added);\n    }\n```",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 56
+      },
+      "revId": "bb4b29752fc2747155bcc981ba5f0e453eadac37",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6113f1d6_2425e053",
+        "filename": "requester/spdm_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1002348
+      },
+      "writtenOn": "2026-05-07T11:36:00Z",
+      "side": 1,
+      "message": "The declaration of this method signature in the header file has argument type as ```void remove(const sdbusplus::object_path\u0026);```\nThe types should match exactly between declaration and definition.",
+      "range": {
+        "startLine": 51,
+        "startChar": 26,
+        "endLine": 51,
+        "endChar": 71
+      },
+      "revId": "bb4b29752fc2747155bcc981ba5f0e453eadac37",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53da8a7d_f9912cc3",
+        "filename": "requester/spdm_discovery.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1002348
+      },
+      "writtenOn": "2026-05-07T11:36:00Z",
+      "side": 1,
+      "message": "it calls responderManager-\u003enotifyDeviceRemoved(path) unconditionally, regardless of whether std::erase_if actually removed anything. Is that fine?",
+      "range": {
+        "startLine": 58,
+        "startChar": 8,
+        "endLine": 58,
+        "endChar": 52
+      },
+      "revId": "bb4b29752fc2747155bcc981ba5f0e453eadac37",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfbf279e_03718f13",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1002348
+      },
+      "writtenOn": "2026-05-07T11:36:00Z",
+      "side": 1,
+      "message": "what does this mean?",
+      "range": {
+        "startLine": 73,
+        "startChar": 23,
+        "endLine": 73,
+        "endChar": 55
+      },
+      "revId": "bb4b29752fc2747155bcc981ba5f0e453eadac37",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92b6a56a_bbaf1776",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1002348
+      },
+      "writtenOn": "2026-05-07T11:36:00Z",
+      "side": 1,
+      "message": "Just a nit, an enum would be better here like DiscoverySource::Initial/Runtime",
+      "range": {
+        "startLine": 121,
+        "startChar": 37,
+        "endLine": 121,
+        "endChar": 56
+      },
+      "revId": "bb4b29752fc2747155bcc981ba5f0e453eadac37",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5989494_b745d0eb",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1002348
+      },
+      "writtenOn": "2026-05-07T11:36:00Z",
+      "side": 1,
+      "message": "Can\u0027t we use find \u0026 erase, as here it walks the entire unordered_map to remove one key?",
+      "range": {
+        "startLine": 57,
+        "startChar": 1,
+        "endLine": 64,
+        "endChar": 7
+      },
+      "revId": "bb4b29752fc2747155bcc981ba5f0e453eadac37",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
