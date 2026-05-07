@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53554388_33f4b928",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T11:14:17Z",
+      "side": 1,
+      "message": "I really don\u0027t like having to inject friends into a base class from test cases.  Is there any way to avoid this?",
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac85414a_7b024839",
+        "filename": "subprojects/gtest.wrap",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T11:14:17Z",
+      "side": 1,
+      "message": "Please use `googletest.wrap` for consistency with the rest of the project:\n\n```\n$ fd --glob \"*.wrap\" -0 | xargs -0 rg googletest -l | xargs -n1 basename | sort | uniq -c\n     28 googletest.wrap\n      4 gtest.wrap\n```",
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8dff3579_fe596312",
+        "filename": "tests/meson.build",
+        "patchSetId": 23
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T11:14:17Z",
+      "side": 1,
+      "message": "It doesn\u0027t seem like we actually use gmock.  Can we avoid adding it until someone has a concrete case for it?  (I\u0027m not really a fan of the syntax of gmock anyhow.)",
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42014840_75d1ebfe",
+        "filename": "tests/meson.build",
+        "patchSetId": 23
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T11:14:17Z",
+      "side": 1,
+      "message": "Why do we need this?  I thought we left a variable for includes also.",
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9880dc2_4deed4c2",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T11:14:17Z",
+      "side": 1,
+      "message": "Can you just do a lambda?  It\u0027s only 2 lines.",
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb790a36_3f71e4d9",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T11:14:17Z",
+      "side": 1,
+      "message": "What are we testing here.  A test called \"constructor\" doesn\u0027t have meaning to me.  Constructor what... what are we confirming about the constructor?",
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "859fbbb0_c00641d5",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T11:14:17Z",
+      "side": 1,
+      "message": "```suggestion\nTEST_F(MCTPTransportDiscoveryTest, StaticTypeIsMCTP)\n```",
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcdafc13_02827fd5",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T11:14:17Z",
+      "side": 1,
+      "message": "Shouldn\u0027t these be in another file?  This makes it sound like you\u0027re testing something with the Discovery class and not the MCTP class.",
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1865e569_2b555f7e",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-07T11:14:17Z",
+      "side": 1,
+      "message": "nit: Can you make a function that returns an ResponderInfo with an MctpResponderInfo given an integer?  Seems like you have a bunch of places where you have to hardcode strings.  Would be way easier, I think, to just pass a number and have all the rest of the struct pre-populated.",
+      "range": {
+        "startLine": 105,
+        "startChar": 40,
+        "endLine": 105,
+        "endChar": 78
+      },
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
