@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "191405de_24e9d66f",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-07T10:34:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c407e7f_3c413c34",
+      "range": {
+        "startLine": 37,
+        "startChar": 31,
+        "endLine": 37,
+        "endChar": 49
+      },
+      "revId": "ac6a49a8597e0d4b411f4d4b0e39cff8ab228719",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a2fb0716_facb0510",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-05-06T07:25:11Z",
       "side": 1,
       "message": "write to the temp and rename it ??\nEven if it crashes during write original config.json is untouched",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 27
+      },
+      "revId": "ac6a49a8597e0d4b411f4d4b0e39cff8ab228719",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c275c96c_7cc738ae",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-07T10:34:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2fb0716_facb0510",
       "range": {
         "startLine": 40,
         "startChar": 0,
@@ -64,6 +112,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73720f0e_8555d16d",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-07T10:34:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e6fa4c1_c9087ba2",
+      "revId": "ac6a49a8597e0d4b411f4d4b0e39cff8ab228719",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d99b55d_69e143af",
@@ -87,6 +153,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ac692d5_b69994b8",
+        "filename": "requester/policy_manager.hpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-07T10:34:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d99b55d_69e143af",
+      "range": {
+        "startLine": 43,
+        "startChar": 9,
+        "endLine": 43,
+        "endChar": 76
+      },
+      "revId": "ac6a49a8597e0d4b411f4d4b0e39cff8ab228719",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e11085f9_6dd589ff",
@@ -100,6 +190,30 @@
       "writtenOn": "2026-05-06T07:25:11Z",
       "side": 1,
       "message": "Do we need to keep the JSON config in sync?\n config[key] \u003d current;",
+      "range": {
+        "startLine": 68,
+        "startChar": 1,
+        "endLine": 68,
+        "endChar": 41
+      },
+      "revId": "ac6a49a8597e0d4b411f4d4b0e39cff8ab228719",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fd24769_713b4316",
+        "filename": "requester/policy_manager.hpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-07T10:34:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e11085f9_6dd589ff",
       "range": {
         "startLine": 68,
         "startChar": 1,
