@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b0c67c7_aa41d784",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 31
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002348
+      },
+      "writtenOn": "2026-05-07T12:26:30Z",
+      "side": 1,
+      "message": "Both policy_manager.cpp \u0026 policy_manager.hpp doesn\u0027t have the ```// SPDX-License-Identifier: Apache-2.0 / // SPDX-FileCopyrightText: Copyright OpenBMC Author``` at the beginning.",
+      "revId": "aa5df8bb96cd402988919f1201514063ba74ce84",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b41f7655_2bb4d48c",
+        "filename": "meson.build",
+        "patchSetId": 31
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1002348
+      },
+      "writtenOn": "2026-05-07T12:26:30Z",
+      "side": 1,
+      "message": "Header files are not required here.",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 34
+      },
+      "revId": "aa5df8bb96cd402988919f1201514063ba74ce84",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72a2892b_17da6d92",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1002348
+      },
+      "writtenOn": "2026-05-07T12:26:30Z",
+      "side": 1,
+      "message": "Make it a named constant to improve maintainability.",
+      "range": {
+        "startLine": 68,
+        "startChar": 41,
+        "endLine": 68,
+        "endChar": 48
+      },
+      "revId": "aa5df8bb96cd402988919f1201514063ba74ce84",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9223d83_4d0346bb",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1002348
+      },
+      "writtenOn": "2026-05-07T12:26:30Z",
+      "side": 1,
+      "message": "Make this too a named constant for better clarity.",
+      "range": {
+        "startLine": 75,
+        "startChar": 24,
+        "endLine": 75,
+        "endChar": 25
+      },
+      "revId": "aa5df8bb96cd402988919f1201514063ba74ce84",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccc9231e_1e97f1e8",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1002348
+      },
+      "writtenOn": "2026-05-07T12:26:30Z",
+      "side": 1,
+      "message": "Just a suggestion, add a file stream state check to ensure write operation didn\u0027t fail",
+      "range": {
+        "startLine": 76,
+        "startChar": 3,
+        "endLine": 76,
+        "endChar": 16
+      },
+      "revId": "aa5df8bb96cd402988919f1201514063ba74ce84",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}

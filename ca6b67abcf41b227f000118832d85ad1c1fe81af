@@ -94,6 +94,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ecc8ce6f_7215254b",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1002348
+      },
+      "writtenOn": "2026-05-07T12:26:30Z",
+      "side": 1,
+      "message": "If rename fails, wouldn\u0027t this temp file still be lying around?",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 91,
+        "endChar": 5
+      },
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "26fa7584_6e5f9ddb",
         "filename": "requester/policy_manager.hpp",
         "patchSetId": 33
