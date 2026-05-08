@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7ff4723_dbdd0aea",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-05-08T10:44:23Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "53554388_33f4b928",
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac85414a_7b024839",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-05-07T11:14:17Z",
       "side": 1,
       "message": "Please use `googletest.wrap` for consistency with the rest of the project:\n\n```\n$ fd --glob \"*.wrap\" -0 | xargs -0 rg googletest -l | xargs -n1 basename | sort | uniq -c\n     28 googletest.wrap\n      4 gtest.wrap\n```",
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c18ff03c_e2677c58",
+        "filename": "subprojects/gtest.wrap",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-05-08T10:44:23Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ac85414a_7b024839",
       "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -52,6 +88,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d2e7e0d_422b901c",
+        "filename": "tests/meson.build",
+        "patchSetId": 23
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-05-08T10:44:23Z",
+      "side": 1,
+      "message": "Yes wanted to do around mocking for the dbus calls by_interface to test the discovery but it was getting complex.\nremoved now",
+      "parentUuid": "8dff3579_fe596312",
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42014840_75d1ebfe",
@@ -65,6 +119,24 @@
       "writtenOn": "2026-05-07T11:14:17Z",
       "side": 1,
       "message": "Why do we need this?  I thought we left a variable for includes also.",
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33132ecb_1a8579d4",
+        "filename": "tests/meson.build",
+        "patchSetId": 23
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-05-08T10:44:23Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "42014840_75d1ebfe",
       "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -86,6 +158,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d37ed72_f17f8c66",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-05-08T10:44:23Z",
+      "side": 1,
+      "message": "I removed runAsyncImpl and keeping only the runAsync to avoid ASAN issue stack-use-after-scope - Lambda must be named",
+      "parentUuid": "b9880dc2_4deed4c2",
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb790a36_3f71e4d9",
@@ -99,6 +189,24 @@
       "writtenOn": "2026-05-07T11:14:17Z",
       "side": 1,
       "message": "What are we testing here.  A test called \"constructor\" doesn\u0027t have meaning to me.  Constructor what... what are we confirming about the constructor?",
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "683545ea_d3c6f82e",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-05-08T10:44:23Z",
+      "side": 1,
+      "message": "Appened ConstructionSucceeds",
+      "parentUuid": "bb790a36_3f71e4d9",
       "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -120,6 +228,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "455be66f_f6bc7d07",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-05-08T10:44:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "859fbbb0_c00641d5",
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bcdafc13_02827fd5",
@@ -137,6 +263,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff0cf447_8c46af86",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-05-08T10:44:23Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "bcdafc13_02827fd5",
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1865e569_2b555f7e",
@@ -150,6 +294,30 @@
       "writtenOn": "2026-05-07T11:14:17Z",
       "side": 1,
       "message": "nit: Can you make a function that returns an ResponderInfo with an MctpResponderInfo given an integer?  Seems like you have a bunch of places where you have to hardcode strings.  Would be way easier, I think, to just pass a number and have all the rest of the struct pre-populated.",
+      "range": {
+        "startLine": 105,
+        "startChar": 40,
+        "endLine": 105,
+        "endChar": 78
+      },
+      "revId": "c6fc575a3a3e9db0c94a95bee3674ccb8b03b101",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abc790ac_1ef6c037",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-05-08T10:44:23Z",
+      "side": 1,
+      "message": "Create the makeResponder function.",
+      "parentUuid": "1865e569_2b555f7e",
       "range": {
         "startLine": 105,
         "startChar": 40,
