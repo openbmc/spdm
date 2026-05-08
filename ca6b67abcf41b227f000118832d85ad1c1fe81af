@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e56bc3a3_a5454de9",
+        "filename": "meson.build",
+        "patchSetId": 33
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-08T05:31:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22e321b9_643ef68a",
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "232ed0af_40cd0850",
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "124f4954_77d2907d",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-08T05:31:32Z",
+      "side": 1,
+      "message": "right!, fixed",
+      "parentUuid": "232ed0af_40cd0850",
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1a104ccd_af46fd5a",
         "filename": "requester/policy_manager.cpp",
         "patchSetId": 33
@@ -48,6 +84,30 @@
       "writtenOn": "2026-05-07T10:58:31Z",
       "side": 1,
       "message": "Never use `.what()` in a lg2 call.",
+      "range": {
+        "startLine": 38,
+        "startChar": 19,
+        "endLine": 38,
+        "endChar": 26
+      },
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54ac89db_a2bdac41",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-08T05:31:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a104ccd_af46fd5a",
       "range": {
         "startLine": 38,
         "startChar": 19,
@@ -92,6 +152,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77d02e9d_fa207173",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-08T05:31:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8a3ce51_dd355e15",
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ecc8ce6f_7215254b",
@@ -105,6 +183,30 @@
       "writtenOn": "2026-05-07T12:26:30Z",
       "side": 1,
       "message": "If rename fails, wouldn\u0027t this temp file still be lying around?",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 91,
+        "endChar": 5
+      },
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78cf4ed1_cafb2fc0",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-08T05:31:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecc8ce6f_7215254b",
       "range": {
         "startLine": 87,
         "startChar": 4,
@@ -132,6 +234,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b76895b_dd9a3f99",
+        "filename": "requester/policy_manager.hpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-08T05:31:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26fa7584_6e5f9ddb",
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a70f096_00370ab3",
@@ -145,6 +265,30 @@
       "writtenOn": "2026-05-07T10:58:31Z",
       "side": 1,
       "message": "I\u0027d prefer not to use \"expected\".",
+      "range": {
+        "startLine": 32,
+        "startChar": 24,
+        "endLine": 32,
+        "endChar": 32
+      },
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d9b8a01_13860567",
+        "filename": "requester/policy_manager.hpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-08T05:31:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a70f096_00370ab3",
       "range": {
         "startLine": 32,
         "startChar": 24,
@@ -191,6 +335,24 @@
       "writtenOn": "2026-05-07T10:58:31Z",
       "side": 1,
       "message": "What are we going to do about a warning like this?  It\u0027s just going to sit in a BMC forever and nobody is ever going to do anything about it.\n\nShouldn\u0027t we just crash the daemon?  What are reasons why the `dump` operation is going to fail?  Is there something we should do to recover from that?",
+      "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a2afd5f_b9ed59dc",
+        "filename": "requester/policy_manager.hpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-08T05:31:32Z",
+      "side": 1,
+      "message": "uh, you are right, i over-handled this for edge cases for OOM and permission issues.\n\nIs crashing the daemon a good idea for this case ?",
+      "parentUuid": "bf0d5338_96749576",
       "revId": "ca6b67abcf41b227f000118832d85ad1c1fe81af",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
