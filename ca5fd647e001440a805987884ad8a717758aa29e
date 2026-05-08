@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "18e30247_7533c081",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-05-08T12:02:22Z",
+      "side": 1,
+      "message": "Also responder changes are present in this commit https://gerrit.openbmc.org/c/openbmc/spdm/+/80264/22, and this PR needs to be rebased on that as well.",
+      "parentUuid": "a013bd8f_f64ab871",
+      "revId": "ca5fd647e001440a805987884ad8a717758aa29e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "50b61bce_80a56c4a",
         "filename": "requester/spdm_responder_manager.cpp",
         "patchSetId": 4
