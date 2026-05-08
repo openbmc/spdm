@@ -281,6 +281,24 @@
       "parentUuid": "e57291b5_402d139b",
       "revId": "d5a9a5f7a76fde09d192d96cac0f4c074977dd68",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67d55f24_8d8da4ac",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-08T16:34:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3dac66e4_3819e21c",
+      "revId": "d5a9a5f7a76fde09d192d96cac0f4c074977dd68",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
