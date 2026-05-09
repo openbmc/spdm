@@ -46,7 +46,7 @@ static ResponderInfo makeResponder(int id)
         "/xyz/openbmc_project/mctp/endpoint/" + std::to_string(id);
     std::string uuid = "test-uuid-" + std::to_string(id);
     uint8_t eid = static_cast<uint8_t>(id * 0x10);
-    return ResponderInfo{sdbusplus::message::object_path(path),
+    return ResponderInfo{sdbusplus::object_path(path),
                          MctpResponderInfo{eid, uuid}, TransportType::MCTP};
 }
 
