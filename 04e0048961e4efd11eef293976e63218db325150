@@ -141,6 +141,24 @@
       "parentUuid": "032ef464_c84ed3cf",
       "revId": "04e0048961e4efd11eef293976e63218db325150",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95e25e51_f47d3056",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-05-11T10:15:39Z",
+      "side": 1,
+      "message": "@itsmanjeet1998@gmail.com If there is no PR, can you please explain the flow here on how policy manager will be plugged into spdmd and how it will be enforced?. Since these needs to be finally enforced in negotiation i am thinking it needs to be part of initialization may be after this patch\nhttps://gerrit.openbmc.org/c/openbmc/spdm/+/80358/1/src/spdmd.cpp#55",
+      "parentUuid": "e337abd0_a3968bfa",
+      "revId": "04e0048961e4efd11eef293976e63218db325150",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
