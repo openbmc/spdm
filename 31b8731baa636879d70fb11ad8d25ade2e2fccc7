@@ -16,6 +16,24 @@
       "message": "I think explicit check to verify type for TCP will enable us to add more types in future. In else condition we can throw exception.",
       "revId": "31b8731baa636879d70fb11ad8d25ade2e2fccc7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "230260fa_681465b2",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-05-12T05:07:48Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b7252907_d651d750",
+      "revId": "31b8731baa636879d70fb11ad8d25ade2e2fccc7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
