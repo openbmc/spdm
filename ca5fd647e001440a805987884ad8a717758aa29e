@@ -109,6 +109,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3394e147_e319335b",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-05-12T05:38:43Z",
+      "side": 1,
+      "message": "Yes, this needs to be rebased",
+      "parentUuid": "18e30247_7533c081",
+      "revId": "ca5fd647e001440a805987884ad8a717758aa29e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "50b61bce_80a56c4a",
         "filename": "requester/spdm_responder_manager.cpp",
         "patchSetId": 4
