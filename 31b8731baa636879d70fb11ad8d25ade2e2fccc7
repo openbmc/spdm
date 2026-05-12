@@ -34,6 +34,23 @@
       "parentUuid": "b7252907_d651d750",
       "revId": "31b8731baa636879d70fb11ad8d25ade2e2fccc7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a26008cd_176d553f",
+        "filename": "requester/spdm_dbus_responder.hpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-05-12T07:14:51Z",
+      "side": 1,
+      "message": "Can we save ResponderInfo instead of inventoryPath?\nAlso generate the deviceName whenever needed ??",
+      "revId": "31b8731baa636879d70fb11ad8d25ade2e2fccc7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
