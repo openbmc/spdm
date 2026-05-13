@@ -41,6 +41,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf6fe4dc_80b5dc57",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-05-13T15:02:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98a562e6_41be4431",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 5
+      },
+      "revId": "cc9e2df4a232f365abd2416bd592839759865eff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b9bf48b_e5501807",
@@ -58,6 +82,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd67bdfb_36f0d0e5",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-05-13T15:02:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b9bf48b_e5501807",
+      "revId": "cc9e2df4a232f365abd2416bd592839759865eff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "193980d7_66ec5d4c",
@@ -71,6 +113,24 @@
       "writtenOn": "2026-04-23T15:47:04Z",
       "side": 1,
       "message": "Lambda is a temporary; its captured `device` is read after the lambda\ndies once the spawned coroutine resumes. Suggest passing `device` as\na coroutine parameter (matching 89179 PS4\u0027s `SPDMDiscovery::add`\npattern). See patchset comment for details.",
+      "revId": "cc9e2df4a232f365abd2416bd592839759865eff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "941ac8cf_6c15cc67",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-05-13T15:02:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "193980d7_66ec5d4c",
       "revId": "cc9e2df4a232f365abd2416bd592839759865eff",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -98,6 +158,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ba6e4f1_369f8ded",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-05-13T15:02:16Z",
+      "side": 1,
+      "message": "The Connect functionality will be added in another commit.",
+      "parentUuid": "a11fadfb_537873a4",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 1
+      },
+      "revId": "cc9e2df4a232f365abd2416bd592839759865eff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ebe67d1c_a889af2e",
@@ -111,6 +195,30 @@
       "writtenOn": "2026-04-20T10:10:50Z",
       "side": 1,
       "message": "Why it should be public functions?",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 74
+      },
+      "revId": "cc9e2df4a232f365abd2416bd592839759865eff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "983a0ea9_56b9d835",
+        "filename": "requester/spdm_responder_manager.hpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-05-13T15:02:16Z",
+      "side": 1,
+      "message": "Moved those functions to another commit where they are getting used.",
+      "parentUuid": "ebe67d1c_a889af2e",
       "range": {
         "startLine": 39,
         "startChar": 0,
