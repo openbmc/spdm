@@ -25,16 +25,20 @@ auto SPDMDBusResponder::run() -> sdbusplus::async::task<>
 
     // Step 1: Initialize SPDM transport and connection
 
-    // Step 2: Get certificate digests from the responder
+    // Step 2: VCA - Version, Capabilities, Algorithms negotiation
 
-    // Step 3: Get certificate chain and populate the certificate D-Bus
+    // Step 3: GET_DIGESTS - Get certificate digests from the responder
 
-    // Step 4: Get measurements (libspdm_get_measurement)
+    // Step 4: GET_CERTIFICATE - Get certificate chain and populate the
+    // certificate D-Bus
 
-    // Step 5: Verify and update TrustedComponent D-Bus object
+    // Step 5: GET_MEASUREMENTS - Get measurements (libspdm_get_measurement)
+
+    // Step 6: Verify and update TrustedComponent D-Bus object
 
     info("SPDM device operations complete: {PATH}", "PATH", responderInfo.path);
     co_return;
 }
 
 } // namespace spdm
+

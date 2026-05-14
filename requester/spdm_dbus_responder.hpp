@@ -35,10 +35,12 @@ class SPDMDBusResponder
                                const ResponderInfo& responderInfo);
 
     ~SPDMDBusResponder() = default;
+
     /**
      * @brief Perform async operations for this responder
      * @details Contains the async logic for device connection and attestation.
-     *          The manager is responsible for spawning this coroutine.
+     *          Performs: VCA, GET_DIGESTS, GET_CERTIFICATE, GET_MEASUREMENTS
+     *          Manager spawns this in its async_scope which can be stopped.
      * @return Async task for coroutine execution
      */
     auto run() -> sdbusplus::async::task<>;
@@ -52,3 +54,4 @@ class SPDMDBusResponder
 };
 
 } // namespace spdm
+

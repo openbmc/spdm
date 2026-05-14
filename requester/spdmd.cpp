@@ -38,8 +38,8 @@ int main()
     TCPTransportDiscovery tcp{ctx};
     discovery.discover(tcp);
 
-    // Create responder manager
-    SPDMResponderManager responderManager{ctx};
+    // Create responder manager with policy manager reference
+    SPDMResponderManager responderManager{ctx, policyManager};
 
     // Enable dynamic device notifications
     discovery.setResponderManager(&responderManager);
