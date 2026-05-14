@@ -23,6 +23,9 @@ auto SPDMDBusResponder::run() -> sdbusplus::async::task<>
     debug("Running async operations for device: {PATH}", "PATH",
           responderInfo.path);
 
+    debug("Running async operations for device: {PATH}", "PATH",
+          responderInfo.path);
+
     // Step 1: Initialize SPDM transport and connection
 
     // Step 2: Get certificate digests from the responder
