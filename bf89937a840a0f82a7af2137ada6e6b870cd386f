@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ced78068_ec5e53e1",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002348
+      },
+      "writtenOn": "2026-05-18T06:27:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95ac48c2_f9c1a40c",
+      "revId": "bf89937a840a0f82a7af2137ada6e6b870cd386f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd3854b7_3e5e777e",
@@ -31,6 +49,30 @@
       "writtenOn": "2026-05-18T05:35:13Z",
       "side": 1,
       "message": "This also should be SPDMResponder right?",
+      "range": {
+        "startLine": 62,
+        "startChar": 52,
+        "endLine": 62,
+        "endChar": 69
+      },
+      "revId": "bf89937a840a0f82a7af2137ada6e6b870cd386f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9120682_3fd10aef",
+        "filename": "requester/spdm_responder_manager.hpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1002348
+      },
+      "writtenOn": "2026-05-18T06:27:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd3854b7_3e5e777e",
       "range": {
         "startLine": 62,
         "startChar": 52,
