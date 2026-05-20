@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca5c0988_26b0806d",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-20T07:02:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb679d57_48c69ec7",
+      "range": {
+        "startLine": 22,
+        "startChar": 14,
+        "endLine": 22,
+        "endChar": 36
+      },
+      "revId": "5b7eb9dd5129e8fc382a2f9379aa4d1e3d193616",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea87cdf8_d4fcc82f",
@@ -41,6 +65,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "367502f8_8eb0bdb1",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-20T07:02:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea87cdf8_d4fcc82f",
+      "revId": "5b7eb9dd5129e8fc382a2f9379aa4d1e3d193616",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ef4fad3_081a4421",
@@ -54,6 +96,24 @@
       "writtenOn": "2026-05-19T05:31:28Z",
       "side": 1,
       "message": "nit: rather than reading one by one ..can\u0027t we group all the config into a struct ? and then have a function for parsing the config and applying it ? wouldn\u0027t that scale much better ?",
+      "revId": "5b7eb9dd5129e8fc382a2f9379aa4d1e3d193616",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48fc3449_6e8da9fe",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-05-20T07:02:54Z",
+      "side": 1,
+      "message": "Yeah, initially I tried that, but the same property had to be maintained across policy.json, the config struct, and D-Bus property variables. And right, I separate the marshal unmarshal logic in separate methods for scalability",
+      "parentUuid": "2ef4fad3_081a4421",
       "revId": "5b7eb9dd5129e8fc382a2f9379aa4d1e3d193616",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
