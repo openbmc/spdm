@@ -22,6 +22,30 @@
       },
       "revId": "eb34aeec78f6ee93993cfefd674ce6f7e211809f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "711f1404_b2e5be52",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-05-21T08:53:19Z",
+      "side": 1,
+      "message": "line no 18 on this file, where it is used.",
+      "parentUuid": "b85806d5_e2b3d43c",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 1
+      },
+      "revId": "eb34aeec78f6ee93993cfefd674ce6f7e211809f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
