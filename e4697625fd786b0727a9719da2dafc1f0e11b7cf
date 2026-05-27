@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3b43580_b80f1776",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-05-27T07:05:26Z",
+      "side": 1,
+      "message": "duplicate, already present in #23",
+      "revId": "e4697625fd786b0727a9719da2dafc1f0e11b7cf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30030d06_7f1cca6e",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-05-27T07:05:26Z",
+      "side": 1,
+      "message": "This can be debug to limit logging since if else below already covers the same message",
+      "revId": "e4697625fd786b0727a9719da2dafc1f0e11b7cf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20695759_2463fbaf",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-05-27T07:05:26Z",
+      "side": 1,
+      "message": "What will be the impact on running tasks in below scenario, since running task state is not maintained per endpoint.\n\nSPDM Enabled property is set in this order one after the other --\u003e True --\u003e False --\u003e True",
+      "revId": "e4697625fd786b0727a9719da2dafc1f0e11b7cf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
