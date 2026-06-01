@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d66ea4d5_52e2090a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-01T20:20:05Z",
+      "side": 1,
+      "message": "I\u0027d prefer to defer mostly because I can\u0027t envision why this would be right from a dbus-semantics perspective.  I also didn\u0027t think the dbus object was supposed to be created until _after_ the add, but I guess I need to get to that code first before making that assertion.",
+      "revId": "2ba68e62ea92ed1dfaa2a3a5d4563ff5df7e09e9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
