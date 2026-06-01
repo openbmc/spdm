@@ -101,10 +101,20 @@ class SPDMDiscovery
 
     /**
      * Add a discovered device's ResponderInfo.
-     * @param r The ResponderInfo.
+     * @param r The ResponderInfo.  Adds are deduplicated against path
+     *          so that runtime-discovery races (e.g. the same endpoint
+     *          arriving via both the initial mapper sweep and an
+     *          InterfacesAdded signal) do not produce duplicate
+     *          entries.
      */
     void add(ResponderInfo&& r)
     {
+        if (std::ranges::any_of(responderInfos, [&r](const auto& e) {
+                return e.path == r.path;
+            }))
+        {
+            return;
+        }
         responderInfos.emplace_back(std::move(r));
     }
 
