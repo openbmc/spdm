@@ -229,4 +229,36 @@ TEST_F(SPDMDiscoveryTest, DuplicatePathIsDeduplicated)
     });
 }
 
+TEST_F(SPDMDiscoveryTest, DuplicatePathReplacesExisting)
+{
+    SPDMDiscovery disc;
+    MockTransport mock;
+
+    auto responder1 = makeResponder(1);
+    // Same path, but different EID + UUID — simulates a re-add after
+    // the device's state has changed (firmware update, reset, etc.).
+    // The discovery surface must surface the new state, not silently
+    // keep the cached one.
+    ResponderInfo responder1Updated{responder1.path,
+                                    MctpResponderInfo{0x99, "updated-uuid"},
+                                    TransportType::MCTP};
+
+    mock.devicesToAdd.push_back(responder1);
+    mock.devicesToAdd.push_back(responder1Updated);
+
+    disc.discover(mock);
+
+    runAsync([&]() -> sdbusplus::async::task<> {
+        co_await disc.run();
+        const auto& devs = disc.devices();
+        EXPECT_EQ(devs.size(), 1u);
+        // Verify the replacement (second add) is what's stored, not
+        // the original — confirming delete-recreate semantics rather
+        // than first-wins early-return.
+        const auto& mctp = std::get<MctpResponderInfo>(devs[0].info);
+        EXPECT_EQ(mctp.eid, 0x99);
+        EXPECT_EQ(mctp.uuid, "updated-uuid");
+    });
+}
+
 } // namespace spdm

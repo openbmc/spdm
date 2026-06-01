@@ -101,20 +101,23 @@ class SPDMDiscovery
 
     /**
      * Add a discovered device's ResponderInfo.
-     * @param r The ResponderInfo.  Adds are deduplicated against path
-     *          so that runtime-discovery races (e.g. the same endpoint
-     *          arriving via both the initial mapper sweep and an
-     *          InterfacesAdded signal) do not produce duplicate
-     *          entries.
+     * @param r The ResponderInfo.  When the same path arrives again
+     *          (e.g. the initial mapper sweep + a runtime
+     *          InterfacesAdded signal both seeing the same endpoint,
+     *          or a matcher that re-fires), the existing entry is
+     *          replaced rather than ignored.  A re-add may represent
+     *          a fresh device state — firmware update, reset, or a
+     *          compromise scenario — that should not inherit cached
+     *          attestation state.  Forcing fresh state every time is
+     *          the correct posture for an attestation-bearing
+     *          discovery surface, even at the cost of re-attesting
+     *          an unchanged device.
      */
     void add(ResponderInfo&& r)
     {
-        if (std::ranges::any_of(responderInfos, [&r](const auto& e) {
-                return e.path == r.path;
-            }))
-        {
-            return;
-        }
+        auto path = r.path;
+        std::erase_if(responderInfos,
+                      [&path](const auto& e) { return e.path == path; });
         responderInfos.emplace_back(std::move(r));
     }
 
