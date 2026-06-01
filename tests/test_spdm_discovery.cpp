@@ -209,4 +209,24 @@ TEST_F(SPDMDiscoveryTest, ParallelTransports)
     });
 }
 
+TEST_F(SPDMDiscoveryTest, DuplicatePathIsDeduplicated)
+{
+    SPDMDiscovery disc;
+    MockTransport mock;
+
+    auto responder1 = makeResponder(1);
+    auto responder1Dup = makeResponder(1);
+    mock.devicesToAdd.push_back(responder1);
+    mock.devicesToAdd.push_back(responder1Dup);
+
+    disc.discover(mock);
+
+    runAsync([&]() -> sdbusplus::async::task<> {
+        co_await disc.run();
+        const auto& devs = disc.devices();
+        EXPECT_EQ(devs.size(), 1u);
+        EXPECT_EQ(devs[0].path, responder1.path);
+    });
+}
+
 } // namespace spdm
