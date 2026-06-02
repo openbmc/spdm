@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "620be19b_6cf9bb53",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-02T10:49:19Z",
+      "side": 1,
+      "message": "In the current OpenBMC codebase, the MCTP daemon implementation follows a design in which the BMC acts as the bus owner and is responsible for assigning EIDs to all downstream devices. During EID assignment, the BMC ensures that each EID is unique across the system, even when the same physical device is reachable through multiple transport interfaces such as PCIe and I2C.\n\n\nWe can not take the object path as it is - as object path belongs to the discovery object path eg /au/com/codeconstruct/mctp1/networks/1/endpoints/9\n\nSecond reason to choose the EID/IPaddress is for the readability.\nWhat do you want to keep it for the TCP discovery - hostname/ipaddress.\nI don\u0027t have any issues with either.",
+      "parentUuid": "df337c9d_8760ed39",
+      "revId": "eb34aeec78f6ee93993cfefd674ce6f7e211809f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b0134a5_c68fa307",
@@ -31,6 +49,30 @@
       "writtenOn": "2026-05-22T04:43:51Z",
       "side": 1,
       "message": "we can have same endpoints id\u0027s across multiple MCTP networks. why not UUID ?",
+      "range": {
+        "startLine": 31,
+        "startChar": 16,
+        "endLine": 31,
+        "endChar": 48
+      },
+      "revId": "eb34aeec78f6ee93993cfefd674ce6f7e211809f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3155efbf_d1889958",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-02T10:49:19Z",
+      "side": 1,
+      "message": "Partially responded above, UUID is a random number for each device on the system and we will never know that this UUID is belongs to which device until and unless someone goes and read the machine book and do this mapping.\nEID is done by the BMC and will be same for the platform.\n\n*As explained above in the current mctpd implementation: the BMC ensures that each EID is unique across the system, even when the same physical device is reachable through multiple transport interfaces such as PCIe and I2C.*\n\nWe could have add the physical medium in the object name but not needed now, we can do it later once we hit this issue.",
+      "parentUuid": "4b0134a5_c68fa307",
       "range": {
         "startLine": 31,
         "startChar": 16,
@@ -101,6 +143,24 @@
       "writtenOn": "2026-05-22T04:43:51Z",
       "side": 1,
       "message": "what\u0027s the need for deriving different names for MCTP and TCP ? we already have the dbus object path of the responder from the discovery phase.",
+      "revId": "eb34aeec78f6ee93993cfefd674ce6f7e211809f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4942b97d_3cae2ae7",
+        "filename": "requester/spdm_dbus_responder.hpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-02T10:49:19Z",
+      "side": 1,
+      "message": "Responded below",
+      "parentUuid": "4e6e2718_63b9f590",
       "revId": "eb34aeec78f6ee93993cfefd674ce6f7e211809f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
