@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a0fbf9c_da124772",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-06-03T11:00:35Z",
+      "side": 1,
+      "message": "The InterfacesAdded signal from ObjectManager carries all interfaces and all their properties for the added path. Can we use that instead of D-Bus call here?\n\nWhat if UUID inteface is not populated by mctpd in path when EID interface is emitted?",
+      "revId": "f7a4f73b1ad8b177ffd4ab4f69a03cafc57067f4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae8344a1_1004f987",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-06-03T11:00:35Z",
+      "side": 1,
+      "message": "Can we please add UUID as well in the log?",
+      "revId": "f7a4f73b1ad8b177ffd4ab4f69a03cafc57067f4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3313c8a_1230760b",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-06-03T11:00:35Z",
+      "side": 1,
+      "message": "If endpoint X appears while the mapper sweep (line 44) is in flight, both discovery() and monitor_added will add X — discovery() via the mapper result, monitor_added via the queued InterfacesAdded signal. I think will need a fix in SPDMDiscovery::add() to check for an existing entry with the same path before inserting",
+      "revId": "f7a4f73b1ad8b177ffd4ab4f69a03cafc57067f4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d002102f_a61536de",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-06-03T11:00:35Z",
+      "side": 1,
+      "message": "Can this be moved to private? No external code needs access to the barrier.",
+      "revId": "f7a4f73b1ad8b177ffd4ab4f69a03cafc57067f4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e4857a1_be8adfe1",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-06-03T11:00:35Z",
+      "side": 1,
+      "message": "docstring for methods",
+      "revId": "f7a4f73b1ad8b177ffd4ab4f69a03cafc57067f4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
