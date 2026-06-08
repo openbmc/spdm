@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "641cc1a3_78a141a3",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-06-08T04:57:20Z",
+      "side": 1,
+      "message": "\u003e In the current OpenBMC codebase, the MCTP daemon implementation follows a design in which the BMC acts as the bus owner and is responsible for assigning EIDs to all downstream devices. During EID assignment, the BMC ensures that each EID is unique across the system, even when the same physical device is reachable through multiple transport interfaces such as PCIe and I2C.\n\nBut , what if the MCTP implementation change ? Technically as per the spec its totally allowed to have same EID across multiple networks. And from this change, i am not understanding why we need device name ? because this patch does not consume it. is this purely needed for debugging ? or do we plan to use it for something later in your patches ? If it is for debugging I think we should purely drop it because redfish endpoints should clearly show the links between component intergrity and actually physical device already right ?",
+      "parentUuid": "620be19b_6cf9bb53",
+      "revId": "eb34aeec78f6ee93993cfefd674ce6f7e211809f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4b0134a5_c68fa307",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 24
