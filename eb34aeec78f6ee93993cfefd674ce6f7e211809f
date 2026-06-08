@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "494a3396_914566cd",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-06-08T15:54:30Z",
+      "side": 1,
+      "message": "so , when you say , \"identifier\" you mean its the leaf node in the dbus object path. I think this entire thing needs to go in a commit that uses it \u0026 I wish we had captured the intent a bit more elaborately in the commit message. That a side, I don\u0027t think we need to complicate this by adding device name. Can\u0027t we just have simple incremental numbering for dbus objects like (1,2,..) and let `associations` on the object tell which device it really is ?",
+      "parentUuid": "7225815d_cdebf887",
+      "revId": "eb34aeec78f6ee93993cfefd674ce6f7e211809f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4b0134a5_c68fa307",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 24
