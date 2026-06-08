@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cc1ab98d_29c19ee3",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-08T10:15:20Z",
+      "side": 1,
+      "message": "The impact will be much higher if if the MCTP implementation change.\n\u003e i am not understanding why we need device name\nWith the current change, the D-Bus object name will use the EID as its identifier. In a subsequent commit, we plan to retrieve the inventory object name from the Entity Manager using the EID and use that instead. The following commit contains the initial implementation of this approach, but it requires rebasing and further rework:\nhttps://gerrit.openbmc.org/c/openbmc/spdm/+/83262/1/requester/mctp_transport_discovery.cpp",
+      "parentUuid": "641cc1a3_78a141a3",
+      "revId": "eb34aeec78f6ee93993cfefd674ce6f7e211809f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4b0134a5_c68fa307",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 24
