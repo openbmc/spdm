@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5973f419_427786f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-06-08T19:27:48Z",
+      "side": 1,
+      "message": "@gary The queries are based on the scope of 89179 commit\n\nFor runtime-added devices, the expectation is that only the newly discovered device should be processed and attested. We do not intend to re-attest all previously discovered devices whenever a new endpoint is detected. \nTherefore, when a new responder is discovered at runtime, the discovery layer should notify the manager with the specific ResponderInfo for that device through a single-device entry point `notifyDeviceAdded`. This allows the manager to create the corresponding SPDMDBusResponder and initiate attestation only for the newly added device.\n\nFor removed responders, the discovery layer will call `notifyDeviceRemoved`. This method is expected to handle the responder removal by cancelling the corresponding spawned task and removing the responder entry from the manager state.",
+      "revId": "d5fcdef4ea1d239933bbda92903b7c0806d82e5b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
