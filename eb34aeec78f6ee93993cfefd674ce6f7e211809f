@@ -110,6 +110,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1f51c838_ecb868c7",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-06-08T16:12:58Z",
+      "side": 1,
+      "message": "\u003e we plan to retrieve the inventory object name from the Entity Manager using the EID and use that instead.\n\nI just saw the other commit its like 6-7 commits above this one.  I am not sure how many things would change as we move from a commit to another as we go through the review process. I think this probably have a chance if it moves to the commit that uses it.",
+      "parentUuid": "494a3396_914566cd",
+      "revId": "eb34aeec78f6ee93993cfefd674ce6f7e211809f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4b0134a5_c68fa307",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 24
