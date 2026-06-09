@@ -128,6 +128,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c1498be5_efbc8154",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-09T10:02:00Z",
+      "side": 1,
+      "message": "Yes, there will be additional commits on top of this one. Immediately after this commit, we need to implement the interfaces (ComponentIntegrity and TrustedInterface). For that, we need the D-Bus objects in place, and those objects will require names.\n\nCurrently, the object names will be based on the EIDs of the MCTP-discovered objects. Later, we plan to replace those EID-based names with the corresponding inventory object names. So this commit is required now because the next commit depends on it. I can have the follow-up commit ready as well.\n\nI\u0027m not sure why we\u0027re blocked on the naming of the D-Bus object path, especially since the current naming is intended as an intermediate step and will be updated once the inventory object names become available.",
+      "parentUuid": "1f51c838_ecb868c7",
+      "revId": "eb34aeec78f6ee93993cfefd674ce6f7e211809f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4b0134a5_c68fa307",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 24
