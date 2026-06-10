@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "78ba6deb_52f9d79f",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-06-10T06:40:10Z",
+      "side": 1,
+      "message": "@garybeihl@microsoft.com\n\n```\nOne open question back: does spdmd have a hard requirement for UUID as the responder identifier, or is EID alone sufficient? If UUID is required, options are (a) skip endpoints without UUID, (b) wait/retry hoping mctpd later publishes UUID via PropertiesChanged or InterfacesAdded, (c) treat UUID as optional and fall back to EID. Want to make sure we\u0027re aligned on which.\n```\n\n--\u003e UUID is unique for the device and can change across systems for same device. EID assignment is done by the MCTP bus owner and in OpenBMC case MCTPD will assign the EID. Usually EID is assigned based on system topology and fixed for the device and won\u0027t change across systems for the platform. Both are required fields. We plan to use EID for MCTP based devices as an identifier in Entity manager to identify device and add corresponding association.",
+      "parentUuid": "2a0fbf9c_da124772",
+      "revId": "f7a4f73b1ad8b177ffd4ab4f69a03cafc57067f4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ae8344a1_1004f987",
         "filename": "requester/mctp_transport_discovery.cpp",
         "patchSetId": 1
