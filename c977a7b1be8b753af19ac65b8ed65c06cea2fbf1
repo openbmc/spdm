@@ -34,6 +34,24 @@
       "parentUuid": "b7a1f803_b2272713",
       "revId": "c977a7b1be8b753af19ac65b8ed65c06cea2fbf1",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "638b7ee8_4211b256",
+        "filename": "requester/spdm_responder_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-06-10T06:30:48Z",
+      "side": 1,
+      "message": "Is this resolved?. patch 10 has the same changes \n[[maybe_unused]] sdbusplus::async::context\u0026 asyncCtx;",
+      "parentUuid": "71115327_5c7d0701",
+      "revId": "c977a7b1be8b753af19ac65b8ed65c06cea2fbf1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
