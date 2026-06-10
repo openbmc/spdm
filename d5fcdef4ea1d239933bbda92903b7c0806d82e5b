@@ -16,6 +16,23 @@
       "message": "@gary The queries are based on the scope of 89179 commit\n\nFor runtime-added devices, the expectation is that only the newly discovered device should be processed and attested. We do not intend to re-attest all previously discovered devices whenever a new endpoint is detected. \nTherefore, when a new responder is discovered at runtime, the discovery layer should notify the manager with the specific ResponderInfo for that device through a single-device entry point `notifyDeviceAdded`. This allows the manager to create the corresponding SPDMDBusResponder and initiate attestation only for the newly added device.\n\nFor removed responders, the discovery layer will call `notifyDeviceRemoved`. This method is expected to handle the responder removal by cancelling the corresponding spawned task and removing the responder entry from the manager state.",
       "revId": "d5fcdef4ea1d239933bbda92903b7c0806d82e5b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e87e8b7c_14038a37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-06-10T03:02:51Z",
+      "side": 1,
+      "message": "@garybeihl@microsoft.com\nOn 90798: 89179 PS7 commit provides support for notifyDeviceAdded and notifyDeviceRemoved. 90798 should go on top of 89179 with the changes for notifyDeviceAdded. No explicit changes required for notifyDeviceRemoved, its all taken care by the manager in 89179 PS7.\nOn 90810: Sounds good. I’m aligned with this approach",
+      "revId": "d5fcdef4ea1d239933bbda92903b7c0806d82e5b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
