@@ -36,6 +36,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b556fb8f_9d53b321",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-06-17T16:41:44Z",
+      "side": 1,
+      "message": "Thanks — went EID-primary, per your point that EID is the identifier. monitor_added() and the initial sweep no longer skip endpoints that lack a UUID: we key on EID and record the UUID best-effort (empty when mctpd hasn\u0027t published it). That also dissolves the original race — discovery no longer depends on the UUID interface being present when the EID interface is emitted.\n\nConfirmed it\u0027s safe downstream: the UUID in MctpResponderInfo is stored but not consumed by any production code today (only tests reference it), and responders are keyed by object_path, so an empty UUID can\u0027t affect identification or dedup. If a later layer needs UUID it can require it there.",
+      "parentUuid": "78ba6deb_52f9d79f",
+      "revId": "f7a4f73b1ad8b177ffd4ab4f69a03cafc57067f4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae8344a1_1004f987",
@@ -49,6 +67,24 @@
       "writtenOn": "2026-06-03T11:00:35Z",
       "side": 1,
       "message": "Can we please add UUID as well in the log?",
+      "revId": "f7a4f73b1ad8b177ffd4ab4f69a03cafc57067f4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1a88bee_e381ef0a",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-06-17T16:41:44Z",
+      "side": 1,
+      "message": "Done — UUID is now logged on both paths: the runtime InterfacesAdded path and the initial-sweep discovery() log (…EID\u003d{EID}, UUID\u003d{UUID}).",
+      "parentUuid": "ae8344a1_1004f987",
       "revId": "f7a4f73b1ad8b177ffd4ab4f69a03cafc57067f4",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -70,6 +106,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12471346_fdebb795",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-06-17T16:41:44Z",
+      "side": 1,
+      "message": "Good catch on the ordering — already handled at the sink: SPDMDiscovery::add() dedups against duplicate path adds (merged in 90799), so the discovery() + monitor_added double-add is a no-op for an existing path. startup_barrier arms the matchers before the mapper sweep, narrowing the window further. The runtime remove-then-readd case (where we want a fresh entry) is 90810\u0027s delete-recreate, which I\u0027ll refresh alongside the runtime re-discovery series (89179).",
+      "parentUuid": "e3313c8a_1230760b",
+      "revId": "f7a4f73b1ad8b177ffd4ab4f69a03cafc57067f4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d002102f_a61536de",
@@ -87,6 +141,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5c85bbd_da1c986d",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-06-17T16:41:44Z",
+      "side": 1,
+      "message": "Done — startup_barrier is in the private: section now.",
+      "parentUuid": "d002102f_a61536de",
+      "revId": "f7a4f73b1ad8b177ffd4ab4f69a03cafc57067f4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e4857a1_be8adfe1",
@@ -100,6 +172,24 @@
       "writtenOn": "2026-06-03T11:00:35Z",
       "side": 1,
       "message": "docstring for methods",
+      "revId": "f7a4f73b1ad8b177ffd4ab4f69a03cafc57067f4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "369a6596_e09f1086",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-06-17T16:41:44Z",
+      "side": 1,
+      "message": "Done — added @brief/@param doc comments to discovery(), monitor_added(), and monitor_removed() (and the barrier member).",
+      "parentUuid": "6e4857a1_be8adfe1",
       "revId": "f7a4f73b1ad8b177ffd4ab4f69a03cafc57067f4",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
