@@ -22,6 +22,126 @@
       },
       "revId": "0cff49e185f8986961ad6e3fa862ab2b0efd2521",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeebb2ce_24476927",
+        "filename": "requester/trusted_component_dbus.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-17T13:45:25Z",
+      "side": 1,
+      "message": "@param bus D-Bus connection but the responder passes ctx (async context)",
+      "revId": "0cff49e185f8986961ad6e3fa862ab2b0efd2521",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ff15996_7619efaa",
+        "filename": "requester/trusted_component_dbus.hpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-17T13:45:25Z",
+      "side": 1,
+      "message": "do we need this in hpp?",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 73
+      },
+      "revId": "0cff49e185f8986961ad6e3fa862ab2b0efd2521",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "940b0bc9_3c46ae1a",
+        "filename": "requester/trusted_component_dbus.hpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-17T13:45:25Z",
+      "side": 1,
+      "message": "We need this only in cpp.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 35
+      },
+      "revId": "0cff49e185f8986961ad6e3fa862ab2b0efd2521",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f1219cb_2e3884a6",
+        "filename": "requester/trusted_component_dbus.hpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-17T13:45:25Z",
+      "side": 1,
+      "message": "bus --\u003e context",
+      "revId": "0cff49e185f8986961ad6e3fa862ab2b0efd2521",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa3f5a0b_af3a839f",
+        "filename": "requester/trusted_component_dbus.hpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-17T13:45:25Z",
+      "side": 1,
+      "message": "virtual ~TrustedComponent() \u003d default — TrustedComponent is a leaf class: virtual is unnecessary",
+      "range": {
+        "startLine": 50,
+        "startChar": 3,
+        "endLine": 50,
+        "endChar": 42
+      },
+      "revId": "0cff49e185f8986961ad6e3fa862ab2b0efd2521",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bcc7f32_3fbbb7ef",
+        "filename": "requester/trusted_component_dbus.hpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-17T13:45:25Z",
+      "side": 1,
+      "message": "std::string path is public — should be private?",
+      "revId": "0cff49e185f8986961ad6e3fa862ab2b0efd2521",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
