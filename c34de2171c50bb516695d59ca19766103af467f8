@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21196297_aa410959",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-17T13:33:44Z",
+      "side": 1,
+      "message": "Not yet done, but will do it later.",
+      "parentUuid": "522ff9aa_5104155b",
+      "revId": "c34de2171c50bb516695d59ca19766103af467f8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "24a5984d_329e860e",
         "filename": "requester/component_integrity_dbus.cpp",
         "patchSetId": 12
@@ -31,6 +49,30 @@
       "writtenOn": "2025-09-09T10:11:23Z",
       "side": 1,
       "message": "cannot be first negotiate and then set the version based on the negotiation with the responder ? we probably should not limit openbmc implementation to just support 1.1 - shouldn\u0027t we target for 1.3 ?",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 23,
+        "endChar": 24
+      },
+      "revId": "c34de2171c50bb516695d59ca19766103af467f8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb7c8024_755fdd58",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-17T13:33:44Z",
+      "side": 1,
+      "message": "Code changed, can you please re-review?",
+      "parentUuid": "24a5984d_329e860e",
       "range": {
         "startLine": 22,
         "startChar": 2,
@@ -64,6 +106,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b938380e_f25b080e",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-17T13:33:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "84b8bc2e_70a31b38",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 6
+      },
+      "revId": "c34de2171c50bb516695d59ca19766103af467f8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a76277d5_712d37a3",
@@ -77,6 +143,30 @@
       "writtenOn": "2025-09-09T10:11:23Z",
       "side": 1,
       "message": "extra space",
+      "range": {
+        "startLine": 6,
+        "startChar": 55,
+        "endLine": 6,
+        "endChar": 56
+      },
+      "revId": "c34de2171c50bb516695d59ca19766103af467f8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "456f6ac1_862d5bbd",
+        "filename": "subprojects/phosphor-dbus-interfaces.wrap",
+        "patchSetId": 12
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-17T13:33:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a76277d5_712d37a3",
       "range": {
         "startLine": 6,
         "startChar": 55,

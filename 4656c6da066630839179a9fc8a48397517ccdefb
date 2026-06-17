@@ -86,6 +86,24 @@
       "message": "Should this be camel case https://github.com/openbmc/docs/blob/master/cpp-style-and-conventions.md#style-recommendations ?",
       "revId": "4656c6da066630839179a9fc8a48397517ccdefb",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7de63fc_515ec168",
+        "filename": "src/component_integrity_dbus.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-17T13:33:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aafd5f28_9490936d",
+      "revId": "4656c6da066630839179a9fc8a48397517ccdefb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
