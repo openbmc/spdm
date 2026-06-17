@@ -71,6 +71,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "027dd1e1_0ff90f6a",
+        "filename": "src/component_integrity_dbus.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-17T13:35:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c15ad642_66b0cd07",
+      "revId": "4656c6da066630839179a9fc8a48397517ccdefb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aafd5f28_9490936d",
