@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "189ec77c_a8f2d76b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-17T14:10:12Z",
+      "side": 1,
+      "message": "Minor comments - otherwise code LGTM",
+      "revId": "18adbdbada82326a543b5920899381f308544ee3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abeefdba_2d18bbcf",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-17T14:10:12Z",
+      "side": 1,
+      "message": "named constant? eg: num_startup_tasks",
+      "range": {
+        "startLine": 29,
+        "startChar": 14,
+        "endLine": 29,
+        "endChar": 32
+      },
+      "revId": "18adbdbada82326a543b5920899381f308544ee3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efcb3cb9_7b4de44f",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-17T14:10:12Z",
+      "side": 1,
+      "message": "// mctpd publishes endpoints under its own tree, not /xyz/openbmc_project",
+      "range": {
+        "startLine": 90,
+        "startChar": 3,
+        "endLine": 95,
+        "endChar": 56
+      },
+      "revId": "18adbdbada82326a543b5920899381f308544ee3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
