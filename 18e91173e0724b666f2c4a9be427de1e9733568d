@@ -70,6 +70,24 @@
       "parentUuid": "ee525271_e14e753e",
       "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bce2f274_0f89dc0e",
+        "filename": "meson.build",
+        "patchSetId": 12
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1002523
+      },
+      "writtenOn": "2026-06-19T09:29:39Z",
+      "side": 1,
+      "message": "so .hpp is now not responsible for policy cache json or its structure, for sample json you can use\n```json\n{\n    \"Enabled\": true,\n    \"SecureSessionEnabled\": true,\n    \"VerifyCertificate\": true,\n    \"AllowExtendedAlgorithms\": true,\n    \"AllowedVersions\": [],\n    \"AllowedAlgorithmsAEAD\": [],\n    \"AllowedAlgorithmsBaseHash\": [],\n    \"AllowedAlgorithmsBaseAsym\": []\n}\n```\n\nor follow requester/policy_manager.cpp:159\n```cpp\nauto PolicyManager::marshal_config() -\u003e nlohmann::json\n{\n    return nlohmann::json{\n        {POLICY_VERSION_ID, POLICY_VERSION},\n        {Policy::enabled_t::name, enabled_},\n        {Policy::secure_session_enabled_t::name, secure_session_enabled_},\n        {Policy::verify_certificate_t::name, verify_certificate_},\n        {Policy::allow_extended_algorithms_t::name, allow_extended_algorithms_},\n        {Policy::allowed_versions_t::name, to_json(allowed_versions_)},\n        {Policy::allowed_algorithms_aead_t::name,\n         to_json(allowed_algorithms_aead_)},\n        {Policy::allowed_algorithms_base_hash_t::name,\n         to_json(allowed_algorithms_base_hash_)},\n        {Policy::allowed_algorithms_base_asym_t::name,\n         to_json(allowed_algorithms_base_asym_)},\n    };\n}\n```",
+      "parentUuid": "76540952_57cf8087",
+      "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
