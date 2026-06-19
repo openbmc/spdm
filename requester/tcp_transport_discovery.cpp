@@ -24,7 +24,7 @@ using InterfaceMap = std::unordered_map<
     std::string,
     std::unordered_map<std::string, std::variant<std::string, uint64_t>>>;
 
-namespace rules = sdbusplus::bus::match::rules;
+namespace rules = sdbusplus::match_rules;
 
 TCPTransportDiscovery::TCPTransportDiscovery(sdbusplus::async::context& ctx) :
     startup_barrier(3), ctx(ctx)
