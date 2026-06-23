@@ -7,6 +7,7 @@
 #include <xyz/openbmc_project/ObjectMapper/client.hpp>
 
 #include <expected>
+#include <map>
 
 namespace spdm::mapper
 {
@@ -20,8 +21,12 @@ auto by_interface(sdbusplus::async::context& ctx, std::string interface)
 {
     using Mapper = sdbusplus::client::xyz::openbmc_project::ObjectMapper<>;
 
-    auto objects = co_await [&ctx, interface]()
-        -> sdbusplus::async::task<Mapper::get_sub_tree_t::return_type> {
+    // GetSubTree returns: object path -> { service -> [interfaces] }
+    using SubTreeType =
+        std::map<std::string, std::map<std::string, std::vector<std::string>>>;
+
+    auto objects = co_await
+        [&ctx, interface]() -> sdbusplus::async::task<SubTreeType> {
         try
         {
             co_return co_await Mapper(ctx)
@@ -50,7 +55,7 @@ auto by_interface(sdbusplus::async::context& ctx, std::string interface)
     {
         for (const auto& [service, _] : services)
         {
-            results.push_back({path, service});
+            results.emplace_back(path, service);
         }
     }
 
