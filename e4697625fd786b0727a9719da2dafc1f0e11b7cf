@@ -37,6 +37,57 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "68433b66_0e701a1d",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-25T10:46:29Z",
+      "side": 1,
+      "message": "Why do we need to attest all the devices here?\n\nWhat we actually need is to fetch the certificates from all devices. The primary reason for doing this is to pre-fetch and cache the certificates so they can be displayed through RF. Otherwise, if we fetch the certificate on every request, it could lead to performance issues.\n\nIn most systems, certificates do not change automatically once they have been provisioned. Although SPDM provides a \"Set Certificate\" operation, we can refresh the cached certificate as part of that workflow whenever a certificate is updated.\n\nI don\u0027t see a use of attestation here - what we are attesting? where is the reference measurements?",
+      "revId": "e4697625fd786b0727a9719da2dafc1f0e11b7cf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1111129_69f05992",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-25T10:46:29Z",
+      "side": 1,
+      "message": "As per the above comment we should not do attestation - so no stop",
+      "revId": "e4697625fd786b0727a9719da2dafc1f0e11b7cf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7af4e13e_536fd2c8",
+        "filename": "requester/spdm_responder_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-25T10:46:29Z",
+      "side": 1,
+      "message": "For me the policy manger role is - read all the default policies for the BMC as a SPDM requester, kind of what kind of SPDM version BMC supports or the algo which it supports.",
+      "revId": "e4697625fd786b0727a9719da2dafc1f0e11b7cf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "20695759_2463fbaf",
         "filename": "requester/spdm_responder_manager.cpp",
         "patchSetId": 2
