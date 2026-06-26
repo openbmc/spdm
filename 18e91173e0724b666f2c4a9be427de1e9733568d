@@ -106,6 +106,24 @@
       "parentUuid": "bce2f274_0f89dc0e",
       "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58c1ae04_f770cd80",
+        "filename": "meson.build",
+        "patchSetId": 12
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-06-26T07:11:57Z",
+      "side": 1,
+      "message": "I am thinking we should have default policy in spdm repo which serves as a reference, then each BMC can decide what to allow in their platform and modify accordingly.\n\n@ratankgupta31@gmail.com any thoughts on this?",
+      "parentUuid": "64f8dd2a_06b8ed55",
+      "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
