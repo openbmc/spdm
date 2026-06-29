@@ -146,6 +146,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7a3703ee_66d4ee48",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-06-29T05:24:31Z",
+      "side": 1,
+      "message": "When the EM config patch comes in(https://gerrit.openbmc.org/c/openbmc/spdm/+/83262/1) we have D-Bus objects populated like this\n/xyz/openbmc_project/component_integrity/BMC_0\n/xyz/openbmc_project/component_integrity/CPU_0\n\nThis steps is intermediate step to show EID(MCTP) or IP Addrress(TCP) till then so that E2E attestation can be verified. \nEx:\n/xyz/openbmc_project/component_integrity/20\n/xyz/openbmc_project/component_integrity/30",
+      "parentUuid": "c1498be5_efbc8154",
+      "revId": "eb34aeec78f6ee93993cfefd674ce6f7e211809f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4b0134a5_c68fa307",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 24
