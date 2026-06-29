@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3700593b_8adeb059",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-06-29T15:29:34Z",
+      "side": 1,
+      "message": "Hi Ratan — I rebuilt 80267/PS26 in a current CI image (gcc-15, meson 1.10.1, sdbusplus HEAD) to chase the Verified−1, and it turns out there are two small fixes needed, not one:\n\n1. meson.options is missing the coverage option that meson.build:97 reads via get_option(\u0027coverage\u0027), so meson setup aborts before compiling anything (meson.build:97:3: ERROR: Option coverage does not exist, job 138552). Add:\n\nmeson\noption(\u0027coverage\u0027, type: \u0027boolean\u0027, value: false,\n       description: \u0027Enable the coverage-html custom target\u0027)\n\n2. With setup fixed, the build then fails -Werror\u003ddeprecated-declarations in the Trusted Component change (80274): requester/trusted_component_dbus.hpp:45 and .cpp:18 use the now-deprecated sdbusplus::bus::bus. Fix is sdbusplus::bus::bus → sdbusplus::bus_t (both spots).\n\nWith both fixes, 80267 and the changes below it configures, compiles, links, and meson test passes 2/2 for me. I didn\u0027t rebuild the changes stacked above 80267, so there may be similar deprecated-alias cleanups needed higher up — but this clears the base.\n\n(Also — please disregard my earlier get_sub_tree_t / mapper.cpp note; I verified it compiles fine against current sdbusplus, HEAD 542f199 still generates that alias.)\n\nHappy to push either or both as patchsets if that\u0027s easier — just say the word. Thanks for driving this.\n\n— Gary",
+      "revId": "f541be83ac1a62696cb539e2473170c90e0fc117",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
