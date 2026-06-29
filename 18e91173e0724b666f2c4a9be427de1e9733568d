@@ -124,6 +124,24 @@
       "parentUuid": "64f8dd2a_06b8ed55",
       "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f6449c0_624c91ae",
+        "filename": "meson.build",
+        "patchSetId": 12
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-06-29T05:02:42Z",
+      "side": 1,
+      "message": "\u003e I am thinking we should have default policy in spdm repo which serves as a reference, then each BMC can decide what to allow in their platform and modify accordingly.\n\n\u003e \n\nI disagree, The default values for the policies are already debated and documented in PDI. if you need changes for the defaults please create a new comment and we can discuss the rationale for that over there.I dont think we should be halting this review because of that.",
+      "parentUuid": "58c1ae04_f770cd80",
+      "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
