@@ -160,6 +160,24 @@
       "parentUuid": "6f6449c0_624c91ae",
       "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27b759aa_d1820681",
+        "filename": "meson.build",
+        "patchSetId": 12
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-06-30T10:25:21Z",
+      "side": 1,
+      "message": "@manojkiran.eda@gmail.com: How is a user of this SPDM repository expected to know the structure of the JSON configuration file?\n\nI understand that the default values are defined in the PDI, but we should also include a sample configuration file in the SPDM repository itself. The sample can use the same default values as the PDI.\n\nIf needed, this configuration file can then be customized through the respective meta layer.",
+      "parentUuid": "0ff23a0a_da32f593",
+      "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
