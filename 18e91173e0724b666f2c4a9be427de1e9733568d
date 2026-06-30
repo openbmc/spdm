@@ -142,6 +142,24 @@
       "parentUuid": "58c1ae04_f770cd80",
       "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ff23a0a_da32f593",
+        "filename": "meson.build",
+        "patchSetId": 12
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-06-30T04:08:32Z",
+      "side": 1,
+      "message": "Default values in PDI are false in all the cases, like SPDM enabled, Secure session enabled. Some BMCs will have use case not to support secure session and some BMCs not, that policy needs to be determined at compile time for the platform.\nThis patch expects policy.json in /lib/spdm, for someone enabling for their platform there is no reference json. If we can have example.json with default values(same as PDI) i think it simplifies the integration.",
+      "parentUuid": "6f6449c0_624c91ae",
+      "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
