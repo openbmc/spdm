@@ -200,6 +200,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9b77ec08_0fc5c374",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-07-01T06:55:23Z",
+      "side": 1,
+      "message": "There is no code in the upstream repository currently to do en E2E testing. I am not sure how having EID \u0026 TCP IP on the dbus object would help.\n\n--\u003e Sorry, I didn’t mean redfish — I meant using the D-Bus API with busctl calls in this commit chain (https://gerrit.openbmc.org/c/openbmc/spdm/+/84019/13)",
+      "parentUuid": "d0f8deab_2c6d6681",
+      "revId": "eb34aeec78f6ee93993cfefd674ce6f7e211809f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4b0134a5_c68fa307",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 24
