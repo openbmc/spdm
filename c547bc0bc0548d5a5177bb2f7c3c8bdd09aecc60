@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b85d44e2_9ff3157f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 51
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-01T05:06:53Z",
+      "side": 1,
+      "message": "\u003e Current Dbus interface default value for SPDM communication is set to false \n\u003e \n\u003e name: Enabled\n\u003e     type: boolean\n\u003e     default: false\n\u003e     description: \u003e\n\u003e         Indicates whether SPDM communication is enabled.\n\u003e \n\u003e Requiring system administrators to use the Redfish API to enable SPDM communication or verify certificate on every SPDM-capable system is not a scalable approach.\n\u003e \n\u003e IMHO, the default value for SPDM communication should be set to true. \n\n\u003e \n\nPlease then come up with a new commit in PDI to change the default with a rationale. NVIDIA guys are in the review of that PDI commit when it was merged. I am not sure what is the point of debating that here in this review. \n\n\u003e Additionally, there should be a mechanism to allow these default values to be configured or overridden at compile time. it is a generic requirement in any Daemon.\n\nSure, fine if that is what NVIDIA wants - please come up with a patch to add that functionality.",
+      "parentUuid": "663c7db4_dcb67854",
+      "revId": "c547bc0bc0548d5a5177bb2f7c3c8bdd09aecc60",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "416fe7aa_98f8b3fc",

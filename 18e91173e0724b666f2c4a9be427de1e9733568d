@@ -178,6 +178,24 @@
       "parentUuid": "0ff23a0a_da32f593",
       "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a30673f8_9a8438c7",
+        "filename": "meson.build",
+        "patchSetId": 12
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-01T05:06:53Z",
+      "side": 1,
+      "message": "This commit is not meant for adding any configuration file, it is meant to only add infrastructure that persists the existing dbus settings. If you need  configuration file, please open a new commit adding that functionality.\n\n\u003e  Some BMCs will have use case not to support secure session and some \nBMCs not, that policy needs to be determined at compile time for the \nplatform.\n\nWhat are those BMC\u0027s ? NVIDIA\u0027s ?  I would let those companies that have that sort of BMC behavior to add the respective code. Again to state - this comment is intented to only add persistence of dbus settings.",
+      "parentUuid": "27b759aa_d1820681",
+      "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
