@@ -196,6 +196,24 @@
       "parentUuid": "27b759aa_d1820681",
       "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0355659a_70289bf9",
+        "filename": "meson.build",
+        "patchSetId": 12
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-07-01T05:23:04Z",
+      "side": 1,
+      "message": "Manoj, We\u0027re not discussing whether the BMC is NVIDIA\u0027s or any other vendor\u0027s. The point is that there should always be a way to configure the default value at compile time, whether through a Meson option, a configuration file, or a similar mechanism.\n\nTo give a concrete example, SPDM communication is currently disabled by default. If it needs to be enabled, is that really an NVIDIA-specific requirement, or is it a generic configuration requirement?\n\nThe alternative is to make an additional Redfish interface call on every system just to enable it, which seems unnecessary when the default could be configured at build time.\n\nHasn\u0027t this been the approach followed by OpenBMC since its inception? Anyways if it can not be fixed here, which I though this is the commit which needs to fix this - we will push the fix for the same.",
+      "parentUuid": "a30673f8_9a8438c7",
+      "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
