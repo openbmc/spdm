@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "121c7753_386aad3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-07-01T11:12:05Z",
+      "side": 1,
+      "message": "Trimmed the commit message down to problem/solution/impact, and removed the (added in 90799) cross-reference from the discovery() docstring. Thanks for the review!",
+      "revId": "8ecdda850cc36fc3967767417e8352288686ed83",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
