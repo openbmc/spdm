@@ -16,6 +16,24 @@
       "message": "Hi Chinmay — PS27 (your 12:20 rebase) is still Verified−1 on the same two issues from my earlier note: the coverage option missing from meson.options on 80267, and sdbusplus::bus::bus → sdbusplus::bus_t in requester/trusted_component_dbus.{hpp,cpp} on 80274 (-Werror\u003ddeprecated-declarations). I built both in a current CI image (gcc-15 / sdbusplus HEAD) — with them the stack configures, compiles, and meson test passes 2/2. I\u0027ve got them staged and can push as patchsets onto 80267/80274, or you can fold them into your next rebase — whatever\u0027s easiest. Just let me know.",
       "revId": "3873e676fcfc213c4d1a896aae7a9f88daefd50f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c718fad5_11cf634b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-07-01T10:10:09Z",
+      "side": 1,
+      "message": "Those CI issues are fixed now.",
+      "parentUuid": "c46b1718_f5cb27c0",
+      "revId": "3873e676fcfc213c4d1a896aae7a9f88daefd50f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
