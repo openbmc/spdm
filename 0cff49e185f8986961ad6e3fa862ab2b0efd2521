@@ -65,6 +65,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6270444a_74474cea",
+        "filename": "requester/trusted_component_dbus.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-07-01T16:57:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eeebb2ce_24476927",
+      "revId": "0cff49e185f8986961ad6e3fa862ab2b0efd2521",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ff15996_7619efaa",
@@ -78,6 +96,30 @@
       "writtenOn": "2026-06-17T13:45:25Z",
       "side": 1,
       "message": "do we need this in hpp?",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 73
+      },
+      "revId": "0cff49e185f8986961ad6e3fa862ab2b0efd2521",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f7fa9ea_0e37b004",
+        "filename": "requester/trusted_component_dbus.hpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-07-01T16:57:28Z",
+      "side": 1,
+      "message": "Trusted Component is needed, error hpp is not needed.",
+      "parentUuid": "9ff15996_7619efaa",
       "range": {
         "startLine": 6,
         "startChar": 0,
@@ -111,6 +153,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b4d5869_b03a2b7e",
+        "filename": "requester/trusted_component_dbus.hpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-07-01T16:57:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "940b0bc9_3c46ae1a",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 35
+      },
+      "revId": "0cff49e185f8986961ad6e3fa862ab2b0efd2521",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f1219cb_2e3884a6",
@@ -124,6 +190,24 @@
       "writtenOn": "2026-06-17T13:45:25Z",
       "side": 1,
       "message": "bus --\u003e context",
+      "revId": "0cff49e185f8986961ad6e3fa862ab2b0efd2521",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78a21b39_9d04e677",
+        "filename": "requester/trusted_component_dbus.hpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-07-01T16:57:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f1219cb_2e3884a6",
       "revId": "0cff49e185f8986961ad6e3fa862ab2b0efd2521",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -151,6 +235,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93e191c9_e9912d7a",
+        "filename": "requester/trusted_component_dbus.hpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-07-01T16:57:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa3f5a0b_af3a839f",
+      "range": {
+        "startLine": 50,
+        "startChar": 3,
+        "endLine": 50,
+        "endChar": 42
+      },
+      "revId": "0cff49e185f8986961ad6e3fa862ab2b0efd2521",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4bcc7f32_3fbbb7ef",
@@ -164,6 +272,24 @@
       "writtenOn": "2026-06-17T13:45:25Z",
       "side": 1,
       "message": "std::string path is public — should be private?",
+      "revId": "0cff49e185f8986961ad6e3fa862ab2b0efd2521",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0a1d806_5506f098",
+        "filename": "requester/trusted_component_dbus.hpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-07-01T16:57:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4bcc7f32_3fbbb7ef",
       "revId": "0cff49e185f8986961ad6e3fa862ab2b0efd2521",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
