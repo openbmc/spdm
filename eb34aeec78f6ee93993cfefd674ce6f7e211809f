@@ -164,6 +164,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "36f186eb_ee38d871",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-01T05:36:17Z",
+      "side": 1,
+      "message": "@ratan, @chinmay -  Over the past few years in OpenBMC, we\u0027ve intentionally moved away from encoding meaning into D-Bus object paths. Instead, we rely on associations to derive the relationships and semantics. Ideally, an object path should be treated as an opaque identifier rather than something consumers parse to infer meaning.I\u0027m fully in favor of using a meaningful and unique name where appropriate. However, neither the EID nor the IP address can be considered globally unique identifiers, so using them in the object path doesn\u0027t solve the uniqueness problem.For that reason, I would like to see a simple unique naming (may be a sequential numbering like 1,2,3..) until we have the EM support. I don\u0027t think I can merge this change in its current form.\u003e This steps is intermediate step to show EID(MCTP) or IP Addrress(TCP) till then so that E2E attestation can be verified.There is no code in the upstream repository currently to do en E2E testing. I am not sure how having EID \u0026 TCP IP on the dbus object would help.",
+      "parentUuid": "7a3703ee_66d4ee48",
+      "revId": "eb34aeec78f6ee93993cfefd674ce6f7e211809f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4b0134a5_c68fa307",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 24
