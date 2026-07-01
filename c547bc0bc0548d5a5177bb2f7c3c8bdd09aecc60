@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "663c7db4_dcb67854",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 51
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-07-01T04:54:42Z",
+      "side": 1,
+      "message": "Current Dbus interface default value for SPDM communication is set to false \n\nname: Enabled\n    type: boolean\n    default: false\n    description: \u003e\n        Indicates whether SPDM communication is enabled.\n\nRequiring system administrators to use the Redfish API to enable SPDM communication or verify certificate on every SPDM-capable system is not a scalable approach.\n\nIMHO, the default value for SPDM communication should be set to true. \n\nAdditionally, there should be a mechanism to allow these default values to be configured or overridden at compile time. it is a generic requirement in any Daemon.",
+      "revId": "c547bc0bc0548d5a5177bb2f7c3c8bdd09aecc60",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "416fe7aa_98f8b3fc",
