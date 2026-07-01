@@ -182,6 +182,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d0f8deab_2c6d6681",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-01T05:37:27Z",
+      "side": 1,
+      "message": "\u003e This steps is intermediate step to show EID(MCTP) or IP Addrress(TCP) till then so that E2E attestation can be verified.\n\nThere is no code in the upstream repository currently to do en E2E testing. I am not sure how having EID \u0026 TCP IP on the dbus object would help.",
+      "parentUuid": "36f186eb_ee38d871",
+      "revId": "eb34aeec78f6ee93993cfefd674ce6f7e211809f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4b0134a5_c68fa307",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 24
