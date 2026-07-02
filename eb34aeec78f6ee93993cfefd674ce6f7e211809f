@@ -218,6 +218,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "11ad414c_af26ecb8",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-07-02T11:53:53Z",
+      "side": 1,
+      "message": "If concern for using EID till we have EM support is because there could be duplicate EID on different network?. In that case we can see if we can use network id and eid as an intermediate approach till we have EM support. \n\nEntity Manager maintains the mapping from EID to the inventory object. However, if the concern is that we\u0027ll be making decisions based on the object name, that\u0027s not the case. We\u0027ll use the associated MCTP object to retrieve the EID and base the decision on that instead.\n\nWhen we have EM changes in, SPDM daemon does a mapping for EID and inventory with the association present in EM to get a device name\n\nWith modified patch in current MR object path for spdm will be /xyz/openbmc_project/component_integrity/1_20\n/xyz/openbmc_project/component_integrity/1_30\n\nWith EM change it will be\n/xyz/openbmc_project/component_integrity/CPU_0\n/xyz/openbmc_project/component_integrity/CPU_1\n\n\nBMCWeb does one mapper call for component integrity to fetch objects implementing ComponentIntegrityInterface. Similar to FW inventory where it looks for objects implementing version interface. Id property in ComponentIntegrity redfish will use objectpath.filename()\n\nLater for links in component integrity and trusted components we need couple of more association, for reporting and authenticating association.",
+      "parentUuid": "9b77ec08_0fc5c374",
+      "revId": "eb34aeec78f6ee93993cfefd674ce6f7e211809f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4b0134a5_c68fa307",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 24
