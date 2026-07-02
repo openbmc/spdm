@@ -102,6 +102,69 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e10ae7b0_dc32ec35",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-07-02T01:24:01Z",
+      "side": 1,
+      "message": "Consider passing e instead of e.what(). lg2 has support for logging exceptions directly.",
+      "revId": "2887dd80a2159dca0712a6d7fe54adbe8491694b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ebef0d1_ba7501bd",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-07-02T01:24:01Z",
+      "side": 1,
+      "message": "Consider passing e instead of e.what(). lg2 has support for logging exceptions directly.",
+      "range": {
+        "startLine": 116,
+        "startChar": 16,
+        "endLine": 116,
+        "endChar": 28
+      },
+      "revId": "2887dd80a2159dca0712a6d7fe54adbe8491694b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df8e9d93_1eadd474",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-07-02T01:24:01Z",
+      "side": 1,
+      "message": "The parsing of MCTP interface for properties EID, UUid is similar to the discovery function from line 54-70. Can we avoid code duplication here?",
+      "range": {
+        "startLine": 135,
+        "startChar": 8,
+        "endLine": 180,
+        "endChar": 13
+      },
+      "revId": "2887dd80a2159dca0712a6d7fe54adbe8491694b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2d832439_ca07b97c",
         "filename": "requester/mctp_transport_discovery.hpp",
         "patchSetId": 7
