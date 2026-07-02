@@ -117,6 +117,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "649fd934_b479919c",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-07-02T19:13:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e10ae7b0_dc32ec35",
+      "revId": "2887dd80a2159dca0712a6d7fe54adbe8491694b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ebef0d1_ba7501bd",
@@ -140,6 +158,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30ccfa86_124b7974",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-07-02T19:13:38Z",
+      "side": 1,
+      "message": "Done — also applied it to the InterfacesRemoved handler (monitor_removed) for consistency.",
+      "parentUuid": "0ebef0d1_ba7501bd",
+      "range": {
+        "startLine": 116,
+        "startChar": 16,
+        "endLine": 116,
+        "endChar": 28
+      },
+      "revId": "2887dd80a2159dca0712a6d7fe54adbe8491694b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df8e9d93_1eadd474",
@@ -153,6 +195,30 @@
       "writtenOn": "2026-07-02T01:24:01Z",
       "side": 1,
       "message": "The parsing of MCTP interface for properties EID, UUid is similar to the discovery function from line 54-70. Can we avoid code duplication here?",
+      "range": {
+        "startLine": 135,
+        "startChar": 8,
+        "endLine": 180,
+        "endChar": 13
+      },
+      "revId": "2887dd80a2159dca0712a6d7fe54adbe8491694b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4cadcea_a166f76f",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-07-02T19:13:38Z",
+      "side": 1,
+      "message": "Factored the shared SPDM-support check + ResponderInfo registration into a new addIfSpdmCapable() helper, now used by both the initial mapper sweep and monitor_added. I kept the property extraction separate on purpose: the sweep reads typed properties through the MctpEndpoint/CommonUUID client proxy, while monitor_added parses the raw InterfacesAdded payload directly to avoid the extra Get/GetAll round-trip and keep the read atomic with the signal (the rationale in the comment above the payload parse). So the two extractions differ by design; the check + registration is now shared. Happy to split it differently if you\u0027d prefer.",
+      "parentUuid": "df8e9d93_1eadd474",
       "range": {
         "startLine": 135,
         "startChar": 8,
