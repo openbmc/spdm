@@ -214,6 +214,24 @@
       "parentUuid": "a30673f8_9a8438c7",
       "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d5b5810_009dab56",
+        "filename": "meson.build",
+        "patchSetId": 12
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-02T07:00:49Z",
+      "side": 1,
+      "message": "This commit is only meant to persist the dbus settings, it\u0027s not meant for the changes that you are asking.\n\n\u003e we will push the fix for the same.\n\nSure please do. Can you please revert your -1 then ? so that we can merge this code ? We have been holding this long enough for reasons which are out of scope for this commit.",
+      "parentUuid": "0355659a_70289bf9",
+      "revId": "18e91173e0724b666f2c4a9be427de1e9733568d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
