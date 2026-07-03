@@ -5,7 +5,6 @@
 
 #include <systemd/sd-bus-protocol.h>
 
-#include <config.hpp>
 #include <nlohmann/json.hpp>
 #include <sdbusplus/async/fdio.hpp>
 #include <xyz/openbmc_project/Control/Security/SPDM/Policy/server.hpp>
@@ -13,6 +12,7 @@
 #include <filesystem>
 #include <fstream>
 #include <ranges>
+#include <sstream>
 #include <system_error>
 #include <variant>
 #include <vector>
@@ -172,6 +172,47 @@ auto PolicyManager::marshal_config() -> nlohmann::json
         {Policy::allowed_algorithms_base_asym_t::name,
          to_json(allowed_algorithms_base_asym_)},
     };
+}
+
+auto PolicyManager::init_defaults() -> void
+{
+    // Array properties are stored in config.hpp as comma-separated strings
+    // (e.g. "ALL" or "1.2,1.3").  Split on ',' and add into vector.
+    auto parse_csv = [](std::string_view csv) -> std::vector<PolicySelection> {
+        std::vector<PolicySelection> result;
+        std::istringstream ss{std::string(csv)};
+        std::string token;
+        while (std::getline(ss, token, ','))
+        {
+            // Try the full D-Bus enum path first, then the user-friendly short
+            // names accepted by the meson options (e.g. "ALL", "NONE").
+            if (auto val = Policy::convertStringToSpecialSetValues(token))
+            {
+                result.push_back(*val);
+            }
+            else if (token == "ALL")
+            {
+                result.push_back(Policy::SpecialSetValues::ALL);
+            }
+            else if (token == "NONE")
+            {
+                result.push_back(Policy::SpecialSetValues::NONE);
+            }
+            else
+            {
+                result.push_back(token);
+            }
+        }
+        return result;
+    };
+
+    allowed_versions_ = parse_csv(POLICY_DEFAULT_ALLOWED_VERSIONS);
+    allowed_algorithms_aead_ =
+        parse_csv(POLICY_DEFAULT_ALLOWED_ALGORITHMS_AEAD);
+    allowed_algorithms_base_hash_ =
+        parse_csv(POLICY_DEFAULT_ALLOWED_ALGORITHMS_BASE_HASH);
+    allowed_algorithms_base_asym_ =
+        parse_csv(POLICY_DEFAULT_ALLOWED_ALGORITHMS_BASE_ASYM);
 }
 
 auto PolicyManager::load() -> void
