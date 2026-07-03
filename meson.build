@@ -21,7 +21,7 @@ spdmd_deps = [
     phosphor_logging_dep,
     sdbusplus_dep,
 ]
-spdmd_includes = include_directories('requester')
+spdmd_includes = include_directories('requester', '.')
 
 spdmd_src = [
     'requester/spdm_discovery.cpp',
@@ -47,6 +47,36 @@ policy_cache_path = get_option('localstatedir') + '/lib/spdm/policy.json'
 
 conf_data = configuration_data()
 conf_data.set_quoted('POLICY_CACHE_PATH', policy_cache_path)
+conf_data.set10('POLICY_DEFAULT_ENABLED', get_option('enabled'))
+conf_data.set10(
+    'POLICY_DEFAULT_SECURE_SESSION_ENABLED',
+    get_option('secure-session-enabled'),
+)
+conf_data.set10(
+    'POLICY_DEFAULT_VERIFY_CERTIFICATE',
+    get_option('verify-certificate'),
+)
+conf_data.set10(
+    'POLICY_DEFAULT_ALLOW_EXTENDED_ALGORITHMS',
+    get_option('allow-extended-algorithms'),
+)
+
+# Array options are stored as comma-separated strings in config.hpp.
+# e.g. ['ALL', '1.2'] -> "ALL,1.2"
+foreach opt_name : [
+    ['allowed-versions', 'POLICY_DEFAULT_ALLOWED_VERSIONS'],
+    ['allowed-algorithms-aead', 'POLICY_DEFAULT_ALLOWED_ALGORITHMS_AEAD'],
+    [
+        'allowed-algorithms-base-hash',
+        'POLICY_DEFAULT_ALLOWED_ALGORITHMS_BASE_HASH',
+    ],
+    [
+        'allowed-algorithms-base-asym',
+        'POLICY_DEFAULT_ALLOWED_ALGORITHMS_BASE_ASYM',
+    ],
+]
+    conf_data.set_quoted(opt_name[1], ','.join(get_option(opt_name[0])))
+endforeach
 
 configure_file(
     output: 'config.hpp',

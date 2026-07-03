@@ -1,1 +1,49 @@
 option('tests', type: 'feature', value: 'enabled', description: 'Build tests')
+option(
+    'enabled',
+    type: 'boolean',
+    value: false,
+    description: 'Default value for SPDM policy Enabled property',
+)
+option(
+    'secure-session-enabled',
+    type: 'boolean',
+    value: false,
+    description: 'Default value for SPDM policy SecureSessionEnabled property',
+)
+option(
+    'verify-certificate',
+    type: 'boolean',
+    value: false,
+    description: 'Default value for SPDM policy VerifyCertificate property',
+)
+option(
+    'allow-extended-algorithms',
+    type: 'boolean',
+    value: false,
+    description: 'Default value for SPDM policy AllowExtendedAlgorithms property',
+)
+option(
+    'allowed-versions',
+    type: 'array',
+    value: ['ALL'],
+    description: 'Default allowed SPDM versions (e.g. ALL, NONE, 1.2, 1.3)',
+)
+option(
+    'allowed-algorithms-aead',
+    type: 'array',
+    value: ['ALL'],
+    description: 'Default allowed AEAD algorithms (e.g. ALL, NONE, AES-128-GCM)',
+)
+option(
+    'allowed-algorithms-base-hash',
+    type: 'array',
+    value: ['ALL'],
+    description: 'Default allowed base hash algorithms (e.g. ALL, NONE, SHA_256)',
+)
+option(
+    'allowed-algorithms-base-asym',
+    type: 'array',
+    value: ['ALL'],
+    description: 'Default allowed base asymmetric algorithms (e.g. ALL, NONE, RSASSA_2048)',
+)

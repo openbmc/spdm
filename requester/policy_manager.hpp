@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <config.hpp>
 #include <nlohmann/json.hpp>
 #include <phosphor-logging/lg2.hpp>
 #include <xyz/openbmc_project/Control/Security/SPDM/Policy/aserver.hpp>
@@ -24,6 +25,18 @@ class PolicyManager :
     {
         PHOSPHOR_LOG2_USING;
 
+        // Apply compile-time defaults before loading persisted config.
+        enabled_ = static_cast<bool>(POLICY_DEFAULT_ENABLED);
+        secure_session_enabled_ =
+            static_cast<bool>(POLICY_DEFAULT_SECURE_SESSION_ENABLED);
+        verify_certificate_ =
+            static_cast<bool>(POLICY_DEFAULT_VERIFY_CERTIFICATE);
+        allow_extended_algorithms_ =
+            static_cast<bool>(POLICY_DEFAULT_ALLOW_EXTENDED_ALGORITHMS);
+
+        // NOTE: Keep the order of `init_defaults` and the `load` function
+        // unchanged.
+        init_defaults();
         load();
     }
 
@@ -108,7 +121,10 @@ class PolicyManager :
 
         if constexpr (!std::same_as<F, std::nullptr_t>)
         {
-            std::invoke(std::forward<F>(f), std::as_const(current));
+            if (f)
+            {
+                std::invoke(std::forward<F>(f), std::as_const(current));
+            }
         }
 
         dump();
@@ -116,6 +132,8 @@ class PolicyManager :
     }
 
     auto dump() -> void;
+
+    auto init_defaults() -> void;
 
     auto load() -> void;
 
