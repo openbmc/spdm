@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9763382e_17154e60",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-07-06T18:55:17Z",
+      "side": 1,
+      "message": "Done. Refactored the InterfacesAdded payload parse to\nsdbusplus::unpackPropertiesNoThrow — EID, MessageTypes and UUID are now read by\nname into typed variables, dropping the manual find / holds_alternative / get.\nThe inner interface map was changed to a vector\u003cpair\u003e (PropertyMap) so\nunpackProperties accepts it. Kept on the signal payload rather than a\nGet/GetAll round-trip, since the properties arrive in the InterfacesAdded\nsignal itself.",
+      "parentUuid": "28542cb0_91b6b190",
+      "range": {
+        "startLine": 157,
+        "startChar": 8,
+        "endLine": 165,
+        "endChar": 54
+      },
+      "revId": "1f1c87c74aa53471dce56e27c3455d003a329e0c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0b82bf1_39972272",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-07-03T03:13:51Z",
       "side": 1,
       "message": "typo??",
+      "range": {
+        "startLine": 85,
+        "startChar": 59,
+        "endLine": 85,
+        "endChar": 63
+      },
+      "revId": "1f1c87c74aa53471dce56e27c3455d003a329e0c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a6e23b1_d73510a0",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-07-06T18:55:17Z",
+      "side": 1,
+      "message": "Fixed — reworded \"iff\" to \"only when\" (\"Register an endpoint with the discovery\nsink only when it advertises SPDM support.\").",
+      "parentUuid": "d0b82bf1_39972272",
       "range": {
         "startLine": 85,
         "startChar": 59,
