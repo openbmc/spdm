@@ -11,7 +11,6 @@
 
 #include <filesystem>
 #include <fstream>
-#include <ranges>
 #include <system_error>
 #include <variant>
 #include <vector>
@@ -24,162 +23,100 @@ namespace
 
 using Policy =
     sdbusplus::common::xyz::openbmc_project::control::security::spdm::Policy;
-using PolicySelection = std::variant<Policy::SpecialSetValues, std::string>;
 
-template <typename T>
-concept PolicySelectionRange =
-    std::ranges::input_range<T> &&
-    std::same_as<std::ranges::range_value_t<T>, PolicySelection>;
-
-template <typename T>
-auto to_json(const T& value) -> nlohmann::json
-{
-    if constexpr (std::same_as<T, PolicySelection>)
-    {
-        return std::visit(
-            [](const auto& entry) -> nlohmann::json {
-                using Entry = std::decay_t<decltype(entry)>;
-
-                if constexpr (std::same_as<Entry, Policy::SpecialSetValues>)
-                {
-                    return Policy::convertSpecialSetValuesToString(entry);
-                }
-                else
-                {
-                    return entry;
-                }
-            },
-            value);
-    }
-    else if constexpr (PolicySelectionRange<T>)
-    {
-        auto json = nlohmann::json::array();
-
-        for (const auto& entry : value)
-        {
-            json.push_back(to_json(entry));
-        }
-
-        return json;
-    }
-}
-
-template <typename T>
-auto from_json(const nlohmann::json& value) -> T
-{
-    if constexpr (std::same_as<T, PolicySelection>)
-    {
-        const auto stringValue = value.get<std::string>();
-
-        if (const auto enumValue =
-                Policy::convertStringToSpecialSetValues(stringValue);
-            enumValue.has_value())
-        {
-            return *enumValue;
-        }
-
-        return stringValue;
-    }
-    else if constexpr (PolicySelectionRange<T>)
-    {
-        T result{};
-
-        if (!value.is_array())
-        {
-            return result;
-        }
-
-        if constexpr (requires(T v, std::size_t n) { v.reserve(n); })
-        {
-            result.reserve(value.size());
-        }
-
-        for (const auto& entry : value)
-        {
-            result.push_back(from_json<PolicySelection>(entry));
-        }
-
-        return result;
-    }
-}
+using SelectionArray =
+    std::vector<std::variant<Policy::SpecialSetValues, std::string>>;
 
 } // namespace
 
-auto is_compatible(const auto version) -> bool
+namespace nlohmann
 {
-    return version == POLICY_VERSION;
-}
 
-auto PolicyManager::unmarshal_config(const nlohmann::json& config) -> void
+template <>
+struct adl_serializer<SelectionArray::value_type>
 {
-    PHOSPHOR_LOG2_USING;
-
-    const auto version = config.value<unsigned int>(POLICY_VERSION_ID, 1);
-    if (!is_compatible(version))
+    static void to_json(json& j, const SelectionArray::value_type& v)
     {
-        error("policy file is not compatible, ignoring");
-        return;
+        std::visit(
+            [&j](const auto& val) {
+                if constexpr (requires {
+                                  sdbusplus::message::convert_to_string(val);
+                              })
+                {
+                    j = sdbusplus::message::convert_to_string(val);
+                }
+                else
+                {
+                    j = val;
+                }
+            },
+            v);
     }
 
-    properties.enabled =
-        config.value(Policy::enabled_t::name, properties.enabled);
-    properties.secure_session_enabled =
-        config.value(Policy::secure_session_enabled_t::name,
-                     properties.secure_session_enabled);
-    properties.verify_certificate = config.value(
-        Policy::verify_certificate_t::name, properties.verify_certificate);
-    properties.allow_extended_algorithms =
-        config.value(Policy::allow_extended_algorithms_t::name,
-                     properties.allow_extended_algorithms);
+    static void from_json(const json& j, SelectionArray::value_type& v)
+    {
+        std::string s = j;
+        if (auto opt = sdbusplus::message::convert_from_string<
+                Policy::SpecialSetValues>(s);
+            opt.has_value())
+        {
+            v = *opt;
+        }
+        else
+        {
+            v = std::move(s);
+        }
+    }
+};
 
-    if (config.contains(Policy::allowed_versions_t::name))
-    {
-        properties.allowed_versions =
-            from_json<Policy::allowed_versions_t::value_type>(
-                config.at(Policy::allowed_versions_t::name));
-    }
-    if (config.contains(Policy::allowed_algorithms_aead_t::name))
-    {
-        properties.allowed_algorithms_aead =
-            from_json<Policy::allowed_algorithms_aead_t::value_type>(
-                config.at(Policy::allowed_algorithms_aead_t::name));
-    }
-    if (config.contains(Policy::allowed_algorithms_base_hash_t::name))
-    {
-        properties.allowed_algorithms_base_hash =
-            from_json<Policy::allowed_algorithms_base_hash_t::value_type>(
-                config.at(Policy::allowed_algorithms_base_hash_t::name));
-    }
-    if (config.contains(Policy::allowed_algorithms_base_asym_t::name))
-    {
-        properties.allowed_algorithms_base_asym =
-            from_json<Policy::allowed_algorithms_base_asym_t::value_type>(
-                config.at(Policy::allowed_algorithms_base_asym_t::name));
-    }
-}
-
-auto PolicyManager::marshal_config() -> nlohmann::json
+template <>
+struct adl_serializer<Policy::properties_t>
 {
-    return nlohmann::json{
-        {POLICY_VERSION_ID, POLICY_VERSION},
-        {Policy::enabled_t::name, properties.enabled},
-        {Policy::secure_session_enabled_t::name,
-         properties.secure_session_enabled},
-        {Policy::verify_certificate_t::name, properties.verify_certificate},
-        {Policy::allow_extended_algorithms_t::name,
-         properties.allow_extended_algorithms},
-        {Policy::allowed_versions_t::name,
-         to_json(properties.allowed_versions)},
-        {Policy::allowed_algorithms_aead_t::name,
-         to_json(properties.allowed_algorithms_aead)},
-        {Policy::allowed_algorithms_base_hash_t::name,
-         to_json(properties.allowed_algorithms_base_hash)},
-        {Policy::allowed_algorithms_base_asym_t::name,
-         to_json(properties.allowed_algorithms_base_asym)},
-    };
-}
+    static void to_json(json& j, const Policy::properties_t& p)
+    {
+        j = nlohmann::json{
+            {POLICY_VERSION_ID, POLICY_VERSION},
+            {Policy::enabled_t::name, p.enabled},
+            {Policy::secure_session_enabled_t::name, p.secure_session_enabled},
+            {Policy::verify_certificate_t::name, p.verify_certificate},
+            {Policy::allow_extended_algorithms_t::name,
+             p.allow_extended_algorithms},
+            {Policy::allowed_versions_t::name, p.allowed_versions},
+            {Policy::allowed_algorithms_aead_t::name,
+             p.allowed_algorithms_aead},
+            {Policy::allowed_algorithms_base_hash_t::name,
+             p.allowed_algorithms_base_hash},
+            {Policy::allowed_algorithms_base_asym_t::name,
+             p.allowed_algorithms_base_asym},
+        };
+    }
 
-auto PolicyManager::load() -> void
+    static void from_json(const json& j, Policy::properties_t& p)
+    {
+        size_t version = j.at(POLICY_VERSION_ID);
+        if (version != POLICY_VERSION)
+        {
+            p = Policy::properties_t{};
+            return;
+        }
+        p.enabled = j.at(Policy::enabled_t::name);
+        p.secure_session_enabled = j.at(Policy::secure_session_enabled_t::name);
+        p.verify_certificate = j.at(Policy::verify_certificate_t::name);
+        p.allow_extended_algorithms =
+            j.at(Policy::allow_extended_algorithms_t::name);
+        p.allowed_versions = j.at(Policy::allowed_versions_t::name);
+        p.allowed_algorithms_aead =
+            j.at(Policy::allowed_algorithms_aead_t::name);
+        p.allowed_algorithms_base_hash =
+            j.at(Policy::allowed_algorithms_base_hash_t::name);
+        p.allowed_algorithms_base_asym =
+            j.at(Policy::allowed_algorithms_base_asym_t::name);
+    }
+};
+
+} // namespace nlohmann
+
+void PolicyManager::load()
 {
     PHOSPHOR_LOG2_USING;
 
@@ -205,18 +142,16 @@ auto PolicyManager::load() -> void
         return;
     }
 
-    unmarshal_config(config);
+    config.get_to(properties);
 }
 
-auto PolicyManager::dump() -> void
+void PolicyManager::save()
 {
-    PHOSPHOR_LOG2_USING;
-
     const auto tempPath = cache_path.string() + ".temp";
 
     std::filesystem::create_directories(cache_path.parent_path());
 
-    auto config = marshal_config();
+    auto config = nlohmann::json(properties);
 
     std::ofstream file(tempPath);
 
@@ -228,8 +163,6 @@ auto PolicyManager::dump() -> void
     if (err)
     {
         std::filesystem::remove(tempPath);
-        throw std::system_error(err, "failed to dump policy cache file");
+        throw std::system_error(err, "failed to save policy cache file");
     }
-
-    return;
 }

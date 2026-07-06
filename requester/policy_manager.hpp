@@ -26,8 +26,6 @@ class PolicyManager :
             Policy<PolicyManager>(ctx, path),
         cache_path(std::move(cachePath))
     {
-        PHOSPHOR_LOG2_USING;
-
         load();
     }
 
@@ -127,17 +125,12 @@ class PolicyManager :
             }
         }
 
-        dump();
+        save();
         return true;
     }
 
-    auto dump() -> void;
-
-    auto load() -> void;
-
-    auto unmarshal_config(const nlohmann::json& config) -> void;
-
-    auto marshal_config() -> nlohmann::json;
+    void save();
+    void load();
 
     std::function<void(bool)> enabled_callback_{nullptr};
     std::function<void(bool)> secure_session_enabled_callback_{nullptr};
