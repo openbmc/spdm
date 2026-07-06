@@ -22,6 +22,23 @@
       },
       "revId": "53b137d47ae63f402926f5a2a287f76ba257e57a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce25afaf_e6adcbc0",
+        "filename": "tests/test_policy_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-07-06T10:37:18Z",
+      "side": 1,
+      "message": "nit: saem --\u003e same",
+      "revId": "53b137d47ae63f402926f5a2a287f76ba257e57a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }

@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfea7378_dfb33071",
+        "filename": "meson.options",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-07-06T10:37:18Z",
+      "side": 1,
+      "message": "Choices seems better option, so that we can identify any errors during compilation itself.\n\nchoices: [\u0027ALL\u0027, \u0027NONE\u0027, \u00271.1\u0027],\nAlso later once we add 1.2, 1.3 support same can be updated here to indicate the same.",
+      "revId": "6b17f676c47ce3953befbd5430fec0303e808a07",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7086e57_9083e7fc",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-07-06T10:37:18Z",
+      "side": 1,
+      "message": "convertStringToSpecialSetValues is a sdbusplus-generated function that already handles \"ALL\" and \"NONE\" (they are the valid enum string representations). The else if branches are dead code — they can never be reached. If convertStringToSpecialSetValues fails on \"ALL\", the fallback will succeed, masking a real upstream bug",
+      "revId": "6b17f676c47ce3953befbd5430fec0303e808a07",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7461eae3_038246b5",
+        "filename": "tests/test_policy_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-07-06T10:37:18Z",
+      "side": 1,
+      "message": "nit: ttrue --\u003e true",
+      "revId": "6b17f676c47ce3953befbd5430fec0303e808a07",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
