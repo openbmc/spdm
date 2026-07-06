@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "341bfca9_ea4148b9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-07-06T13:33:54Z",
+      "side": 1,
+      "message": "\u003eif defaults are defined in PDI, they are part of the interface contract.\n\nI agree that we should not have defined these default values in the PDI because they are platform-specific configurations.\n\n\nFor example, one platform may require only a specific subset of PQC algorithms, another may support only SPDM 1.1 or only SPDM 1.2, while another platform may require secure session establishment. These are all platform-specific policy decisions and should not be dictated by the PDI.\n\n\u003eThe reason that we made them false by default is because , SPDM policies can alter the security model of the system \u0026 redfish model seems to show that an external verifier does the verification of the measurement values\n\nYes, It can and it should be up to the platform owner what the securtiy plicy should be.\n\nI agree that SPDM policies can affect the security model. However, the security policy should be determined by the platform owner, not by the PDI.\n\nFrom my perspective, it is also inconsistent to claim that SPDM is provided as a distro feature while SPDM communication is disabled by default. These default values should not have been defined in the PDI in the first place, as they introduce unnecessary assumptions and create confusion.\n\n\nThe daemon needs the ability to override these settings because the appropriate SPDM configuration depends on the target platform and its security policy, not on the generic interface.\n\nDifferent platforms have different requirements—for example, supported PQC algorithms, SPDM version (1.1 vs. 1.2), whether secure sessions are mandatory, or whether certain SPDM features should be enabled. These decisions are driven by platform capabilities, compliance requirements, and the overall security model.\n\nIf the PDI defines fixed defaults, those defaults effectively become part of the interface contract and may not be suitable for every platform. Allowing the daemon to override these values enables platform owners or integrators to apply the correct policy without changing the interface itself. This keeps the PDI platform-agnostic while allowing each deployment to enforce its intended security policy.",
+      "parentUuid": "4f950c02_b2708911",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "53b137d47ae63f402926f5a2a287f76ba257e57a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ce25afaf_e6adcbc0",
         "filename": "tests/test_policy_manager.cpp",
         "patchSetId": 1
