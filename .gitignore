@@ -3,3 +3,4 @@ build*/
 subprojects/*
 !subprojects/*.wrap
 subprojects/stdexec.wrap
+subprojects/CLI11.wrap

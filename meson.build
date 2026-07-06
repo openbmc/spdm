@@ -11,12 +11,26 @@ project(
     meson_version: '>=1.1.1',
 )
 
+cpp = meson.get_compiler('cpp')
+
 phosphor_dbus_interfaces_dep = dependency('phosphor-dbus-interfaces')
 phosphor_logging_dep = dependency('phosphor-logging')
 sdbusplus_dep = dependency('sdbusplus')
 systemd_dep = dependency('systemd')
 
+# Get CLI11 dependency
+if cpp.has_header('CLI/CLI.hpp')
+    CLI11_dep = declare_dependency()
+else
+    CLI11_dep = dependency(
+        'CLI11',
+        include_type: 'system',
+        default_options: ['tests=disabled'],
+    )
+endif
+
 spdmd_deps = [
+    CLI11_dep,
     phosphor_dbus_interfaces_dep,
     phosphor_logging_dep,
     sdbusplus_dep,
