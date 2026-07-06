@@ -32,44 +32,54 @@ class PolicyManager :
 
     virtual ~PolicyManager() = default;
 
-    template <typename T>
-    auto set_property(T, auto value) -> bool
+    auto set_property(enabled_t, auto&& value) -> bool
     {
-        if constexpr (std::is_same_v<T, enabled_t>)
-        {
-            return update_property(enabled_, value, enabled_callback_);
-        }
-        else if constexpr (std::is_same_v<T, secure_session_enabled_t>)
-        {
-            return update_property(secure_session_enabled_, value,
-                                   secure_session_enabled_callback_);
-        }
-        else if constexpr (std::is_same_v<T, verify_certificate_t>)
-        {
-            return update_property(verify_certificate_, value,
-                                   verify_certificate_callback_);
-        }
-        else if constexpr (std::is_same_v<T, allow_extended_algorithms_t>)
-        {
-            return update_property(allow_extended_algorithms_, value,
-                                   allow_extended_algorithms_callback_);
-        }
-        else if constexpr (std::is_same_v<T, allowed_versions_t>)
-        {
-            return update_property(allowed_versions_, value);
-        }
-        else if constexpr (std::is_same_v<T, allowed_algorithms_aead_t>)
-        {
-            return update_property(allowed_algorithms_aead_, value);
-        }
-        else if constexpr (std::is_same_v<T, allowed_algorithms_base_hash_t>)
-        {
-            return update_property(allowed_algorithms_base_hash_, value);
-        }
-        else if constexpr (std::is_same_v<T, allowed_algorithms_base_asym_t>)
-        {
-            return update_property(allowed_algorithms_base_asym_, value);
-        }
+        return update_property(enabled_, std::forward<decltype(value)>(value),
+                               enabled_callback_);
+    }
+
+    auto set_property(secure_session_enabled_t, auto&& value) -> bool
+    {
+        return update_property(secure_session_enabled_,
+                               std::forward<decltype(value)>(value),
+                               secure_session_enabled_callback_);
+    }
+
+    auto set_property(verify_certificate_t, auto&& value) -> bool
+    {
+        return update_property(verify_certificate_,
+                               std::forward<decltype(value)>(value),
+                               verify_certificate_callback_);
+    }
+
+    auto set_property(allow_extended_algorithms_t, auto&& value) -> bool
+    {
+        return update_property(allow_extended_algorithms_,
+                               std::forward<decltype(value)>(value));
+    }
+
+    auto set_property(allowed_versions_t, auto&& value) -> bool
+    {
+        return update_property(allowed_versions_,
+                               std::forward<decltype(value)>(value));
+    }
+
+    auto set_property(allowed_algorithms_aead_t, auto&& value) -> bool
+    {
+        return update_property(allowed_algorithms_aead_,
+                               std::forward<decltype(value)>(value));
+    }
+
+    auto set_property(allowed_algorithms_base_hash_t, auto&& value) -> bool
+    {
+        return update_property(allowed_algorithms_base_hash_,
+                               std::forward<decltype(value)>(value));
+    }
+
+    auto set_property(allowed_algorithms_base_asym_t, auto&& value) -> bool
+    {
+        return update_property(allowed_algorithms_base_asym_,
+                               std::forward<decltype(value)>(value));
     }
 
     template <typename F>
@@ -100,8 +110,6 @@ class PolicyManager :
                   std::invocable<F, const T&>)
     auto update_property(T& current, U&& value, F&& f = nullptr) -> bool
     {
-        PHOSPHOR_LOG2_USING;
-
         if (current == value)
         {
             return false;
@@ -132,6 +140,5 @@ class PolicyManager :
     std::function<void(bool)> enabled_callback_{nullptr};
     std::function<void(bool)> secure_session_enabled_callback_{nullptr};
     std::function<void(bool)> verify_certificate_callback_{nullptr};
-    std::function<void(bool)> allow_extended_algorithms_callback_{nullptr};
     std::filesystem::path cache_path;
 };
