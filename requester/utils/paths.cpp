@@ -8,9 +8,9 @@
 namespace
 {
 
-auto state_dir() -> const std::filesystem::path&
+auto& state_dir()
 {
-    static const auto dir = std::filesystem::path(SPDM_STATE_DIR);
+    static auto dir = std::filesystem::path(SPDM_STATE_DIR);
     return dir;
 }
 
@@ -18,6 +18,11 @@ auto state_dir() -> const std::filesystem::path&
 
 namespace spdm::paths
 {
+
+void set_state_dir(std::filesystem::path dir)
+{
+    state_dir() = std::move(dir);
+}
 
 auto policy_cache() -> std::filesystem::path
 {

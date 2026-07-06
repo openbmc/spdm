@@ -7,7 +7,7 @@
 
 namespace spdm::paths
 {
-
 auto policy_cache() -> std::filesystem::path;
 
-}
+void set_state_dir(std::filesystem::path dir);
+} // namespace spdm::paths
