@@ -108,7 +108,10 @@ class PolicyManager :
 
         if constexpr (!std::same_as<F, std::nullptr_t>)
         {
-            std::invoke(std::forward<F>(f), std::as_const(current));
+            if (f)
+            {
+                std::invoke(std::forward<F>(f), std::as_const(current));
+            }
         }
 
         dump();
