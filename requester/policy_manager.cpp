@@ -121,35 +121,39 @@ auto PolicyManager::unmarshal_config(const nlohmann::json& config) -> void
         return;
     }
 
-    enabled_ = config.value(Policy::enabled_t::name, enabled_);
-    secure_session_enabled_ = config.value(
-        Policy::secure_session_enabled_t::name, secure_session_enabled_);
-    verify_certificate_ =
-        config.value(Policy::verify_certificate_t::name, verify_certificate_);
-    allow_extended_algorithms_ = config.value(
-        Policy::allow_extended_algorithms_t::name, allow_extended_algorithms_);
+    properties.enabled =
+        config.value(Policy::enabled_t::name, properties.enabled);
+    properties.secure_session_enabled =
+        config.value(Policy::secure_session_enabled_t::name,
+                     properties.secure_session_enabled);
+    properties.verify_certificate = config.value(
+        Policy::verify_certificate_t::name, properties.verify_certificate);
+    properties.allow_extended_algorithms =
+        config.value(Policy::allow_extended_algorithms_t::name,
+                     properties.allow_extended_algorithms);
 
     if (config.contains(Policy::allowed_versions_t::name))
     {
-        allowed_versions_ = from_json<decltype(allowed_versions_)>(
-            config.at(Policy::allowed_versions_t::name));
+        properties.allowed_versions =
+            from_json<Policy::allowed_versions_t::value_type>(
+                config.at(Policy::allowed_versions_t::name));
     }
     if (config.contains(Policy::allowed_algorithms_aead_t::name))
     {
-        allowed_algorithms_aead_ =
-            from_json<decltype(allowed_algorithms_aead_)>(
+        properties.allowed_algorithms_aead =
+            from_json<Policy::allowed_algorithms_aead_t::value_type>(
                 config.at(Policy::allowed_algorithms_aead_t::name));
     }
     if (config.contains(Policy::allowed_algorithms_base_hash_t::name))
     {
-        allowed_algorithms_base_hash_ =
-            from_json<decltype(allowed_algorithms_base_hash_)>(
+        properties.allowed_algorithms_base_hash =
+            from_json<Policy::allowed_algorithms_base_hash_t::value_type>(
                 config.at(Policy::allowed_algorithms_base_hash_t::name));
     }
     if (config.contains(Policy::allowed_algorithms_base_asym_t::name))
     {
-        allowed_algorithms_base_asym_ =
-            from_json<decltype(allowed_algorithms_base_asym_)>(
+        properties.allowed_algorithms_base_asym =
+            from_json<Policy::allowed_algorithms_base_asym_t::value_type>(
                 config.at(Policy::allowed_algorithms_base_asym_t::name));
     }
 }
@@ -158,17 +162,20 @@ auto PolicyManager::marshal_config() -> nlohmann::json
 {
     return nlohmann::json{
         {POLICY_VERSION_ID, POLICY_VERSION},
-        {Policy::enabled_t::name, enabled_},
-        {Policy::secure_session_enabled_t::name, secure_session_enabled_},
-        {Policy::verify_certificate_t::name, verify_certificate_},
-        {Policy::allow_extended_algorithms_t::name, allow_extended_algorithms_},
-        {Policy::allowed_versions_t::name, to_json(allowed_versions_)},
+        {Policy::enabled_t::name, properties.enabled},
+        {Policy::secure_session_enabled_t::name,
+         properties.secure_session_enabled},
+        {Policy::verify_certificate_t::name, properties.verify_certificate},
+        {Policy::allow_extended_algorithms_t::name,
+         properties.allow_extended_algorithms},
+        {Policy::allowed_versions_t::name,
+         to_json(properties.allowed_versions)},
         {Policy::allowed_algorithms_aead_t::name,
-         to_json(allowed_algorithms_aead_)},
+         to_json(properties.allowed_algorithms_aead)},
         {Policy::allowed_algorithms_base_hash_t::name,
-         to_json(allowed_algorithms_base_hash_)},
+         to_json(properties.allowed_algorithms_base_hash)},
         {Policy::allowed_algorithms_base_asym_t::name,
-         to_json(allowed_algorithms_base_asym_)},
+         to_json(properties.allowed_algorithms_base_asym)},
     };
 }
 

@@ -2,6 +2,7 @@
 // SPDX-FileCopyrightText: Copyright OpenBMC Authors
 
 #pragma once
+#define SDBUSPLUS_ASYNC_NEW_PROPERTY_MEMBERS
 
 #include "utils/paths.hpp"
 
@@ -34,51 +35,52 @@ class PolicyManager :
 
     auto set_property(enabled_t, auto&& value) -> bool
     {
-        return update_property(enabled_, std::forward<decltype(value)>(value),
+        return update_property(properties.enabled,
+                               std::forward<decltype(value)>(value),
                                enabled_callback_);
     }
 
     auto set_property(secure_session_enabled_t, auto&& value) -> bool
     {
-        return update_property(secure_session_enabled_,
+        return update_property(properties.secure_session_enabled,
                                std::forward<decltype(value)>(value),
                                secure_session_enabled_callback_);
     }
 
     auto set_property(verify_certificate_t, auto&& value) -> bool
     {
-        return update_property(verify_certificate_,
+        return update_property(properties.verify_certificate,
                                std::forward<decltype(value)>(value),
                                verify_certificate_callback_);
     }
 
     auto set_property(allow_extended_algorithms_t, auto&& value) -> bool
     {
-        return update_property(allow_extended_algorithms_,
+        return update_property(properties.allow_extended_algorithms,
                                std::forward<decltype(value)>(value));
     }
 
     auto set_property(allowed_versions_t, auto&& value) -> bool
     {
-        return update_property(allowed_versions_,
+        return update_property(properties.allowed_versions,
                                std::forward<decltype(value)>(value));
     }
 
     auto set_property(allowed_algorithms_aead_t, auto&& value) -> bool
     {
-        return update_property(allowed_algorithms_aead_,
+        return update_property(properties.allowed_algorithms_aead,
                                std::forward<decltype(value)>(value));
     }
 
     auto set_property(allowed_algorithms_base_hash_t, auto&& value) -> bool
     {
-        return update_property(allowed_algorithms_base_hash_,
+        return update_property(properties.allowed_algorithms_base_hash,
                                std::forward<decltype(value)>(value));
     }
 
     auto set_property(allowed_algorithms_base_asym_t, auto&& value) -> bool
     {
-        return update_property(allowed_algorithms_base_asym_,
+        return update_property(properties.allowed_algorithms_base_asym,
                                std::forward<decltype(value)>(value));
     }
 
