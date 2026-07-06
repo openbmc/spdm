@@ -49,6 +49,7 @@ conf_data = configuration_data()
 conf_data.set_quoted('POLICY_CACHE_PATH', policy_cache_path)
 
 configure_file(
+    input: 'config.hpp.in',
     output: 'config.hpp',
     configuration: conf_data,
 )
