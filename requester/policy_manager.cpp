@@ -5,7 +5,6 @@
 
 #include <systemd/sd-bus-protocol.h>
 
-#include <config.hpp>
 #include <nlohmann/json.hpp>
 #include <sdbusplus/async/fdio.hpp>
 #include <xyz/openbmc_project/Control/Security/SPDM/Policy/server.hpp>
@@ -177,14 +176,11 @@ auto PolicyManager::load() -> void
 {
     PHOSPHOR_LOG2_USING;
 
-    const auto cachePath =
-        cache_path_.empty() ? POLICY_CACHE_PATH : cache_path_;
-
-    if (!std::filesystem::exists(cachePath))
+    if (!std::filesystem::exists(cache_path))
     {
         return;
     }
-    std::ifstream file(cachePath);
+    std::ifstream file(cache_path);
     if (!file.is_open())
     {
         return;
@@ -198,7 +194,7 @@ auto PolicyManager::load() -> void
     catch (const nlohmann::json::parse_error& e)
     {
         error("Failed to parse policy file, error: {ERROR}", "ERROR", e);
-        std::filesystem::remove(cachePath);
+        std::filesystem::remove(cache_path);
         return;
     }
 
@@ -209,11 +205,9 @@ auto PolicyManager::dump() -> void
 {
     PHOSPHOR_LOG2_USING;
 
-    const auto cachePath =
-        cache_path_.empty() ? POLICY_CACHE_PATH : cache_path_;
-    const auto tempPath = cachePath.string() + ".temp";
+    const auto tempPath = cache_path.string() + ".temp";
 
-    std::filesystem::create_directories(cachePath.parent_path());
+    std::filesystem::create_directories(cache_path.parent_path());
 
     auto config = marshal_config();
 
@@ -223,7 +217,7 @@ auto PolicyManager::dump() -> void
     file.close();
 
     std::error_code err;
-    std::filesystem::rename(tempPath, cachePath, err);
+    std::filesystem::rename(tempPath, cache_path, err);
     if (err)
     {
         std::filesystem::remove(tempPath);

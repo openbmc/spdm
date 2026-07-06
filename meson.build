@@ -29,6 +29,7 @@ spdmd_src = [
     'requester/tcp_transport_discovery.cpp',
     'requester/policy_manager.cpp',
     'requester/utils/mapper.cpp',
+    'requester/utils/paths.cpp',
 ]
 
 spdmd_lib = static_library(
@@ -43,10 +44,10 @@ install_data(
     install_dir: systemd_dep.get_variable('systemd_system_unit_dir'),
 )
 
-policy_cache_path = get_option('localstatedir') + '/lib/spdm/policy.json'
+spdm_state_dir = get_option('localstatedir') + '/lib/spdm'
 
 conf_data = configuration_data()
-conf_data.set_quoted('POLICY_CACHE_PATH', policy_cache_path)
+conf_data.set_quoted('SPDM_STATE_DIR', spdm_state_dir)
 
 configure_file(
     input: 'config.hpp.in',

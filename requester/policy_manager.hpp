@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "utils/paths.hpp"
+
 #include <nlohmann/json.hpp>
 #include <phosphor-logging/lg2.hpp>
 #include <xyz/openbmc_project/Control/Security/SPDM/Policy/aserver.hpp>
@@ -16,11 +18,12 @@ class PolicyManager :
         Policy<PolicyManager>
 {
   public:
-    explicit PolicyManager(sdbusplus::async::context& ctx, auto path,
-                           std::filesystem::path cache_path = {}) :
+    explicit PolicyManager(
+        sdbusplus::async::context& ctx, auto path,
+        std::filesystem::path cachePath = spdm::paths::policy_cache()) :
         sdbusplus::aserver::xyz::openbmc_project::control::security::spdm::
             Policy<PolicyManager>(ctx, path),
-        cache_path_(std::move(cache_path))
+        cache_path(std::move(cachePath))
     {
         PHOSPHOR_LOG2_USING;
 
@@ -130,5 +133,5 @@ class PolicyManager :
     std::function<void(bool)> secure_session_enabled_callback_{nullptr};
     std::function<void(bool)> verify_certificate_callback_{nullptr};
     std::function<void(bool)> allow_extended_algorithms_callback_{nullptr};
-    std::filesystem::path cache_path_;
+    std::filesystem::path cache_path;
 };
