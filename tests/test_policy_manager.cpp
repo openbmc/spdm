@@ -15,12 +15,47 @@
 
 #include <gtest/gtest.h>
 
-namespace
-{
-
+using CommonPolicy =
+    sdbusplus::common::xyz::openbmc_project::control::security::spdm::Policy;
 using PolicyClient =
     sdbusplus::client::xyz::openbmc_project::control::security::spdm::Policy<>;
 using Selection = std::variant<PolicyClient::SpecialSetValues, std::string>;
+
+using namespace spdm;
+
+struct PropertyObserver
+{
+    bool enabledValue = false;
+    int enabledCount = 0;
+    bool sessionValue = false;
+    int sessionCount = 0;
+    bool certValue = false;
+    int certCount = 0;
+    int allowedCount = 0;
+
+    void on_update(CommonPolicy::enabled_t, bool value)
+    {
+        enabledValue = value;
+        ++enabledCount;
+    }
+
+    void on_update(CommonPolicy::secure_session_enabled_t, bool value)
+    {
+        sessionValue = value;
+        ++sessionCount;
+    }
+
+    void on_update(CommonPolicy::verify_certificate_t, bool value)
+    {
+        certValue = value;
+        ++certCount;
+    }
+
+    void on_update(CommonPolicy::allowed_versions_t, auto&&)
+    {
+        ++allowedCount;
+    }
+};
 
 class PolicyManagerTest : public ::testing::Test
 {
@@ -29,31 +64,31 @@ class PolicyManagerTest : public ::testing::Test
     {
         ctx = std::make_unique<sdbusplus::async::context>();
 
-        auto test_prefix = std::format(
+        auto testPrefix = std::format(
             "spdm_test_{}_{}",
             ::testing::UnitTest::GetInstance()->current_test_info()->name(),
             std::this_thread::get_id());
 
-        cache_path = std::filesystem::path("/tmp") / test_prefix;
+        cachePath = std::filesystem::path("/tmp") / testPrefix;
 
         std::error_code ec;
-        std::filesystem::remove(cache_path, ec);
+        std::filesystem::remove(cachePath, ec);
 
-        manager_path = std::format("/xyz/openbmc_project/spdm/{}", test_prefix),
+        managerPath = std::format("/xyz/openbmc_project/spdm/{}", testPrefix),
 
-        manager =
-            std::make_unique<PolicyManager>(*ctx, manager_path, cache_path);
+        manager = std::make_unique<PolicyManager<PropertyObserver>>(
+            *ctx, managerPath, cachePath);
 
-        service_name =
-            std::format("xyz.openbmc_project.spdm.test.{}", test_prefix);
+        serviceName =
+            std::format("xyz.openbmc_project.spdm.test.{}", testPrefix);
 
-        ctx->request_name(service_name.c_str());
+        ctx->request_name(serviceName.c_str());
     }
 
     void TearDown() override
     {
         std::error_code ec;
-        std::filesystem::remove(cache_path, ec);
+        std::filesystem::remove(cachePath, ec);
 
         manager.reset();
         ctx.reset();
@@ -61,7 +96,7 @@ class PolicyManagerTest : public ::testing::Test
 
     auto readCacheJson() const -> nlohmann::json
     {
-        std::ifstream file(cache_path);
+        std::ifstream file(cachePath);
         EXPECT_TRUE(file.is_open());
         return nlohmann::json::parse(file);
     }
@@ -77,124 +112,97 @@ class PolicyManagerTest : public ::testing::Test
 
     auto client()
     {
-        return PolicyClient(*ctx).service(service_name).path(manager_path);
+        return PolicyClient(*ctx).service(serviceName).path(managerPath);
     }
 
-    std::filesystem::path cache_path;
+    std::filesystem::path cachePath;
     std::unique_ptr<sdbusplus::async::context> ctx;
-    std::string service_name;
+    std::string serviceName;
 
-    std::string manager_path;
-    std::unique_ptr<PolicyManager> manager;
+    std::string managerPath;
+    std::unique_ptr<PolicyManager<PropertyObserver>> manager;
 };
 
 TEST_F(PolicyManagerTest, UnchangedEnabledDoesNotPersistOrInvokeCallback)
 {
-    bool callbackCalled = false;
-    manager->on_enabled([&](bool) { callbackCalled = true; });
-
-    ctx->spawn([this, &callbackCalled]() -> sdbusplus::async::task<> {
-        co_await client().enabled(false);
-        EXPECT_FALSE(std::filesystem::exists(cache_path));
-        EXPECT_FALSE(callbackCalled);
-    }());
+    ctx->spawn([](auto self) -> sdbusplus::async::task<> {
+        co_await self->client().enabled(false);
+        EXPECT_FALSE(std::filesystem::exists(self->cachePath));
+        EXPECT_EQ(self->manager->enabledCount, 0);
+    }(this));
 
     run();
 }
 
 TEST_F(PolicyManagerTest, EnabledChangePersistsAndInvokesCallback)
 {
-    bool callbackValue = false;
-    int callbackCount = 0;
-    manager->on_enabled([&](bool value) {
-        callbackValue = value;
-        ++callbackCount;
-    });
+    ctx->spawn([](auto self) -> sdbusplus::async::task<> {
+        co_await self->client().enabled(true);
+        EXPECT_EQ(self->manager->enabledCount, 1);
+        EXPECT_TRUE(self->manager->enabledValue);
 
-    ctx->spawn(
-        [this, &callbackValue, &callbackCount]() -> sdbusplus::async::task<> {
-            co_await client().enabled(true);
-            EXPECT_EQ(callbackCount, 1);
-            EXPECT_TRUE(callbackValue);
-
-            const auto cache = readCacheJson();
-            EXPECT_TRUE(cache.at(PolicyClient::enabled_t::name).get<bool>());
-        }());
+        const auto cache = self->readCacheJson();
+        EXPECT_TRUE(
+            cache.at(PolicyClient::enabled_t::name).template get<bool>());
+    }(this));
 
     run();
 }
 
 TEST_F(PolicyManagerTest, SecureSessionChangePersistsAndInvokesCallback)
 {
-    bool callbackValue = false;
-    int callbackCount = 0;
-    manager->on_secure_session_enabled([&](bool value) {
-        callbackValue = value;
-        ++callbackCount;
-    });
+    ctx->spawn([](auto self) -> sdbusplus::async::task<> {
+        co_await self->client().secure_session_enabled(true);
+        EXPECT_EQ(self->manager->sessionCount, 1);
+        EXPECT_TRUE(self->manager->sessionValue);
 
-    ctx->spawn([this, &callbackValue,
-                &callbackCount]() -> sdbusplus::async::task<> {
-        co_await client().secure_session_enabled(true);
-        EXPECT_EQ(callbackCount, 1);
-        EXPECT_TRUE(callbackValue);
-
-        const auto cache = readCacheJson();
-        EXPECT_TRUE(
-            cache.at(PolicyClient::secure_session_enabled_t::name).get<bool>());
-    }());
+        const auto cache = self->readCacheJson();
+        EXPECT_TRUE(cache.at(PolicyClient::secure_session_enabled_t::name)
+                        .template get<bool>());
+    }(this));
 
     run();
 }
 
 TEST_F(PolicyManagerTest, VerifyCertificateChangePersistsAndInvokesCallback)
 {
-    bool callbackValue = false;
-    int callbackCount = 0;
-    manager->on_verify_certificate([&](bool value) {
-        callbackValue = value;
-        ++callbackCount;
-    });
+    ctx->spawn([](auto self) -> sdbusplus::async::task<> {
+        co_await self->client().verify_certificate(true);
+        EXPECT_EQ(self->manager->certCount, 1);
+        EXPECT_TRUE(self->manager->certValue);
 
-    ctx->spawn(
-        [this, &callbackValue, &callbackCount]() -> sdbusplus::async::task<> {
-            co_await client().verify_certificate(true);
-            EXPECT_EQ(callbackCount, 1);
-            EXPECT_TRUE(callbackValue);
-
-            const auto cache = readCacheJson();
-            EXPECT_TRUE(
-                cache.at(PolicyClient::verify_certificate_t::name).get<bool>());
-        }());
+        const auto cache = self->readCacheJson();
+        EXPECT_TRUE(cache.at(PolicyClient::verify_certificate_t::name)
+                        .template get<bool>());
+    }(this));
 
     run();
 }
 
 TEST_F(PolicyManagerTest, AllowedVersionsPersistSelectionsAndSkipDuplicateWrite)
 {
-    const std::vector<Selection> versions{
-        PolicyClient::SpecialSetValues::ALL,
-        std::string{"1.3"},
-    };
+    ctx->spawn([](auto self) -> sdbusplus::async::task<> {
+        const std::vector<Selection> versions{
+            PolicyClient::SpecialSetValues::ALL,
+            std::string{"1.3"},
+        };
 
-    ctx->spawn([this, &versions]() -> sdbusplus::async::task<> {
-        co_await client().allowed_versions(versions);
+        co_await self->client().allowed_versions(versions);
 
-        const auto cache = readCacheJson();
+        const auto cache = self->readCacheJson();
         const auto& jsonVersions =
             cache.at(PolicyClient::allowed_versions_t::name);
         EXPECT_TRUE(jsonVersions.is_array());
         EXPECT_EQ(jsonVersions.size(), 2);
         EXPECT_EQ(
-            jsonVersions.at(0).get<std::string>(),
+            jsonVersions.at(0).template get<std::string>(),
             "xyz.openbmc_project.Control.Security.SPDM.Policy.SpecialSetValues.ALL");
-        EXPECT_EQ(jsonVersions.at(1).get<std::string>(), "1.3");
+        EXPECT_EQ(jsonVersions.at(1).template get<std::string>(), "1.3");
+        EXPECT_EQ(self->manager->allowedCount, 1);
 
-        // TODO: Should check that we didn't write JSON twice.
-        co_await client().allowed_versions(versions);
-    }());
+        co_await self->client().allowed_versions(versions);
+        EXPECT_EQ(self->manager->allowedCount, 1);
+    }(this));
 
     run();
 }
-
-} // namespace
