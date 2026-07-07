@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dd5c9641_669a2af9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-07T12:27:30Z",
+      "side": 1,
+      "message": "I would like the defaults to be some kind of sane defaults.  I don\u0027t understand why \"enabled\u003dfalse\" is a good default for us.  Shouldn\u0027t we make the default \"widely useful and available\"?\n\nMy general feeling is that people should not have to \"provision\" a system to make it do something expected.  Having to do provisioning means that after a factory reset (or file system corruption) the system is now in an undesired state.",
+      "revId": "6b17f676c47ce3953befbd5430fec0303e808a07",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bfea7378_dfb33071",
         "filename": "meson.options",
         "patchSetId": 2
