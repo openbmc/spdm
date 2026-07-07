@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab32f224_0d3da6e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-07T02:48:41Z",
+      "side": 1,
+      "message": "I\u0027m not planning to fix the test case error here.  There is a use-after-free because of structural issues with how we\u0027re handling the std::function callbacks and it isn\u0027t worth it to fix them.  The next commit completely pulls them out and fixes the use-after-free issues.",
+      "revId": "944e7b1908874df50884d0400aaa23dacb9f9e8c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
