@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9fa95a9_db4a4a13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-07-07T11:57:06Z",
+      "side": 1,
+      "message": "I see that this commit https://gerrit.openbmc.org/c/openbmc/spdm/+/92060 has already been merged. If spdmd is started with a state directory, for example:\n\nspdmd --state-dir /path/to/your/dir\n\nand a policy.json file is placed in /path/to/your/dir, PolicyManager::load() will read it during startup and populate all the SPDM policy properties from it.\n\nThe JSON format is:\n\n{\n  \"Version\": 1.1,\n  \"Enabled\": true,\n  \"SecureSessionEnabled\": false,\n  \"VerifyCertificate\": true,\n  \"AllowExtendedAlgorithms\": false,\n  \"AllowedVersions\": [\"ALL\"],\n  \"AllowedAlgorithmsAEAD\": [\"ALL\"],\n  \"AllowedAlgorithmsBaseHash\": [\"ALL\"],\n  \"AllowedAlgorithmsBaseAsym\": [\"ALL\"]\n}\n\nGiven this, it seems we no longer need this commit, as we already have a mechanism to configure these settings based on platform requirements.",
+      "revId": "6b17f676c47ce3953befbd5430fec0303e808a07",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bfea7378_dfb33071",
