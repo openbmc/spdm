@@ -6,24 +6,24 @@
 #include <systemd/sd-bus-protocol.h>
 
 #include <nlohmann/json.hpp>
+#include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/async/fdio.hpp>
+#include <sdbusplus/message.hpp>
 #include <xyz/openbmc_project/Control/Security/SPDM/Policy/server.hpp>
 
 #include <filesystem>
 #include <fstream>
+#include <string>
 #include <system_error>
 #include <variant>
 #include <vector>
 
-constexpr auto POLICY_VERSION_ID = "Version";
-constexpr unsigned int POLICY_VERSION = 1;
+constexpr auto policyVersionID = "Version";
+constexpr unsigned int policyVersion = 1;
 
 namespace
 {
-
-using Policy =
-    sdbusplus::common::xyz::openbmc_project::control::security::spdm::Policy;
-
+using Policy = spdm::Policy;
 using SelectionArray =
     std::vector<std::variant<Policy::SpecialSetValues, std::string>>;
 
@@ -74,8 +74,8 @@ struct adl_serializer<Policy::properties_t>
 {
     static void to_json(json& j, const Policy::properties_t& p)
     {
-        j = nlohmann::json{
-            {POLICY_VERSION_ID, POLICY_VERSION},
+        j = {
+            {policyVersionID, policyVersion},
             {Policy::enabled_t::name, p.enabled},
             {Policy::secure_session_enabled_t::name, p.secure_session_enabled},
             {Policy::verify_certificate_t::name, p.verify_certificate},
@@ -93,8 +93,8 @@ struct adl_serializer<Policy::properties_t>
 
     static void from_json(const json& j, Policy::properties_t& p)
     {
-        size_t version = j.at(POLICY_VERSION_ID);
-        if (version != POLICY_VERSION)
+        size_t version = j.at(policyVersionID);
+        if (version != policyVersion)
         {
             p = Policy::properties_t{};
             return;
@@ -116,18 +116,48 @@ struct adl_serializer<Policy::properties_t>
 
 } // namespace nlohmann
 
-void PolicyManager::load()
+namespace spdm
+{
+
+PolicyManagerBase::PolicyManagerBase(std::filesystem::path&& cachePath) :
+    cachePath(std::move(cachePath))
+{}
+
+PolicyManagerBase::~PolicyManagerBase() = default;
+
+void PolicyManagerBase::save(const Policy::properties_t& properties)
+{
+    const auto tempPath = cachePath.string() + ".temp";
+
+    std::filesystem::create_directories(cachePath.parent_path());
+
+    auto config = nlohmann::json(properties);
+
+    std::ofstream file(tempPath);
+    file << config.dump(4);
+    file.close();
+
+    std::error_code err;
+    std::filesystem::rename(tempPath, cachePath, err);
+    if (err)
+    {
+        std::filesystem::remove(tempPath);
+        throw std::system_error(err, "failed to save policy cache file");
+    }
+}
+
+auto PolicyManagerBase::load() -> Policy::properties_t
 {
     PHOSPHOR_LOG2_USING;
 
-    if (!std::filesystem::exists(cache_path))
+    if (!std::filesystem::exists(cachePath))
     {
-        return;
+        return {};
     }
-    std::ifstream file(cache_path);
+    std::ifstream file(cachePath);
     if (!file.is_open())
     {
-        return;
+        return {};
     }
 
     nlohmann::json config;
@@ -138,31 +168,13 @@ void PolicyManager::load()
     catch (const nlohmann::json::parse_error& e)
     {
         error("Failed to parse policy file, error: {ERROR}", "ERROR", e);
-        std::filesystem::remove(cache_path);
-        return;
+        std::filesystem::remove(cachePath);
+        return {};
     }
 
+    Policy::properties_t properties;
     config.get_to(properties);
+    return properties;
 }
 
-void PolicyManager::save()
-{
-    const auto tempPath = cache_path.string() + ".temp";
-
-    std::filesystem::create_directories(cache_path.parent_path());
-
-    auto config = nlohmann::json(properties);
-
-    std::ofstream file(tempPath);
-
-    file << config.dump(4);
-    file.close();
-
-    std::error_code err;
-    std::filesystem::rename(tempPath, cache_path, err);
-    if (err)
-    {
-        std::filesystem::remove(tempPath);
-        throw std::system_error(err, "failed to save policy cache file");
-    }
-}
+} // namespace spdm
