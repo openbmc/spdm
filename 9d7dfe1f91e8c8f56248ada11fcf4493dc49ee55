@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "614139f3_6c42700c",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-07-07T21:48:57Z",
+      "side": 1,
+      "message": "Narrowed to sdbusplus::exception::exception in PS15. This one is a real property\nread that legitimately throws when the endpoint has no UUID interface (best-\neffort UUID), so it still needs a catch -- just not std::exception. Done.",
+      "parentUuid": "cd5151c3_5b10bd9f",
+      "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49429106_3951608d",
@@ -31,6 +49,30 @@
       "writtenOn": "2026-07-07T16:17:27Z",
       "side": 1,
       "message": "Why do this here?  Have `addIfSpdmCapable` log this if appropriate.",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 68
+      },
+      "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af12ad3a_bf7f2d94",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-07-07T21:48:57Z",
+      "side": 1,
+      "message": "Done -- moved the \"not SPDM\" log into addResponder() (the renamed helper) in\nPS15; both call sites drop their own log.",
+      "parentUuid": "49429106_3951608d",
       "range": {
         "startLine": 93,
         "startChar": 0,
@@ -64,6 +106,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6f63659_4e9d8e6e",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-07-07T21:48:57Z",
+      "side": 1,
+      "message": "Done in PS15 -- single structured-binding unpack:auto [path, interfaces] \u003d msg.unpack\u003csdbusplus::object_path, InterfaceMap\u003e();",
+      "parentUuid": "bb61de64_d5d815bc",
+      "range": {
+        "startLine": 120,
+        "startChar": 0,
+        "endLine": 121,
+        "endChar": 52
+      },
+      "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b70ba453_0eb03e56",
@@ -77,6 +143,30 @@
       "writtenOn": "2026-07-07T16:17:27Z",
       "side": 1,
       "message": "There is no case where InterfacesAdded should be corrupted from the dbus-broker.  I don\u0027t think this exception catching is necessary.",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 9
+      },
+      "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ff6c234_30994d11",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-07-07T21:48:57Z",
+      "side": 1,
+      "message": "Done -- dropped the try/catch in PS15. Also removed the identical one in monitorRemoved() for consistency.",
+      "parentUuid": "b70ba453_0eb03e56",
       "range": {
         "startLine": 123,
         "startChar": 0,
@@ -106,6 +196,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f2696444_c7fa76a3",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-07-07T21:48:57Z",
+      "side": 1,
+      "message": "Agree that the string-keyed unpackProperties isn\u0027t the ideal async idiom. It\u0027s here\nto read EID/SupportedMessageTypes from the InterfacesAdded payload we already\nhold, avoiding a per-endpoint Get/GetAll (Chinmay asked for the inline read on\nPS1). The generated client accessors all go through get_property/\nget_all_properties, so switching to them reintroduces the round-trip.\n\nThe clean fix is the sdbusplus addition you mention: the generated .properties()\nalready contains the exact PropertiesVariant-map -\u003e properties_t decode -- it\u0027s\njust chained onto get_all_properties(). I\u0027ll extract that into a standalone\ndecode_properties(a{sv}) on the client harness so the typed decode works on a\npayload we already have; this call site then becomes decode_properties(\nendpointProps) -- typed and no round-trip. I\u0027ll put that up as a separate\nsdbusplus change and switch this over once it lands, keeping\nunpackPropertiesNoThrow here in the meantime so this change isn\u0027t blocked on it. Would that be OK?",
+      "parentUuid": "63006dc9_e8a8950b",
+      "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c75f9cdc_f4d3eb3c",
         "filename": "requester/mctp_transport_discovery.hpp",
         "patchSetId": 14
@@ -117,6 +225,24 @@
       "writtenOn": "2026-07-07T16:17:27Z",
       "side": 1,
       "message": "Please use consistent function naming style.  Seems like monitorRemoved would be more apt, as much as I hate it.  Check variable and function names throughout.",
+      "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43290c67_e831cd45",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-07-07T21:48:57Z",
+      "side": 1,
+      "message": "Done -- renamed monitor_added/monitor_removed to monitorAdded/monitorRemoved\n(camelCase) throughout in PS15.",
+      "parentUuid": "c75f9cdc_f4d3eb3c",
       "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -138,6 +264,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1c333a2_ac23dac5",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-07-07T21:48:57Z",
+      "side": 1,
+      "message": "Done -- renamed addIfSpdmCapable -\u003e addResponder in PS15.",
+      "parentUuid": "affee1d6_56e22dcb",
+      "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "946cb8b1_670fa849",
@@ -151,6 +295,24 @@
       "writtenOn": "2026-07-07T16:17:27Z",
       "side": 1,
       "message": "Please do something like this:\n\nhttps://gist.github.com/williamspatrick/1bfd665b5ef604096e7a45a3b77bf5d9",
+      "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b9d3074_9ddb8d99",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-07-07T21:48:57Z",
+      "side": 1,
+      "message": "Done -- adopted the static constexpr std::array of monitors with num_startup_tasks \u003d 1 + monitors.size() in PS15. (Also covers Ratan\u0027s earlier\n\"named constant?\" note on the hard-coded 3.)",
+      "parentUuid": "946cb8b1_670fa849",
       "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
