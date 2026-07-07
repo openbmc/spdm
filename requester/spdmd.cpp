@@ -51,13 +51,13 @@ int main(int argc, char* argv[])
     discovery.discover(tcp);
 
     // Run the initial discovery and then claim the bus name.
-    ctx.spawn([&]() -> sdbusplus::async::task<> {
+    ctx.spawn([](auto& ctx, auto& discovery) -> sdbusplus::async::task<> {
         // Perform discovery
         co_await discovery.run();
 
         // Request D-Bus name after initial discovery.
         ctx.request_name(dbusServiceName);
-    }());
+    }(ctx, discovery));
 
     // Run the sdbusplus async context for parallel coroutine execution
     ctx.run();

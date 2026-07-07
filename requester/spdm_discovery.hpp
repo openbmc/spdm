@@ -94,9 +94,9 @@ class SPDMDiscovery
     template <details::DiscoveryType D>
     void discover(D& d)
     {
-        initialDiscovery.spawn([this](D& d) -> sdbusplus::async::task<> {
-            co_await d.discovery(*this);
-        }(d));
+        initialDiscovery.spawn([](auto self, D& d) -> sdbusplus::async::task<> {
+            co_await d.discovery(*self);
+        }(this, d));
     }
 
     /**
