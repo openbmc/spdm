@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ab29a069_8210e81f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-07-07T00:58:39Z",
+      "side": 1,
+      "message": "Why not run time configuration for the default security settings.\n\n1. Manufacturing Process Is Not Atomic or Guaranteed\nManufacturing steps can fail, be skipped, If the Redfish API call to set policy properties is missed (tooling bug, network issue, rushed line), the device ships with the hardcoded PDI defaults silently. Compile-time defaults give the platform/vendor a safety net - the right behavior for \ntheir product is baked in at build time and doesn\u0027t depend on the manufacturing workflow executing perfectly.\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \n2. Different Products Need Different Defaults Without Runtime Setup\nA security focused product (e.g. one that must enforce verify-certificate\u003dtrue, spdm enabled \u003d true, version \u003d x.x, supported algorithms) can ship a binary where that is the default without requiring manufacturing to configure it. The compile-time option is an ODM/OEM customization point — different customers building different images can have different starting points, without touching runtime workflows at all.\n\n3. Air-Gapped deployments                                                                                                                                                                                                                                                                              \nSome deployments never have a Redfish client talking to them at manufacturing. Embedded use cases, or stripped-down deployments may not run the Redfish configuration step at all. Compile-time defaults handle these without needing any runtime intervention.\n\n4. Manufacturing Time\nsay millions of boards even a 1–2 second Redfish API call per board adds up fast:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      1 million boards × 2 seconds \u003d 555 hours of pure API execution time \n\n5. hidden costs per board on the line\nError handling and retry logic if the call fails\nVerification call afterward to confirm the property was actually set",
+      "parentUuid": "341bfca9_ea4148b9",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "53b137d47ae63f402926f5a2a287f76ba257e57a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ce25afaf_e6adcbc0",
         "filename": "tests/test_policy_manager.cpp",
         "patchSetId": 1
