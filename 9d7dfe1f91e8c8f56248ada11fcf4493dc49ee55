@@ -1,0 +1,158 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd5151c3_5b10bd9f",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-07T16:17:27Z",
+      "side": 1,
+      "message": "Catching all std::exception seems a little excessive?",
+      "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49429106_3951608d",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-07T16:17:27Z",
+      "side": 1,
+      "message": "Why do this here?  Have `addIfSpdmCapable` log this if appropriate.",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 68
+      },
+      "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb61de64_d5d815bc",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-07T16:17:27Z",
+      "side": 1,
+      "message": "Unpack in one shot.",
+      "range": {
+        "startLine": 120,
+        "startChar": 0,
+        "endLine": 121,
+        "endChar": 52
+      },
+      "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b70ba453_0eb03e56",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-07T16:17:27Z",
+      "side": 1,
+      "message": "There is no case where InterfacesAdded should be corrupted from the dbus-broker.  I don\u0027t think this exception catching is necessary.",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 9
+      },
+      "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63006dc9_e8a8950b",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-07T16:17:27Z",
+      "side": 1,
+      "message": "Why are we using these unpackProperties rather than the generated bindings?  If there is something to add to sdbusplus, we should do that, but unpackProperties isn\u0027t something we should be doing in newer async code.",
+      "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c75f9cdc_f4d3eb3c",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-07T16:17:27Z",
+      "side": 1,
+      "message": "Please use consistent function naming style.  Seems like monitorRemoved would be more apt, as much as I hate it.  Check variable and function names throughout.",
+      "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "affee1d6_56e22dcb",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-07T16:17:27Z",
+      "side": 1,
+      "message": "I\u0027d prefer a less verbose function name.\n\n\"SPDM\" is an acronym; should be all upper or all lowercase when used.",
+      "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "946cb8b1_670fa849",
+        "filename": "requester/mctp_transport_discovery.hpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-07T16:17:27Z",
+      "side": 1,
+      "message": "Please do something like this:\n\nhttps://gist.github.com/williamspatrick/1bfd665b5ef604096e7a45a3b77bf5d9",
+      "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
