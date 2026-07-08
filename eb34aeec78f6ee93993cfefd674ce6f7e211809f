@@ -234,6 +234,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "44ed3aea_8bd1c710",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-07-08T10:51:02Z",
+      "side": 1,
+      "message": "Updated the patch to use network id + eid for device name for object path until EM changes available",
+      "parentUuid": "11ad414c_af26ecb8",
+      "revId": "eb34aeec78f6ee93993cfefd674ce6f7e211809f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b0134a5_c68fa307",
