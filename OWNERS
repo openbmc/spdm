@@ -37,6 +37,7 @@ owners:
 
 reviewers:
 - mine260309@gmail.com
+- ratankgupta31@gmail.com
 
 matchers:
 
@@ -50,3 +51,6 @@ openbmc:
 - name: Patrick Williams
   email: patrick@stwcx.xyz
   discord: stwcx
+- name: Ratan Gupta
+  email: ratankgupta31@gmail.com
+  discord: rgupta
