@@ -126,7 +126,7 @@ class PolicyManagerTest : public ::testing::Test
 TEST_F(PolicyManagerTest, UnchangedEnabledDoesNotPersistOrInvokeCallback)
 {
     ctx->spawn([](auto self) -> sdbusplus::async::task<> {
-        co_await self->client().enabled(false);
+        co_await self->client().enabled(co_await self->client().enabled());
         EXPECT_FALSE(std::filesystem::exists(self->cachePath));
         EXPECT_EQ(self->manager->enabledCount, 0);
     }(this));
@@ -137,13 +137,14 @@ TEST_F(PolicyManagerTest, UnchangedEnabledDoesNotPersistOrInvokeCallback)
 TEST_F(PolicyManagerTest, EnabledChangePersistsAndInvokesCallback)
 {
     ctx->spawn([](auto self) -> sdbusplus::async::task<> {
-        co_await self->client().enabled(true);
+        auto change = !co_await self->client().enabled();
+        co_await self->client().enabled(change);
         EXPECT_EQ(self->manager->enabledCount, 1);
-        EXPECT_TRUE(self->manager->enabledValue);
+        EXPECT_EQ(self->manager->enabledValue, change);
 
         const auto cache = self->readCacheJson();
-        EXPECT_TRUE(
-            cache.at(PolicyClient::enabled_t::name).template get<bool>());
+        EXPECT_EQ(cache.at(PolicyClient::enabled_t::name).template get<bool>(),
+                  change);
     }(this));
 
     run();
@@ -152,13 +153,15 @@ TEST_F(PolicyManagerTest, EnabledChangePersistsAndInvokesCallback)
 TEST_F(PolicyManagerTest, SecureSessionChangePersistsAndInvokesCallback)
 {
     ctx->spawn([](auto self) -> sdbusplus::async::task<> {
-        co_await self->client().secure_session_enabled(true);
+        auto change = !co_await self->client().secure_session_enabled();
+        co_await self->client().secure_session_enabled(change);
         EXPECT_EQ(self->manager->sessionCount, 1);
         EXPECT_TRUE(self->manager->sessionValue);
 
         const auto cache = self->readCacheJson();
-        EXPECT_TRUE(cache.at(PolicyClient::secure_session_enabled_t::name)
-                        .template get<bool>());
+        EXPECT_EQ(cache.at(PolicyClient::secure_session_enabled_t::name)
+                      .template get<bool>(),
+                  change);
     }(this));
 
     run();
@@ -167,13 +170,15 @@ TEST_F(PolicyManagerTest, SecureSessionChangePersistsAndInvokesCallback)
 TEST_F(PolicyManagerTest, VerifyCertificateChangePersistsAndInvokesCallback)
 {
     ctx->spawn([](auto self) -> sdbusplus::async::task<> {
-        co_await self->client().verify_certificate(true);
+        auto change = !co_await self->client().verify_certificate();
+        co_await self->client().verify_certificate(change);
         EXPECT_EQ(self->manager->certCount, 1);
-        EXPECT_TRUE(self->manager->certValue);
+        EXPECT_EQ(self->manager->certValue, change);
 
         const auto cache = self->readCacheJson();
-        EXPECT_TRUE(cache.at(PolicyClient::verify_certificate_t::name)
-                        .template get<bool>());
+        EXPECT_EQ(cache.at(PolicyClient::verify_certificate_t::name)
+                      .template get<bool>(),
+                  change);
     }(this));
 
     run();
