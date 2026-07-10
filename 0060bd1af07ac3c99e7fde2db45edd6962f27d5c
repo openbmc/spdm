@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7c11dd13_a3e955b2",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-07-10T08:22:45Z",
+      "side": 1,
+      "message": "Rather than calling unpackPropertiesNoThrow() twice on the same endpointProps, can you unpack all three properties in a single call?",
+      "range": {
+        "startLine": 132,
+        "startChar": 8,
+        "endLine": 148,
+        "endChar": 0
+      },
+      "revId": "0060bd1af07ac3c99e7fde2db45edd6962f27d5c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4f57ac70_e1739b68",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 33
@@ -36,6 +59,29 @@
         "startChar": 4,
         "endLine": 36,
         "endChar": 48
+      },
+      "revId": "0060bd1af07ac3c99e7fde2db45edd6962f27d5c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69e2857a_71e256dc",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-07-10T08:22:45Z",
+      "side": 1,
+      "message": "This will make it serialized, and will block until device attestation is complete to move on to next device.\nCan we run this in parallel ?\n\nHow this will be handled for the devices added dynamically?",
+      "range": {
+        "startLine": 61,
+        "startChar": 7,
+        "endLine": 65,
+        "endChar": 0
       },
       "revId": "0060bd1af07ac3c99e7fde2db45edd6962f27d5c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
