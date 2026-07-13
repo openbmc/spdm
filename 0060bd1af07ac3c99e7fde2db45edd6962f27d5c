@@ -64,6 +64,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9085e262_c66f2467",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-07-13T06:42:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4f57ac70_e1739b68",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 48
+      },
+      "revId": "0060bd1af07ac3c99e7fde2db45edd6962f27d5c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69e2857a_71e256dc",
@@ -77,6 +101,30 @@
       "writtenOn": "2026-07-10T08:22:45Z",
       "side": 1,
       "message": "This will make it serialized, and will block until device attestation is complete to move on to next device.\nCan we run this in parallel ?\n\nHow this will be handled for the devices added dynamically?",
+      "range": {
+        "startLine": 61,
+        "startChar": 7,
+        "endLine": 65,
+        "endChar": 0
+      },
+      "revId": "0060bd1af07ac3c99e7fde2db45edd6962f27d5c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf3e5d2c_77d57f9c",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-07-13T06:42:51Z",
+      "side": 1,
+      "message": "Line no 65: does not perform attestation — SPDMDBusResponder constructor just creates and registers a D-Bus object.\n\nThere is no blocking coroutine or protocol exchange here. So the \"blocking attestation\" concern doesn\u0027t apply to this patch.\n\n\n\"how will this be handled for devices added dynamically?\"\u003d\u003d\u003d\u003e it\u0027s addressed in the patch 90798 (spdmd: Add runtime MCTP endpoint discovery via D-Bus signals), which uses D-Bus InterfacesAdded/InterfacesRemoved signals to handle dynamic\ndevices.",
+      "parentUuid": "69e2857a_71e256dc",
       "range": {
         "startLine": 61,
         "startChar": 7,
