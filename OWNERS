@@ -38,6 +38,7 @@ owners:
 reviewers:
 - mine260309@gmail.com
 - ratankgupta31@gmail.com
+- archana.kakani@ibm.com
 
 matchers:
 
@@ -54,3 +55,6 @@ openbmc:
 - name: Ratan Gupta
   email: ratankgupta31@gmail.com
   discord: rgupta
+- name: Archana Kakani 
+  email: archana.kakani@ibm.com 
+  discord: archanakakani
