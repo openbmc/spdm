@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d6ec39a7_d9fbe5b6",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-07-13T12:26:14Z",
+      "side": 1,
+      "message": "In the discussion on decode properties on this commit https://gerrit.openbmc.org/c/openbmc/spdm/+/90798/comment/63006dc9_e8a8950b/, Patrick mentioned about the preference against using unpackPropertiesNoThrow().\n\nLet\u0027s wait for the outcome of that discussion, my preference is till we are done with decode properties, let\u0027s keep using the unpackPropertiesNoThrow,and I agree with your comment that there should be only one call.",
+      "parentUuid": "7c11dd13_a3e955b2",
+      "range": {
+        "startLine": 132,
+        "startChar": 8,
+        "endLine": 148,
+        "endChar": 0
+      },
+      "revId": "0060bd1af07ac3c99e7fde2db45edd6962f27d5c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4f57ac70_e1739b68",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 33
