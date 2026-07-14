@@ -1,0 +1,22 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87e118e6_80d0f7d5",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-07-14T16:36:27Z",
+      "side": 1,
+      "message": "Thanks Ratan - please go ahead and push this. The unpackPropertiesNoThrow here was the agreed interim (PS14): it reads EID/SupportedMessageTypes straight from the InterfacesAdded payload we already hold, so 90798 shouldn\u0027t block the chain.\n\nFor the async-idiom cleanup Patrick flagged, I\u0027ll put the sdbusplus addition up as a separate change - a standalone decode_properties(a{sv}) on the client harness (the same PropertiesVariant -\u003e properties_t decode the generated .properties() already does, minus the get_all_properties round-trip) - and switch spdmd over to it once it lands. No need to hold 90798 or the blocked commits on that.",
+      "parentUuid": "a5e7b7aa_54d0c791",
+      "revId": "05e22c3edb9da889baf15b2861e59953eab8da3b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
