@@ -214,6 +214,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a5e7b7aa_54d0c791",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-07-14T16:24:48Z",
+      "side": 1,
+      "message": "Gary, are you working on the sdbusplus enhancement, or can we go ahead and push this change? There are quite a few commits currently blocked waiting for it.",
+      "parentUuid": "f2696444_c7fa76a3",
+      "revId": "9d7dfe1f91e8c8f56248ada11fcf4493dc49ee55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c75f9cdc_f4d3eb3c",
         "filename": "requester/mctp_transport_discovery.hpp",
         "patchSetId": 14
