@@ -17,6 +17,24 @@
       "parentUuid": "a5e7b7aa_54d0c791",
       "revId": "05e22c3edb9da889baf15b2861e59953eab8da3b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e93bc64f_039f5862",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-07-15T08:36:27Z",
+      "side": 1,
+      "message": "Gary, My ask was for the sdbusplus addition as the commit after your commit still uses the unpackPropertiesNoThrow. Can you push it on priority?",
+      "parentUuid": "87e118e6_80d0f7d5",
+      "revId": "05e22c3edb9da889baf15b2861e59953eab8da3b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
