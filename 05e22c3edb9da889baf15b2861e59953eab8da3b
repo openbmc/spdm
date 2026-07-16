@@ -3,6 +3,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "3fa055a1_66cb48a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-07-16T10:34:15Z",
+      "side": 1,
+      "message": "Looks like the CI is green for https://gerrit.openbmc.org/c/openbmc/sdbusplus/+/92385, Let\u0027s do the review over there.",
+      "revId": "05e22c3edb9da889baf15b2861e59953eab8da3b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "87e118e6_80d0f7d5",
         "filename": "requester/mctp_transport_discovery.cpp",
         "patchSetId": 15
