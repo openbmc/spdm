@@ -95,11 +95,9 @@ bool SpdmMctpTransport::setupScratchBuffer()
     }
 
     libspdm_set_scratch_buffer(spdmContext, scratchBuffer, scratch_buffer_size);
-    if (!libspdm_check_context(spdmContext))
-    {
-        lg2::error("Context check failed");
-        return false;
-    }
+    // Note: libspdm_check_context() is intentionally not called here. It runs
+    // at the end of applySecureSessionConfig() once all KEY_EX caps and
+    // algorithms have been set.
     return true;
 }
 

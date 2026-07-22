@@ -23,6 +23,7 @@ SPDMDBusResponder::SPDMDBusResponder(sdbusplus::async::context& ctx,
     responder(responderInfo)
 {
     const auto devName = name();
+    deviceName = devName;
 
     std::string componentIntegrityPath =
         "/xyz/openbmc_project/ComponentIntegrity/" + devName;
@@ -33,17 +34,28 @@ SPDMDBusResponder::SPDMDBusResponder(sdbusplus::async::context& ctx,
             using T = std::decay_t<decltype(info)>;
             if constexpr (std::is_same_v<T, MctpResponderInfo>)
             {
-                componentIntegrity->setTransport(
-                    std::make_shared<SpdmMctpTransport>(info.eid));
+                auto t = std::make_shared<SpdmMctpTransport>(info.eid);
+                transport = t;
+                componentIntegrity->setTransport(t);
             }
             else if constexpr (std::is_same_v<T, TcpResponderInfo>)
             {
-                componentIntegrity->setTransport(
-                    std::make_shared<SpdmTcpTransport>(
-                        info.ipAddr, static_cast<uint16_t>(info.port)));
+                auto t = std::make_shared<SpdmTcpTransport>(
+                    info.ipAddr, static_cast<uint16_t>(info.port));
+                transport = t;
+                componentIntegrity->setTransport(t);
             }
         },
         responderInfo.info);
+
+    // Allocate the libspdm context, register transport callbacks and open the
+    // underlying socket. Without this the spdmContext stays null and every
+    // subsequent libspdm call (config, connection init, session) is a no-op.
+    if (transport && !transport->initialize())
+    {
+        throw std::runtime_error(
+            "Failed to initialize SPDM transport for " + devName);
+    }
 
     std::string trustedComponentPath =
         "/xyz/openbmc_project/TrustedComponent/" + devName;
@@ -87,6 +99,77 @@ std::string SPDMDBusResponder::name() const
             }
         },
         responder.info);
+}
+
+libspdm_return_t SPDMDBusResponder::applySessionConfig(
+    const SecureSessionConfig& cfg)
+{
+    if (!transport)
+    {
+        return LIBSPDM_STATUS_SUCCESS; // No transport, nothing to configure
+    }
+    return applySecureSessionConfig(*transport, cfg);
+}
+
+libspdm_return_t SPDMDBusResponder::openSecureSession(
+    const SecureSessionConfig& cfg, uint8_t slotId)
+{
+    if (!transport)
+    {
+        error("openSecureSession: transport is null for {DEVICE}", "DEVICE",
+              deviceName);
+        return LIBSPDM_STATUS_INVALID_PARAMETER;
+    }
+
+    // Negotiate the connection (GET_VERSION / CAPABILITIES / ALGORITHMS) before
+    // the session handshake. applySessionConfig() must have already advertised
+    // the KEY_EX capabilities; this call is idempotent, so it is a no-op if the
+    // connection is already up.
+    try
+    {
+        componentIntegrity->ensureConnected();
+    }
+    catch (const std::exception& e)
+    {
+        error("Connection init failed for {DEVICE}: {ERROR}", "DEVICE",
+              deviceName, "ERROR", e.what());
+        return LIBSPDM_STATUS_INVALID_STATE_LOCAL;
+    }
+
+    if (auto st = installPeerRootCert(*transport, cfg);
+        LIBSPDM_STATUS_IS_ERROR(st))
+    {
+        error("Trust anchor install failed for {DEVICE}: {STATUS}", "DEVICE",
+              deviceName, "STATUS",
+              std::format("0x{:08X}", static_cast<uint32_t>(st)));
+        return st;
+    }
+
+    if (!session)
+    {
+        session = std::make_unique<SpdmSession>(*transport);
+    }
+    if (session->active())
+    {
+        return LIBSPDM_STATUS_SUCCESS;
+    }
+    auto st = session->start(slotId);
+    if (LIBSPDM_STATUS_IS_ERROR(st))
+    {
+        error("Secure session start failed for {DEVICE}: {STATUS}", "DEVICE",
+              deviceName, "STATUS",
+              std::format("0x{:08X}", static_cast<uint32_t>(st)));
+    }
+    return st;
+}
+
+libspdm_return_t SPDMDBusResponder::closeSecureSession()
+{
+    if (!session)
+    {
+        return LIBSPDM_STATUS_SUCCESS;
+    }
+    return session->stop();
 }
 
 } // namespace spdm

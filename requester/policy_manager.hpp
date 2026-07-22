@@ -11,6 +11,7 @@
 #include <xyz/openbmc_project/Control/Security/SPDM/Policy/common.hpp>
 
 #include <filesystem>
+#include <functional>
 #include <utility>
 
 namespace spdm
@@ -55,17 +56,55 @@ class PolicyManager final :
         this->properties = std::move(properties);
     }
 
+    using EnabledChangeCallback = std::function<void(bool, bool)>;
+    using SecureSessionEnabledChangeCallback = std::function<void(bool, bool)>;
+
+    void registerEnabledChangeCallback(EnabledChangeCallback cb)
+    {
+        enabledChangeCallback_ = std::move(cb);
+    }
+
+    void registerSecureSessionEnabledChangeCallback(
+        SecureSessionEnabledChangeCallback cb)
+    {
+        secureSessionEnabledChangeCallback_ = std::move(cb);
+    }
+
+    bool enabled() const
+    {
+        return this->properties.enabled;
+    }
+
+    bool secure_session_enabled() const
+    {
+        return this->properties.secure_session_enabled;
+    }
+
     auto set_property(Policy::enabled_t, auto&& value) -> bool
     {
-        return update_property(Policy::enabled_t{}, this->properties.enabled,
-                               std::forward<decltype(value)>(value));
+        bool old = this->properties.enabled;
+        bool changed =
+            update_property(Policy::enabled_t{}, this->properties.enabled,
+                            std::forward<decltype(value)>(value));
+        if (changed && enabledChangeCallback_)
+        {
+            enabledChangeCallback_(old, this->properties.enabled);
+        }
+        return changed;
     }
 
     auto set_property(Policy::secure_session_enabled_t, auto&& value) -> bool
     {
-        return update_property(Policy::secure_session_enabled_t{},
-                               this->properties.secure_session_enabled,
-                               std::forward<decltype(value)>(value));
+        bool old = this->properties.secure_session_enabled;
+        bool changed = update_property(Policy::secure_session_enabled_t{},
+                                       this->properties.secure_session_enabled,
+                                       std::forward<decltype(value)>(value));
+        if (changed && secureSessionEnabledChangeCallback_)
+        {
+            secureSessionEnabledChangeCallback_(
+                old, this->properties.secure_session_enabled);
+        }
+        return changed;
     }
 
     auto set_property(Policy::verify_certificate_t, auto&& value) -> bool
@@ -113,6 +152,9 @@ class PolicyManager final :
     }
 
   private:
+    EnabledChangeCallback enabledChangeCallback_;
+    SecureSessionEnabledChangeCallback secureSessionEnabledChangeCallback_;
+
     template <typename Tag, typename T, typename U>
     auto update_property(Tag, T& current, U&& value) -> bool
     {
