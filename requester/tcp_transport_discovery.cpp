@@ -3,6 +3,7 @@
 
 #include "tcp_transport_discovery.hpp"
 
+#include "libspdm_tcp_transport.hpp"
 #include "utils/mapper.hpp"
 
 #include <phosphor-logging/lg2.hpp>
@@ -33,6 +34,8 @@ TCPTransportDiscovery::TCPTransportDiscovery(sdbusplus::async::context& ctx) :
 auto TCPTransportDiscovery::discovery(SPDMDiscovery& discovery)
     -> sdbusplus::async::task<>
 {
+    info("Starting TCP SPDM device discovery");
+
     // Spawn monitoring tasks on global context
     ctx.spawn(monitor_added(discovery));
     ctx.spawn(monitor_removed(discovery));
@@ -46,6 +49,7 @@ auto TCPTransportDiscovery::discovery(SPDMDiscovery& discovery)
     auto instances =
         co_await mapper::instances::by_interface<Configuration>(ctx);
 
+    size_t added = 0;
     for (const auto& [path, service] : instances)
     {
         auto properties = co_await Configuration(ctx)
@@ -53,15 +57,29 @@ auto TCPTransportDiscovery::discovery(SPDMDiscovery& discovery)
                               .path(path.str)
                               .properties();
 
-        debug("Found SPDM TCP Responder at {IP}:{PORT} for {PATH}", "IP",
-              properties.hostname, "PORT", properties.port, "PATH", path);
+        if (properties.hostname.empty())
+        {
+            error("Missing Hostname for TCP endpoint: {PATH}", "PATH", path);
+            continue;
+        }
+
+        if (properties.port == 0)
+        {
+            error("Missing or invalid Port for TCP endpoint: {PATH}", "PATH",
+                  path);
+            continue;
+        }
+
+        info("Found TCP SPDM Responder - IP: {IP}, Port: {PORT} for {PATH}",
+             "IP", properties.hostname, "PORT", properties.port, "PATH", path);
 
         discovery.add(ResponderInfo{
             path, TcpResponderInfo{properties.hostname, properties.port},
             TransportType::TCP});
+        ++added;
     }
 
-    debug("TCP transport discovery completed");
+    info("TCP discovery found {COUNT} SPDM devices", "COUNT", added);
 }
 
 auto TCPTransportDiscovery::monitor_added(SPDMDiscovery& discovery)
@@ -93,8 +111,16 @@ auto TCPTransportDiscovery::monitor_added(SPDMDiscovery& discovery)
                               .path(path.str)
                               .properties();
 
-        debug("Found SPDM TCP Responder at {IP}:{PORT} for {PATH}", "IP",
-              properties.hostname, "PORT", properties.port, "PATH", path);
+        if (properties.hostname.empty() || properties.port == 0)
+        {
+            error(
+                "Invalid TCP endpoint properties (empty host or zero port) for {PATH}",
+                "PATH", path);
+            continue;
+        }
+
+        info("Found TCP SPDM Responder - IP: {IP}, Port: {PORT} for {PATH}",
+             "IP", properties.hostname, "PORT", properties.port, "PATH", path);
 
         discovery.add(ResponderInfo{
             path, TcpResponderInfo{properties.hostname, properties.port},

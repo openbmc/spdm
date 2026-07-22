@@ -22,6 +22,8 @@ int main(int argc, char* argv[])
 {
     using namespace spdm;
 
+    lg2::info("Starting SPDM daemon");
+
     CLI::App app;
     std::filesystem::path stateDir;
     app.add_option("--state-dir", stateDir,
@@ -43,6 +45,8 @@ int main(int argc, char* argv[])
 
     SPDMDiscovery discovery{};
 
+    lg2::info("Starting SPDM device discovery");
+
     // Start MCTP discovery
     MCTPTransportDiscovery mctp{ctx};
     discovery.discover(mctp);
@@ -58,18 +62,44 @@ int main(int argc, char* argv[])
                  auto& responders) -> sdbusplus::async::task<> {
         co_await discovery.run();
 
+        lg2::info("Processing {COUNT} discovered SPDM devices", "COUNT",
+                  discovery.devices().size());
+
         for (const auto& device : discovery.devices())
         {
-            responders.push_back(
-                std::make_unique<SPDMDBusResponder>(ctx, device));
+            try
+            {
+                lg2::info("Creating D-Bus responder for device {PATH}", "PATH",
+                          device.path);
+                responders.push_back(
+                    std::make_unique<SPDMDBusResponder>(ctx, device));
+                lg2::info("Successfully created responder for device {PATH}",
+                          "PATH", device.path);
+            }
+            catch (const std::exception& e)
+            {
+                lg2::error(
+                    "Failed to create responder for device {PATH}: {ERROR}",
+                    "PATH", device.path, "ERROR", e.what());
+            }
         }
+
+        lg2::info("Created {COUNT} D-Bus responders", "COUNT",
+                  responders.size());
 
         // Request D-Bus name after initial discovery.
         ctx.request_name(dbusServiceName);
+        lg2::info("Registered D-Bus service: {SERVICE}", "SERVICE",
+                  dbusServiceName);
     }(ctx, discovery, responders));
 
     // Run the sdbusplus async context for parallel coroutine execution
     ctx.run();
+
+    // Cleanup
+    responders.clear();
+
+    lg2::info("SPDM daemon shutting down");
 
     return EXIT_SUCCESS;
 }
