@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82552804_b0d90569",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 33
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002700
+      },
+      "writtenOn": "2026-07-27T22:04:07Z",
+      "side": 1,
+      "message": "SPDM over MCTP is an important capability for attestation on cloud infrastructure platforms. Thanks for contributing support for this feature.",
+      "revId": "53850ee2afa7e1738fbf31505ce47e35e5b12ea1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38c85f8d_5795a7da",
+        "filename": "requester/mctp_helper.hpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1002700
+      },
+      "writtenOn": "2026-07-27T22:04:07Z",
+      "side": 1,
+      "message": "We may have memory leak here. `message` already points to libspdm’s registered receiver buffer, with `*message_size` providing its capacity. Replacing it with `malloc()` leaks one allocation per received response because libspdm does not free replacement pointers. \nCan we retain the supplied pointer, verify that the payload fits, copy into  `*message`,and update `*message_size` to the actual payload length? A pointer into  `buf` would also be invalid because the caller’s vector is local.",
+      "revId": "53850ee2afa7e1738fbf31505ce47e35e5b12ea1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
