@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a279893_26139e9a",
+        "filename": "requester/tcp_helper.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1002700
+      },
+      "writtenOn": "2026-07-27T22:12:18Z",
+      "side": 1,
+      "message": "We may have memory leak here. `message` already points to libspdm’s registered receiver buffer, with `*message_size` providing its capacity. Replacing it with `malloc()` leaks one allocation per received response because libspdm does not free replacement pointers.\nCan we retain the supplied pointer, verify that the payload fits, copy into `*message`,and update `*message_size` to the actual payload length?",
+      "revId": "a4a1cedf74b2b63e59944db022e2d39fa9fd81bb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
