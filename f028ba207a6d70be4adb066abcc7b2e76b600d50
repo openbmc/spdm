@@ -16,6 +16,23 @@
       "message": "@ratankgupta31@gmail.com This buffer may overflow when SHA-512 is negotiated. `libspdm_get_digest()` writes `negotiated_hash_size * popcount(slotMask)` bytes without receiving the destination capacity. Since SHA-512 is advertised, a responder reporting 7–8 slots writes 448–512 bytes into this 384-byte buffer.\nWe may allocate `LIBSPDM_MAX_HASH_SIZE * SPDM_MAX_SLOT_COUNT` and calculate totalDigestSize using the negotiated hash size rather than the fixed 48-byte value.",
       "revId": "f028ba207a6d70be4adb066abcc7b2e76b600d50",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50edf382_d4f54e8c",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1002700
+      },
+      "writtenOn": "2026-07-27T22:42:30Z",
+      "side": 1,
+      "message": "`libspdm_init_connection()` executes `GET_VERSION`,`GET_CAPABILITIES`, and\n`NEGOTIATE_ALGORITHMS` before returning, and `getCertificateDigests()` then\nexecutes `GET_DIGESTS` synchronously. The current libspdm implementation invokes\nthe registered send/receive callbacks inline, and this coroutine has no\nsuspension point before `co_return`. In this transport, the receive callback ultimately performs blocking `recv()`\ncalls while ignoring the supplied timeout. An unresponsive endpoint can\ntherefore block the thread executing this D-Bus method indefinitely.\n\nShould we consider moving the complete transaction to a serialized worker/executor and await its completion, or implement genuinely asynchronous transport I/O?",
+      "revId": "f028ba207a6d70be4adb066abcc7b2e76b600d50",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
