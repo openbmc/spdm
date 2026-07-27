@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "270f3839_73412d81",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1002700
+      },
+      "writtenOn": "2026-07-27T21:40:08Z",
+      "side": 1,
+      "message": "The caller-provided nonce is only logged but not bound to the SPDM request `getSingleMeasurement`, so it cannot provide the freshness guarantee. \n\nThe potential fix could be like this: validate and decode the 64-character hex string into 32 bytes, then may use `libspdm_get_measurement_ex()` with the decoded value as `requester_nonce_in` on the signature-bearing request.",
+      "revId": "b76d38cdf657e3f87c1b3631bf977050923c97ce",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
