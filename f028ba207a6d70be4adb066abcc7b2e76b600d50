@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58c56128_59a049da",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1002700
+      },
+      "writtenOn": "2026-07-27T21:15:37Z",
+      "side": 1,
+      "message": "@ratankgupta31@gmail.com This buffer may overflow when SHA-512 is negotiated. `libspdm_get_digest()` writes `negotiated_hash_size * popcount(slotMask)` bytes without receiving the destination capacity. Since SHA-512 is advertised, a responder reporting 7–8 slots writes 448–512 bytes into this 384-byte buffer.\nWe may allocate `LIBSPDM_MAX_HASH_SIZE * SPDM_MAX_SLOT_COUNT` and calculate totalDigestSize using the negotiated hash size rather than the fixed 48-byte value.",
+      "revId": "f028ba207a6d70be4adb066abcc7b2e76b600d50",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
