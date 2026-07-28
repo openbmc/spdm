@@ -2,13 +2,15 @@
 // SPDX-FileCopyrightText: Copyright OpenBMC Authors
 
 #pragma once
-#define SDBUSPLUS_ASYNC_NEW_PROPERTY_MEMBERS
 
 #include "utils/paths.hpp"
 
 #include <nlohmann/json.hpp>
+#pragma push_macro("SDBUSPLUS_ASYNC_NEW_PROPERTY_MEMBERS")
+#define SDBUSPLUS_ASYNC_NEW_PROPERTY_MEMBERS
 #include <xyz/openbmc_project/Control/Security/SPDM/Policy/aserver.hpp>
 #include <xyz/openbmc_project/Control/Security/SPDM/Policy/common.hpp>
+#pragma pop_macro("SDBUSPLUS_ASYNC_NEW_PROPERTY_MEMBERS")
 
 #include <filesystem>
 #include <utility>
