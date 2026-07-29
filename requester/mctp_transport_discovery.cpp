@@ -58,10 +58,22 @@ auto MCTPTransportDiscovery::discovery(SPDMDiscovery& discovery)
 
     for (const auto& [path, service] : instances)
     {
-        auto endpointProps = co_await MctpEndpoint(ctx)
-                                 .service(service)
-                                 .path(path.str)
-                                 .properties();
+        MctpEndpoint::properties_t endpointProps;
+        try
+        {
+            endpointProps = co_await MctpEndpoint(ctx)
+                                .service(service)
+                                .path(path.str)
+                                .properties();
+        }
+        catch (const sdbusplus::exception_t& e)
+        {
+            // mctpd can leave between the mapper reply and this read, and
+            // other services can expose an Endpoint that does not decode.
+            warning("Failed to read MCTP endpoint {PATH}: {ERR}", "PATH", path,
+                    "ERR", e);
+            continue;
+        }
 
         std::string uuid;
         try
@@ -76,6 +88,13 @@ auto MCTPTransportDiscovery::discovery(SPDMDiscovery& discovery)
         {
             debug("UUID unavailable for {PATH}; proceeding EID-only: {ERR}",
                   "PATH", path, "ERR", e);
+        }
+
+        // mctpd left while this endpoint was being read, so it is gone and
+        // must not be added after monitorServiceLost() cleaned up.
+        if (serviceLost)
+        {
+            continue;
         }
 
         if (!addResponder(discovery, path, endpointProps.network_id,
@@ -192,6 +211,49 @@ void MCTPTransportDiscovery::processInterfaceRemoved(
 
     info("MCTP SPDM Responder removed from path: {PATH}", "PATH", path.str);
     discovery.remove(path.str);
+}
+
+void MCTPTransportDiscovery::removeAllResponders(SPDMDiscovery& discovery)
+{
+    // Collect paths first to avoid iterator invalidation during removal.
+    std::vector<sdbusplus::object_path> paths;
+    for (const auto& r : discovery.devices())
+    {
+        if (r.transport == TransportType::MCTP)
+        {
+            paths.push_back(r.path);
+        }
+    }
+    for (const auto& path : paths)
+    {
+        discovery.remove(path);
+    }
+}
+
+auto MCTPTransportDiscovery::monitorServiceLost(SPDMDiscovery& discovery)
+    -> sdbusplus::async::task<>
+{
+    auto matcher = sdbusplus::async::match(
+        ctx, sdbusplus::match_rules::nameOwnerChanged(mctp_service_name));
+
+    co_await startup_barrier.wait();
+
+    while (true)
+    {
+        auto msg = co_await matcher.next();
+
+        auto [name, oldOwner,
+              newOwner] = msg.unpack<std::string, std::string, std::string>();
+
+        if (!newOwner.empty())
+        {
+            continue;
+        }
+
+        serviceLost = true;
+        info("mctpd service lost, removing all MCTP SPDM responders");
+        removeAllResponders(discovery);
+    }
 }
 
 } // namespace spdm
