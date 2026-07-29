@@ -6,6 +6,8 @@
 
 #include <sdbusplus/async.hpp>
 
+#include <chrono>
+#include <functional>
 #include <memory>
 #include <string>
 #include <utility>
@@ -62,6 +64,74 @@ class MCTPTransportDiscoveryTest : public ::testing::Test
         const std::vector<std::string>& interfaces)
     {
         self.processInterfaceRemoved(discovery, path, interfaces);
+    }
+
+    static void removeAllResponders(MCTPTransportDiscovery& self,
+                                    SPDMDiscovery& discovery)
+    {
+        self.removeAllResponders(discovery);
+    }
+
+    static constexpr auto mctpServiceName =
+        MCTPTransportDiscovery::mctp_service_name;
+
+    // Thrown by stopMonitor() to end monitorServiceLost(), whose loop never
+    // returns on its own.
+    struct StopMonitor
+    {};
+
+    static auto monitorServiceLost(MCTPTransportDiscovery& self,
+                                   SPDMDiscovery& discovery)
+        -> sdbusplus::async::task<>
+    {
+        try
+        {
+            co_await self.monitorServiceLost(discovery);
+        }
+        catch (const StopMonitor&)
+        {}
+    }
+
+    // monitorServiceLost() waits at the startup barrier together with
+    // discovery() and the other monitors; stand in for those.
+    static void finishStartup(sdbusplus::async::context& ctx,
+                              MCTPTransportDiscovery& self)
+    {
+        for (std::size_t i = 1; i < MCTPTransportDiscovery::num_startup_tasks;
+             ++i)
+        {
+            ctx.spawn(self.startup_barrier.wait());
+        }
+    }
+
+    // Lose mctpd once more with an MCTP responder present and throw from
+    // the remove callback, so monitorServiceLost() returns; then stop.
+    static void stopMonitor(sdbusplus::async::context& ctx,
+                            MCTPTransportDiscovery& self,
+                            SPDMDiscovery& discovery)
+    {
+        discovery.onDeviceRemoved([](const sdbusplus::object_path&) {
+            throw StopMonitor{};
+        });
+        addResponder(self, discovery, sdbusplus::object_path("/dev/mctp/3"), 1,
+                     30, "uuid3", spdmTypes());
+        {
+            auto mctpd = sdbusplus::bus_t::new_bus();
+            mctpd.request_name(mctpServiceName);
+        }
+        ctx.request_stop();
+    }
+
+    static auto waitUntil(sdbusplus::async::context& ctx,
+                          std::function<bool()> done)
+        -> sdbusplus::async::task<bool>
+    {
+        using namespace std::chrono_literals;
+        for (int i = 0; i < 200 && !done(); ++i)
+        {
+            co_await sdbusplus::async::sleep_for(ctx, 10ms);
+        }
+        co_return done();
     }
 
   protected:
@@ -266,6 +336,86 @@ TEST_F(MCTPTransportDiscoveryTest, ProcessInterfaceRemovedDifferentPath)
     ASSERT_EQ(responderDb.devices().size(), 1);
     EXPECT_EQ(std::get<MctpResponderInfo>(responderDb.devices()[0].info).eid,
               20);
+}
+
+TEST_F(MCTPTransportDiscoveryTest, RemoveAllRespondersEmptyDiscovery)
+{
+    MCTPTransportDiscovery discovery(*ctx);
+    SPDMDiscovery responderDb;
+
+    ASSERT_NO_THROW(removeAllResponders(discovery, responderDb));
+
+    EXPECT_TRUE(responderDb.devices().empty());
+}
+
+TEST_F(MCTPTransportDiscoveryTest, RemoveAllRespondersRemovesOnlyMctp)
+{
+    MCTPTransportDiscovery discovery(*ctx);
+    SPDMDiscovery responderDb;
+
+    std::vector<uint8_t> supportedTypes = {spdmType};
+    sdbusplus::object_path mctpPath1("/dev/mctp/1");
+    sdbusplus::object_path mctpPath2("/dev/mctp/2");
+    sdbusplus::object_path tcpPath("/dev/tcp/1");
+
+    addResponder(discovery, responderDb, mctpPath1, 1, 10, "uuid1",
+                 supportedTypes);
+    addResponder(discovery, responderDb, mctpPath2, 1, 20, "uuid2",
+                 supportedTypes);
+    responderDb.add(ResponderInfo{tcpPath, TcpResponderInfo{"127.0.0.1", 2323},
+                                  TransportType::TCP});
+    ASSERT_EQ(responderDb.devices().size(), 3);
+
+    removeAllResponders(discovery, responderDb);
+
+    ASSERT_EQ(responderDb.devices().size(), 1);
+    EXPECT_EQ(responderDb.devices()[0].path, tcpPath);
+    EXPECT_EQ(responderDb.devices()[0].transport, TransportType::TCP);
+}
+
+TEST_F(MCTPTransportDiscoveryTest, ServiceLostRemovesOnlyMctpResponders)
+{
+    std::vector<std::string> paths;
+    MCTPTransportDiscovery discovery(*ctx);
+    SPDMDiscovery responderDb;
+    trackDevices(responderDb, paths);
+
+    sdbusplus::object_path tcpPath("/dev/tcp/1");
+    addResponder(discovery, responderDb, sdbusplus::object_path("/dev/mctp/1"),
+                 1, 10, "uuid1", spdmTypes());
+    addResponder(discovery, responderDb, sdbusplus::object_path("/dev/mctp/2"),
+                 1, 20, "uuid2", spdmTypes());
+    responderDb.add(ResponderInfo{tcpPath, TcpResponderInfo{"127.0.0.1", 2323},
+                                  TransportType::TCP});
+    ASSERT_EQ(paths.size(), 3);
+
+    ctx->spawn(monitorServiceLost(discovery, responderDb));
+    finishStartup(*ctx, discovery);
+
+    // A second connection takes and then drops the mctpd bus name, so the
+    // bus daemon sends the same NameOwnerChanged signals as when mctpd
+    // starts and exits.
+    ctx->spawn([](sdbusplus::async::context& ctx,
+                  MCTPTransportDiscovery& discovery, SPDMDiscovery& responderDb,
+                  std::vector<std::string>& paths,
+                  std::string tcpPath) -> sdbusplus::async::task<> {
+        using namespace std::chrono_literals;
+
+        auto mctpd =
+            std::make_unique<sdbusplus::bus_t>(sdbusplus::bus_t::new_bus());
+        mctpd->request_name(mctpServiceName);
+        co_await sdbusplus::async::sleep_for(ctx, 100ms);
+        EXPECT_EQ(paths.size(), 3);
+
+        mctpd.reset();
+        EXPECT_TRUE(
+            co_await waitUntil(ctx, [&paths]() { return paths.size() == 1; }));
+        EXPECT_EQ(paths, std::vector<std::string>{tcpPath});
+
+        stopMonitor(ctx, discovery, responderDb);
+    }(*ctx, discovery, responderDb, paths, tcpPath.str));
+
+    ctx->run();
 }
 
 } // namespace spdm
