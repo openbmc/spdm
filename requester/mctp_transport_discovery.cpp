@@ -195,4 +195,42 @@ auto MCTPTransportDiscovery::monitorRemoved(SPDMDiscovery& discovery)
     }
 }
 
+auto MCTPTransportDiscovery::monitorServiceLost(SPDMDiscovery& discovery)
+    -> sdbusplus::async::task<>
+{
+    auto matcher = sdbusplus::async::match(
+        ctx, rules::nameOwnerChanged(mctp_service_name));
+
+    co_await startup_barrier.wait();
+
+    while (true)
+    {
+        auto msg = co_await matcher.next();
+
+        auto [name, old_owner,
+              new_owner] = msg.unpack<std::string, std::string, std::string>();
+
+        if (!new_owner.empty())
+        {
+            continue;
+        }
+
+        info("mctpd service lost, removing all MCTP SPDM responders");
+
+        // Collect paths first to avoid iterator invalidation during removal.
+        std::vector<sdbusplus::object_path> paths;
+        for (const auto& r : discovery.devices())
+        {
+            if (r.transport == TransportType::MCTP)
+            {
+                paths.push_back(r.path);
+            }
+        }
+        for (const auto& path : paths)
+        {
+            discovery.remove(path);
+        }
+    }
+}
+
 } // namespace spdm
