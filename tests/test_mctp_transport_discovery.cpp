@@ -51,6 +51,12 @@ class MCTPTransportDiscoveryTest : public ::testing::Test
         self.processInterfaceRemoved(discovery, path, interfaces);
     }
 
+    static void removeAllResponders(MCTPTransportDiscovery& self,
+                                    SPDMDiscovery& discovery)
+    {
+        self.removeAllResponders(discovery);
+    }
+
   protected:
     void SetUp() override
     {
@@ -198,6 +204,41 @@ TEST_F(MCTPTransportDiscoveryTest, ProcessInterfaceRemovedDifferentPath)
     ASSERT_EQ(responderDb.devices().size(), 1);
     EXPECT_EQ(std::get<MctpResponderInfo>(responderDb.devices()[0].info).eid,
               20);
+}
+
+TEST_F(MCTPTransportDiscoveryTest, RemoveAllRespondersEmptyDiscovery)
+{
+    MCTPTransportDiscovery discovery(*ctx);
+    SPDMDiscovery responderDb;
+
+    ASSERT_NO_THROW(removeAllResponders(discovery, responderDb));
+
+    EXPECT_TRUE(responderDb.devices().empty());
+}
+
+TEST_F(MCTPTransportDiscoveryTest, RemoveAllRespondersRemovesOnlyMctp)
+{
+    MCTPTransportDiscovery discovery(*ctx);
+    SPDMDiscovery responderDb;
+
+    std::vector<uint8_t> supportedTypes = {spdmType};
+    sdbusplus::object_path mctpPath1("/dev/mctp/1");
+    sdbusplus::object_path mctpPath2("/dev/mctp/2");
+    sdbusplus::object_path tcpPath("/dev/tcp/1");
+
+    addResponder(discovery, responderDb, mctpPath1, 1, 10, "uuid1",
+                 supportedTypes);
+    addResponder(discovery, responderDb, mctpPath2, 1, 20, "uuid2",
+                 supportedTypes);
+    [[maybe_unused]] bool added = responderDb.add(ResponderInfo{
+        tcpPath, TcpResponderInfo{"127.0.0.1", 2323}, TransportType::TCP});
+    ASSERT_EQ(responderDb.devices().size(), 3);
+
+    removeAllResponders(discovery, responderDb);
+
+    ASSERT_EQ(responderDb.devices().size(), 1);
+    EXPECT_EQ(responderDb.devices()[0].path, tcpPath);
+    EXPECT_EQ(responderDb.devices()[0].transport, TransportType::TCP);
 }
 
 } // namespace spdm
