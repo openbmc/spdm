@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b21b294_8a864f44",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-29T21:55:16Z",
+      "side": 1,
+      "message": "There is no ODR violation in the current code though.  Anything you\u0027ve introduced is in a later commit?\n\n```\n$ rg aserver.hpp            \nrequester/policy_manager.hpp\n10:#include \u003cxyz/openbmc_project/Control/Security/SPDM/Policy/aserver.hpp\u003e\n```\n\nThis is the only use of any `aserver.hpp` header.  If you introduced another one, it would also need the NEW_PROPERTY_MEMBERS.\n\nAnyhow, I\u0027m making NEW_PROPERTY_MEMBERS the default in sdbusplus now so you can just abandon this.\n\nhttps://gerrit.openbmc.org/c/openbmc/sdbusplus/+/92903",
+      "revId": "b80d58855d9293ad643677dac75774e46ba53a6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
