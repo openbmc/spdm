@@ -56,6 +56,9 @@ class MCTPTransportDiscovery
     /// Drop the matching ResponderInfo as mctpd removes endpoints.
     auto monitorRemoved(SPDMDiscovery&) -> sdbusplus::async::task<>;
 
+    /// Remove all MCTP responders when the mctpd service disappears.
+    auto monitorServiceLost(SPDMDiscovery&) -> sdbusplus::async::task<>;
+
     /**
      * @brief Register an endpoint only if it advertises SPDM support.
      * @return true if added; false if skipped (logs the skip).
@@ -81,6 +84,7 @@ class MCTPTransportDiscovery
     static constexpr std::array monitors{
         &MCTPTransportDiscovery::monitorAdded,
         &MCTPTransportDiscovery::monitorRemoved,
+        &MCTPTransportDiscovery::monitorServiceLost,
     };
 
     // discovery() plus each monitor rendezvous at the barrier.
@@ -91,6 +95,7 @@ class MCTPTransportDiscovery
     // mctpd publishes endpoints under its own tree (Code Construct,
     // au.com.codeconstruct), so scope the match there rather than under
     // /xyz/openbmc_project.
+    static constexpr auto mctp_service_name = "au.com.codeconstruct.MCTP1";
     static constexpr auto mctp_namespace_path = "/au/com/codeconstruct/mctp1";
 };
 
