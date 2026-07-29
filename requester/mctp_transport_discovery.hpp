@@ -56,6 +56,12 @@ class MCTPTransportDiscovery
     /// Drop the matching ResponderInfo as mctpd removes endpoints.
     auto monitorRemoved(SPDMDiscovery&) -> sdbusplus::async::task<>;
 
+    /// Remove all MCTP responders when the mctpd service disappears.
+    auto monitorServiceLost(SPDMDiscovery&) -> sdbusplus::async::task<>;
+
+    /// Remove every currently discovered MCTP responder from discovery.
+    void removeAllResponders(SPDMDiscovery& discovery);
+
     /**
      * @brief Register an endpoint only if it advertises SPDM support.
      * @return true if added; false if skipped (logs the skip).
@@ -81,12 +87,15 @@ class MCTPTransportDiscovery
     static constexpr std::array monitors{
         &MCTPTransportDiscovery::monitorAdded,
         &MCTPTransportDiscovery::monitorRemoved,
+        &MCTPTransportDiscovery::monitorServiceLost,
     };
 
     // discovery() plus each monitor rendezvous at the barrier.
     static constexpr std::size_t num_startup_tasks = 1 + monitors.size();
 
     static constexpr uint8_t spdm_message_type = 0x5;
+
+    static constexpr auto mctp_service_name = "au.com.codeconstruct.MCTP1";
 
     // mctpd publishes endpoints under its own tree (Code Construct,
     // au.com.codeconstruct), so scope the match there rather than under
