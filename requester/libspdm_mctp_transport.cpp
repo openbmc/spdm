@@ -145,6 +145,7 @@ void SpdmMctpTransport::cleanupContext()
     if (spdmContext)
     {
         libspdm_deinit_context(spdmContext);
+        free(spdmContext);
         spdmContext = nullptr;
     }
 }

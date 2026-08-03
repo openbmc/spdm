@@ -58,6 +58,8 @@ class SpdmTransport
         if (spdmContext)
         {
             libspdm_deinit_context(spdmContext);
+            free(spdmContext);
+            spdmContext = nullptr;
         }
     }
     /** @brief Shared send/receive buffer for SPDM messages. */
@@ -106,7 +108,7 @@ class SpdmTransport
     /** @brief Supported AEAD cipher suite bitmask. */
     uint16_t supportAeadAlgo = SPDM_ALGORITHMS_AEAD_CIPHER_SUITE_AES_256_GCM;
     /** @brief Supported key schedule algorithm bitmask. */
-    uint16_t supportKeyScheduleAlgo = SPDM_ALGORITHMS_KEY_SCHEDULE_HMAC_HASH;
+    uint16_t supportKeyScheduleAlgo = SPDM_ALGORITHMS_KEY_SCHEDULE_SPDM;
     /** @brief Supported other parameters bitmask. */
     uint8_t supportOtherParamsSupport = 0;
     /** @brief libspdm data parameter used when setting/getting SPDM context
