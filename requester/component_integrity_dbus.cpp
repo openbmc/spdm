@@ -175,6 +175,24 @@ void ComponentIntegrity::initializeSpdmConnection()
         throw std::runtime_error("SPDM context not initialized");
     }
 
+    // Idempotent: if the connection is already negotiated, skip re-init so a
+    // later caller (e.g. the lazy init in getSignedMeasurements) cannot tear
+    // down an established secure session by re-running the handshake.
+    libspdm_data_parameter_t param{};
+    param.location = LIBSPDM_DATA_LOCATION_CONNECTION;
+    uint32_t connectionState = 0;
+    size_t stateSize = sizeof(connectionState);
+    if (libspdm_get_data(transport->spdmContext, LIBSPDM_DATA_CONNECTION_STATE,
+                         &param, &connectionState, &stateSize) ==
+            LIBSPDM_STATUS_SUCCESS &&
+        connectionState >= LIBSPDM_CONNECTION_STATE_NEGOTIATED)
+    {
+        lg2::debug(
+            "SPDM connection already negotiated (state=0x{STATE:X}), skipping init",
+            "STATE", connectionState);
+        return;
+    }
+
     libspdm_return_t initStatus =
         libspdm_init_connection(transport->spdmContext, false);
 
