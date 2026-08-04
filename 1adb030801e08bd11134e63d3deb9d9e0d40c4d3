@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fc0046f_4570387d",
+        "filename": "requester/libspdm_transport.hpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-04T10:24:25Z",
+      "side": 1,
+      "message": "we need to get all these from the policy/config file.",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 36
+      },
+      "revId": "1adb030801e08bd11134e63d3deb9d9e0d40c4d3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
