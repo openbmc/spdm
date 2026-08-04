@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46f6a046_d56e588b",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-08-04T10:40:18Z",
+      "side": 1,
+      "message": "Can this be a debug?. Since clients can call this method periodically it may flood the journal log",
+      "revId": "ed188fad93c37d6e3a107107b8aa4018e33e76d2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf9bf5d0_640b4c0d",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-08-04T10:40:18Z",
+      "side": 1,
+      "message": "This is addressed in https://gerrit.openbmc.org/c/openbmc/spdm/+/84019. TODO: can be removed",
+      "revId": "ed188fad93c37d6e3a107107b8aa4018e33e76d2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
