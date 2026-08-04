@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23207691_9ea15f4f",
+        "filename": "requester/libspdm_transport.hpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-04T10:18:42Z",
+      "side": 1,
+      "message": "static constexpr?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 40
+      },
+      "revId": "7a62d028645343f9708f3d867f14662bd2fdeadf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac9e2fc7_4ddfaccc",
+        "filename": "requester/libspdm_transport.hpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-04T10:18:42Z",
+      "side": 1,
+      "message": "std::array?",
+      "range": {
+        "startLine": 60,
+        "startChar": 1,
+        "endLine": 60,
+        "endChar": 29
+      },
+      "revId": "7a62d028645343f9708f3d867f14662bd2fdeadf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c165354_53b767d7",
+        "filename": "requester/libspdm_transport.hpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-04T10:18:42Z",
+      "side": 1,
+      "message": "raw void pointers: Can we use RAII warppers?\nusing SpdmContextPtr \u003d std::unique_ptr\u003cvoid, decltype(\u0026libspdm_deinit_context)\u003e;                                                                                                                                                                                                                                 \n  using ScratchBufferPtr \u003d std::unique_ptr\u003cvoid, decltype(\u0026free)\u003e;",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 24
+      },
+      "revId": "7a62d028645343f9708f3d867f14662bd2fdeadf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
