@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d43ab7e7_cf00ccf8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002796
+      },
+      "writtenOn": "2026-08-04T13:53:03Z",
+      "side": 1,
+      "message": "The Verified −1 here is a real compile error rather than a CI flake, so it\u0027ll persist across a rebase: requester/component_integrity_dbus.cpp still passes transport-\u003espdmContext as a raw void*, but it\u0027s now a std::unique_ptr\u003cvoid, spdm::SpdmContextDeleter\u003e (from a change lower in the stack). The libspdm calls/casts need .get():\n\n- L80: libspdm_init_connection(transport-\u003espdmContext.get(), false)\n- L119: libspdm_get_digest(transport-\u003espdmContext.get(), ...)\n- L172: reinterpret_cast\u003clibspdm_context_t*\u003e(transport-\u003espdmContext.get())\n- L274: libspdm_get_certificate(transport-\u003espdmContext.get(), ...)\n- L288: reinterpret_cast\u003clibspdm_context_t*\u003e(transport-\u003espdmContext.get())\n\ntests/test_component_integrity.cpp (73, 98, 203, 231) assigns raw pointers/buffers directly to spdmContext, so those want .reset(...) rather than \u003d. 80267 came back green on the same rebase, so it looks like just this file that didn\u0027t move to the new context type.",
+      "revId": "9df2d3855061d4e809baedc1f5d8d3737d5e8882",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
