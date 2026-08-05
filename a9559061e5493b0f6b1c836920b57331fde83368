@@ -1,0 +1,181 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcf024c5_8a4b25fa",
+        "filename": "requester/libspdm_mctp_transport.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-05T03:58:18Z",
+      "side": 1,
+      "message": "Use RAII here.",
+      "range": {
+        "startLine": 50,
+        "startChar": 1,
+        "endLine": 58,
+        "endChar": 24
+      },
+      "revId": "a9559061e5493b0f6b1c836920b57331fde83368",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4042c30_590ebb93",
+        "filename": "requester/libspdm_mctp_transport.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-05T03:58:18Z",
+      "side": 1,
+      "message": "RAII?",
+      "range": {
+        "startLine": 91,
+        "startChar": 4,
+        "endLine": 91,
+        "endChar": 17
+      },
+      "revId": "a9559061e5493b0f6b1c836920b57331fde83368",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36668bdd_32a27e0e",
+        "filename": "requester/libspdm_mctp_transport.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-05T03:58:18Z",
+      "side": 1,
+      "message": "Parameter \u003d {}",
+      "revId": "a9559061e5493b0f6b1c836920b57331fde83368",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9b0186b_f321e0e1",
+        "filename": "requester/libspdm_mctp_transport.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-05T03:58:18Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "a9559061e5493b0f6b1c836920b57331fde83368",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "835af195_70c45ffe",
+        "filename": "requester/libspdm_mctp_transport.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-05T03:58:18Z",
+      "side": 1,
+      "message": "Log the error here.",
+      "revId": "a9559061e5493b0f6b1c836920b57331fde83368",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9f0438d_4a40965f",
+        "filename": "requester/libspdm_mctp_transport.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-05T03:58:18Z",
+      "side": 1,
+      "message": "Log the error here.",
+      "revId": "a9559061e5493b0f6b1c836920b57331fde83368",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af068dc2_71db344c",
+        "filename": "requester/libspdm_mctp_transport.hpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-05T03:58:18Z",
+      "side": 1,
+      "message": "why 4 functions - 2 should be enough.",
+      "range": {
+        "startLine": 117,
+        "startChar": 3,
+        "endLine": 146,
+        "endChar": 77
+      },
+      "revId": "a9559061e5493b0f6b1c836920b57331fde83368",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3de1874_01077cf6",
+        "filename": "requester/libspdm_transport.hpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-05T03:58:18Z",
+      "side": 1,
+      "message": "C++ smart pointer?",
+      "range": {
+        "startLine": 116,
+        "startChar": 3,
+        "endLine": 116,
+        "endChar": 22
+      },
+      "revId": "a9559061e5493b0f6b1c836920b57331fde83368",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce15ec49_1f28afa8",
+        "filename": "requester/libspdm_transport.hpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-05T03:58:18Z",
+      "side": 1,
+      "message": "Here too?",
+      "revId": "a9559061e5493b0f6b1c836920b57331fde83368",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
