@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "962aafe6_041ef380",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-06T10:09:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "46f6a046_d56e588b",
+      "revId": "ed188fad93c37d6e3a107107b8aa4018e33e76d2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf9bf5d0_640b4c0d",
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d8152b43_a8572284",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-06T10:09:51Z",
+      "side": 1,
+      "message": "TODO will be there till 84019 and we will remove TODO from that commit.",
+      "parentUuid": "bf9bf5d0_640b4c0d",
+      "revId": "ed188fad93c37d6e3a107107b8aa4018e33e76d2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1a5c115d_c807068a",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 34
@@ -48,6 +84,24 @@
       "writtenOn": "2026-08-04T10:50:34Z",
       "side": 1,
       "message": "Can we use the path defined at https://github.com/openbmc/spdm/blob/main/requester/spdmd.hpp#L6C16-L6C30?",
+      "revId": "ed188fad93c37d6e3a107107b8aa4018e33e76d2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3796c5e0_89ff8db4",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-06T10:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a5c115d_c807068a",
       "revId": "ed188fad93c37d6e3a107107b8aa4018e33e76d2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
