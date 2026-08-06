@@ -104,12 +104,22 @@ auto TCPTransportDiscovery::monitor_added(SPDMDiscovery& discovery)
         }
 
         info("TCP SPDM Responder added at path: {PATH}", "PATH", path.str);
-        auto service = msg.get_sender();
 
-        auto properties = co_await Configuration(ctx)
-                              .service(service)
-                              .path(path.str)
-                              .properties();
+        // Decode the properties from the InterfacesAdded payload we already
+        // hold, avoiding a Get/GetAll round-trip (matches MCTP discovery).
+        Configuration::properties_t properties;
+        try
+        {
+            properties = Configuration::properties_t::unpack(
+                interfaces.at(Configuration::interface));
+        }
+        catch (const sdbusplus::internal_exception_t& e)
+        {
+            error(
+                "InterfacesAdded for {PATH} has malformed properties; skipping: {ERR}",
+                "PATH", path, "ERR", e);
+            continue;
+        }
 
         if (properties.hostname.empty() || properties.port == 0)
         {
