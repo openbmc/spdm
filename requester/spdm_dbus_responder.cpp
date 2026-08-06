@@ -26,7 +26,7 @@ SPDMDBusResponder::SPDMDBusResponder(sdbusplus::async::context& ctx,
     deviceName = devName;
 
     std::string componentIntegrityPath =
-        "/xyz/openbmc_project/ComponentIntegrity/" + devName;
+        "/xyz/openbmc_project/component_integrity/" + devName;
     componentIntegrity =
         std::make_unique<ComponentIntegrity>(ctx, componentIntegrityPath);
     std::visit(
