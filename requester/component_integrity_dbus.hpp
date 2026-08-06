@@ -79,6 +79,19 @@ class ComponentIntegrity :
     }
 
     /**
+     * @brief Ensure the SPDM connection is negotiated (GET_VERSION /
+     * CAPABILITIES / NEGOTIATE_ALGORITHMS).
+     *
+     * A no-op if the connection is already negotiated.
+     *
+     * @throws std::runtime_error if initialization fails.
+     */
+    void ensureConnected()
+    {
+        initializeSpdmConnection();
+    }
+
+    /**
      * @brief Request stop of the async context
      */
     void stopAsyncContext()
