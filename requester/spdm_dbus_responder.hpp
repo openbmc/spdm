@@ -4,11 +4,15 @@
 #pragma once
 
 #include "component_integrity_dbus.hpp"
+#include "libspdm_transport.hpp"
 #include "spdm_discovery.hpp"
+#include "spdm_session.hpp"
+#include "spdm_session_config.hpp"
 #include "trusted_component_dbus.hpp"
 
 #include <sdbusplus/async.hpp>
 
+#include <memory>
 #include <string>
 
 namespace spdm
@@ -47,8 +51,44 @@ class SPDMDBusResponder
         return responder.path.str;
     }
 
+    /**
+     * @brief Apply secure-session capability flags and algorithms to the
+     * transport. Must be called after transport initialization and before
+     * openSecureSession().
+     */
+    libspdm_return_t applySessionConfig(const SecureSessionConfig& cfg);
+
+    /**
+     * @brief Open an SPDM secure session against this device.
+     *
+     * Installs the peer trust anchor (resolved from cfg) before running
+     * GET_DIGESTS / GET_CERTIFICATE / KEY_EXCHANGE / FINISH.
+     *
+     * @param cfg     Session config (used for trust-anchor resolution).
+     * @param slotId  Responder cert slot to authenticate against (default 0).
+     */
+    libspdm_return_t openSecureSession(const SecureSessionConfig& cfg,
+                                       uint8_t slotId = 0);
+
+    /** @brief Tear down the secure session. */
+    libspdm_return_t closeSecureSession();
+
+    /** @brief True if a secure session is currently open. */
+    bool secureSessionActive() const
+    {
+        return session && session->active();
+    }
+
+    /** @brief Device name (public for use in log messages) */
+    std::string deviceName;
+
   private:
     ResponderInfo responder;
+
+    /** @brief Shared transport used for the secure session. */
+    std::shared_ptr<SpdmTransport> transport;
+    /** @brief Active secure session (nullptr when no session). */
+    std::unique_ptr<SpdmSession> session;
 
     /** @brief D-Bus ComponentIntegrity interface object for this device. */
     std::unique_ptr<ComponentIntegrity> componentIntegrity;
