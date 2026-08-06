@@ -4,9 +4,12 @@
 #include "spdm_dbus_responder.hpp"
 
 #include "libspdm_mctp_transport.hpp"
+#include "libspdm_tcp_transport.hpp"
 
 #include <phosphor-logging/lg2.hpp>
 
+#include <algorithm>
+#include <cctype>
 #include <format>
 #include <stdexcept>
 
@@ -34,6 +37,12 @@ SPDMDBusResponder::SPDMDBusResponder(sdbusplus::async::context& ctx,
             {
                 componentIntegrity->setTransport(
                     std::make_shared<SpdmMctpTransport>(info.eid));
+            }
+            else if constexpr (std::is_same_v<T, TcpResponderInfo>)
+            {
+                componentIntegrity->setTransport(
+                    std::make_shared<SpdmTcpTransport>(
+                        info.ipAddr, static_cast<uint16_t>(info.port)));
             }
         },
         responderInfo.info);
