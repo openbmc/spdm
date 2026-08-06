@@ -22,6 +22,8 @@ int main(int argc, char* argv[])
 {
     using namespace spdm;
 
+    lg2::info("Starting SPDM daemon");
+
     CLI::App app;
     std::filesystem::path stateDir;
     app.add_option("--state-dir", stateDir,
@@ -47,7 +49,20 @@ int main(int argc, char* argv[])
 
     // Create a D-Bus responder for every device as it is discovered.
     discovery.onDeviceAdded([&ctx, &responders](const ResponderInfo& device) {
-        responders.push_back(std::make_unique<SPDMDBusResponder>(ctx, device));
+        try
+        {
+            lg2::info("Creating D-Bus responder for device {PATH}", "PATH",
+                      device.path);
+            responders.push_back(
+                std::make_unique<SPDMDBusResponder>(ctx, device));
+            lg2::info("Successfully created responder for device {PATH}",
+                      "PATH", device.path);
+        }
+        catch (const std::exception& e)
+        {
+            lg2::error("Failed to create responder for device {PATH}: {ERROR}",
+                       "PATH", device.path, "ERROR", e.what());
+        }
     });
 
     // Destroy the D-Bus responder when a device is removed at runtime.
@@ -58,6 +73,8 @@ int main(int argc, char* argv[])
             });
         });
 
+    lg2::info("Starting SPDM device discovery");
+
     // Start MCTP discovery
     MCTPTransportDiscovery mctp{ctx};
     discovery.discover(mctp);
@@ -67,13 +84,28 @@ int main(int argc, char* argv[])
     discovery.discover(tcp);
 
     // Wait for initial discovery to complete, then claim bus name.
-    ctx.spawn([](auto& ctx, auto& discovery) -> sdbusplus::async::task<> {
+    ctx.spawn([](auto& ctx, auto& discovery,
+                 auto& responders) -> sdbusplus::async::task<> {
         co_await discovery.run();
+
+        lg2::info("Processed {COUNT} discovered SPDM devices", "COUNT",
+                  discovery.devices().size());
+        lg2::info("Created {COUNT} D-Bus responders", "COUNT",
+                  responders.size());
+
+        // Request D-Bus name after initial discovery.
         ctx.request_name(dbusServiceName);
-    }(ctx, discovery));
+        lg2::info("Registered D-Bus service: {SERVICE}", "SERVICE",
+                  dbusServiceName);
+    }(ctx, discovery, responders));
 
     // Run the sdbusplus async context for parallel coroutine execution
     ctx.run();
+
+    // Cleanup
+    responders.clear();
+
+    lg2::info("SPDM daemon shutting down");
 
     return EXIT_SUCCESS;
 }
