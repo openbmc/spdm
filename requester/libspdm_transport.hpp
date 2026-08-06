@@ -26,6 +26,13 @@ extern "C"
 #define LIBSPDM_RECEIVER_BUFFER_SIZE                                           \
     (LIBSPDM_MAX_SPDM_MSG_SIZE + LIBSPDM_TRANSPORT_ADDITIONAL_SIZE)
 #endif
+/* libspdm only defines LIBSPDM_MAX_CERT_CHAIN_SIZE when
+ * LIBSPDM_RECORD_TRANSCRIPT_DATA_SUPPORT is enabled (it defaults to 0). Fall
+ * back to libspdm's own non-PQC default so cert-chain buffers stay sized
+ * consistently either way. */
+#ifndef LIBSPDM_MAX_CERT_CHAIN_SIZE
+#define LIBSPDM_MAX_CERT_CHAIN_SIZE 0x1000
+#endif
 #if (LIBSPDM_SENDER_BUFFER_SIZE > LIBSPDM_RECEIVER_BUFFER_SIZE)
 #define LIBSPDM_MAX_SENDER_RECEIVER_BUFFER_SIZE LIBSPDM_SENDER_BUFFER_SIZE
 #else
@@ -108,7 +115,7 @@ class SpdmTransport
     /** @brief Supported AEAD cipher suite bitmask. */
     uint16_t supportAeadAlgo = SPDM_ALGORITHMS_AEAD_CIPHER_SUITE_AES_256_GCM;
     /** @brief Supported key schedule algorithm bitmask. */
-    uint16_t supportKeyScheduleAlgo = SPDM_ALGORITHMS_KEY_SCHEDULE_HMAC_HASH;
+    uint16_t supportKeyScheduleAlgo = SPDM_ALGORITHMS_KEY_SCHEDULE_SPDM;
     /** @brief Supported other parameters bitmask. */
     uint8_t supportOtherParamsSupport = 0;
     /** @brief libspdm data parameter used when setting/getting SPDM context

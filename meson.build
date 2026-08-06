@@ -83,6 +83,7 @@ spdmd_src = [
     'requester/spdm_device_secret_lib_stub.cpp',
     'requester/libspdm_mctp_transport.cpp',
     'requester/certificate_dbus.cpp',
+    'requester/libspdm_tcp_transport.cpp',
 ]
 
 spdmd_lib = static_library(
