@@ -133,11 +133,9 @@ bool SpdmTcpTransport::setupScratchBuffer()
     libspdm_set_scratch_buffer(spdmContext.get(), scratchBuffer.get(),
                                scratchBufferSize);
 
-    if (!libspdm_check_context(spdmContext.get()))
-    {
-        lg2::error("SPDM context check failed after scratch buffer setup");
-        return false;
-    }
+    // Note: libspdm_check_context() is intentionally not called here. It runs
+    // at the end of applySecureSessionConfig() once all KEY_EX caps and
+    // algorithms have been set.
 
     lg2::debug("Scratch buffer allocated: {SIZE} bytes", "SIZE",
                scratchBufferSize);
