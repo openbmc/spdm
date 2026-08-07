@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63790e6b_754c84e6",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1001758
+      },
+      "writtenOn": "2026-08-07T07:49:13Z",
+      "side": 1,
+      "message": "Is there a related EM patch which adds the schema for SPDM over MCTP device ?",
+      "revId": "1d66ac99b12bcc2f943310495a9604616fa17ee2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
