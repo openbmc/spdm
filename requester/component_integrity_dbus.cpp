@@ -18,6 +18,7 @@ extern "C"
 #include <phosphor-logging/lg2.hpp>
 
 #include <chrono>
+#include <format>
 #include <set>
 
 namespace spdm
@@ -199,8 +200,9 @@ void ComponentIntegrity::initializeSpdmConnection()
 
     if (LIBSPDM_STATUS_IS_ERROR(initStatus))
     {
-        lg2::error("Failed to initialize SPDM connection, status: 0x{STATUS:x}",
-                   "STATUS", initStatus);
+        lg2::error("Failed to initialize SPDM connection, status: {STATUS}",
+                   "STATUS",
+                   std::format("0x{:08X}", static_cast<uint32_t>(initStatus)));
         throw std::runtime_error("SPDM connection initialization failed");
     }
 }

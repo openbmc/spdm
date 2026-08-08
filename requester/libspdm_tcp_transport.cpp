@@ -308,6 +308,20 @@ libspdm_return_t SpdmTcpTransport::deviceReceiveMessage(
 
         lg2::info("Received SPDM message: {SIZE} bytes (total TCP: {TOTAL})",
                   "SIZE", *messageSize, "TOTAL", tcpMessage.size());
+
+        // An SPDM ERROR response carries the reason the responder rejected the
+        // last request. Surface it, otherwise libspdm only reports the generic
+        // LIBSPDM_STATUS_ERROR_PEER.
+        const auto* spdmMsg = static_cast<const uint8_t*>(*message);
+        if (*messageSize >= 4 && spdmMsg[1] == SPDM_ERROR)
+        {
+            lg2::error(
+                "Responder returned SPDM ERROR: version={VER} code={CODE} data={DATA}",
+                "VER", std::format("0x{:02X}", spdmMsg[0]), "CODE",
+                std::format("0x{:02X}", spdmMsg[2]), "DATA",
+                std::format("0x{:02X}", spdmMsg[3]));
+        }
+
         return LIBSPDM_STATUS_SUCCESS;
     }
     catch (const std::exception& e)
