@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca4944c1_e85db21e",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1002700
+      },
+      "writtenOn": "2026-08-10T03:02:35Z",
+      "side": 1,
+      "message": "This seems to always return D-Bus success, The dependent implementation https://gerrit.openbmc.org/c/openbmc/spdm/+/84019 adds the normal success path, but still returns the same empty success response when an error is caught. This seems not following the interface contract, which declares `InvalidArgument` and `InternalFailure`.\n\nShould we consider returning `InternalFailure` until implemented, and ensure #84019 propagates the documented errors instead of returning an empty tuple?",
+      "revId": "15e4e597ca7ca12085662b298112a3183e44300d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
