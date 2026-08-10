@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7fe31040_c4cd3ceb",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1001758
+      },
+      "writtenOn": "2026-08-10T23:07:26Z",
+      "side": 1,
+      "message": "\u003e Sorry, Jagpal, I didn\u0027t quite understand why we need that. Could you please explain how it is related to this commit? My understanding is that this is for runtime discovery of the MCTP endpoint.\n\u003e Do you mean to say for association with the invneotry objects?\n\nI am referring to your comment \"until Entity Manager provides inventory names\", so i suppose there will be a related EM configuration interface which will provide this information? I am referring to that.",
+      "parentUuid": "069134c3_ede0b5ac",
+      "revId": "1d66ac99b12bcc2f943310495a9604616fa17ee2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e8105f07_0cfe9385",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 35
