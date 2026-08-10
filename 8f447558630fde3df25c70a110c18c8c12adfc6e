@@ -16,6 +16,24 @@
       "message": "I have a question regarding the test sequence: it seems not exercising the behavior added here explicitly, as both `mctpd` and `spdmd` are stopped. Can we keep `spdmd` running, stop only `mctpd` and verify that existing MCTP responder objects disappear; then restart `mctpd` afterwards and verify each responder is recreated exactly once?",
       "revId": "8f447558630fde3df25c70a110c18c8c12adfc6e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "211a5ca4_03d2d04f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-10T10:38:37Z",
+      "side": 1,
+      "message": "I already tested this. When I stopped mctpd, spdmd was still running, but all the D-Bus objects disappeared once MCTP stopped. When I restarted mctpd, the spdmd objects reappeared.\nWill add this test in the tested section of the commit message.",
+      "parentUuid": "fc49217e_5c422fe0",
+      "revId": "8f447558630fde3df25c70a110c18c8c12adfc6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
