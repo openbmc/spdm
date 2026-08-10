@@ -95,6 +95,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e18a7d27_db1dec54",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-10T10:29:29Z",
+      "side": 1,
+      "message": "Yes, I am not able to test this use case(TCP endpoint specific). One option we could consider is converting the IP address to an underscore-separated format, for example, xx_xx_xx_xx.",
+      "parentUuid": "e8105f07_0cfe9385",
+      "range": {
+        "startLine": 40,
+        "startChar": 16,
+        "endLine": 40,
+        "endChar": 35
+      },
+      "revId": "1d66ac99b12bcc2f943310495a9604616fa17ee2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba36da88_f1a64474",
         "filename": "requester/spdm_dbus_responder.hpp",
         "patchSetId": 35
@@ -106,6 +130,24 @@
       "writtenOn": "2026-08-10T08:56:03Z",
       "side": 1,
       "message": "Use responder.path.string().\nSdbuplus commit https://gerrit.openbmc.org/c/openbmc/sdbusplus/+/91255",
+      "revId": "1d66ac99b12bcc2f943310495a9604616fa17ee2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b297a41_52519bbd",
+        "filename": "requester/spdm_dbus_responder.hpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-10T10:29:29Z",
+      "side": 1,
+      "message": "I am aware that this change was recently introduced in sdbusplus, but I don’t think it should be a blocker. We have similar changes across multiple repositories, so this should be manageable.",
+      "parentUuid": "ba36da88_f1a64474",
       "revId": "1d66ac99b12bcc2f943310495a9604616fa17ee2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
