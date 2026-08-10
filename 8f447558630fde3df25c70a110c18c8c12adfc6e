@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc49217e_5c422fe0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002700
+      },
+      "writtenOn": "2026-08-10T02:22:21Z",
+      "side": 1,
+      "message": "I have a question regarding the test sequence: it seems not exercising the behavior added here explicitly, as both `mctpd` and `spdmd` are stopped. Can we keep `spdmd` running, stop only `mctpd` and verify that existing MCTP responder objects disappear; then restart `mctpd` afterwards and verify each responder is recreated exactly once?",
+      "revId": "8f447558630fde3df25c70a110c18c8c12adfc6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
