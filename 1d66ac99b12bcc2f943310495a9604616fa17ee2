@@ -51,6 +51,46 @@
       "parentUuid": "63790e6b_754c84e6",
       "revId": "1d66ac99b12bcc2f943310495a9604616fa17ee2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8105f07_0cfe9385",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-08-10T08:56:03Z",
+      "side": 1,
+      "message": "DBus specification does not allow \".\" in the element name of the DBus object path\nBelow are the valid Dbus object path rules\n```\nThe path may be of any length.\nThe path must begin with an ASCII \u0027/\u0027 (integer 47) character, and must consist of elements separated by slash characters.\nEach element must only contain the ASCII characters \"[A-Z][a-z][0-9]_\"\nNo element may be the empty string.\nMultiple \u0027/\u0027 characters cannot occur in sequence.\nA trailing \u0027/\u0027 character is not allowed unless the path is the root path (a single \u0027/\u0027 character).\n```\n\nSo the dotted Ip address can not be used in the Dbus object path.",
+      "range": {
+        "startLine": 40,
+        "startChar": 16,
+        "endLine": 40,
+        "endChar": 35
+      },
+      "revId": "1d66ac99b12bcc2f943310495a9604616fa17ee2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba36da88_f1a64474",
+        "filename": "requester/spdm_dbus_responder.hpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001384
+      },
+      "writtenOn": "2026-08-10T08:56:03Z",
+      "side": 1,
+      "message": "Use responder.path.string().\nSdbuplus commit https://gerrit.openbmc.org/c/openbmc/sdbusplus/+/91255",
+      "revId": "1d66ac99b12bcc2f943310495a9604616fa17ee2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
