@@ -16,6 +16,24 @@
       "message": "Can we clarify how a SPDM responder is determined to be a `TrustedComponent`?\n\nMy understanding is that `ComponentIntegrity` models the SPDM evidence/API, while `TrustedComponent` represents a platform-defined RoT/TPM etc. Currently we create both objects for every SPDM responder without consulting Entity Manager, setting the trusted component type, or adding the relevant associations.",
       "revId": "68354518df4903d9bcf69b44303c0f85ad8bb351",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40d2aa51_41fe74c7",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-08-10T11:01:07Z",
+      "side": 1,
+      "message": "These were the initial patches put up for Entity manager look up, it needs some rework for association. We will rely on entity manager for reporting and authenticating association properties lookup and also for component integrity, trusted component D-Bus object path name.\n\nhttps://gerrit.openbmc.org/c/openbmc/entity-manager/+/83263/1/schemas/spdm_endpoint.json#65\nhttps://gerrit.openbmc.org/c/openbmc/spdm/+/83262/4",
+      "parentUuid": "39a74b7e_02bb0502",
+      "revId": "68354518df4903d9bcf69b44303c0f85ad8bb351",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
