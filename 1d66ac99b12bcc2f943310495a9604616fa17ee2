@@ -186,6 +186,24 @@
       "parentUuid": "ba36da88_f1a64474",
       "revId": "1d66ac99b12bcc2f943310495a9604616fa17ee2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cce419f9_85e97234",
+        "filename": "requester/spdm_dbus_responder.hpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-11T10:11:11Z",
+      "side": 1,
+      "message": "Resolving.",
+      "parentUuid": "3b297a41_52519bbd",
+      "revId": "1d66ac99b12bcc2f943310495a9604616fa17ee2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
