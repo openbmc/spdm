@@ -88,6 +88,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "770d59f5_556a2afb",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-08-11T10:10:24Z",
+      "side": 1,
+      "message": "https://gerrit.openbmc.org/c/openbmc/spdm/+/80274/comment/39a74b7e_02bb0502/",
+      "parentUuid": "7fe31040_c4cd3ceb",
+      "revId": "1d66ac99b12bcc2f943310495a9604616fa17ee2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8105f07_0cfe9385",
