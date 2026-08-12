@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e2f74bd9_9165ecf5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 37
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002700
+      },
+      "writtenOn": "2026-08-12T15:54:53Z",
+      "side": 1,
+      "message": "Looks good to me.",
+      "revId": "68354518df4903d9bcf69b44303c0f85ad8bb351",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "39a74b7e_02bb0502",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 37
@@ -32,6 +49,24 @@
       "side": 1,
       "message": "These were the initial patches put up for Entity manager look up, it needs some rework for association. We will rely on entity manager for reporting and authenticating association properties lookup and also for component integrity, trusted component D-Bus object path name.\n\nhttps://gerrit.openbmc.org/c/openbmc/entity-manager/+/83263/1/schemas/spdm_endpoint.json#65\nhttps://gerrit.openbmc.org/c/openbmc/spdm/+/83262/4",
       "parentUuid": "39a74b7e_02bb0502",
+      "revId": "68354518df4903d9bcf69b44303c0f85ad8bb351",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "550fbd4d_3ec0929f",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002700
+      },
+      "writtenOn": "2026-08-12T15:54:53Z",
+      "side": 1,
+      "message": "Thanks for the clarification. If we can put some comments inside the code, it\u0027ll be helpful.",
+      "parentUuid": "40d2aa51_41fe74c7",
       "revId": "68354518df4903d9bcf69b44303c0f85ad8bb351",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
