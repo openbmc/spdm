@@ -179,6 +179,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2247b954_9ead80d6",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000350
+      },
+      "writtenOn": "2026-08-13T05:45:13Z",
+      "side": 1,
+      "message": "networkd also follows the same underscore-separated format to create unique IP object paths\n\nstatic auto makeObjPath(std::string_view root, stdplus::SubnetAny addr)\n{\n    auto ret \u003d sdbusplus::object_path(std::string(root));\n    stdplus::ToStrHandle\u003cstdplus::ToStr\u003cstdplus::SubnetAny\u003e\u003e tsh;\n    ret /\u003d tsh(addr);\n    return ret;\n}",
+      "parentUuid": "256b9f0a_eb003cf1",
+      "range": {
+        "startLine": 40,
+        "startChar": 16,
+        "endLine": 40,
+        "endChar": 35
+      },
+      "revId": "1d66ac99b12bcc2f943310495a9604616fa17ee2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba36da88_f1a64474",
         "filename": "requester/spdm_dbus_responder.hpp",
         "patchSetId": 35
