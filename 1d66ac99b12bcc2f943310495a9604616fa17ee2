@@ -37,6 +37,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7960130b_a2f6d588",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000350
+      },
+      "writtenOn": "2026-08-13T06:20:41Z",
+      "side": 1,
+      "message": "consider making add() return bool value, so that addResponder() can accurately report whether a new device was actually added or not",
+      "revId": "1d66ac99b12bcc2f943310495a9604616fa17ee2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87e7c8b0_e3b5f027",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000350
+      },
+      "writtenOn": "2026-08-13T06:20:41Z",
+      "side": 1,
+      "message": "uuid may be unspecified after std::move(uuid) right?",
+      "revId": "1d66ac99b12bcc2f943310495a9604616fa17ee2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "63790e6b_754c84e6",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 35
