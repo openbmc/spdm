@@ -11,6 +11,7 @@
 
 #include <array>
 #include <cstddef>
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -60,8 +61,8 @@ class MCTPTransportDiscovery
      * @return true if added; false if skipped (logs the skip).
      */
     auto addResponder(SPDMDiscovery& discovery,
-                      const sdbusplus::object_path& path, uint8_t eid,
-                      std::string&& uuid,
+                      const sdbusplus::object_path& path, uint32_t networkId,
+                      uint8_t eid, std::string&& uuid,
                       const std::vector<uint8_t>& supportedTypes) -> bool;
 
     /// Remove the endpoint from discovery when MctpEndpoint interface is in the
