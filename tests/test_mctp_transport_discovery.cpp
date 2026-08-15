@@ -42,12 +42,12 @@ class MCTPTransportDiscoveryTest : public ::testing::Test
                                  supportedTypes);
     }
 
-    static void processInterfaceRemoved(
+    static auto processInterfaceRemoved(
         MCTPTransportDiscovery& self, SPDMDiscovery& discovery,
         const sdbusplus::object_path& path,
-        const std::vector<std::string>& interfaces)
+        const std::vector<std::string>& interfaces) -> bool
     {
-        self.processInterfaceRemoved(discovery, path, interfaces);
+        return self.processInterfaceRemoved(discovery, path, interfaces);
     }
 
   protected:
@@ -154,10 +154,11 @@ TEST_F(MCTPTransportDiscoveryTest, ProcessInterfaceRemovedMatching)
     addResponder(discovery, responderDb, path, 10, "uuid1", supportedTypes);
     ASSERT_EQ(responderDb.devices().size(), 1);
 
-    processInterfaceRemoved(
+    bool result = processInterfaceRemoved(
         discovery, responderDb, path,
         {"xyz.openbmc_project.MCTP.Endpoint", "org.some.other.Interface"});
 
+    EXPECT_TRUE(result);
     EXPECT_TRUE(responderDb.devices().empty());
 }
 
@@ -171,9 +172,10 @@ TEST_F(MCTPTransportDiscoveryTest, ProcessInterfaceRemovedNonMatching)
     addResponder(discovery, responderDb, path, 10, "uuid1", supportedTypes);
     ASSERT_EQ(responderDb.devices().size(), 1);
 
-    processInterfaceRemoved(discovery, responderDb, path,
-                            {"org.some.other.Interface"});
+    bool result = processInterfaceRemoved(discovery, responderDb, path,
+                                          {"org.some.other.Interface"});
 
+    EXPECT_FALSE(result);
     ASSERT_EQ(responderDb.devices().size(), 1);
 }
 
@@ -190,9 +192,11 @@ TEST_F(MCTPTransportDiscoveryTest, ProcessInterfaceRemovedDifferentPath)
     addResponder(discovery, responderDb, path2, 20, "uuid2", supportedTypes);
     ASSERT_EQ(responderDb.devices().size(), 2);
 
-    processInterfaceRemoved(discovery, responderDb, path1,
-                            {"xyz.openbmc_project.MCTP.Endpoint"});
+    bool result = processInterfaceRemoved(
+        discovery, responderDb, path1,
+        {"xyz.openbmc_project.MCTP.Endpoint"});
 
+    EXPECT_TRUE(result);
     ASSERT_EQ(responderDb.devices().size(), 1);
     EXPECT_EQ(std::get<MctpResponderInfo>(responderDb.devices()[0].info).eid,
               20);
