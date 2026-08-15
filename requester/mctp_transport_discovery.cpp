@@ -172,21 +172,31 @@ auto MCTPTransportDiscovery::monitorRemoved(SPDMDiscovery& discovery)
         auto [path, interfaces] =
             msg.unpack<sdbusplus::object_path, std::vector<std::string>>();
 
-        processInterfaceRemoved(discovery, path, interfaces);
+        if (!processInterfaceRemoved(discovery, path, interfaces))
+        {
+            continue;
+        }
     }
 }
 
-void MCTPTransportDiscovery::processInterfaceRemoved(
+auto MCTPTransportDiscovery::processInterfaceRemoved(
     SPDMDiscovery& discovery, const sdbusplus::object_path& path,
-    const std::vector<std::string>& interfaces)
+    const std::vector<std::string>& interfaces) -> bool
 {
     if (!std::ranges::contains(interfaces, MctpEndpoint::interface))
     {
-        return;
+        return false;
+    }
+
+    if (!discovery.remove(path.str))
+    {
+        debug("MCTP responder {PATH} was not removed (not tracked)", "PATH",
+              path.str);
+        return false;
     }
 
     info("MCTP SPDM Responder removed from path: {PATH}", "PATH", path.str);
-    discovery.remove(path.str);
+    return true;
 }
 
 } // namespace spdm

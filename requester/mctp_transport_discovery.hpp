@@ -66,9 +66,11 @@ class MCTPTransportDiscovery
 
     /// Remove the endpoint from discovery when MctpEndpoint interface is in the
     /// removed list.
-    void processInterfaceRemoved(SPDMDiscovery& discovery,
+    /// @return true if a tracked endpoint was removed; false otherwise.
+    auto processInterfaceRemoved(SPDMDiscovery& discovery,
                                  const sdbusplus::object_path& path,
-                                 const std::vector<std::string>& interfaces);
+                                 const std::vector<std::string>& interfaces)
+        -> bool;
 
     /// Joins discovery() with the monitors so the matchers are armed before
     /// the initial mapper read.
