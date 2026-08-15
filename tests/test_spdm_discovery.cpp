@@ -50,14 +50,11 @@ static ResponderInfo makeResponder(int id)
                          MctpResponderInfo{eid, uuid}, TransportType::MCTP};
 }
 
-// Helper: run a coroutine inside a temporary async context.
+// Helper: run a coroutine without a D-Bus async context.
 template <typename F>
 void runAsync(F func)
 {
-    sdbusplus::async::context ctx;
-    ctx.spawn(func() |
-              sdbusplus::async::execution::then([&]() { ctx.request_stop(); }));
-    ctx.run();
+    sdbusplus::async::execution::sync_wait(func());
 }
 
 class SPDMDiscoveryTest : public ::testing::Test
