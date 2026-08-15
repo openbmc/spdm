@@ -8,6 +8,7 @@ tests = [
     'test_mctp_transport_discovery',
     'test_spdm_discovery',
     'test_policy_manager',
+    'test_dbus_path',
 ]
 
 foreach t : tests

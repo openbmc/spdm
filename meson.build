@@ -44,6 +44,7 @@ spdmd_src = [
     'requester/policy_manager.cpp',
     'requester/utils/mapper.cpp',
     'requester/utils/paths.cpp',
+    'requester/utils/dbus_path.cpp',
 ]
 
 spdmd_lib = static_library(
