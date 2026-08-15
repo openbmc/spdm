@@ -123,8 +123,14 @@ auto TCPTransportDiscovery::monitor_removed(SPDMDiscovery& discovery)
             continue;
         }
 
+        if (!discovery.remove(path.str))
+        {
+            debug("TCP responder {PATH} was not removed (not tracked)", "PATH",
+                  path.str);
+            continue;
+        }
+
         info("TCP SPDM Responder removed from path: {PATH}", "PATH", path.str);
-        discovery.remove(path.str);
     }
 }
 
