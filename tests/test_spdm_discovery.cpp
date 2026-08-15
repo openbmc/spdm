@@ -144,7 +144,7 @@ TEST_F(SPDMDiscoveryTest, RemoveDevice)
         co_await disc.run();
         EXPECT_EQ(disc.devices().size(), 2u);
 
-        disc.remove(responders[0].path);
+        EXPECT_TRUE(disc.remove(responders[0].path));
 
         const auto& after = disc.devices();
         EXPECT_EQ(after.size(), 1u);
@@ -164,7 +164,7 @@ TEST_F(SPDMDiscoveryTest, RemoveNonExistentDeviceIsNoOp)
         co_await disc.run();
         EXPECT_EQ(disc.devices().size(), 1u);
 
-        disc.remove(makeResponder(5).path);
+        EXPECT_FALSE(disc.remove(makeResponder(5).path));
         EXPECT_EQ(disc.devices().size(), 1u);
     });
 }
