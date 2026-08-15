@@ -34,9 +34,8 @@ auto MCTPTransportDiscovery::addResponder(
         return false;
     }
 
-    discovery.add(ResponderInfo{path, MctpResponderInfo{eid, std::move(uuid)},
-                                TransportType::MCTP});
-    return true;
+    return discovery.add(ResponderInfo{
+        path, MctpResponderInfo{eid, std::move(uuid)}, TransportType::MCTP});
 }
 
 auto MCTPTransportDiscovery::discovery(SPDMDiscovery& discovery)

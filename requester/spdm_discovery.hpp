@@ -106,16 +106,21 @@ class SPDMDiscovery
      *          arriving via both the initial mapper sweep and an
      *          InterfacesAdded signal) do not produce duplicate
      *          entries.
+     * @return true if the device was newly registered; false if it was
+     *         a duplicate (already tracked by path). Callers should
+     *         check this to decide whether the device was actually
+     *         added.
      */
-    void add(ResponderInfo&& r)
+    [[nodiscard]] bool add(ResponderInfo&& r)
     {
         if (std::ranges::any_of(responderInfos, [&r](const auto& e) {
                 return e.path == r.path;
             }))
         {
-            return;
+            return false;
         }
         responderInfos.emplace_back(std::move(r));
+        return true;
     }
 
     /**
