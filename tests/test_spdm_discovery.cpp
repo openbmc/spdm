@@ -25,7 +25,7 @@ struct MockTransport
         for (const auto& r : devicesToAdd)
         {
             ResponderInfo copy(r);
-            d.add(std::move(copy));
+            [[maybe_unused]] bool added = d.add(std::move(copy));
         }
         co_return;
     }

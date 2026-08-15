@@ -56,9 +56,13 @@ auto TCPTransportDiscovery::discovery(SPDMDiscovery& discovery)
         debug("Found SPDM TCP Responder at {IP}:{PORT} for {PATH}", "IP",
               properties.hostname, "PORT", properties.port, "PATH", path);
 
-        discovery.add(ResponderInfo{
-            path, TcpResponderInfo{properties.hostname, properties.port},
-            TransportType::TCP});
+        if (!discovery.add(ResponderInfo{
+                path, TcpResponderInfo{properties.hostname, properties.port},
+                TransportType::TCP}))
+        {
+            debug("TCP responder {PATH} was not added (duplicate)", "PATH",
+                  path);
+        }
     }
 
     debug("TCP transport discovery completed");
@@ -96,9 +100,13 @@ auto TCPTransportDiscovery::monitor_added(SPDMDiscovery& discovery)
         debug("Found SPDM TCP Responder at {IP}:{PORT} for {PATH}", "IP",
               properties.hostname, "PORT", properties.port, "PATH", path);
 
-        discovery.add(ResponderInfo{
-            path, TcpResponderInfo{properties.hostname, properties.port},
-            TransportType::TCP});
+        if (!discovery.add(ResponderInfo{
+                path, TcpResponderInfo{properties.hostname, properties.port},
+                TransportType::TCP}))
+        {
+            debug("TCP responder {PATH} was not added (duplicate)", "PATH",
+                  path);
+        }
     }
 }
 
