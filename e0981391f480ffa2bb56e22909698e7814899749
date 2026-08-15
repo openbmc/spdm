@@ -16,6 +16,24 @@
       "message": "please consider change remove() to return bool as well, can be addressed in separate commit",
       "revId": "e0981391f480ffa2bb56e22909698e7814899749",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99c94f86_4d1c7602",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000350
+      },
+      "writtenOn": "2026-08-15T16:59:06Z",
+      "side": 1,
+      "message": "i pushed a commit to address this https://gerrit.openbmc.org/c/openbmc/spdm/+/93557",
+      "parentUuid": "2b529974_e8fa47ba",
+      "revId": "e0981391f480ffa2bb56e22909698e7814899749",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
