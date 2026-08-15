@@ -37,6 +37,10 @@ void SPDMDiscovery::remove(const sdbusplus::object_path& path)
 {
     std::erase_if(responderInfos,
                   [&path](const auto& r) { return r.path == path; });
+    if (removeCallback)
+    {
+        removeCallback(path);
+    }
 }
 
 } // namespace spdm

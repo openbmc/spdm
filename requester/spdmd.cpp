@@ -5,6 +5,7 @@
 
 #include "mctp_transport_discovery.hpp"
 #include "policy_manager.hpp"
+#include "spdm_dbus_responder.hpp"
 #include "spdm_discovery.hpp"
 #include "tcp_transport_discovery.hpp"
 #include "utils/paths.hpp"
@@ -42,6 +43,21 @@ int main(int argc, char* argv[])
 
     SPDMDiscovery discovery{};
 
+    std::vector<std::unique_ptr<SPDMDBusResponder>> responders;
+
+    // Create a D-Bus responder for every device as it is discovered.
+    discovery.onDeviceAdded([&responders](const ResponderInfo& device) {
+        responders.push_back(std::make_unique<SPDMDBusResponder>(device));
+    });
+
+    // Destroy the D-Bus responder when a device is removed at runtime.
+    discovery.onDeviceRemoved(
+        [&responders](const sdbusplus::object_path& path) {
+            std::erase_if(responders, [&path](const auto& r) {
+                return r->path() == path.str;
+            });
+        });
+
     // Start MCTP discovery
     MCTPTransportDiscovery mctp{ctx};
     discovery.discover(mctp);
@@ -50,12 +66,9 @@ int main(int argc, char* argv[])
     TCPTransportDiscovery tcp{ctx};
     discovery.discover(tcp);
 
-    // Run the initial discovery and then claim the bus name.
+    // Wait for initial discovery to complete, then claim bus name.
     ctx.spawn([](auto& ctx, auto& discovery) -> sdbusplus::async::task<> {
-        // Perform discovery
         co_await discovery.run();
-
-        // Request D-Bus name after initial discovery.
         ctx.request_name(dbusServiceName);
     }(ctx, discovery));
 
