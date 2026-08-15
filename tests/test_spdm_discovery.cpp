@@ -50,16 +50,6 @@ static ResponderInfo makeResponder(int id)
                          MctpResponderInfo{eid, uuid}, TransportType::MCTP};
 }
 
-// Helper: run a coroutine inside a temporary async context.
-template <typename F>
-void runAsync(F func)
-{
-    sdbusplus::async::context ctx;
-    ctx.spawn(func() |
-              sdbusplus::async::execution::then([&]() { ctx.request_stop(); }));
-    ctx.run();
-}
-
 class SPDMDiscoveryTest : public ::testing::Test
 {};
 
@@ -73,7 +63,7 @@ TEST_F(SPDMDiscoveryTest, DiscoverSingleDevice)
 
     disc.discover(mock);
 
-    runAsync([&]() -> sdbusplus::async::task<> {
+    sdbusplus::async::execution::sync_wait([&]() -> sdbusplus::async::task<> {
         co_await disc.run();
 
         const auto& devs = disc.devices();
@@ -86,7 +76,7 @@ TEST_F(SPDMDiscoveryTest, DiscoverSingleDevice)
         const auto& mctp = std::get<MctpResponderInfo>(d.info);
         EXPECT_EQ(mctp.eid, 0x10);
         EXPECT_EQ(mctp.uuid, "test-uuid-1");
-    });
+    }());
 }
 
 TEST_F(SPDMDiscoveryTest, DiscoverMultipleDevices)
@@ -99,7 +89,7 @@ TEST_F(SPDMDiscoveryTest, DiscoverMultipleDevices)
 
     disc.discover(mock);
 
-    runAsync([&]() -> sdbusplus::async::task<> {
+    sdbusplus::async::execution::sync_wait([&]() -> sdbusplus::async::task<> {
         co_await disc.run();
         const auto& devs = disc.devices();
         EXPECT_EQ(devs.size(), 2u);
@@ -116,7 +106,7 @@ TEST_F(SPDMDiscoveryTest, DiscoverMultipleDevices)
         const auto& mctpinfo1 = std::get<MctpResponderInfo>(responders[1].info);
         EXPECT_EQ(byPath.at(responders[1].path).eid, mctpinfo1.eid);
         EXPECT_EQ(byPath.at(responders[1].path).uuid, mctpinfo1.uuid);
-    });
+    }());
 }
 
 TEST_F(SPDMDiscoveryTest, DiscoverNoDevices)
@@ -126,10 +116,10 @@ TEST_F(SPDMDiscoveryTest, DiscoverNoDevices)
 
     disc.discover(mock);
 
-    runAsync([&]() -> sdbusplus::async::task<> {
+    sdbusplus::async::execution::sync_wait([&]() -> sdbusplus::async::task<> {
         co_await disc.run();
         EXPECT_EQ(disc.devices().size(), 0u);
-    });
+    }());
 }
 
 TEST_F(SPDMDiscoveryTest, RemoveDevice)
@@ -143,7 +133,7 @@ TEST_F(SPDMDiscoveryTest, RemoveDevice)
 
     disc.discover(mock);
 
-    runAsync([&]() -> sdbusplus::async::task<> {
+    sdbusplus::async::execution::sync_wait([&]() -> sdbusplus::async::task<> {
         co_await disc.run();
         EXPECT_EQ(disc.devices().size(), 2u);
 
@@ -152,7 +142,7 @@ TEST_F(SPDMDiscoveryTest, RemoveDevice)
         const auto& after = disc.devices();
         EXPECT_EQ(after.size(), 1u);
         EXPECT_EQ(after[0].path, responders[1].path);
-    });
+    }());
 }
 
 TEST_F(SPDMDiscoveryTest, RemoveNonExistentDeviceIsNoOp)
@@ -163,13 +153,13 @@ TEST_F(SPDMDiscoveryTest, RemoveNonExistentDeviceIsNoOp)
 
     disc.discover(mock);
 
-    runAsync([&]() -> sdbusplus::async::task<> {
+    sdbusplus::async::execution::sync_wait([&]() -> sdbusplus::async::task<> {
         co_await disc.run();
         EXPECT_EQ(disc.devices().size(), 1u);
 
         disc.remove(makeResponder(5).path);
         EXPECT_EQ(disc.devices().size(), 1u);
-    });
+    }());
 }
 
 TEST_F(SPDMDiscoveryTest, ParallelTransports)
@@ -186,7 +176,7 @@ TEST_F(SPDMDiscoveryTest, ParallelTransports)
     disc.discover(mock1);
     disc.discover(mock2);
 
-    runAsync([&]() -> sdbusplus::async::task<> {
+    sdbusplus::async::execution::sync_wait([&]() -> sdbusplus::async::task<> {
         co_await disc.run();
         const auto& devs = disc.devices();
         EXPECT_EQ(devs.size(), 2u);
@@ -206,7 +196,7 @@ TEST_F(SPDMDiscoveryTest, ParallelTransports)
         EXPECT_EQ(
             eids.count(std::get<MctpResponderInfo>(responders[1].info).eid),
             1u);
-    });
+    }());
 }
 
 TEST_F(SPDMDiscoveryTest, DuplicatePathIsDeduplicated)
@@ -221,12 +211,12 @@ TEST_F(SPDMDiscoveryTest, DuplicatePathIsDeduplicated)
 
     disc.discover(mock);
 
-    runAsync([&]() -> sdbusplus::async::task<> {
+    sdbusplus::async::execution::sync_wait([&]() -> sdbusplus::async::task<> {
         co_await disc.run();
         const auto& devs = disc.devices();
         EXPECT_EQ(devs.size(), 1u);
         EXPECT_EQ(devs[0].path, responder1.path);
-    });
+    }());
 }
 
 } // namespace spdm
