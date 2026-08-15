@@ -25,8 +25,9 @@ MCTPTransportDiscovery::MCTPTransportDiscovery(sdbusplus::async::context& ctx) :
 {}
 
 auto MCTPTransportDiscovery::addResponder(
-    SPDMDiscovery& discovery, const sdbusplus::object_path& path, uint8_t eid,
-    std::string&& uuid, const std::vector<uint8_t>& supportedTypes) -> bool
+    SPDMDiscovery& discovery, const sdbusplus::object_path& path,
+    uint32_t networkId, uint8_t eid, std::string&& uuid,
+    const std::vector<uint8_t>& supportedTypes) -> bool
 {
     if (!std::ranges::contains(supportedTypes, spdm_message_type))
     {
@@ -34,8 +35,9 @@ auto MCTPTransportDiscovery::addResponder(
         return false;
     }
 
-    discovery.add(ResponderInfo{path, MctpResponderInfo{eid, std::move(uuid)},
-                                TransportType::MCTP});
+    discovery.add(
+        ResponderInfo{path, MctpResponderInfo{networkId, eid, std::move(uuid)},
+                      TransportType::MCTP});
     return true;
 }
 
@@ -61,8 +63,6 @@ auto MCTPTransportDiscovery::discovery(SPDMDiscovery& discovery)
                                  .path(path.str)
                                  .properties();
 
-        // UUID is best-effort: mctpd exposes the interface only for endpoints
-        // that have one, so identify on EID and record the UUID when present.
         std::string uuid;
         try
         {
@@ -78,14 +78,18 @@ auto MCTPTransportDiscovery::discovery(SPDMDiscovery& discovery)
                   "PATH", path, "ERR", e);
         }
 
-        if (!addResponder(discovery, path, endpointProps.eid, std::move(uuid),
+        // Pass a copy: uuid is still needed for the log message below, and
+        if (!addResponder(discovery, path, endpointProps.network_id,
+                          endpointProps.eid, std::string(uuid),
                           endpointProps.supported_message_types))
         {
             continue;
         }
 
-        debug("Found SPDM MCTP device at {PATH}, EID={EID}, UUID={UUID}",
-              "PATH", path, "EID", endpointProps.eid, "UUID", uuid);
+        debug(
+            "Found SPDM MCTP device at {PATH}, NET={NET}, EID={EID}, UUID={UUID}",
+            "PATH", path, "NET", endpointProps.network_id, "EID",
+            endpointProps.eid, "UUID", uuid);
     }
 
     debug("MCTP transport discovery completed");
@@ -145,15 +149,20 @@ auto MCTPTransportDiscovery::monitorAdded(SPDMDiscovery& discovery)
             continue;
         }
 
-        if (!addResponder(discovery, path, endpointProps.eid, std::move(uuid),
+        // Pass a copy: uuid is still needed for the log message below, and
+        // std::move(uuid) here would leave it in a moved-from (valid but
+        // unspecified) state.
+        if (!addResponder(discovery, path, endpointProps.network_id,
+                          endpointProps.eid, std::string(uuid),
                           endpointProps.supported_message_types))
         {
             continue;
         }
 
         info(
-            "Runtime-discovered SPDM MCTP device at {PATH}, EID={EID}, UUID={UUID}",
-            "PATH", path, "EID", endpointProps.eid, "UUID", uuid);
+            "Runtime-discovered SPDM MCTP device at {PATH}, NET={NET}, EID={EID}, UUID={UUID}",
+            "PATH", path, "NET", endpointProps.network_id, "EID",
+            endpointProps.eid, "UUID", uuid);
     }
 }
 
