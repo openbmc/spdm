@@ -120,9 +120,19 @@ class SPDMDiscovery
 
     /**
      * Remove a discovered device by object path.
-     * @param The D-Bus object path of the device to remove.
+     * @param path The D-Bus object path of the device to remove.
+     * @return true if the device was removed; false if it was not
+     *         removed. Callers should check this to decide whether the
+     *         device was actually removed.
      */
-    void remove(const sdbusplus::object_path&);
+    [[nodiscard]] bool remove(const sdbusplus::object_path& path)
+    {
+        auto removed = std::erase_if(responderInfos,
+                                     [&path](const auto& r) {
+                                         return r.path == path;
+                                     });
+        return removed != 0;
+    }
 
     /**
      * Return all discovered devices.

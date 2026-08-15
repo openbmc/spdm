@@ -186,7 +186,11 @@ void MCTPTransportDiscovery::processInterfaceRemoved(
     }
 
     info("MCTP SPDM Responder removed from path: {PATH}", "PATH", path.str);
-    discovery.remove(path.str);
+    if (!discovery.remove(path.str))
+    {
+        debug("MCTP responder {PATH} was not removed (not tracked)", "PATH",
+              path.str);
+    }
 }
 
 } // namespace spdm
