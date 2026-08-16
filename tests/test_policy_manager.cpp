@@ -10,6 +10,7 @@
 #include <format>
 #include <fstream>
 #include <thread>
+#include <utility>
 #include <variant>
 #include <vector>
 
@@ -101,12 +102,13 @@ class PolicyManagerTest : public ::testing::Test
         return nlohmann::json::parse(file);
     }
 
-    void run()
+    void run(sdbusplus::async::task<>&& test)
     {
-        ctx->spawn(sdbusplus::async::execution::just() |
-                   sdbusplus::async::execution::then([this]() {
-                       ctx->request_stop();
-                   }));
+        ctx->spawn([](auto self, sdbusplus::async::task<> test)
+                       -> sdbusplus::async::task<> {
+            co_await std::move(test);
+            self->ctx->request_stop();
+        }(this, std::move(test)));
         ctx->run();
     }
 
@@ -125,18 +127,16 @@ class PolicyManagerTest : public ::testing::Test
 
 TEST_F(PolicyManagerTest, UnchangedEnabledDoesNotPersistOrInvokeCallback)
 {
-    ctx->spawn([](auto self) -> sdbusplus::async::task<> {
+    run([](auto self) -> sdbusplus::async::task<> {
         co_await self->client().enabled(co_await self->client().enabled());
         EXPECT_FALSE(std::filesystem::exists(self->cachePath));
         EXPECT_EQ(self->manager->enabledCount, 0);
     }(this));
-
-    run();
 }
 
 TEST_F(PolicyManagerTest, EnabledChangePersistsAndInvokesCallback)
 {
-    ctx->spawn([](auto self) -> sdbusplus::async::task<> {
+    run([](auto self) -> sdbusplus::async::task<> {
         auto change = !co_await self->client().enabled();
         co_await self->client().enabled(change);
         EXPECT_EQ(self->manager->enabledCount, 1);
@@ -146,13 +146,11 @@ TEST_F(PolicyManagerTest, EnabledChangePersistsAndInvokesCallback)
         EXPECT_EQ(cache.at(PolicyClient::enabled_t::name).template get<bool>(),
                   change);
     }(this));
-
-    run();
 }
 
 TEST_F(PolicyManagerTest, SecureSessionChangePersistsAndInvokesCallback)
 {
-    ctx->spawn([](auto self) -> sdbusplus::async::task<> {
+    run([](auto self) -> sdbusplus::async::task<> {
         auto change = !co_await self->client().secure_session_enabled();
         co_await self->client().secure_session_enabled(change);
         EXPECT_EQ(self->manager->sessionCount, 1);
@@ -163,13 +161,11 @@ TEST_F(PolicyManagerTest, SecureSessionChangePersistsAndInvokesCallback)
                       .template get<bool>(),
                   change);
     }(this));
-
-    run();
 }
 
 TEST_F(PolicyManagerTest, VerifyCertificateChangePersistsAndInvokesCallback)
 {
-    ctx->spawn([](auto self) -> sdbusplus::async::task<> {
+    run([](auto self) -> sdbusplus::async::task<> {
         auto change = !co_await self->client().verify_certificate();
         co_await self->client().verify_certificate(change);
         EXPECT_EQ(self->manager->certCount, 1);
@@ -180,13 +176,11 @@ TEST_F(PolicyManagerTest, VerifyCertificateChangePersistsAndInvokesCallback)
                       .template get<bool>(),
                   change);
     }(this));
-
-    run();
 }
 
 TEST_F(PolicyManagerTest, AllowedVersionsPersistSelectionsAndSkipDuplicateWrite)
 {
-    ctx->spawn([](auto self) -> sdbusplus::async::task<> {
+    run([](auto self) -> sdbusplus::async::task<> {
         const std::vector<Selection> versions{
             PolicyClient::SpecialSetValues::ALL,
             std::string{"1.3"},
@@ -208,6 +202,4 @@ TEST_F(PolicyManagerTest, AllowedVersionsPersistSelectionsAndSkipDuplicateWrite)
         co_await self->client().allowed_versions(versions);
         EXPECT_EQ(self->manager->allowedCount, 1);
     }(this));
-
-    run();
 }
