@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d53dcecd_2ca387cb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-08-16T16:59:42Z",
+      "side": 1,
+      "message": "You reiterated what you did but not why. Why do callers _need_ to know this?",
+      "parentUuid": "4a9a769d_82ae0f96",
+      "revId": "f03826d1b74730119360857cf352bd08e0656c89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5c26813_f9ee39a0",
         "filename": "requester/mctp_transport_discovery.cpp",
         "patchSetId": 3
