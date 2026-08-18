@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adb78354_99ae139a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 39
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002700
+      },
+      "writtenOn": "2026-08-18T22:02:12Z",
+      "side": 1,
+      "message": "The latest patch looks good to me.",
+      "revId": "93cd8766b1c5a5c815fb2cb9ff4326b37258f3fe",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
