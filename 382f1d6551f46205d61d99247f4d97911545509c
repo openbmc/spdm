@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b9bb809_5f2cdbad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000350
+      },
+      "writtenOn": "2026-08-18T14:38:14Z",
+      "side": 1,
+      "message": "Noticed CI failures with timeout\n\nspdm:test_policy_manager time out (After 300.0 seconds)\n2/3 spdm:test_policy_manager                  TIMEOUT        300.02s   killed by signal 15 SIGTERM\n\u003e\u003e\u003e ASAN_OPTIONS\u003dhalt_on_error\u003d1:abort_on_error\u003d1:print_summary\u003d1 MSAN_OPTIONS\u003dhalt_on_error\u003d1:abort_on_error\u003d1:print_summary\u003d1:print_stacktrace\u003d1 UBSAN_OPTIONS\u003dhalt_on_error\u003d1:abort_on_error\u003d1:print_summary\u003d1:print_stacktrace\u003d1 MESON_TEST_ITERATION\u003d1 MALLOC_PERTURB_\u003d179 VALGRIND_OPTS\u003d--error-exitcode\u003d1 valgrind --error-exitcode\u003d1 /var/jenkins-openbmc/workspace/ci-repository/openbmc/spdm/build/tests/test_policy_manager",
+      "revId": "382f1d6551f46205d61d99247f4d97911545509c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
