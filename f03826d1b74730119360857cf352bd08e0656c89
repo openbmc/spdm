@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d58210de_88f0eb68",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-08-18T14:25:44Z",
+      "side": 1,
+      "message": "I\u0027m not interested in this.\n\nKeep code and APIs simple.  Only use return codes when there is a strong need.",
+      "parentUuid": "990b5bb1_147b421a",
+      "revId": "f03826d1b74730119360857cf352bd08e0656c89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5c26813_f9ee39a0",
         "filename": "requester/mctp_transport_discovery.cpp",
         "patchSetId": 3
