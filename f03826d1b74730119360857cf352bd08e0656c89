@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "990b5bb1_147b421a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000350
+      },
+      "writtenOn": "2026-08-18T11:28:23Z",
+      "side": 1,
+      "message": "processInterfaceRemoved() assumes that remove() always successful even if it fails to remove, and logs \ninfo(\"MCTP SPDM Responder removed from path: {PATH}\", \"PATH\", path.str)\n\nwith this change callers aware of success or failure and logs traces accrodingly which will be useful while debugging.",
+      "parentUuid": "d53dcecd_2ca387cb",
+      "revId": "f03826d1b74730119360857cf352bd08e0656c89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5c26813_f9ee39a0",
         "filename": "requester/mctp_transport_discovery.cpp",
         "patchSetId": 3
