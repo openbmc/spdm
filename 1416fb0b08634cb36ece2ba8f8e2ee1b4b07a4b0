@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "758ccdbd_d563c1d5",
+        "filename": "requester/utils/dbus_path.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002700
+      },
+      "writtenOn": "2026-08-18T23:05:23Z",
+      "side": 1,
+      "message": "This replacement may collapse distinct valid hostnames to the same D-Bus element. For example, both `a-b.example.com` and `a.b-example.com`  produce `a_b_example_com` with the same port. Can we use an injective encoding, such as hexadecimal encoding so different endpoint addresses remain distinct?",
+      "revId": "1416fb0b08634cb36ece2ba8f8e2ee1b4b07a4b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
