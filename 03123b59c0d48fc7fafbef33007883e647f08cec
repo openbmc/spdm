@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a41a3ad4_9b3dd1ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000350
+      },
+      "writtenOn": "2026-08-18T14:40:22Z",
+      "side": 1,
+      "message": "noticed CI failure intermittently\n\n[3/3] 🌖 spdm:test_spdm_discovery                            300/300.0s\nspdm:test_spdm_discovery time out (After 300.0 seconds)\n3/3 spdm:test_spdm_discovery                  TIMEOUT        300.02s   killed by signal 15 SIGTERM\n\u003e\u003e\u003e ASAN_OPTIONS\u003dhalt_on_error\u003d1:abort_on_error\u003d1:print_summary\u003d1 MSAN_OPTIONS\u003dhalt_on_error\u003d1:abort_on_error\u003d1:print_summary\u003d1:print_stacktrace\u003d1 MALLOC_PERTURB_\u003d254 UBSAN_OPTIONS\u003dhalt_on_error\u003d1:abort_on_error\u003d1:print_summary\u003d1:print_stacktrace\u003d1 MESON_TEST_ITERATION\u003d1 VALGRIND_OPTS\u003d--error-exitcode\u003d1 valgrind --error-exitcode\u003d1 /var/jenkins-openbmc/workspace/ci-repository/openbmc/spdm/build/tests/test_spdm_discovery",
+      "revId": "03123b59c0d48fc7fafbef33007883e647f08cec",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
