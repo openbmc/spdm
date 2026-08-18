@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9a3af6b_0a5afd05",
+        "filename": "requester/libspdm_mctp_transport.hpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002700
+      },
+      "writtenOn": "2026-08-18T22:37:53Z",
+      "side": 1,
+      "message": "`networkId` is part of the discovered MCTP routing address, but this constructor retains only the EID. That works for a single MCTP network but an endpoint on another network or two networks containing the same EID cannot be addressed. Should we consider retaining `networkId` and pass the discovered  (networkId, eid) pair to `sockaddr_mctp`?",
+      "revId": "8e32272bee56524aa5828e2faaa2b0466f3f2b4f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
