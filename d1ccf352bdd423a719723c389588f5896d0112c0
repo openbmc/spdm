@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec1598e4_afbaea32",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1002700
+      },
+      "writtenOn": "2026-08-19T04:52:33Z",
+      "side": 1,
+      "message": "Could we validate `slotId` before calling `getCertificate()`? Values outside 0–7 may be narrowed incorrectly, for example, 256 becomes slot 0. We can also use slotMask to reject unavailable slots with InvalidArgument.",
+      "revId": "d1ccf352bdd423a719723c389588f5896d0112c0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6a67c55_9f7972ce",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1002700
+      },
+      "writtenOn": "2026-08-19T04:52:33Z",
+      "side": 1,
+      "message": "`certPem` contains the full certificate chain. I think we should pass the leaf certificate\u0027s PEM-encoded public key here, right?",
+      "revId": "d1ccf352bdd423a719723c389588f5896d0112c0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
