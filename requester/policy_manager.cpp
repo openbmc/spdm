@@ -168,13 +168,34 @@ auto PolicyManagerBase::load() -> Policy::properties_t
     catch (const nlohmann::json::parse_error& e)
     {
         error("Failed to parse policy file, error: {ERROR}", "ERROR", e);
-        std::filesystem::remove(cachePath);
+        std::error_code err;
+        std::filesystem::remove(cachePath, err);
+        if (err)
+        {
+            error("Failed to remove invalid policy file {PATH}: {ERROR}",
+                  "PATH", cachePath.string(), "ERROR", err.message());
+        }
         return {};
     }
 
-    Policy::properties_t properties;
-    config.get_to(properties);
-    return properties;
+    try
+    {
+        Policy::properties_t properties;
+        config.get_to(properties);
+        return properties;
+    }
+    catch (const nlohmann::json::exception& e)
+    {
+        error("Failed to load policy file, error: {ERROR}", "ERROR", e);
+        std::error_code err;
+        std::filesystem::remove(cachePath, err);
+        if (err)
+        {
+            error("Failed to remove invalid policy file {PATH}: {ERROR}",
+                  "PATH", cachePath.string(), "ERROR", err.message());
+        }
+        return {};
+    }
 }
 
 } // namespace spdm
