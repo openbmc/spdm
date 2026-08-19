@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c0d50306_65c0948d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-08-19T02:06:50Z",
+      "side": 1,
+      "message": "This entire premise is wrong.  sdbusplus has the operator/ on object_paths that _already_ sanitize this for you.  Don\u0027t invent your own mechanism.",
+      "revId": "1416fb0b08634cb36ece2ba8f8e2ee1b4b07a4b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "758ccdbd_d563c1d5",
         "filename": "requester/utils/dbus_path.cpp",
         "patchSetId": 1
