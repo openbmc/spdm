@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "885fbc8a_83c14ee5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000350
+      },
+      "writtenOn": "2026-08-20T05:05:27Z",
+      "side": 1,
+      "message": "please check this CI pipeline\nhttps://jenkins.openbmc.org/job/ci-repository/144788\n\nSummary of Failures:\n2/3 spdm:test_policy_manager           TIMEOUT        300.02s   killed by signal 15 SIGTERM\n3/3 spdm:test_spdm_discovery           TIMEOUT        300.02s   killed by signal 15 SIGTERM",
+      "revId": "477131d5244742cf55f029433c2c181a735e2d53",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
