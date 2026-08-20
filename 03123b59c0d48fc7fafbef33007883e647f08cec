@@ -16,6 +16,24 @@
       "message": "noticed CI failure intermittently\n\n[3/3] 🌖 spdm:test_spdm_discovery                            300/300.0s\nspdm:test_spdm_discovery time out (After 300.0 seconds)\n3/3 spdm:test_spdm_discovery                  TIMEOUT        300.02s   killed by signal 15 SIGTERM\n\u003e\u003e\u003e ASAN_OPTIONS\u003dhalt_on_error\u003d1:abort_on_error\u003d1:print_summary\u003d1 MSAN_OPTIONS\u003dhalt_on_error\u003d1:abort_on_error\u003d1:print_summary\u003d1:print_stacktrace\u003d1 MALLOC_PERTURB_\u003d254 UBSAN_OPTIONS\u003dhalt_on_error\u003d1:abort_on_error\u003d1:print_summary\u003d1:print_stacktrace\u003d1 MESON_TEST_ITERATION\u003d1 VALGRIND_OPTS\u003d--error-exitcode\u003d1 valgrind --error-exitcode\u003d1 /var/jenkins-openbmc/workspace/ci-repository/openbmc/spdm/build/tests/test_spdm_discovery",
       "revId": "03123b59c0d48fc7fafbef33007883e647f08cec",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbea5b18_2c529ee5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-08-20T04:54:26Z",
+      "side": 1,
+      "message": "Was there specific jenkins instance it was seen or it\u0027s seen with above config?\nWas referring to this pipeline and i don\u0027t see this issue.\nhttps://jenkins.openbmc.org/job/ci-repository/144765/console",
+      "parentUuid": "a41a3ad4_9b3dd1ec",
+      "revId": "03123b59c0d48fc7fafbef33007883e647f08cec",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
