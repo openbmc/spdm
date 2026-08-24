@@ -34,27 +34,29 @@ libspdm_dep = dependency('libspdm', required: false)
 
 # If pkg-config doesn't work, try to find it manually
 if not libspdm_dep.found()
-    libspdm_lib = meson.get_compiler('cpp').find_library('spdm', required: false)
-    libspdm_platform_lib = meson.get_compiler('cpp').find_library(
-        'spdm_platform',
-        required: false,
-    )
-    libspdm_crypto_lib = meson.get_compiler('cpp').find_library(
-        'spdm_crypto',
-        required: false,
-    )
+    libspdm_common_lib = meson.get_compiler('cpp').find_library(
+        'spdm_common_lib', required: false)
+    libspdm_requester_lib = meson.get_compiler('cpp').find_library(
+        'spdm_requester_lib', required: false)
+    libspdm_transport_mctp_lib = meson.get_compiler('cpp').find_library(
+        'spdm_transport_mctp_lib', required: false)
+    libspdm_crypt_lib = meson.get_compiler('cpp').find_library(
+        'spdm_crypt_lib', required: false)
+    libspdm_crypt_ext_lib = meson.get_compiler('cpp').find_library(
+        'spdm_crypt_ext_lib', required: false)
 
-    if libspdm_lib.found() and libspdm_platform_lib.found() and libspdm_crypto_lib.found()
+    if libspdm_common_lib.found() and libspdm_requester_lib.found() and \
+       libspdm_transport_mctp_lib.found() and libspdm_crypt_lib.found() and \
+       libspdm_crypt_ext_lib.found()
         libspdm_dep = declare_dependency(
-            dependencies: [
-                libspdm_lib,
-                libspdm_platform_lib,
-                libspdm_crypto_lib,
+            # libspdm 3.8.2 publishes mutually dependent static archives.
+            # Keep them in one linker argument so Meson cannot separate the
+            # group delimiters from the archives while ordering dependencies.
+            link_args: [
+                '-Wl,--start-group,-lspdm_requester_lib,-lspdm_transport_mctp_lib,-lspdm_common_lib,-lspdm_secured_message_lib,-lspdm_crypt_lib,-lspdm_crypt_ext_lib,-lcryptlib_openssl,-lmemlib,-lmalloclib,-lplatform_lib,-lrnglib,-ldebuglib,-lcrypto,--end-group',
             ],
-            include_directories: include_directories(
-                '/usr/local/include/libspdm',
-                '/usr/local/include/libspdm/include',
-            ),
+            # '=' makes GCC resolve this path relative to the cross sysroot.
+            compile_args: ['-I=/usr/include/libspdm'],
         )
     else
         error('libspdm not found. Please ensure libspdm is installed.')
@@ -111,7 +113,9 @@ configure_file(
 executable(
     'spdmd',
     'requester/spdmd.cpp',
-    link_with: spdmd_lib,
+    # Retain the local device-secret stubs, even though libspdm references
+    # them only after the application archive would normally be scanned.
+    link_whole: spdmd_lib,
     dependencies: spdmd_deps,
     include_directories: spdmd_includes,
     install: true,
