@@ -402,10 +402,10 @@ auto ComponentIntegrity::method_call(
     {
         lg2::error("SPDM Get Signed Measurements FAILED: {ERROR}", "ERROR", e);
         // Return empty tuple on error
-        co_return std::make_tuple(sdbusplus::object_path(path), std::string(""),
-                                  std::string(""), std::string(""),
-                                  std::string(""), type_version(),
-                                  std::vector<uint8_t>{});
+        co_return std::make_tuple(
+            sdbusplus::object_path(path), std::string(""), std::string(""),
+            std::string(""), std::string(""), type_version(),
+            std::vector<uint8_t>{});
     }
 }
 
