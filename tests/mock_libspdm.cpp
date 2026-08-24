@@ -29,8 +29,6 @@ typedef uint32_t (*libspdm_get_hash_size_func_t)(uint32_t);
 static libspdm_init_connection_func_t g_libspdm_init_connection = nullptr;
 static libspdm_get_digest_func_t g_libspdm_get_digest = nullptr;
 static libspdm_get_cert_func_t g_libspdm_get_cert = nullptr;
-static libspdm_deinit_context_func_t g_libspdm_deinit_context = nullptr;
-static libspdm_get_hash_size_func_t g_libspdm_get_hash_size = nullptr;
 
 // Mock data structure
 struct MockSpdmData
@@ -64,19 +62,17 @@ extern "C" void set_mock_spdm_data(MockSpdmData* data)
     }
 }
 
-// Function to set the real libspdm function pointers
+// Set the callbacks used by the mocks. Deinit stays a no-op and hash size
+// stays fixed, so their callback arguments are intentionally ignored.
 extern "C" void set_real_libspdm_functions(
     libspdm_init_connection_func_t init_func,
     libspdm_get_digest_func_t digest_func,
-    libspdm_get_cert_func_t get_cert_func,
-    libspdm_deinit_context_func_t deinit_func,
-    libspdm_get_hash_size_func_t get_hash_size_func)
+    libspdm_get_cert_func_t get_cert_func, libspdm_deinit_context_func_t,
+    libspdm_get_hash_size_func_t)
 {
     g_libspdm_init_connection = init_func;
     g_libspdm_get_digest = digest_func;
     g_libspdm_get_cert = get_cert_func;
-    g_libspdm_deinit_context = deinit_func;
-    g_libspdm_get_hash_size = get_hash_size_func;
 }
 
 // Real libspdm message log functions; the mocks below write to the log the
@@ -130,12 +126,6 @@ extern "C" void __wrap_libspdm_deinit_context(void* spdm_context)
 
     // For testing, we just ignore the call and don't do anything destructive
     // This prevents the segmentation fault when the destructor is called
-
-    // If we had a real function pointer, we could call it here
-    // if (g_libspdm_deinit_context)
-    // {
-    //     g_libspdm_deinit_context(spdm_context);
-    // }
 }
 
 // Mock wrapper for libspdm_get_digest
