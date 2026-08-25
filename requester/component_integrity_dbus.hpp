@@ -4,6 +4,7 @@
 #pragma once
 
 #include "certificate_dbus.hpp"
+#include "xyz/openbmc_project/Association/Definitions/aserver.hpp"
 #include "xyz/openbmc_project/Attestation/ComponentIntegrity/aserver.hpp"
 #include "xyz/openbmc_project/Attestation/IdentityAuthentication/aserver.hpp"
 #include "xyz/openbmc_project/Attestation/MeasurementSet/aserver.hpp"
@@ -37,7 +38,9 @@ class ComponentIntegrity :
     public sdbusplus::aserver::xyz::openbmc_project::attestation::
         MeasurementSet<ComponentIntegrity, void>,
     public sdbusplus::aserver::xyz::openbmc_project::attestation::
-        IdentityAuthentication<ComponentIntegrity, void>
+        IdentityAuthentication<ComponentIntegrity, void>,
+    public sdbusplus::aserver::xyz::openbmc_project::association::Definitions<
+        ComponentIntegrity, void>
 {
   public:
     ComponentIntegrity() = delete;
@@ -59,6 +62,8 @@ class ComponentIntegrity :
             ComponentIntegrity, void>(ctx, path.c_str()),
         sdbusplus::aserver::xyz::openbmc_project::attestation::
             IdentityAuthentication<ComponentIntegrity, void>(ctx, path.c_str()),
+        sdbusplus::aserver::xyz::openbmc_project::association::Definitions<
+            ComponentIntegrity, void>(ctx, path.c_str()),
         path(path), asyncCtx(ctx)
     {
         initializeProperties();
@@ -76,6 +81,18 @@ class ComponentIntegrity :
     void setTransport(std::shared_ptr<spdm::SpdmTransport> transportIn)
     {
         transport = transportIn;
+    }
+
+    /**
+     * @brief Associate this attestation object with its TrustedComponent.
+     *
+     * The platform inventory layer owns any further mapping of the trusted
+     * component to a stable chassis or inventory resource.
+     */
+    void setTrustedComponentAssociation(const std::string& trustedComponentPath)
+    {
+        associations(
+            {{"authenticating", "authenticated_by", trustedComponentPath}});
     }
 
     /**
