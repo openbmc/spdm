@@ -30,13 +30,18 @@ class SPDMDBusResponder
 
     /**
      * @brief Construct a new SPDM D-Bus Responder
-     * @param ctx Async context for D-Bus object creation
      * @param responderInfo ResponderInfo containing device details
      */
-    explicit SPDMDBusResponder(sdbusplus::async::context& ctx,
-                               const ResponderInfo& responderInfo);
+    explicit SPDMDBusResponder(const ResponderInfo& responderInfo);
 
     ~SPDMDBusResponder() = default;
+
+    /**
+     * @brief Initialize the transport and D-Bus objects for this responder.
+     * @param ctx Async context for D-Bus object creation
+     * @return true when the responder can serve SPDM requests
+     */
+    [[nodiscard]] bool initialize(sdbusplus::async::context& ctx);
 
     /** @brief Device name derived from responder transport info */
     std::string name() const;
