@@ -173,7 +173,7 @@ bool SpdmMctpTransport::registerFunctions()
                                     &SpdmMctpTransport::device_send_message,
                                     &SpdmMctpTransport::device_receive_message);
     libspdm_register_transport_layer_func(
-        spdmContext.get(), LIBSPDM_MAX_SPDM_MSG_SIZE,
+        spdmContext.get(), maxSpdmMessageSize,
         LIBSPDM_TRANSPORT_HEADER_SIZE, LIBSPDM_TRANSPORT_TAIL_SIZE,
         libspdm_transport_mctp_encode_message,
         libspdm_transport_mctp_decode_message);
