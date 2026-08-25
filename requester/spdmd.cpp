@@ -5,6 +5,7 @@
 
 #include "mctp_transport_discovery.hpp"
 #include "policy_manager.hpp"
+#include "responder_manager.hpp"
 #include "spdm_dbus_responder.hpp"
 #include "spdm_discovery.hpp"
 #include "tcp_transport_discovery.hpp"
@@ -13,10 +14,25 @@
 #include <CLI/CLI.hpp>
 #include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/async.hpp>
+#include <sdbusplus/async/timer.hpp>
 #include <sdbusplus/server/manager.hpp>
 
 #include <cstdint>
 #include <filesystem>
+
+namespace spdm
+{
+namespace
+{
+auto retryAfter(sdbusplus::async::context& ctx, std::chrono::seconds delay,
+                ResponderManager<SPDMDBusResponder>::Retry retry)
+    -> sdbusplus::async::task<>
+{
+    co_await sdbusplus::async::sleep_for(ctx, delay);
+    retry();
+}
+} // namespace
+} // namespace spdm
 
 int main(int argc, char* argv[])
 {
@@ -43,19 +59,28 @@ int main(int argc, char* argv[])
 
     SPDMDiscovery discovery{};
 
-    std::vector<std::unique_ptr<SPDMDBusResponder>> responders;
+    ResponderManager<SPDMDBusResponder> responders(
+        [&ctx](std::chrono::seconds delay, auto retry) {
+            ctx.spawn(retryAfter(ctx, delay, std::move(retry)));
+        });
 
     // Create a D-Bus responder for every device as it is discovered.
     discovery.onDeviceAdded([&ctx, &responders](const ResponderInfo& device) {
-        responders.push_back(std::make_unique<SPDMDBusResponder>(ctx, device));
+        // Discovery may reallocate its device list while a retry is pending.
+        responders.add(device.path.str, [&ctx, device] {
+            auto responder = std::make_unique<SPDMDBusResponder>(device);
+            if (!responder->initialize(ctx))
+            {
+                return std::unique_ptr<SPDMDBusResponder>{};
+            }
+            return responder;
+        });
     });
 
     // Destroy the D-Bus responder when a device is removed at runtime.
     discovery.onDeviceRemoved(
         [&responders](const sdbusplus::object_path& path) {
-            std::erase_if(responders, [&path](const auto& r) {
-                return r->path() == path.str;
-            });
+            responders.remove(path.str);
         });
 
     // Start MCTP discovery
