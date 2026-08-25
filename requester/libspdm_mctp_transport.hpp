@@ -26,7 +26,12 @@ class SpdmMctpTransport : public SpdmTransport
      *
      * @param eid MCTP Endpoint ID
      */
-    explicit SpdmMctpTransport(uint8_t eid) : eid(eid) {}
+    explicit SpdmMctpTransport(
+        uint8_t eid, size_t maxSpdmMessageSize = LIBSPDM_MAX_SPDM_MSG_SIZE) :
+        eid(eid)
+    {
+        setMaxSpdmMessageSize(maxSpdmMessageSize);
+    }
 
     /**
      * @brief Virtual destructor for proper cleanup
