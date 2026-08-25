@@ -185,6 +185,16 @@ class ComponentIntegrity :
     std::tuple<uint8_t, std::vector<uint8_t>, size_t> getCertificateDigests();
 
     /**
+     * @brief Verify that the responder advertises the requested certificate
+     * slot.
+     * @param slotMask Bit mask returned by GET_DIGESTS
+     * @param slotId Certificate slot selected by the caller
+     * @throws xyz::openbmc_project::Common::Error::InvalidArgument when the
+     *         slot is invalid or unavailable
+     */
+    void validateCertificateSlot(uint8_t slotMask, size_t slotId);
+
+    /**
      * @brief Get certificate from SPDM device
      * @param slotId Certificate slot ID
      * @return Tuple of (certificate, certificateSize, leaf certificate)

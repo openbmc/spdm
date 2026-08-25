@@ -202,6 +202,11 @@ class ComponentIntegrityTest : public ::testing::Test
         return componentIntegrity->getCertificateDigests();
     }
 
+    void validateCertificateSlot(uint8_t slotMask, size_t slotId)
+    {
+        componentIntegrity->validateCertificateSlot(slotMask, slotId);
+    }
+
     std::tuple<std::string, std::vector<uint8_t>, std::vector<uint8_t>>
         getCertificate(size_t slotId)
     {
@@ -428,6 +433,29 @@ TEST_F(ComponentIntegrityTest, GetCertificateDigestsFailureTest)
 
     // This should throw runtime_error
     EXPECT_THROW(getCertificateDigests(), std::runtime_error);
+}
+
+TEST_F(ComponentIntegrityTest, CertificateSlotMustBeAdvertised)
+{
+    auto* context = reinterpret_cast<libspdm_context_t*>(makeDummyContext());
+    context->connection_info.algorithm.base_hash_algo =
+        SPDM_ALGORITHMS_BASE_HASH_ALGO_TPM_ALG_SHA_384;
+    mockTransport->setSpdmContext(context);
+    mockTransport->digestStatus = LIBSPDM_STATUS_SUCCESS;
+    // GET_DIGESTS advertises only slot 1 (bit 1), not slot 0 (bit 0).
+    mockTransport->mockSlotMask = 0x02;
+    mockTransport->setAsCurrentMock();
+
+    const uint8_t slotMask = std::get<0>(getCertificateDigests());
+
+    EXPECT_EQ(slotMask, 0x02);
+    EXPECT_NO_THROW(validateCertificateSlot(slotMask, 1));
+    EXPECT_THROW(
+        validateCertificateSlot(slotMask, 0),
+        sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument);
+    EXPECT_THROW(
+        validateCertificateSlot(slotMask, SPDM_MAX_SLOT_COUNT),
+        sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument);
 }
 
 // Test initializeSpdmConnection with successful initialization

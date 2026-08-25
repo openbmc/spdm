@@ -246,6 +246,20 @@ std::tuple<uint8_t, std::vector<uint8_t>, size_t>
     return {slotMask, digestBuffer, totalDigestSize};
 }
 
+void ComponentIntegrity::validateCertificateSlot(uint8_t slotMask,
+                                                 size_t slotId)
+{
+    using namespace sdbusplus::xyz::openbmc_project::Common::Error;
+
+    if ((slotId >= SPDM_MAX_SLOT_COUNT) ||
+        ((slotMask & (static_cast<uint8_t>(1U) << slotId)) == 0))
+    {
+        lg2::error("Requested certificate slot is unavailable: {SLOT}", "SLOT",
+                   slotId);
+        throw InvalidArgument();
+    }
+}
+
 std::pair<std::string, std::vector<uint8_t>>
     ComponentIntegrity::getSignedMeasurements(
     const std::vector<size_t>& measurementIndices, const std::string& nonce,
@@ -473,6 +487,7 @@ auto ComponentIntegrity::method_call(
 
         auto [slotMask, digestBuffer,
               totalDigestSize] = getCertificateDigests();
+        validateCertificateSlot(slotMask, slotId);
         auto [certPem, certRaw, certLeaf] = getCertificate(slotId);
 
         // Get signed measurements using libspdm
