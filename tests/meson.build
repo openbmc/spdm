@@ -9,6 +9,7 @@ tests = [
     'test_mctp_transport_discovery',
     'test_mctp_helper',
     'test_spdm_discovery',
+    'test_responder_manager',
     'test_policy_manager',
     'test_component_integrity',
     'test_certificate_dbus',
