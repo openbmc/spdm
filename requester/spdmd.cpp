@@ -47,7 +47,12 @@ int main(int argc, char* argv[])
 
     // Create a D-Bus responder for every device as it is discovered.
     discovery.onDeviceAdded([&ctx, &responders](const ResponderInfo& device) {
-        responders.push_back(std::make_unique<SPDMDBusResponder>(ctx, device));
+        auto responder = std::make_unique<SPDMDBusResponder>(device);
+        if (!responder->initialize(ctx))
+        {
+            return;
+        }
+        responders.push_back(std::move(responder));
     });
 
     // Destroy the D-Bus responder when a device is removed at runtime.
