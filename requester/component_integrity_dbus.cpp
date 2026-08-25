@@ -363,8 +363,7 @@ std::tuple<std::vector<uint8_t>, uint8_t, std::vector<uint8_t>>
     uint8_t measurementOperation = static_cast<uint8_t>(measurementIndex);
 
     // Buffer for single measurement response
-    constexpr size_t MAX_MEASUREMENT_SIZE = 4096;
-    std::vector<uint8_t> measurementBuffer(MAX_MEASUREMENT_SIZE);
+    std::vector<uint8_t> measurementBuffer(transport->maxSpdmMessageSize);
     uint32_t measurementSize = measurementBuffer.size();
     uint8_t contentChanged = 0;
     uint8_t numberOfBlocks = 0;
