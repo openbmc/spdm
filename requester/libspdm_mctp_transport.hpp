@@ -9,6 +9,11 @@
 namespace spdm
 {
 
+namespace test
+{
+class SpdmMctpTransportTest;
+}
+
 /**
  * @class SpdmMctpTransport
  * @brief SPDM transport implementation over MCTP
@@ -24,9 +29,18 @@ class SpdmMctpTransport : public SpdmTransport
      * @brief Constructor for SPDM MCTP Transport with direct MctpTransportClass
      * creation
      *
+     * The daemon supplies its configured message limit. Other callers can
+     * supply a lower limit, for example SpdmMctpTransport(eid, 2047).
+     *
      * @param eid MCTP Endpoint ID
+     * @param maxSpdmMessageSize Maximum raw SPDM message size, at least 42.
      */
-    explicit SpdmMctpTransport(uint8_t eid) : eid(eid) {}
+    explicit SpdmMctpTransport(
+        uint8_t eid, size_t maxSpdmMessageSize = LIBSPDM_MAX_SPDM_MSG_SIZE) :
+        eid(eid)
+    {
+        setMaxSpdmMessageSize(maxSpdmMessageSize);
+    }
 
     /**
      * @brief Virtual destructor for proper cleanup
@@ -50,6 +64,8 @@ class SpdmMctpTransport : public SpdmTransport
     bool initialize() override;
 
   private:
+    friend class test::SpdmMctpTransportTest;
+
     static constexpr size_t MAX_MCTP_PACKET_SIZE = 65536;
 
     /**

@@ -16,23 +16,31 @@ PHOSPHOR_LOG2_USING;
 namespace spdm
 {
 
-SPDMDBusResponder::SPDMDBusResponder(const ResponderInfo& responderInfo) :
-    responder(responderInfo)
+SPDMDBusResponder::SPDMDBusResponder(const ResponderInfo& responderInfo,
+                                     size_t maxSpdmMessageSize) :
+    responder(responderInfo), maxSpdmMessageSize(maxSpdmMessageSize)
 {}
 
-bool SPDMDBusResponder::initialize(sdbusplus::async::context& ctx)
+std::shared_ptr<SpdmTransport> SPDMDBusResponder::createTransport() const
 {
     std::shared_ptr<SpdmTransport> transport;
     std::visit(
-        [&transport](const auto& info) {
+        [this, &transport](const auto& info) {
             using T = std::decay_t<decltype(info)>;
             if constexpr (std::is_same_v<T, MctpResponderInfo>)
             {
-                transport = std::make_shared<SpdmMctpTransport>(info.eid);
+                transport = std::make_shared<SpdmMctpTransport>(
+                    info.eid, maxSpdmMessageSize);
             }
         },
         responder.info);
 
+    return transport;
+}
+
+bool SPDMDBusResponder::initialize(sdbusplus::async::context& ctx)
+{
+    auto transport = createTransport();
     if ((transport != nullptr) && !transport->initialize())
     {
         error("Failed to initialize SPDM MCTP transport for {PATH}", "PATH",

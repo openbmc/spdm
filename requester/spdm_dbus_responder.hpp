@@ -5,14 +5,22 @@
 
 #include "component_integrity_dbus.hpp"
 #include "spdm_discovery.hpp"
+#include "spdm_message_limits.hpp"
 #include "trusted_component_dbus.hpp"
 
 #include <sdbusplus/async.hpp>
 
+#include <cstddef>
+#include <memory>
 #include <string>
 
 namespace spdm
 {
+
+namespace test
+{
+class SPDMDBusResponderTest;
+}
 
 /**
  * @brief Holds transport information for a discovered SPDM device.
@@ -29,8 +37,11 @@ class SPDMDBusResponder
     /**
      * @brief Construct a new SPDM D-Bus Responder
      * @param responderInfo ResponderInfo containing device details
+     * @param maxSpdmMessageSize Maximum raw SPDM message size in bytes
      */
-    explicit SPDMDBusResponder(const ResponderInfo& responderInfo);
+    explicit SPDMDBusResponder(
+        const ResponderInfo& responderInfo,
+        size_t maxSpdmMessageSize = LIBSPDM_MAX_SPDM_MSG_SIZE);
 
     ~SPDMDBusResponder() = default;
 
@@ -51,7 +62,12 @@ class SPDMDBusResponder
     }
 
   private:
+    friend class test::SPDMDBusResponderTest;
+
+    std::shared_ptr<SpdmTransport> createTransport() const;
+
     ResponderInfo responder;
+    const size_t maxSpdmMessageSize;
 
     /** @brief D-Bus ComponentIntegrity interface object for this device. */
     std::unique_ptr<ComponentIntegrity> componentIntegrity;

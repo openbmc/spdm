@@ -3,6 +3,7 @@
 
 #include "spdmd.hpp"
 
+#include "daemon_options.hpp"
 #include "mctp_transport_discovery.hpp"
 #include "policy_manager.hpp"
 #include "responder_manager.hpp"
@@ -39,14 +40,13 @@ int main(int argc, char* argv[])
     using namespace spdm;
 
     CLI::App app;
-    std::filesystem::path stateDir;
-    app.add_option("--state-dir", stateDir,
-                   "Override the SPDM state directory");
+    DaemonOptions options;
+    options.addTo(app);
     CLI11_PARSE(app, argc, argv);
 
-    if (!stateDir.empty())
+    if (!options.stateDir.empty())
     {
-        paths::set_state_dir(stateDir);
+        paths::set_state_dir(options.stateDir);
     }
 
     // Create async context for parallel coroutine execution
@@ -65,10 +65,12 @@ int main(int argc, char* argv[])
         });
 
     // Create a D-Bus responder for every device as it is discovered.
-    discovery.onDeviceAdded([&ctx, &responders](const ResponderInfo& device) {
+    discovery.onDeviceAdded([&ctx, &responders,
+                             limit = options.maxSpdmMessageSize](
+                                const ResponderInfo& device) {
         // Discovery may reallocate its device list while a retry is pending.
-        responders.add(device.path.str, [&ctx, device] {
-            auto responder = std::make_unique<SPDMDBusResponder>(device);
+        responders.add(device.path.str, [&ctx, device, limit] {
+            auto responder = std::make_unique<SPDMDBusResponder>(device, limit);
             if (!responder->initialize(ctx))
             {
                 return std::unique_ptr<SPDMDBusResponder>{};
