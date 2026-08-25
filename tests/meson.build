@@ -8,6 +8,7 @@ test_deps = [
 tests = [
     'test_mctp_transport_discovery',
     'test_mctp_helper',
+    'test_libspdm_mctp_transport',
     'test_spdm_discovery',
     'test_responder_manager',
     'test_policy_manager',

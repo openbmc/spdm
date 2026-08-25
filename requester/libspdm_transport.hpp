@@ -35,6 +35,7 @@ extern "C"
 #include <array>
 #include <cstdint>
 #include <memory>
+#include <stdexcept>
 
 namespace spdm
 {
@@ -64,6 +65,9 @@ class SpdmTransport
     /** @brief Shared send/receive buffer for SPDM messages. */
     std::array<uint8_t, LIBSPDM_MAX_SENDER_RECEIVER_BUFFER_SIZE>
         sendReceiveBuffer{};
+    /** @brief Maximum raw SPDM message accepted by this transport.
+     *  This policy can only reduce the maximum compiled into libspdm. */
+    size_t maxSpdmMessageSize = LIBSPDM_MAX_SPDM_MSG_SIZE;
     /** @brief Indicates whether the send/receive buffer is currently
      * acquired. */
     bool sendReceiveBufferAcquired = false;
@@ -131,6 +135,18 @@ class SpdmTransport
      * @return false if the SPDM context is not initialized successfully
      */
     virtual bool initialize() = 0;
+
+    void setMaxSpdmMessageSize(size_t size)
+    {
+        if ((size < SPDM_MIN_DATA_TRANSFER_SIZE_VERSION_12) ||
+            (size > LIBSPDM_MAX_SPDM_MSG_SIZE))
+        {
+            throw std::invalid_argument(
+                "SPDM message limit must be between 42 and the "
+                "libspdm build limit");
+        }
+        maxSpdmMessageSize = size;
+    }
 };
 
 } // namespace spdm
