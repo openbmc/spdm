@@ -590,8 +590,11 @@ auto ComponentIntegrity::method_call(spdm_get_signed_measurements_t,
             attestation::IdentityAuthentication::VerificationStatus;
         responder_verification_status(VerificationStatus::Success);
 
-        co_return std::make_tuple(objectPath, hashAlgoStr, certPem, signedMeas,
-                                  signAlgoStr, versionStr,
+        // Redfish exposes the identity of supported certificate-backed slots
+        // through the Certificate link, not through PublicKey.
+        const std::string publicKey;
+        co_return std::make_tuple(objectPath, hashAlgoStr, publicKey,
+                                  signedMeas, signAlgoStr, versionStr,
                                   std::move(opaqueData));
     }
     catch (
