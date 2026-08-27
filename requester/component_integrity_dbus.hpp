@@ -14,6 +14,8 @@
 #include <sdbusplus/server/object.hpp>
 
 #include <chrono>
+#include <array>
+#include <cstdint>
 
 namespace spdm
 {
@@ -107,6 +109,7 @@ class ComponentIntegrity :
      *         - Signed measurements base64 string
      *         - Signing algorithm string
      *         - Version string
+     *         - Opaque data from the final signed response
      * @throws xyz::openbmc_project::Common::Error::InvalidArgument on invalid
      * input
      * @throws xyz::openbmc_project::Common::Error::InternalFailure on errors
@@ -211,9 +214,10 @@ class ComponentIntegrity :
      * @param measurementIndices Vector of measurement indices to request
      * @param nonce Nonce for freshness
      * @param slotId Certificate slot ID for signing
-     * @return Base64 encoded signed measurements
+     * @return Pair of base64 encoded measurements and opaque data from the
+     *         final signed response
      */
-    std::string getSignedMeasurements(
+    std::pair<std::string, std::vector<uint8_t>> getSignedMeasurements(
         const std::vector<size_t>& measurementIndices, const std::string& nonce,
         size_t slotId);
 
@@ -238,6 +242,19 @@ class ComponentIntegrity :
         std::vector<uint8_t>& allMeasurements, uint8_t numberOfBlocks);
 
   private:
+    /**
+     * @brief Get one measurement, optionally requesting a signature.
+     * @param measurementIndex Measurement index to request
+     * @param slotId Certificate slot ID for signing
+     * @param generateSignature Request a responder signature
+     * @param requesterNonce Optional nonce for a signed request
+     * @return Tuple of measurement data, number of blocks and opaque data
+     */
+    std::tuple<std::vector<uint8_t>, uint8_t, std::vector<uint8_t>>
+        getSignedSingleMeasurement(size_t measurementIndex, size_t slotId,
+                                   bool generateSignature,
+                                   const std::array<uint8_t, 32>* requesterNonce);
+
     std::shared_ptr<spdm::SpdmTransport> transport;
 
     /** @brief Async context for D-Bus operations */
