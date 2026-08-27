@@ -17,8 +17,12 @@ extern "C"
 
 #include <phosphor-logging/lg2.hpp>
 
+#include <array>
 #include <chrono>
+#include <cstdint>
+#include <optional>
 #include <set>
+#include <utility>
 
 namespace spdm
 {
@@ -37,9 +41,8 @@ void ComponentIntegrity::initializeProperties()
 
     enabled(true);
 
-    last_updated(std::chrono::duration_cast<std::chrono::milliseconds>(
-                     std::chrono::system_clock::now().time_since_epoch())
-                     .count());
+    // No evidence exists until a signed measurement request succeeds.
+    last_updated(0);
 }
 
 void ComponentIntegrity::validateMeasurementIndices(
@@ -243,10 +246,13 @@ std::tuple<uint8_t, std::vector<uint8_t>, size_t>
     return {slotMask, digestBuffer, totalDigestSize};
 }
 
-std::string ComponentIntegrity::getSignedMeasurements(
-    const std::vector<size_t>& measurementIndices, const std::string& nonce,
-    size_t slotId)
+std::pair<std::string, std::vector<uint8_t>>
+    ComponentIntegrity::getSignedMeasurements(
+        const std::vector<size_t>& measurementIndices, const std::string& nonce,
+        size_t slotId)
 {
+    using namespace sdbusplus::xyz::openbmc_project::Common::Error;
+
     lg2::debug(
         "Getting signed measurements for slot {SLOTID}, nonce length: {NONCE_LEN}",
         "SLOTID", slotId, "NONCE_LEN", nonce.length());
@@ -272,16 +278,62 @@ std::string ComponentIntegrity::getSignedMeasurements(
         indicesToProcess = {255}; // Request all measurements
     }
 
-    // Buffer to collect all measurements
-    std::vector<uint8_t> allMeasurements;
-
-    // Loop through each measurement index and get measurements individually
-    for (const auto& idx : indicesToProcess)
+    std::optional<std::array<uint8_t, SPDM_NONCE_SIZE>> requesterNonce;
+    if (!nonce.empty())
     {
-        auto [measurementData,
-              numberOfBlocks] = getSingleMeasurement(idx, slotId);
+        if (nonce.size() != (SPDM_NONCE_SIZE * 2))
+        {
+            lg2::error("Nonce must be a 32-byte hexadecimal string");
+            throw InvalidArgument();
+        }
+        const auto hexNibble = [](char character) -> uint8_t {
+            if ((character >= '0') && (character <= '9'))
+            {
+                return static_cast<uint8_t>(character - '0');
+            }
+            if ((character >= 'a') && (character <= 'f'))
+            {
+                return static_cast<uint8_t>(character - 'a' + 10);
+            }
+            if ((character >= 'A') && (character <= 'F'))
+            {
+                return static_cast<uint8_t>(character - 'A' + 10);
+            }
+            lg2::error("Nonce must be hexadecimal");
+            throw InvalidArgument();
+        };
+        std::array<uint8_t, SPDM_NONCE_SIZE> decodedNonce{};
+        for (size_t index = 0; index < decodedNonce.size(); ++index)
+        {
+            decodedNonce[index] = static_cast<uint8_t>(
+                (hexNibble(nonce[index * 2]) << 4U) |
+                hexNibble(nonce[(index * 2) + 1]));
+        }
+        requesterNonce = decodedNonce;
+    }
+
+    // Request each measurement index individually and collect its record.
+    // SPDM requires the final GET_MEASUREMENTS request in a multi-index
+    // operation to carry the nonce and request the signature.
+    std::vector<uint8_t> allMeasurements;
+    std::vector<uint8_t> finalOpaqueData;
+
+    for (size_t position = 0; position < indicesToProcess.size(); ++position)
+    {
+        const size_t idx = indicesToProcess[position];
+        const bool generateSignature =
+            ((position + 1) == indicesToProcess.size());
+        auto [measurementData, numberOfBlocks, opaqueData] =
+            getSignedSingleMeasurement(idx, slotId, generateSignature,
+                                       ((generateSignature && requesterNonce)
+                                            ? &*requesterNonce
+                                            : nullptr));
         processMeasurementData(idx, measurementData, allMeasurements,
                                numberOfBlocks);
+        if (generateSignature)
+        {
+            finalOpaqueData = std::move(opaqueData);
+        }
     }
 
     // Convert combined measurements to base64 for D-Bus transport
@@ -291,12 +343,22 @@ std::string ComponentIntegrity::getSignedMeasurements(
         "Successfully retrieved {COUNT} measurements, total size: {SIZE} bytes",
         "COUNT", indicesToProcess.size(), "SIZE", allMeasurements.size());
 
-    return base64Measurement;
+    return {std::move(base64Measurement), std::move(finalOpaqueData)};
 }
 
 std::pair<std::vector<uint8_t>, uint8_t>
     ComponentIntegrity::getSingleMeasurement(size_t measurementIndex,
                                              size_t slotId)
+{
+    auto [measurementData, numberOfBlocks, opaqueData] =
+        getSignedSingleMeasurement(measurementIndex, slotId, false, nullptr);
+    return {std::move(measurementData), numberOfBlocks};
+}
+
+std::tuple<std::vector<uint8_t>, uint8_t, std::vector<uint8_t>>
+    ComponentIntegrity::getSignedSingleMeasurement(
+        size_t measurementIndex, size_t slotId, bool generateSignature,
+        const std::array<uint8_t, 32>* requesterNonce)
 {
     uint8_t measurementOperation = static_cast<uint8_t>(measurementIndex);
 
@@ -307,13 +369,26 @@ std::pair<std::vector<uint8_t>, uint8_t>
     uint8_t contentChanged = 0;
     uint8_t numberOfBlocks = 0;
 
-    // Call libspdm to get single measurement
-    libspdm_return_t status = libspdm_get_measurement(
+    std::array<uint8_t, SPDM_NONCE_SIZE> generatedNonce{};
+    std::array<uint8_t, SPDM_NONCE_SIZE> responderNonce{};
+    std::vector<uint8_t> opaqueData(1024);
+    size_t opaqueDataSize = opaqueData.size();
+    const uint8_t requestAttribute =
+        (generateSignature
+             ? SPDM_GET_MEASUREMENTS_REQUEST_ATTRIBUTES_GENERATE_SIGNATURE
+             : 0);
+
+    // libspdm_get_measurement_ex verifies a requested signature and accepts
+    // the caller nonce (or generates one when none was supplied).
+    libspdm_return_t status = libspdm_get_measurement_ex(
         transport->spdmContext.get(),
         nullptr, // No session
-        0,       // request_attribute
-        measurementOperation, static_cast<uint8_t>(slotId), &contentChanged,
-        &numberOfBlocks, &measurementSize, measurementBuffer.data());
+        requestAttribute, measurementOperation, static_cast<uint8_t>(slotId),
+        &contentChanged, &numberOfBlocks, &measurementSize,
+        measurementBuffer.data(),
+        (requesterNonce ? requesterNonce->data() : nullptr),
+        generatedNonce.data(), responderNonce.data(), opaqueData.data(),
+        &opaqueDataSize);
 
     if (LIBSPDM_STATUS_IS_ERROR(status))
     {
@@ -323,10 +398,17 @@ std::pair<std::vector<uint8_t>, uint8_t>
         throw std::runtime_error("Failed to get signed measurements");
     }
 
-    // Resize buffer to actual measurement size
-    measurementBuffer.resize(measurementSize);
+    if (opaqueDataSize > opaqueData.size())
+    {
+        throw std::runtime_error("Invalid SPDM opaque data size");
+    }
 
-    return {measurementBuffer, numberOfBlocks};
+    // Resize buffers to the actual response sizes.
+    measurementBuffer.resize(measurementSize);
+    opaqueData.resize(opaqueDataSize);
+
+    return {std::move(measurementBuffer), numberOfBlocks,
+            std::move(opaqueData)};
 }
 
 void ComponentIntegrity::processMeasurementData(
@@ -366,13 +448,29 @@ auto ComponentIntegrity::method_call(
     size_t slotId [[maybe_unused]])
     -> sdbusplus::async::task<spdm_get_signed_measurements_t::return_type>
 {
+    using namespace sdbusplus::xyz::openbmc_project::Common::Error;
+
     lg2::debug(
         "spdmGetSignedMeasurements: Starting with path={PATH}, slotId={SLOTID}, nonce_length={NONCE_LEN}",
         "PATH", path, "SLOTID", slotId, "NONCE_LEN", nonce.length());
 
+    bool evidenceCaptureStarted = false;
+    const auto abortEvidenceCapture = [&]() noexcept {
+        if (!evidenceCaptureStarted)
+        {
+            return;
+        }
+        transport->abortEvidenceCapture();
+    };
     try
     {
         validateMeasurementIndices(measurementIndices);
+        if (!transport)
+        {
+            throw std::runtime_error("SPDM transport not initialized");
+        }
+        transport->startEvidenceCapture();
+        evidenceCaptureStarted = true;
         initializeSpdmConnection();
 
         auto [slotMask, digestBuffer,
@@ -380,8 +478,13 @@ auto ComponentIntegrity::method_call(
         auto [certPem, certRaw, certLeaf] = getCertificate(slotId);
 
         // Get signed measurements using libspdm
-        std::string signedMeas =
-            getSignedMeasurements(measurementIndices, nonce, slotId);
+        std::vector<uint8_t> opaqueData =
+            getSignedMeasurements(measurementIndices, nonce, slotId).second;
+        std::vector<uint8_t> signedEvidence = transport->takeEvidenceCapture();
+        if (signedEvidence.empty())
+        {
+            throw std::runtime_error("No SPDM evidence was captured");
+        }
 
         std::string chassisId = sdbusplus::object_path(path).filename();
         auto objectPath = updateCertificateObject(chassisId, certPem, certLeaf);
@@ -394,18 +497,30 @@ auto ComponentIntegrity::method_call(
         auto versionStr = getNegotiatedVersion();
         type_version(versionStr);
 
-        co_return std::make_tuple(objectPath, hashAlgoStr, certPem, signedMeas,
-                                  signAlgoStr, versionStr,
-                                  std::vector<uint8_t>{});
+        updateLastUpdateTime();
+        using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+            attestation::IdentityAuthentication::VerificationStatus;
+        responder_verification_status(VerificationStatus::Success);
+
+        co_return std::make_tuple(
+            objectPath, hashAlgoStr, certPem,
+            spdm::base64Encode(signedEvidence), signAlgoStr, versionStr,
+            std::move(opaqueData));
+    }
+    catch (const InvalidArgument&)
+    {
+        abortEvidenceCapture();
+        throw;
     }
     catch (const std::exception& e)
     {
         lg2::error("SPDM Get Signed Measurements FAILED: {ERROR}", "ERROR", e);
-        // Return empty tuple on error
-        co_return std::make_tuple(
-            sdbusplus::object_path(path), std::string(""), std::string(""),
-            std::string(""), std::string(""), type_version(),
-            std::vector<uint8_t>{});
+        abortEvidenceCapture();
+        last_updated(0);
+        using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+            attestation::IdentityAuthentication::VerificationStatus;
+        responder_verification_status(VerificationStatus::Failed);
+        throw InternalFailure();
     }
 }
 
