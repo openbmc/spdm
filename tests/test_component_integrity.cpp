@@ -72,6 +72,8 @@ class MockSpdmTransport : public SpdmTransport
 
     // For measurement-response mock
     libspdm_return_t getMeasurementStatus = LIBSPDM_STATUS_SUCCESS;
+    std::vector<uint8_t> mockMeasurement = {0xDE, 0xAD};
+    uint8_t mockMeasurementBlockCount = 1;
     std::vector<uint8_t> mockOpaqueData;
     std::vector<uint8_t> mockUnsignedOpaqueData;
 
@@ -110,6 +112,8 @@ class MockSpdmTransport : public SpdmTransport
         // Copy certificate chain data into the mock data struct
         mockData.mockCertChain = this->mockCertChain;
         mockData.getMeasurementStatus = this->getMeasurementStatus;
+        mockData.mockMeasurement = this->mockMeasurement;
+        mockData.mockMeasurementBlockCount = this->mockMeasurementBlockCount;
         mockData.mockOpaqueData = this->mockOpaqueData;
         mockData.mockUnsignedOpaqueData = this->mockUnsignedOpaqueData;
         set_mock_spdm_data(&mockData);
@@ -311,6 +315,32 @@ TEST_F(ComponentIntegrityTest, SignedMeasurementRejectsMalformedNonce)
     EXPECT_THROW(
         getSignedMeasurements({}, std::string(64, 'G'), 0),
         sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument);
+}
+
+TEST_F(ComponentIntegrityTest, CompleteFortyBlockRecordUsesTransportCapacity)
+{
+    auto* context = reinterpret_cast<libspdm_context_t*>(makeDummyContext());
+    context->connection_info.algorithm.base_hash_algo =
+        SPDM_ALGORITHMS_BASE_HASH_ALGO_TPM_ALG_SHA_384;
+    mockTransport->setSpdmContext(context);
+    mockTransport->mockMeasurement.assign(LIBSPDM_MAX_SPDM_MSG_SIZE, 0x5A);
+    mockTransport->mockMeasurementBlockCount = 40;
+    mockTransport->setAsCurrentMock();
+
+    const std::string response =
+        getSignedMeasurements({}, std::string(64, 'B'), 0);
+    EXPECT_EQ(response.size(), 6144U);
+    EXPECT_EQ(get_mock_measurement_operation(), 255);
+}
+
+TEST_F(ComponentIntegrityTest, TransportMessageLimitRejectsUnsafeValues)
+{
+    EXPECT_THROW(mockTransport->setMaxSpdmMessageSize(0),
+                 std::invalid_argument);
+    EXPECT_THROW(
+        mockTransport->setMaxSpdmMessageSize(LIBSPDM_MAX_SPDM_MSG_SIZE + 1),
+        std::invalid_argument);
+    EXPECT_NO_THROW(mockTransport->setMaxSpdmMessageSize(2047));
 }
 
 // Test validateMeasurementIndices with valid indices

@@ -198,14 +198,6 @@ extern "C" libspdm_return_t libspdm_get_certificate(
     return LIBSPDM_STATUS_SUCCESS;
 }
 
-// Mock wrapper for libspdm_get_hash_size
-extern "C" size_t libspdm_get_hash_size(uint32_t base_hash_algo)
-{
-    (void)base_hash_algo;
-    // Always return 48 for the mock
-    return 48;
-}
-
 extern "C" libspdm_return_t libspdm_get_measurement_ex(
     void* spdm_context, const uint32_t* session_id, uint8_t request_attribute,
     uint8_t measurement_operation, uint8_t slot_id, uint8_t* content_changed,
