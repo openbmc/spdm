@@ -238,17 +238,14 @@ extern "C" libspdm_return_t __wrap_libspdm_get_measurement_ex(
     size_t* opaque_data_size)
 {
     (void)session_id;
-    (void)measurement_operation;
     (void)slot_id;
     (void)content_changed;
-    (void)measurement_record;
     (void)requester_nonce;
     (void)responder_nonce;
-    (void)opaque_data;
-    (void)opaque_data_size;
 
     auto& transcript = spdm::test::mockTranscript();
     transcript.requestAttributes.push_back(request_attribute);
+    transcript.measurementOperations.push_back(measurement_operation);
     const auto* nonce = static_cast<const uint8_t*>(requester_nonce_in);
     transcript.nonces.emplace_back();
     if (nonce != nullptr)
@@ -256,16 +253,32 @@ extern "C" libspdm_return_t __wrap_libspdm_get_measurement_ex(
         transcript.nonces.back().assign(nonce, nonce + 32);
     }
 
+    if (transcript.measurementStatus != LIBSPDM_STATUS_SUCCESS)
+    {
+        return transcript.measurementStatus;
+    }
+
+    const auto& opaque = ((request_attribute & 1U) != 0)
+                             ? transcript.opaqueData
+                             : transcript.unsignedOpaqueData;
+    if ((measurement_record_length == nullptr) ||
+        (*measurement_record_length < transcript.measurement.size()) ||
+        (opaque_data_size == nullptr) || (*opaque_data_size < opaque.size()))
+    {
+        return LIBSPDM_STATUS_INVALID_PARAMETER;
+    }
+    std::copy(transcript.measurement.begin(), transcript.measurement.end(),
+              static_cast<uint8_t*>(measurement_record));
+    std::copy(opaque.begin(), opaque.end(), static_cast<uint8_t*>(opaque_data));
+    *measurement_record_length = transcript.measurement.size();
+    *opaque_data_size = opaque.size();
+
     appendToMessageLog(spdm_context, transcript.request);
     appendToMessageLog(spdm_context, transcript.response);
 
     if (number_of_blocks != nullptr)
     {
-        *number_of_blocks = 1;
-    }
-    if (measurement_record_length != nullptr)
-    {
-        *measurement_record_length = 0;
+        *number_of_blocks = transcript.measurementBlockCount;
     }
     return LIBSPDM_STATUS_SUCCESS;
 }

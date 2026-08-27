@@ -207,6 +207,14 @@ class ComponentIntegrityTest : public ::testing::Test
         return getSignedMeasurements(indices, nonce);
     }
 
+    std::vector<uint8_t> captureOpaqueData(const std::vector<size_t>& indices)
+    {
+        beginTranscriptLog(std::max<size_t>(indices.size(), 1));
+        initializeSpdmConnection();
+        suspendTranscriptLog();
+        return componentIntegrity->getSignedMeasurements(indices, "", 0).second;
+    }
+
     /** @brief Fill the transcript mock with recognizable messages. */
     static void setTranscriptMessages(uint16_t spdmVersion)
     {
@@ -482,6 +490,69 @@ TEST_F(ComponentIntegrityTest, ValidateNonceTest)
         sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument);
 }
 
+TEST_F(ComponentIntegrityTest, OpaqueDataMayBeEmpty)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->setAsCurrentMock();
+    setTranscriptMessages(0x1200);
+    EXPECT_TRUE(captureOpaqueData({1}).empty());
+}
+
+TEST_F(ComponentIntegrityTest, OpaqueDataPreservesBinaryBytes)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->setAsCurrentMock();
+    setTranscriptMessages(0x1200);
+    mockTranscript().opaqueData = {0x00, 0xFF, 0x80, 0x01};
+    EXPECT_EQ(captureOpaqueData({1}), mockTranscript().opaqueData);
+}
+
+TEST_F(ComponentIntegrityTest, OpaqueDataUsesFinalSignedResponse)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->setAsCurrentMock();
+    setTranscriptMessages(0x1200);
+    mockTranscript().unsignedOpaqueData = {0x11, 0x22};
+    mockTranscript().opaqueData = {0x00, 0xFF};
+    EXPECT_EQ(captureOpaqueData({1, 2}), mockTranscript().opaqueData);
+    EXPECT_EQ(mockTranscript().requestAttributes, (std::vector<uint8_t>{0, 1}));
+}
+
+TEST_F(ComponentIntegrityTest, EmptySignedOpaqueDataDoesNotReuseUnsignedData)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->setAsCurrentMock();
+    setTranscriptMessages(0x1200);
+    mockTranscript().unsignedOpaqueData = {0x11, 0x22};
+    EXPECT_TRUE(captureOpaqueData({1, 2}).empty());
+}
+
+TEST_F(ComponentIntegrityTest, FailedMeasurementDoesNotReturnStaleOpaqueData)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->setAsCurrentMock();
+    setTranscriptMessages(0x1200);
+    mockTranscript().opaqueData = {0x00, 0xFF};
+    EXPECT_EQ(captureOpaqueData({1}), mockTranscript().opaqueData);
+    mockTranscript().measurementStatus = LIBSPDM_STATUS_VERIF_FAIL;
+    EXPECT_THROW(captureOpaqueData({1}), std::runtime_error);
+}
+
+TEST_F(ComponentIntegrityTest, EmptyIndicesRequestCompleteRecord)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->setAsCurrentMock();
+    setTranscriptMessages(0x1200);
+    EXPECT_FALSE(captureTranscript({}, "").empty());
+    EXPECT_EQ(mockTranscript().measurementOperations,
+              (std::vector<uint8_t>{255}));
+}
+
+TEST_F(ComponentIntegrityTest, InitialTimestampHasNoEvidence)
+{
+    EXPECT_EQ(componentIntegrity->last_updated(), 0U);
+}
+
 TEST_F(ComponentIntegrityTest, ValidateSlotIdTest)
 {
     EXPECT_NO_THROW(validateSlotId(0));
@@ -593,6 +664,11 @@ TEST_F(ComponentIntegrityTest, MessageLogOffAfterFailedMeasurementTest)
     libspdm_append_msg_log(static_cast<libspdm_context_t*>(context),
                            later.data(), later.size());
     EXPECT_EQ(libspdm_get_msg_log_size(context), 0U);
+    EXPECT_EQ(componentIntegrity->last_updated(), 0U);
+    using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+        attestation::IdentityAuthentication::VerificationStatus;
+    EXPECT_EQ(componentIntegrity->responder_verification_status(),
+              VerificationStatus::Failed);
 }
 
 TEST_F(ComponentIntegrityTest, TranscriptLogScalesWithRequestCountTest)
