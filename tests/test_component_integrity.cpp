@@ -192,7 +192,8 @@ class ComponentIntegrityTest : public ::testing::Test
     std::string getSignedMeasurements(const std::vector<size_t>& indices,
                                       const std::string& nonce)
     {
-        return componentIntegrity->getSignedMeasurements(indices, nonce, 0);
+        return componentIntegrity->getSignedMeasurements(indices, nonce, 0)
+            .first;
     }
 
     /** @brief Run the transcript part of SPDMGetSignedMeasurements the way

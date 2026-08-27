@@ -63,9 +63,8 @@ void ComponentIntegrity::initializeProperties()
 
     enabled(true);
 
-    last_updated(std::chrono::duration_cast<std::chrono::milliseconds>(
-                     std::chrono::system_clock::now().time_since_epoch())
-                     .count());
+    // No evidence exists until a signed measurement request succeeds.
+    last_updated(0);
 }
 
 void ComponentIntegrity::validateMeasurementIndices(
@@ -375,9 +374,10 @@ std::vector<uint8_t> ComponentIntegrity::takeTranscriptLog()
             transcriptBuffer.begin() + static_cast<ptrdiff_t>(size)};
 }
 
-std::string ComponentIntegrity::getSignedMeasurements(
-    const std::vector<size_t>& measurementIndices, const std::string& nonce,
-    size_t slotId)
+std::pair<std::string, std::vector<uint8_t>>
+    ComponentIntegrity::getSignedMeasurements(
+        const std::vector<size_t>& measurementIndices, const std::string& nonce,
+        size_t slotId)
 {
     lg2::debug(
         "Getting signed measurements for slot {SLOTID}, nonce length: {NONCE_LEN}",
@@ -410,6 +410,7 @@ std::string ComponentIntegrity::getSignedMeasurements(
 
     // Buffer to collect all measurements
     std::vector<uint8_t> allMeasurements;
+    std::vector<uint8_t> finalOpaqueData;
 
     resumeTranscriptLog();
 
@@ -420,25 +421,33 @@ std::string ComponentIntegrity::getSignedMeasurements(
         const auto idx = indicesToProcess[i];
         const bool requestSignature = (i + 1 == indicesToProcess.size());
 
-        auto [measurementData, numberOfBlocks] =
+        auto [measurementData, numberOfBlocks, opaqueData] =
             getSingleMeasurement(idx, slotId, requestSignature, nonceBytes);
         processMeasurementData(idx, measurementData, allMeasurements,
                                numberOfBlocks);
+        if (requestSignature)
+        {
+            finalOpaqueData = std::move(opaqueData);
+        }
     }
 
     // The signed transcript, not the bare record: a verifier needs the exact
     // bytes the responder signed.
     std::vector<uint8_t> transcript = takeTranscriptLog();
+    if (transcript.empty())
+    {
+        throw std::runtime_error("No SPDM evidence was captured");
+    }
     std::string base64Measurement = spdm::base64Encode(transcript);
 
     lg2::debug(
         "Successfully retrieved {COUNT} measurements, total size: {SIZE} bytes",
         "COUNT", indicesToProcess.size(), "SIZE", allMeasurements.size());
 
-    return base64Measurement;
+    return {std::move(base64Measurement), std::move(finalOpaqueData)};
 }
 
-std::pair<std::vector<uint8_t>, uint8_t>
+std::tuple<std::vector<uint8_t>, uint8_t, std::vector<uint8_t>>
     ComponentIntegrity::getSingleMeasurement(
         size_t measurementIndex, size_t slotId, bool requestSignature,
         const std::vector<uint8_t>& nonceBytes)
@@ -451,6 +460,8 @@ std::pair<std::vector<uint8_t>, uint8_t>
     uint32_t measurementSize = measurementBuffer.size();
     uint8_t contentChanged = 0;
     uint8_t numberOfBlocks = 0;
+    std::vector<uint8_t> opaqueData(1024);
+    size_t opaqueDataSize = opaqueData.size();
 
     uint8_t requestAttribute =
         requestSignature
@@ -464,11 +475,10 @@ std::pair<std::vector<uint8_t>, uint8_t>
         requestAttribute, measurementOperation, static_cast<uint8_t>(slotId),
         &contentChanged, &numberOfBlocks, &measurementSize,
         measurementBuffer.data(),
-        nonceBytes.empty() ? nullptr : nonceBytes.data(),
-        nullptr,  // requester_nonce out - the caller already has it
-        nullptr,  // responder_nonce out
-        nullptr,  // opaque_data
-        nullptr); // opaque_data_size
+        (requestSignature && !nonceBytes.empty()) ? nonceBytes.data() : nullptr,
+        nullptr, // requester_nonce out - the caller already has it
+        nullptr, // responder_nonce out
+        opaqueData.data(), &opaqueDataSize);
 
     if (LIBSPDM_STATUS_IS_ERROR(status))
     {
@@ -478,10 +488,17 @@ std::pair<std::vector<uint8_t>, uint8_t>
         throw std::runtime_error("Failed to get signed measurements");
     }
 
-    // Resize buffer to actual measurement size
-    measurementBuffer.resize(measurementSize);
+    if (opaqueDataSize > opaqueData.size())
+    {
+        throw std::runtime_error("Invalid SPDM opaque data size");
+    }
 
-    return {measurementBuffer, numberOfBlocks};
+    // Resize buffers to the actual response sizes.
+    measurementBuffer.resize(measurementSize);
+    opaqueData.resize(opaqueDataSize);
+
+    return {std::move(measurementBuffer), numberOfBlocks,
+            std::move(opaqueData)};
 }
 
 void ComponentIntegrity::processMeasurementData(
@@ -555,7 +572,7 @@ auto ComponentIntegrity::method_call(spdm_get_signed_measurements_t,
         auto [certPem, certRaw, certLeaf] = getCertificate(slotId);
 
         // Get signed measurements using libspdm
-        std::string signedMeas =
+        auto [signedMeas, opaqueData] =
             getSignedMeasurements(measurementIndices, nonce, slotId);
 
         std::string chassisId = sdbusplus::object_path(path).filename();
@@ -569,9 +586,14 @@ auto ComponentIntegrity::method_call(spdm_get_signed_measurements_t,
         auto versionStr = getNegotiatedVersion();
         type_version(versionStr);
 
+        updateLastUpdateTime();
+        using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+            attestation::IdentityAuthentication::VerificationStatus;
+        responder_verification_status(VerificationStatus::Success);
+
         co_return std::make_tuple(objectPath, hashAlgoStr, certPem, signedMeas,
                                   signAlgoStr, versionStr,
-                                  std::vector<uint8_t>{});
+                                  std::move(opaqueData));
     }
     catch (
         const sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument&)
@@ -581,6 +603,10 @@ auto ComponentIntegrity::method_call(spdm_get_signed_measurements_t,
     catch (const std::exception& e)
     {
         lg2::error("SPDM Get Signed Measurements FAILED: {ERROR}", "ERROR", e);
+        last_updated(0);
+        using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+            attestation::IdentityAuthentication::VerificationStatus;
+        responder_verification_status(VerificationStatus::Failed);
         // Report the failure as the error MeasurementSet declares; an empty
         // reply would look like a successful measurement to the caller.
         throw sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure();

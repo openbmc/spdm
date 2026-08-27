@@ -107,6 +107,7 @@ class ComponentIntegrity :
      *         - Signed measurements base64 string
      *         - Signing algorithm string
      *         - Version string
+     *         - Opaque data bytes from the final signed response
      * @throws xyz::openbmc_project::Common::Error::InvalidArgument on invalid
      * input
      * @throws xyz::openbmc_project::Common::Error::InternalFailure on errors
@@ -223,9 +224,9 @@ class ComponentIntegrity :
      * @param measurementIndices Vector of measurement indices to request
      * @param nonce Nonce for freshness
      * @param slotId Certificate slot ID for signing
-     * @return Base64 encoded signed measurements
+     * @return Base64 encoded transcript and final signed response opaque data
      */
-    std::string getSignedMeasurements(
+    std::pair<std::string, std::vector<uint8_t>> getSignedMeasurements(
         const std::vector<size_t>& measurementIndices, const std::string& nonce,
         size_t slotId);
 
@@ -233,11 +234,12 @@ class ComponentIntegrity :
      * @brief Get a single measurement from SPDM device
      * @param measurementIndex Measurement index to request
      * @param slotId Certificate slot ID for signing
-     * @return Pair of measurement data and number of blocks
+     * @return Tuple of measurement data, number of blocks and opaque data
      */
-    std::pair<std::vector<uint8_t>, uint8_t> getSingleMeasurement(
-        size_t measurementIndex, size_t slotId, bool requestSignature,
-        const std::vector<uint8_t>& nonceBytes);
+    std::tuple<std::vector<uint8_t>, uint8_t, std::vector<uint8_t>>
+        getSingleMeasurement(size_t measurementIndex, size_t slotId,
+                             bool requestSignature,
+                             const std::vector<uint8_t>& nonceBytes);
 
     /** @brief Start capturing the transcript. Call before init_connection.
      *  @param measurementRequestCount Number of GET_MEASUREMENTS exchanges.
