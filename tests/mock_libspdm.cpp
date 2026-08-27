@@ -41,6 +41,14 @@ struct MockSpdmData
     uint8_t mockDigestBuffer[48] = {0xAA, 0xBB, 0xCC,
                                     0xDD}; // 48-byte digest, rest will be 0
     std::vector<uint8_t> mockCertChain = {};
+    libspdm_return_t getMeasurementStatus = LIBSPDM_STATUS_SUCCESS;
+    std::vector<uint8_t> mockMeasurement = {0xDE, 0xAD};
+    uint8_t mockMeasurementBlockCount = 1;
+    uint8_t lastMeasurementRequestAttribute = 0;
+    uint8_t lastMeasurementOperation = 0;
+    std::vector<uint8_t> lastRequesterNonce = {};
+    std::vector<uint8_t> mockOpaqueData;
+    std::vector<uint8_t> mockUnsignedOpaqueData;
 };
 
 // Global mock data (stored by value, not pointer)
@@ -60,6 +68,25 @@ extern "C" void set_mock_spdm_data(MockSpdmData* data)
     {
         g_mockDataValid = false;
     }
+}
+
+extern "C" uint8_t get_mock_measurement_request_attribute()
+{
+    return g_mockData.lastMeasurementRequestAttribute;
+}
+
+extern "C" uint8_t get_mock_measurement_operation()
+{
+    return g_mockData.lastMeasurementOperation;
+}
+
+extern "C" uint8_t get_mock_requester_nonce_byte(size_t index)
+{
+    if (index >= g_mockData.lastRequesterNonce.size())
+    {
+        return 0;
+    }
+    return g_mockData.lastRequesterNonce[index];
 }
 
 // Function to set the real libspdm function pointers
@@ -177,4 +204,69 @@ extern "C" size_t libspdm_get_hash_size(uint32_t base_hash_algo)
     (void)base_hash_algo;
     // Always return 48 for the mock
     return 48;
+}
+
+extern "C" libspdm_return_t libspdm_get_measurement_ex(
+    void* spdm_context, const uint32_t* session_id, uint8_t request_attribute,
+    uint8_t measurement_operation, uint8_t slot_id, uint8_t* content_changed,
+    uint8_t* number_of_blocks, uint32_t* measurement_record_length,
+    void* measurement_record, const void* requester_nonce_in,
+    void* requester_nonce, void* responder_nonce, void* opaque_data,
+    size_t* opaque_data_size)
+{
+    (void)session_id;
+    (void)slot_id;
+    (void)requester_nonce;
+    (void)responder_nonce;
+
+    if (!g_mockDataValid || (g_mockData.spdmContext != spdm_context))
+    {
+        return LIBSPDM_STATUS_INVALID_PARAMETER;
+    }
+
+    g_mockData.lastMeasurementRequestAttribute = request_attribute;
+    g_mockData.lastMeasurementOperation = measurement_operation;
+    g_mockData.lastRequesterNonce.clear();
+    if (requester_nonce_in)
+    {
+        const auto* nonce = static_cast<const uint8_t*>(requester_nonce_in);
+        g_mockData.lastRequesterNonce.assign(nonce, nonce + 32);
+    }
+    if (content_changed)
+    {
+        *content_changed = 0;
+    }
+    if (number_of_blocks)
+    {
+        *number_of_blocks = g_mockData.mockMeasurementBlockCount;
+    }
+    if (measurement_record && measurement_record_length)
+    {
+        const size_t length =
+            std::min(static_cast<size_t>(*measurement_record_length),
+                     g_mockData.mockMeasurement.size());
+        std::copy(g_mockData.mockMeasurement.begin(),
+                  g_mockData.mockMeasurement.begin() + length,
+                  static_cast<uint8_t*>(measurement_record));
+        *measurement_record_length = static_cast<uint32_t>(length);
+    }
+    const auto& opaqueData = ((request_attribute & 0x01) != 0)
+                                 ? g_mockData.mockOpaqueData
+                                 : g_mockData.mockUnsignedOpaqueData;
+    if (!opaque_data_size)
+    {
+        return LIBSPDM_STATUS_INVALID_PARAMETER;
+    }
+    if ((opaqueData.size() > *opaque_data_size) ||
+        (!opaqueData.empty() && !opaque_data))
+    {
+        return LIBSPDM_STATUS_INVALID_PARAMETER;
+    }
+    if (!opaqueData.empty())
+    {
+        std::copy(opaqueData.begin(), opaqueData.end(),
+                  static_cast<uint8_t*>(opaque_data));
+    }
+    *opaque_data_size = opaqueData.size();
+    return g_mockData.getMeasurementStatus;
 }

@@ -29,8 +29,19 @@ struct MockSpdmData
                                     0xDD}; // 48-byte digest, rest will be 0
     // For certificate chain mock
     std::vector<uint8_t> mockCertChain;
+    uint32_t getMeasurementStatus = 0;
+    std::vector<uint8_t> mockMeasurement = {0xDE, 0xAD};
+    uint8_t mockMeasurementBlockCount = 1;
+    uint8_t lastMeasurementRequestAttribute = 0;
+    uint8_t lastMeasurementOperation = 0;
+    std::vector<uint8_t> lastRequesterNonce;
+    std::vector<uint8_t> mockOpaqueData;
+    std::vector<uint8_t> mockUnsignedOpaqueData;
 };
 void set_mock_spdm_data(MockSpdmData* data);
+uint8_t get_mock_measurement_request_attribute();
+uint8_t get_mock_measurement_operation();
+uint8_t get_mock_requester_nonce_byte(size_t index);
 }
 
 PHOSPHOR_LOG2_USING;
@@ -58,6 +69,11 @@ class MockSpdmTransport : public SpdmTransport
 
     // For certificate chain mock
     std::vector<uint8_t> mockCertChain;
+
+    // For measurement-response mock
+    libspdm_return_t getMeasurementStatus = LIBSPDM_STATUS_SUCCESS;
+    std::vector<uint8_t> mockOpaqueData;
+    std::vector<uint8_t> mockUnsignedOpaqueData;
 
     // Override methods for testing
     bool initialize() override
@@ -93,6 +109,9 @@ class MockSpdmTransport : public SpdmTransport
                   mockData.mockDigestBuffer);
         // Copy certificate chain data into the mock data struct
         mockData.mockCertChain = this->mockCertChain;
+        mockData.getMeasurementStatus = this->getMeasurementStatus;
+        mockData.mockOpaqueData = this->mockOpaqueData;
+        mockData.mockUnsignedOpaqueData = this->mockUnsignedOpaqueData;
         set_mock_spdm_data(&mockData);
     }
 
@@ -182,7 +201,117 @@ class ComponentIntegrityTest : public ::testing::Test
     {
         return componentIntegrity->getCertificate(slotId);
     }
+
+    std::string getSignedMeasurements(const std::vector<size_t>& indices,
+                                      const std::string& nonce, size_t slotId)
+    {
+        return getSignedMeasurementsWithOpaqueData(indices, nonce, slotId)
+            .first;
+    }
+
+    std::pair<std::string, std::vector<uint8_t>>
+        getSignedMeasurementsWithOpaqueData(const std::vector<size_t>& indices,
+                                            const std::string& nonce,
+                                            size_t slotId)
+    {
+        return componentIntegrity->getSignedMeasurements(indices, nonce,
+                                                         slotId);
+    }
+
+    void prepareMeasurementMock()
+    {
+        auto* context =
+            reinterpret_cast<libspdm_context_t*>(makeDummyContext());
+        context->connection_info.algorithm.base_hash_algo =
+            SPDM_ALGORITHMS_BASE_HASH_ALGO_TPM_ALG_SHA_384;
+        mockTransport->setSpdmContext(context);
+        mockTransport->setAsCurrentMock();
+    }
 };
+
+TEST_F(ComponentIntegrityTest,
+       SignedMeasurementUsesCallerNonceAndRequestsSignature)
+{
+    auto* context = reinterpret_cast<libspdm_context_t*>(makeDummyContext());
+    context->connection_info.algorithm.base_hash_algo =
+        SPDM_ALGORITHMS_BASE_HASH_ALGO_TPM_ALG_SHA_384;
+    mockTransport->setSpdmContext(context);
+    mockTransport->setAsCurrentMock();
+
+    const std::string nonce(64, 'A');
+    EXPECT_EQ(getSignedMeasurements({}, nonce, 0), "3q0=");
+    EXPECT_EQ(get_mock_measurement_operation(), 255);
+    EXPECT_EQ(get_mock_measurement_request_attribute(),
+              SPDM_GET_MEASUREMENTS_REQUEST_ATTRIBUTES_GENERATE_SIGNATURE);
+    EXPECT_EQ(get_mock_requester_nonce_byte(0), 0xAA);
+    EXPECT_EQ(get_mock_requester_nonce_byte(31), 0xAA);
+}
+
+TEST_F(ComponentIntegrityTest, SignedMeasurementReturnsEmptyOpaqueData)
+{
+    prepareMeasurementMock();
+
+    const auto [measurements, opaqueData] =
+        getSignedMeasurementsWithOpaqueData({}, "", 0);
+    EXPECT_EQ(measurements, "3q0=");
+    EXPECT_TRUE(opaqueData.empty());
+}
+
+TEST_F(ComponentIntegrityTest, SignedMeasurementPreservesBinaryOpaqueData)
+{
+    mockTransport->mockOpaqueData = {0x00, 0xA5, 0xFF, 0x00};
+    prepareMeasurementMock();
+
+    const auto [measurements, opaqueData] =
+        getSignedMeasurementsWithOpaqueData({}, "", 0);
+    EXPECT_EQ(measurements, "3q0=");
+    EXPECT_EQ(opaqueData, mockTransport->mockOpaqueData);
+}
+
+TEST_F(ComponentIntegrityTest, OnlyFinalSignedResponseSuppliesOpaqueData)
+{
+    mockTransport->mockUnsignedOpaqueData = {0x11, 0x22};
+    mockTransport->mockOpaqueData = {0x00, 0xA5, 0xFF};
+    prepareMeasurementMock();
+
+    const auto result = getSignedMeasurementsWithOpaqueData({1, 2}, "", 0);
+    EXPECT_EQ(result.second, mockTransport->mockOpaqueData);
+    EXPECT_EQ(get_mock_measurement_operation(), 2);
+    EXPECT_EQ(get_mock_measurement_request_attribute(),
+              SPDM_GET_MEASUREMENTS_REQUEST_ATTRIBUTES_GENERATE_SIGNATURE);
+}
+
+TEST_F(ComponentIntegrityTest, EmptyFinalOpaqueDataDoesNotReuseEarlierPayload)
+{
+    mockTransport->mockUnsignedOpaqueData = {0x11, 0x22};
+    prepareMeasurementMock();
+
+    const auto result = getSignedMeasurementsWithOpaqueData({1, 2}, "", 0);
+    EXPECT_TRUE(result.second.empty());
+}
+
+TEST_F(ComponentIntegrityTest, FailedSignedMeasurementDoesNotReturnOpaqueData)
+{
+    mockTransport->mockOpaqueData = {0x00, 0xA5, 0xFF};
+    mockTransport->getMeasurementStatus = LIBSPDM_STATUS_INVALID_PARAMETER;
+    prepareMeasurementMock();
+
+    EXPECT_THROW(getSignedMeasurementsWithOpaqueData({}, "", 0),
+                 std::runtime_error);
+}
+
+TEST_F(ComponentIntegrityTest, SignedMeasurementRejectsMalformedNonce)
+{
+    auto* context = reinterpret_cast<libspdm_context_t*>(makeDummyContext());
+    context->connection_info.algorithm.base_hash_algo =
+        SPDM_ALGORITHMS_BASE_HASH_ALGO_TPM_ALG_SHA_384;
+    mockTransport->setSpdmContext(context);
+    mockTransport->setAsCurrentMock();
+
+    EXPECT_THROW(
+        getSignedMeasurements({}, std::string(64, 'G'), 0),
+        sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument);
+}
 
 // Test validateMeasurementIndices with valid indices
 TEST_F(ComponentIntegrityTest, ValidateMeasurementIndicesValidTest)
