@@ -8,12 +8,9 @@
 #include <cstdio>
 #include <vector>
 
-// Include libspdm types
 extern "C"
 {
-typedef uint32_t libspdm_return_t;
-#define LIBSPDM_STATUS_SUCCESS 0
-#define LIBSPDM_STATUS_INVALID_PARAMETER 1
+#include "library/spdm_return_status.h"
 }
 
 // Function pointer types for libspdm functions
@@ -217,9 +214,14 @@ extern "C" libspdm_return_t __wrap_libspdm_get_data(
     (void)data_type;
     (void)parameter;
     uint16_t version = spdm::test::mockTranscript().spdmVersion;
-    if (data == nullptr || data_size == nullptr || *data_size < sizeof(version))
+    if ((data == nullptr) || (data_size == nullptr))
     {
         return LIBSPDM_STATUS_INVALID_PARAMETER;
+    }
+    if (*data_size < sizeof(version))
+    {
+        *data_size = sizeof(version);
+        return LIBSPDM_STATUS_BUFFER_TOO_SMALL;
     }
     std::copy_n(reinterpret_cast<const uint8_t*>(&version), sizeof(version),
                 static_cast<uint8_t*>(data));
@@ -238,17 +240,14 @@ extern "C" libspdm_return_t __wrap_libspdm_get_measurement_ex(
     size_t* opaque_data_size)
 {
     (void)session_id;
-    (void)measurement_operation;
     (void)slot_id;
     (void)content_changed;
-    (void)measurement_record;
     (void)requester_nonce;
     (void)responder_nonce;
-    (void)opaque_data;
-    (void)opaque_data_size;
 
     auto& transcript = spdm::test::mockTranscript();
     transcript.requestAttributes.push_back(request_attribute);
+    transcript.measurementOperations.push_back(measurement_operation);
     const auto* nonce = static_cast<const uint8_t*>(requester_nonce_in);
     transcript.nonces.emplace_back();
     if (nonce != nullptr)
@@ -256,16 +255,43 @@ extern "C" libspdm_return_t __wrap_libspdm_get_measurement_ex(
         transcript.nonces.back().assign(nonce, nonce + 32);
     }
 
+    if (transcript.measurementStatus != LIBSPDM_STATUS_SUCCESS)
+    {
+        return transcript.measurementStatus;
+    }
+
+    const auto& opaque = ((request_attribute & 1U) != 0)
+                             ? transcript.opaqueData
+                             : transcript.unsignedOpaqueData;
+    if ((measurement_record_length == nullptr) || (opaque_data_size == nullptr))
+    {
+        return LIBSPDM_STATUS_INVALID_PARAMETER;
+    }
+    const bool bufferTooSmall =
+        (*measurement_record_length < transcript.measurement.size()) ||
+        (*opaque_data_size < opaque.size()) ||
+        (transcript.requireOpaqueBufferSlack &&
+         (*opaque_data_size == opaque.size()));
+    *measurement_record_length = transcript.measurement.size();
+    *opaque_data_size = opaque.size();
+    if (bufferTooSmall)
+    {
+        return LIBSPDM_STATUS_BUFFER_TOO_SMALL;
+    }
+    if (((measurement_record == nullptr) && !transcript.measurement.empty()) ||
+        ((opaque_data == nullptr) && !opaque.empty()))
+    {
+        return LIBSPDM_STATUS_INVALID_PARAMETER;
+    }
+    std::copy(transcript.measurement.begin(), transcript.measurement.end(),
+              static_cast<uint8_t*>(measurement_record));
+    std::copy(opaque.begin(), opaque.end(), static_cast<uint8_t*>(opaque_data));
     appendToMessageLog(spdm_context, transcript.request);
     appendToMessageLog(spdm_context, transcript.response);
 
     if (number_of_blocks != nullptr)
     {
-        *number_of_blocks = 1;
-    }
-    if (measurement_record_length != nullptr)
-    {
-        *measurement_record_length = 0;
+        *number_of_blocks = transcript.measurementBlockCount;
     }
     return LIBSPDM_STATUS_SUCCESS;
 }
