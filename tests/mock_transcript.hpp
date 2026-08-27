@@ -24,6 +24,14 @@ struct MockTranscript
     /** @brief Recorded per libspdm_get_measurement_ex() call. */
     std::vector<uint8_t> requestAttributes;
     std::vector<std::vector<uint8_t>> nonces;
+    std::vector<uint8_t> measurementOperations;
+    uint32_t measurementStatus = 0;
+    /** @brief Emulate libspdm 3.8.2 rejecting exactly sized opaque buffers. */
+    bool requireOpaqueBufferSlack = false;
+    std::vector<uint8_t> measurement;
+    uint8_t measurementBlockCount = 1;
+    std::vector<uint8_t> opaqueData;
+    std::vector<uint8_t> unsignedOpaqueData;
 };
 
 /** @brief The transcript mock shared by mock_libspdm.cpp and the tests. */
