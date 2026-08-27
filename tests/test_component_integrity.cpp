@@ -237,6 +237,36 @@ class ComponentIntegrityTest : public ::testing::Test
     }
 };
 
+TEST_F(ComponentIntegrityTest, CompleteFortyBlockRecordUsesTransportCapacity)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->setAsCurrentMock();
+    setTranscriptMessages(0x1200);
+    auto& transcript = mockTranscript();
+    transcript.measurement.assign(LIBSPDM_MAX_SPDM_MSG_SIZE, 0x5A);
+    transcript.measurementBlockCount = 40;
+    transcript.response = transcript.measurement;
+
+    std::vector<uint8_t> expected = transcript.vca;
+    expected.insert(expected.end(), transcript.request.begin(),
+                    transcript.request.end());
+    expected.insert(expected.end(), transcript.response.begin(),
+                    transcript.response.end());
+    EXPECT_EQ(captureTranscript({}, std::string(64, 'B')),
+              spdm::base64Encode(expected));
+    EXPECT_EQ(transcript.measurementOperations, (std::vector<uint8_t>{255}));
+}
+
+TEST_F(ComponentIntegrityTest, TransportMessageLimitRejectsUnsafeValues)
+{
+    EXPECT_THROW(mockTransport->setMaxSpdmMessageSize(0),
+                 std::invalid_argument);
+    EXPECT_THROW(
+        mockTransport->setMaxSpdmMessageSize(LIBSPDM_MAX_SPDM_MSG_SIZE + 1),
+        std::invalid_argument);
+    EXPECT_NO_THROW(mockTransport->setMaxSpdmMessageSize(2047));
+}
+
 // Test validateMeasurementIndices with valid indices
 TEST_F(ComponentIntegrityTest, ValidateMeasurementIndicesValidTest)
 {
