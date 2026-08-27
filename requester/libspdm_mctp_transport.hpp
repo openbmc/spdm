@@ -49,8 +49,30 @@ class SpdmMctpTransport : public SpdmTransport
      */
     bool initialize() override;
 
+    void startEvidenceCapture() override;
+    void abortEvidenceCapture() noexcept override;
+    std::vector<uint8_t> takeEvidenceCapture() override;
+
   private:
     static constexpr size_t MAX_MCTP_PACKET_SIZE = 65536;
+
+    /** Append one transport-stripped SPDM message to active evidence. */
+    void captureSpdmMessage(const void* transportMessage,
+                            size_t transportMessageSize, bool isRequester);
+
+    struct CapturedEvidenceMessage
+    {
+        std::vector<uint8_t> bytes;
+        bool isVca = false;
+    };
+
+    struct EvidenceCapture
+    {
+        bool active = false;
+        std::vector<CapturedEvidenceMessage> messages;
+    };
+
+    EvidenceCapture evidenceCapture;
 
     /**
      * @brief Allocate and initialize the SPDM context
