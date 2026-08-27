@@ -35,6 +35,8 @@ extern "C"
 #include <array>
 #include <cstdint>
 #include <memory>
+#include <stdexcept>
+#include <vector>
 
 namespace spdm
 {
@@ -131,6 +133,21 @@ class SpdmTransport
      * @return false if the SPDM context is not initialized successfully
      */
     virtual bool initialize() = 0;
+
+    /**
+     * @brief Start recording raw SPDM exchanges for attestation evidence.
+     *
+     * The returned evidence must exclude the binding transport framing.  A
+     * transport which cannot provide this must not allow callers to return
+     * decoded measurement records as signed evidence.
+     */
+    virtual void startEvidenceCapture() = 0;
+
+    /** @brief Stop capture and discard any recorded exchanges. */
+    virtual void abortEvidenceCapture() noexcept = 0;
+
+    /** @brief Stop capture and return the raw concatenated SPDM exchanges. */
+    virtual std::vector<uint8_t> takeEvidenceCapture() = 0;
 };
 
 } // namespace spdm

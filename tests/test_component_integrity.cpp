@@ -65,6 +65,15 @@ class MockSpdmTransport : public SpdmTransport
         return true;
     }
 
+    void startEvidenceCapture() override {}
+
+    void abortEvidenceCapture() noexcept override {}
+
+    std::vector<uint8_t> takeEvidenceCapture() override
+    {
+        return {};
+    }
+
     // Set this mock as the current mock for libspdm calls
     void setAsCurrentMock()
     {

@@ -6,8 +6,10 @@
 #include <phosphor-logging/lg2.hpp>
 
 #include <algorithm>
+#include <cstdint>
 #include <cstring>
 #include <stdexcept>
+#include <utility>
 
 namespace spdm
 {
@@ -43,6 +45,100 @@ bool SpdmMctpTransport::initialize()
     }
 
     return true;
+}
+
+void SpdmMctpTransport::startEvidenceCapture()
+{
+    evidenceCapture.messages.clear();
+    evidenceCapture.active = true;
+}
+
+void SpdmMctpTransport::abortEvidenceCapture() noexcept
+{
+    evidenceCapture.active = false;
+    evidenceCapture.messages.clear();
+}
+
+std::vector<uint8_t> SpdmMctpTransport::takeEvidenceCapture()
+{
+    evidenceCapture.active = false;
+    const auto* context =
+        static_cast<const libspdm_context_t*>(spdmContext.get());
+    const bool includeVca =
+        ((context != nullptr) &&
+         (context->connection_info.version >= SPDM_MESSAGE_VERSION_12));
+
+    std::vector<uint8_t> evidence;
+    for (const auto& captured : evidenceCapture.messages)
+    {
+        if (!captured.isVca || includeVca)
+        {
+            evidence.insert(evidence.end(), captured.bytes.begin(),
+                            captured.bytes.end());
+        }
+    }
+    evidenceCapture.messages.clear();
+    return evidence;
+}
+
+void SpdmMctpTransport::captureSpdmMessage(
+    const void* transportMessage, size_t transportMessageSize, bool isRequester)
+{
+    if (!evidenceCapture.active)
+    {
+        return;
+    }
+
+    // libspdm hands the device callbacks a message with the SPDM MCTP
+    // binding header.  Redfish SignedMeasurements requires SPDM exchanges,
+    // not MCTP frames, so decode a private copy before recording it.
+    std::vector<uint8_t> encoded(
+        static_cast<const uint8_t*>(transportMessage),
+        static_cast<const uint8_t*>(transportMessage) + transportMessageSize);
+    uint32_t* sessionId = nullptr;
+    bool isAppMessage = false;
+    size_t messageSize = 0;
+    void* message = nullptr;
+    libspdm_return_t status = libspdm_transport_mctp_decode_message(
+        spdmContext.get(), &sessionId, &isAppMessage, isRequester,
+        encoded.size(), encoded.data(), &messageSize, &message);
+    if (LIBSPDM_STATUS_IS_ERROR(status) || isAppMessage || (message == nullptr))
+    {
+        lg2::warning(
+            "Unable to capture SPDM evidence message, status: {STATUS}",
+            "STATUS", static_cast<uint64_t>(status));
+        return;
+    }
+
+    const auto* bytes = static_cast<const uint8_t*>(message);
+
+    if (messageSize < 2)
+    {
+        return;
+    }
+
+    // Redfish requires the VCA (VERSION, CAPABILITIES, and ALGORITHMS)
+    // exchanges for SPDM 1.2, plus the GET_MEASUREMENTS exchanges.  Do not
+    // disclose unrelated certificate or digest traffic in the evidence.
+    bool isVca = false;
+    switch (bytes[1])
+    {
+        case SPDM_GET_VERSION:
+        case SPDM_VERSION:
+        case SPDM_GET_CAPABILITIES:
+        case SPDM_CAPABILITIES:
+        case SPDM_NEGOTIATE_ALGORITHMS:
+        case SPDM_ALGORITHMS:
+            isVca = true;
+            break;
+        case SPDM_GET_MEASUREMENTS:
+        case SPDM_MEASUREMENTS:
+            break;
+        default:
+            return;
+    }
+    evidenceCapture.messages.emplace_back(
+        std::vector<uint8_t>(bytes, bytes + messageSize), isVca);
 }
 
 bool SpdmMctpTransport::allocateContext()
@@ -165,6 +261,7 @@ libspdm_return_t SpdmMctpTransport::device_send_message(
         std::vector<uint8_t> msg(
             static_cast<const uint8_t*>(message),
             static_cast<const uint8_t*>(message) + message_size);
+        transport->captureSpdmMessage(message, message_size, true);
         timeout_us_t timeoutUs = static_cast<timeout_us_t>(timeout);
         std::vector<uint8_t> mctpMessage;
         if (transport->mctpMessageTransport.encode(
@@ -216,6 +313,7 @@ libspdm_return_t SpdmMctpTransport::device_receive_message(
             lg2::error("Failed to decode MCTP message");
             return LIBSPDM_STATUS_RECEIVE_FAIL;
         }
+        transport->captureSpdmMessage(*message, *message_size, false);
         return LIBSPDM_STATUS_SUCCESS;
     }
     catch (const std::exception& e)
