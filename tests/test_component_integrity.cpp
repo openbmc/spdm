@@ -289,6 +289,53 @@ TEST_F(ComponentIntegrityTest, ReportingUpdateReplacesOnlyTrustedComponent)
     EXPECT_EQ(componentIntegrity->associations(), expected);
 }
 
+class ComponentIntegrityRecordLimitTest :
+    public ComponentIntegrityTest,
+    public ::testing::WithParamInterface<size_t>
+{};
+
+TEST_P(ComponentIntegrityRecordLimitTest,
+       CompleteFortyBlockRecordUsesTransportCapacity)
+{
+    mockTransport->setMaxSpdmMessageSize(GetParam());
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->setAsCurrentMock();
+    setTranscriptMessages(0x1200);
+    auto& transcript = mockTranscript();
+    transcript.measurement.assign(GetParam(), 0x5A);
+    transcript.measurementBlockCount = 40;
+    transcript.response = transcript.measurement;
+
+    std::vector<uint8_t> expected = transcript.vca;
+    expected.insert(expected.end(), transcript.request.begin(),
+                    transcript.request.end());
+    expected.insert(expected.end(), transcript.response.begin(),
+                    transcript.response.end());
+    EXPECT_EQ(captureTranscript({}, std::string(64, 'B')),
+              spdm::base64Encode(expected));
+    EXPECT_EQ(transcript.measurementOperations, (std::vector<uint8_t>{255}));
+}
+
+TEST_P(ComponentIntegrityRecordLimitTest,
+       CompleteRecordAboveTransportCapacityIsRejected)
+{
+    mockTransport->setMaxSpdmMessageSize(GetParam());
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->setAsCurrentMock();
+    setTranscriptMessages(0x1200);
+    auto& transcript = mockTranscript();
+    transcript.measurement.assign(GetParam() + 1, 0x5A);
+    transcript.measurementBlockCount = 40;
+    transcript.response = transcript.measurement;
+
+    EXPECT_THROW(captureTranscript({}, std::string(64, 'B')),
+                 std::runtime_error);
+    EXPECT_EQ(transcript.measurementOperations, (std::vector<uint8_t>{255}));
+}
+
+INSTANTIATE_TEST_SUITE_P(TransportCapacities, ComponentIntegrityRecordLimitTest,
+                         ::testing::Values(2047, LIBSPDM_MAX_SPDM_MSG_SIZE));
+
 // Test validateMeasurementIndices with valid indices
 TEST_F(ComponentIntegrityTest, ValidateMeasurementIndicesValidTest)
 {
