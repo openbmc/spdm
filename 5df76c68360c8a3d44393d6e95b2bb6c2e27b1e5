@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5bba992_f3c33746",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-08-31T13:26:46Z",
+      "side": 1,
+      "message": ".string() is unnecessary. lg2 should handle this natively.",
+      "revId": "5df76c68360c8a3d44393d6e95b2bb6c2e27b1e5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e5a1c95_fe113a19",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-08-31T13:26:46Z",
+      "side": 1,
+      "message": "Two exceptions handlers are identical, can we collapse them into one ?",
+      "revId": "5df76c68360c8a3d44393d6e95b2bb6c2e27b1e5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90931c81_b28e3ff6",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-08-31T13:26:46Z",
+      "side": 1,
+      "message": "Failed to load is bit confusing here, since file is loaded at this stage properly and error is more of type related here.",
+      "revId": "5df76c68360c8a3d44393d6e95b2bb6c2e27b1e5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
