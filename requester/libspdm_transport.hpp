@@ -70,8 +70,13 @@ class SpdmTransport
     /** @brief Indicates whether the send/receive buffer is currently
      * acquired. */
     bool sendReceiveBufferAcquired = false;
-    /** @brief Negotiated SPDM protocol version to use. */
-    uint8_t useVersion = SPDM_MESSAGE_VERSION_11;
+    /**
+     * @brief SPDM protocol version to use, or zero to negotiate one.
+     *
+     * Leaving this unset lets libspdm select the highest mutually supported
+     * version during connection initialization.
+     */
+    uint8_t useVersion = 0;
     /** @brief Requester capability flags to advertise. */
     uint32_t useRequesterCapabilityFlags = 0;
     /** @brief Requester slot ID used for certificate selection. */
