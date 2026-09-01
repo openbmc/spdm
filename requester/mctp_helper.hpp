@@ -31,6 +31,7 @@ extern "C"
 
 // Other system headers
 #include <arpa/inet.h>
+#include <poll.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -45,6 +46,7 @@ extern "C"
 #include <phosphor-logging/lg2.hpp>
 
 // Standard library headers
+#include <algorithm>
 #include <array>
 #include <cstdint>
 #include <cstdio>
@@ -311,9 +313,9 @@ class MctpIoClass : public IOClass
     }
 
     libspdm_return_t read(std::vector<uint8_t>& buf,
-                          timeout_us_t timeout [[maybe_unused]]) override
+                          timeout_us_t timeout) override
     {
-        return readFromSocket(buf);
+        return readFromSocket(buf, timeout);
     }
 
     /** @brief Check whether the MCTP socket is open.
@@ -384,14 +386,45 @@ class MctpIoClass : public IOClass
      * receive data from any source address.
      *
      * @param buf The buffer to store the received data.
+     * @param timeout Maximum wait time in microseconds.
      * @return LIBSPDM_STATUS_SUCCESS if the data is read successfully,
      * LIBSPDM_STATUS_RECEIVE_FAIL otherwise.
      */
-    libspdm_return_t readFromSocket(std::vector<uint8_t>& buf)
+    libspdm_return_t readFromSocket(std::vector<uint8_t>& buf,
+                                    timeout_us_t timeout)
     {
         if (!isSocketOpen())
         {
             lg2::error("Socket is not open");
+            return LIBSPDM_STATUS_RECEIVE_FAIL;
+        }
+
+        int timeoutMs = -1;
+        if (timeout != timeoutUsInfinite)
+        {
+            const auto roundedTimeoutMs =
+                (timeout / 1000) + ((timeout % 1000) != 0);
+            timeoutMs = static_cast<int>(std::min(
+                roundedTimeoutMs, static_cast<timeout_us_t>(
+                                      std::numeric_limits<int>::max())));
+        }
+        pollfd pollFd{socketFd, POLLIN, 0};
+        const int pollResult = poll(&pollFd, 1, timeoutMs);
+        if (pollResult == 0)
+        {
+            lg2::error("Timed out waiting for an MCTP response");
+            return LIBSPDM_STATUS_RECEIVE_FAIL;
+        }
+        if (pollResult < 0)
+        {
+            lg2::error("Failed to poll MCTP socket: {ERRNO}", "ERRNO",
+                       errno);
+            return LIBSPDM_STATUS_RECEIVE_FAIL;
+        }
+        if ((pollFd.revents & POLLIN) == 0)
+        {
+            lg2::error("MCTP socket reported no readable response: {EVENTS}",
+                       "EVENTS", pollFd.revents);
             return LIBSPDM_STATUS_RECEIVE_FAIL;
         }
 
