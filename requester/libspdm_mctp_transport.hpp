@@ -25,6 +25,9 @@ class SpdmMctpTransportTest;
 class SpdmMctpTransport : public SpdmTransport
 {
   public:
+    /** Default round-trip time used for SPDM request/response exchanges. */
+    static constexpr uint64_t defaultRttUs = 1'000'000;
+
     /**
      * @brief Constructor for SPDM MCTP Transport with direct MctpTransportClass
      * creation
@@ -36,10 +39,11 @@ class SpdmMctpTransport : public SpdmTransport
      *
      * @param eid MCTP Endpoint ID
      * @param maxSpdmMessageSize Maximum raw SPDM message size, at least 42.
+     * @param rttUs Request/response round-trip time in microseconds.
      */
     explicit SpdmMctpTransport(
-        uint8_t eid, size_t maxSpdmMessageSize = LIBSPDM_MAX_SPDM_MSG_SIZE) :
-        eid(eid)
+        uint8_t eid, size_t maxSpdmMessageSize = LIBSPDM_MAX_SPDM_MSG_SIZE,
+        uint64_t rttUs = defaultRttUs) : eid(eid), responseRttUs(rttUs)
     {
         setMaxSpdmMessageSize(maxSpdmMessageSize);
     }
@@ -69,6 +73,8 @@ class SpdmMctpTransport : public SpdmTransport
     friend class test::SpdmMctpTransportTest;
 
     static constexpr size_t MAX_MCTP_PACKET_SIZE = 65536;
+
+    uint64_t responseRttUs;
 
     /**
      * @brief Allocate and initialize the SPDM context
