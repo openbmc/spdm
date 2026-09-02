@@ -20,15 +20,20 @@ namespace spdm
 class SpdmMctpTransport : public SpdmTransport
 {
   public:
+    /** Default round-trip time used for SPDM request/response exchanges. */
+    static constexpr uint64_t defaultRttUs = 1'000'000;
+
     /**
      * @brief Constructor for SPDM MCTP Transport with direct MctpTransportClass
      * creation
      *
      * @param eid MCTP Endpoint ID
+     * @param maxSpdmMessageSize Maximum SPDM message size.
+     * @param rttUs Request/response round-trip time in microseconds.
      */
     explicit SpdmMctpTransport(
-        uint8_t eid, size_t maxSpdmMessageSize = LIBSPDM_MAX_SPDM_MSG_SIZE) :
-        eid(eid)
+        uint8_t eid, size_t maxSpdmMessageSize = LIBSPDM_MAX_SPDM_MSG_SIZE,
+        uint64_t rttUs = defaultRttUs) : eid(eid), responseRttUs(rttUs)
     {
         setMaxSpdmMessageSize(maxSpdmMessageSize);
     }
@@ -78,6 +83,7 @@ class SpdmMctpTransport : public SpdmTransport
     };
 
     EvidenceCapture evidenceCapture;
+    uint64_t responseRttUs;
 
     /**
      * @brief Allocate and initialize the SPDM context

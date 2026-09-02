@@ -223,6 +223,9 @@ bool SpdmMctpTransport::configureContext()
     libspdm_set_data(spdmContext.get(), LIBSPDM_DATA_CAPABILITY_CT_EXPONENT,
                      &parameter, &data8, sizeof(data8));
 
+    libspdm_set_data(spdmContext.get(), LIBSPDM_DATA_CAPABILITY_RTT_US,
+                     &parameter, &responseRttUs, sizeof(responseRttUs));
+
     data8 = supportMeasurementSpec;
     libspdm_set_data(spdmContext.get(), LIBSPDM_DATA_MEASUREMENT_SPEC,
                      &parameter, &data8, sizeof(data8));
