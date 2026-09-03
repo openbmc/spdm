@@ -145,19 +145,6 @@ bool libspdm_measurement_extension_log_collection(
 }
 #endif /* LIBSPDM_ENABLE_CAPABILITY_MEL_CAP */
 
-#if LIBSPDM_ENABLE_CAPABILITY_MUT_AUTH_CAP
-bool libspdm_requester_data_sign(
-    void* /* spdm_context */, spdm_version_number_t /* spdm_version */,
-    uint8_t /* key_pair_id */, uint8_t /* op_code */,
-    uint16_t /* req_base_asym_alg */, uint32_t /* req_pqc_asym_alg */,
-    uint32_t /* base_hash_algo */, bool /* is_data_hash */,
-    const uint8_t* /* message */, size_t /* message_size */,
-    uint8_t* /* signature */, size_t* /* sig_size */)
-{
-    return false;
-}
-#endif /* LIBSPDM_ENABLE_CAPABILITY_MUT_AUTH_CAP */
-
 /**
  * @brief Stub implementation of the libspdm responder data signing callback.
  * @details Always returns false; signing is not supported in this stub.

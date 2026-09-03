@@ -86,6 +86,8 @@ spdmd_src = [
     'requester/libspdm_tcp_transport.cpp',
     'requester/spdm_session_config.cpp',
     'requester/spdm_session.cpp',
+    'requester/spdm_local_cert.cpp',
+    'requester/spdm_requester_secret_lib.cpp',
 ]
 
 spdmd_lib = static_library(

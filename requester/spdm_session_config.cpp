@@ -11,6 +11,7 @@
 #include <iterator>
 #include <optional>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 namespace spdm
@@ -103,41 +104,6 @@ libspdm_return_t applyVersionConfig(void* ctx, SpdmTransport& transport,
     return LIBSPDM_STATUS_SUCCESS;
 }
 
-/// Map a negotiated base_asym_algo bit to the spdm-emu sample-key folder name.
-const char* asymAlgoSubdir(uint32_t baseAsymAlgo)
-{
-    switch (baseAsymAlgo)
-    {
-        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSASSA_2048:
-        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSAPSS_2048:
-            return "rsa2048";
-        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSASSA_3072:
-        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSAPSS_3072:
-            return "rsa3072";
-        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSASSA_4096:
-        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSAPSS_4096:
-            return "rsa4096";
-        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_ECDSA_ECC_NIST_P256:
-            return "ecp256";
-        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_ECDSA_ECC_NIST_P384:
-            return "ecp384";
-        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_ECDSA_ECC_NIST_P521:
-            return "ecp521";
-        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_SM2_ECC_SM2_P256:
-            return "sm2";
-#ifdef SPDM_ALGORITHMS_BASE_ASYM_ALGO_EDDSA_ED25519
-        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_EDDSA_ED25519:
-            return "ed25519";
-#endif
-#ifdef SPDM_ALGORITHMS_BASE_ASYM_ALGO_EDDSA_ED448
-        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_EDDSA_ED448:
-            return "ed448";
-#endif
-        default:
-            return nullptr;
-    }
-}
-
 uint32_t getNegotiatedAsymAlgo(void* ctx)
 {
     libspdm_data_parameter_t p{};
@@ -192,6 +158,41 @@ std::optional<CertLoadResult> loadPeerRootCert(void* ctx,
 
 } // namespace
 
+/// Map a negotiated base_asym_algo bit to the spdm-emu sample-key folder name.
+const char* asymAlgoSubdir(uint32_t baseAsymAlgo)
+{
+    switch (baseAsymAlgo)
+    {
+        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSASSA_2048:
+        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSAPSS_2048:
+            return "rsa2048";
+        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSASSA_3072:
+        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSAPSS_3072:
+            return "rsa3072";
+        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSASSA_4096:
+        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSAPSS_4096:
+            return "rsa4096";
+        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_ECDSA_ECC_NIST_P256:
+            return "ecp256";
+        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_ECDSA_ECC_NIST_P384:
+            return "ecp384";
+        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_ECDSA_ECC_NIST_P521:
+            return "ecp521";
+        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_SM2_ECC_SM2_P256:
+            return "sm2";
+#ifdef SPDM_ALGORITHMS_BASE_ASYM_ALGO_EDDSA_ED25519
+        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_EDDSA_ED25519:
+            return "ed25519";
+#endif
+#ifdef SPDM_ALGORITHMS_BASE_ASYM_ALGO_EDDSA_ED448
+        case SPDM_ALGORITHMS_BASE_ASYM_ALGO_EDDSA_ED448:
+            return "ed448";
+#endif
+        default:
+            return nullptr;
+    }
+}
+
 libspdm_return_t applySecureSessionConfig(SpdmTransport& transport,
                                           const SecureSessionConfig& cfg)
 {
@@ -233,8 +234,8 @@ libspdm_return_t applySecureSessionConfig(SpdmTransport& transport,
         return st;
     }
 
-    st = setDataAndCheck(ctx, LIBSPDM_DATA_REQ_BASE_ASYM_ALG, cfg.reqAsymAlg,
-                         "REQ_BASE_ASYM_ALG");
+    st = setDataAndCheck(ctx, LIBSPDM_DATA_REQ_BASE_ASYM_ALG,
+                         transport.supportReqAsymAlgo, "REQ_BASE_ASYM_ALG");
     if (LIBSPDM_STATUS_IS_ERROR(st))
     {
         return st;
@@ -275,6 +276,15 @@ libspdm_return_t installPeerRootCert(SpdmTransport& transport,
         return LIBSPDM_STATUS_INVALID_PARAMETER;
     }
 
+    // libspdm stores the pointer without copying and appends a new provision
+    // entry on every call, so the buffer must outlive the context and must be
+    // installed exactly once. The cert source is static config, so a populated
+    // storage buffer means this already ran for this transport.
+    if (!transport.peerRootCertStorage.empty())
+    {
+        return LIBSPDM_STATUS_SUCCESS;
+    }
+
     std::optional<CertLoadResult> certResult = loadPeerRootCert(ctx, cfg);
 
     // Handle "no configuration" case
@@ -302,22 +312,26 @@ libspdm_return_t installPeerRootCert(SpdmTransport& transport,
         return LIBSPDM_STATUS_SUCCESS;
     }
 
-    // Install the certificate
+    // Take ownership of the bytes before handing libspdm the pointer.
+    transport.peerRootCertStorage = std::move(certResult->data);
+
     libspdm_data_parameter_t p{};
     p.location = LIBSPDM_DATA_LOCATION_LOCAL;
     const libspdm_return_t st =
         libspdm_set_data(ctx, LIBSPDM_DATA_PEER_PUBLIC_ROOT_CERT, &p,
-                         certResult->data.data(), certResult->data.size());
+                         transport.peerRootCertStorage.data(),
+                         transport.peerRootCertStorage.size());
 
     if (LIBSPDM_STATUS_IS_ERROR(st))
     {
+        transport.peerRootCertStorage.clear();
         lg2::error("set_data PEER_PUBLIC_ROOT_CERT failed: {STATUS}", "STATUS",
                    std::format("0x{:08X}", static_cast<uint32_t>(st)));
         return st;
     }
 
     lg2::info("Installed peer root cert from {SOURCE} ({SIZE} bytes)", "SOURCE",
-              certResult->source, "SIZE", certResult->data.size());
+              certResult->source, "SIZE", transport.peerRootCertStorage.size());
 
     return LIBSPDM_STATUS_SUCCESS;
 }

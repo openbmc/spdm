@@ -23,13 +23,15 @@ constexpr size_t tcpMaxMessageSize = 65536;
 
 /**
  * @brief Platform message commands for spdm_emu compatibility
- * @details These match the definitions in libspdm's spdm_emu
+ * @details These must match SOCKET_SPDM_COMMAND_* in DMTF/spdm-emu,
+ *          spdm_emu/spdm_emu_common/command.h
  */
 enum class PlatformCommand : uint32_t
 {
     Normal = 0x0001,   // Normal SPDM message
-    Stop = 0xFFFE,     // Stop the responder
-    Shutdown = 0xFFFF, // Shutdown command
+    Continue = 0xFFFD, // End this connection, responder keeps serving
+    Shutdown = 0xFFFE, // End this connection and stop the responder
+    Unknown = 0xFFFF,  // Responder's reply to a command it does not know
 };
 
 /**
