@@ -7,6 +7,7 @@
 #include "policy_manager.hpp"
 #include "spdm_dbus_responder.hpp"
 #include "spdm_discovery.hpp"
+#include "spdm_requester_secret_lib.hpp"
 #include "spdm_session_config.hpp"
 #include "tcp_transport_discovery.hpp"
 #include "utils/paths.hpp"
@@ -47,6 +48,8 @@ int main(int argc, char* argv[])
     // Common secure-session config
     SecureSessionConfig sessionCfg{};
     sessionCfg.peerRootCertBaseDir = "/usr/share/spdm-emu";
+    // Same sample-key tree: the requester's own signing key for mutual auth.
+    setRequesterKeyBaseDir(sessionCfg.peerRootCertBaseDir);
 
     SPDMDiscovery discovery{};
 
