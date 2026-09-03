@@ -108,10 +108,20 @@ libspdm_return_t SpdmSession::start(uint8_t slotId, uint8_t measHashType,
     }
 
     isActive = true;
+
+    // mut_auth_requested is the only end-to-end evidence that the responder
+    // actually ran the encapsulated mutual-auth flow: 0x2 = with encapsulated
+    // request, 0x4 = optimized GET_DIGESTS, 0x0 = never requested.
+    const auto* sessionInfo = static_cast<const libspdm_session_info_t*>(
+        libspdm_get_session_info_via_session_id(ctx, id));
     lg2::info(
-        "Secure session established: id={SESSION_ID}, heartbeat={HEARTBEAT}, psk={PSK}",
+        "Secure session established: id={SESSION_ID}, heartbeat={HEARTBEAT}, psk={PSK}, mutAuth={MUT_AUTH}",
         "SESSION_ID", std::format("0x{:08X}", id), "HEARTBEAT",
-        static_cast<uint32_t>(hbPeriod), "PSK", usePsk);
+        static_cast<uint32_t>(hbPeriod), "PSK", usePsk, "MUT_AUTH",
+        std::format("0x{:02X}",
+                    sessionInfo
+                        ? static_cast<uint32_t>(sessionInfo->mut_auth_requested)
+                        : 0U));
     return LIBSPDM_STATUS_SUCCESS;
 }
 
