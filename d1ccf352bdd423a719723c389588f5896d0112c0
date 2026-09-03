@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2e78c187_1b0bb695",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-03T11:05:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ec1598e4_afbaea32",
+      "revId": "d1ccf352bdd423a719723c389588f5896d0112c0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6a67c55_9f7972ce",
         "filename": "requester/component_integrity_dbus.cpp",
         "patchSetId": 30
