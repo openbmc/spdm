@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87495edb_01ce8f97",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000350
+      },
+      "writtenOn": "2026-09-03T16:58:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5bba992_f3c33746",
+      "revId": "5df76c68360c8a3d44393d6e95b2bb6c2e27b1e5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e5a1c95_fe113a19",
@@ -35,6 +53,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43520065_1580b97a",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000350
+      },
+      "writtenOn": "2026-09-03T16:58:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e5a1c95_fe113a19",
+      "revId": "5df76c68360c8a3d44393d6e95b2bb6c2e27b1e5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "90931c81_b28e3ff6",
@@ -48,6 +84,24 @@
       "writtenOn": "2026-08-31T13:26:46Z",
       "side": 1,
       "message": "Failed to load is bit confusing here, since file is loaded at this stage properly and error is more of type related here.",
+      "revId": "5df76c68360c8a3d44393d6e95b2bb6c2e27b1e5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdb92b75_0273e2de",
+        "filename": "requester/policy_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000350
+      },
+      "writtenOn": "2026-09-03T16:58:11Z",
+      "side": 1,
+      "message": "merged two exception handlers under one, kept the same generic error trace",
+      "parentUuid": "90931c81_b28e3ff6",
       "revId": "5df76c68360c8a3d44393d6e95b2bb6c2e27b1e5",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
