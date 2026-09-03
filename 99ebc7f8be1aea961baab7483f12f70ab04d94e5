@@ -16,6 +16,40 @@
       "message": "LGTM",
       "revId": "99ebc7f8be1aea961baab7483f12f70ab04d94e5",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1f24c4a_0ecf0db0",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-03T10:12:32Z",
+      "side": 1,
+      "message": "Can we please add unit test to cover this function",
+      "revId": "99ebc7f8be1aea961baab7483f12f70ab04d94e5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e341991_277d3553",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-03T10:12:32Z",
+      "side": 1,
+      "message": "This field in redfish gets mapped to ComponentIntegrityTypeVersion. Since redfish schema guide and DMTF versioning uses A.B.C format can we use the same?\n\nhttps://www.dmtf.org/sites/default/files/standards/documents/DSP2046_2026.1.pdf",
+      "revId": "99ebc7f8be1aea961baab7483f12f70ab04d94e5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
