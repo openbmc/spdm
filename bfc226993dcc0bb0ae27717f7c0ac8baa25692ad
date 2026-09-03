@@ -16,6 +16,24 @@
       "message": "In this case, the runAsync function isn\u0027t needed, and sdbusplus::async::execution::sync_wait can be called directly in the tests.",
       "revId": "bfc226993dcc0bb0ae27717f7c0ac8baa25692ad",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34c67c29_6d71fffc",
+        "filename": "tests/test_spdm_discovery.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000350
+      },
+      "writtenOn": "2026-09-03T17:30:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab8efbb_5e8f2173",
+      "revId": "bfc226993dcc0bb0ae27717f7c0ac8baa25692ad",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
