@@ -33,6 +33,24 @@
       "message": "`certPem` contains the full certificate chain. I think we should pass the leaf certificate\u0027s PEM-encoded public key here, right?",
       "revId": "d1ccf352bdd423a719723c389588f5896d0112c0",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e18daa26_d19e5315",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-03T11:05:13Z",
+      "side": 1,
+      "message": "Leaf certificate is used for verifying the signature where certificate chain is populated in redfish. So a verifier can use the cert chain for authenticity.",
+      "parentUuid": "e6a67c55_9f7972ce",
+      "revId": "d1ccf352bdd423a719723c389588f5896d0112c0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
