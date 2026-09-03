@@ -173,6 +173,11 @@ class ComponentIntegrityTest : public ::testing::Test
     {
         return componentIntegrity->getCertificate(slotId);
     }
+
+    std::string getNegotiatedVersion()
+    {
+        return componentIntegrity->getNegotiatedVersion();
+    }
 };
 
 // Test validateMeasurementIndices with valid indices
@@ -735,6 +740,42 @@ TEST_F(ComponentIntegrityTest, GetCertificateMultipleDerCertsTest)
 }
 
 // Note: method_call tests are omitted because they require async testing
+
+// Test getNegotiatedVersion with null transport
+TEST_F(ComponentIntegrityTest, GetNegotiatedVersionNullTransportTest)
+{
+    componentIntegrity->setTransport(nullptr);
+    EXPECT_TRUE(getNegotiatedVersion().empty());
+}
+
+// Test getNegotiatedVersion with null spdmContext
+TEST_F(ComponentIntegrityTest, GetNegotiatedVersionNullContextTest)
+{
+    // Transport is set, but spdmContext is null
+    EXPECT_TRUE(getNegotiatedVersion().empty());
+}
+
+// Test getNegotiatedVersion when responder did not negotiate a version
+TEST_F(ComponentIntegrityTest, GetNegotiatedVersionZeroTest)
+{
+    void* dummyContextBuffer = makeDummyContext();
+    // Zeroed context => libspdm_get_connection_version() returns 0
+    mockTransport->setSpdmContext(dummyContextBuffer);
+    EXPECT_TRUE(getNegotiatedVersion().empty());
+}
+
+// Test getNegotiatedVersion returns DMTF A.B.C format for a negotiated version
+TEST_F(ComponentIntegrityTest, GetNegotiatedVersionFormatTest)
+{
+    void* dummyContextBuffer = makeDummyContext();
+    // connection_info.version is shifted right by SPDM_VERSION_NUMBER_SHIFT_BIT
+    // (8) by libspdm_get_connection_version(), so 0x1200 => version byte 0x12
+    // (SPDM 1.2).
+    reinterpret_cast<libspdm_context_t*>(dummyContextBuffer)
+        ->connection_info.version = 0x1200;
+    mockTransport->setSpdmContext(dummyContextBuffer);
+    EXPECT_EQ(getNegotiatedVersion(), "1.2.0");
+}
 
 } // namespace test
 } // namespace spdm
