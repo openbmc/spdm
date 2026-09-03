@@ -16,6 +16,24 @@
       "message": "This should be the error msg",
       "revId": "a5d80cd1f3064b49387091de254de5687fdfafb2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f93750f9_5d28a3ee",
+        "filename": "requester/tcp_transport_discovery.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-03T13:57:39Z",
+      "side": 1,
+      "message": "Resolving since it\u0027s addressed in patch set 2",
+      "parentUuid": "c4dc8fc0_3dbde7eb",
+      "revId": "a5d80cd1f3064b49387091de254de5687fdfafb2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
