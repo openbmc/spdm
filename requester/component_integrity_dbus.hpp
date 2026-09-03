@@ -196,6 +196,13 @@ class ComponentIntegrity :
     std::string getSigningAlgorithmStr(uint16_t algo);
 
     /**
+     * @brief Get the SPDM version negotiated by libspdm as a string
+     * @return Version string in A.B.C format like "1.2.0", or empty if not yet
+     *         negotiated
+     */
+    std::string getNegotiatedVersion();
+
+    /**
      * @brief Update certificate object
      * @param chassisId Chassis ID
      * @param certPem PEM-encoded certificate chain
