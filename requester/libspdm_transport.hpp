@@ -42,6 +42,7 @@ extern "C"
 #include <array>
 #include <cstdint>
 #include <memory>
+#include <vector>
 
 namespace spdm
 {
@@ -106,10 +107,12 @@ class SpdmTransport
     uint32_t supportAsymAlgo =
         SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_ECDSA_ECC_NIST_P256 |
         SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_ECDSA_ECC_NIST_P384 |
-        SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_ECDSA_ECC_NIST_P521;
+        SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_ECDSA_ECC_NIST_P521 |
+        SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSASSA_2048;
     /** @brief Supported asymmetric algorithms bitmask for the requester. */
     uint16_t supportReqAsymAlgo =
-        SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSASSA_2048;
+        SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSASSA_2048 |
+        SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_ECDSA_ECC_NIST_P256;
     /** @brief Supported DHE named group algorithms bitmask. */
     uint16_t supportDheAlgo = SPDM_ALGORITHMS_DHE_NAMED_GROUP_SECP_384_R1;
     /** @brief Supported AEAD cipher suite bitmask. */
@@ -124,6 +127,12 @@ class SpdmTransport
     /** @brief libspdm data parameter used when setting/getting SPDM context
      * data. */
     libspdm_data_parameter_t parameter{};
+
+    /** @brief Backing storage for the pointers handed to libspdm_set_data
+     *         (LIBSPDM_DATA_PEER_PUBLIC_ROOT_CERT /
+     *         LIBSPDM_DATA_LOCAL_PUBLIC_CERT_CHAIN). */
+    std::vector<uint8_t> peerRootCertStorage;
+    std::vector<uint8_t> localCertChainBlob;
 
     /** @brief Opaque libspdm context — owns the memory and calls
      *         libspdm_deinit_context + free on destruction. */

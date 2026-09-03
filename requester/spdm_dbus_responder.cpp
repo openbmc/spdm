@@ -143,6 +143,17 @@ libspdm_return_t SPDMDBusResponder::openSecureSession(
         return st;
     }
 
+    // Provision our own cert chain so libspdm can answer the responder's
+    // encapsulated GET_DIGESTS / GET_CERTIFICATE if it asks for mutual auth.
+    if (auto st = installLocalRequesterCertChain(*transport, cfg);
+        LIBSPDM_STATUS_IS_ERROR(st))
+    {
+        error("Local cert chain install failed for {DEVICE}: {STATUS}",
+              "DEVICE", deviceName, "STATUS",
+              std::format("0x{:08X}", static_cast<uint32_t>(st)));
+        return st;
+    }
+
     if (!session)
     {
         session = std::make_unique<SpdmSession>(*transport);
