@@ -391,7 +391,8 @@ auto ComponentIntegrity::method_call(
             spdmCtx->connection_info.algorithm.base_hash_algo);
         auto signAlgoStr = getSigningAlgorithmStr(
             spdmCtx->connection_info.algorithm.base_asym_algo);
-        auto versionStr = type_version();
+        auto versionStr = getNegotiatedVersion();
+        type_version(versionStr);
 
         co_return std::make_tuple(objectPath, hashAlgoStr, certPem, signedMeas,
                                   signAlgoStr, versionStr,
@@ -569,6 +570,28 @@ std::string ComponentIntegrity::getSigningAlgorithmStr(uint16_t algo)
             lg2::error("Unknown signing algorithm: {ALGO}", "ALGO", algo);
             return "NONE";
     }
+}
+
+std::string ComponentIntegrity::getNegotiatedVersion()
+{
+    if (!transport || !transport->spdmContext)
+    {
+        return {};
+    }
+
+    auto* spdmCtx =
+        reinterpret_cast<libspdm_context_t*>(transport->spdmContext.get());
+    uint8_t version = libspdm_get_connection_version(spdmCtx);
+    if (version == 0)
+    {
+        return {};
+    }
+
+    std::string versionStr = std::to_string((version >> 4) & 0x0F) + "." +
+                             std::to_string(version & 0x0F);
+    lg2::debug("Negotiated SPDM version from libspdm: {VERSION} (raw={RAW})",
+               "VERSION", versionStr, "RAW", lg2::hex, version);
+    return versionStr;
 }
 
 std::string ComponentIntegrity::updateCertificateObject(
