@@ -153,10 +153,15 @@ class ComponentIntegrity :
         const std::vector<size_t>& measurementIndices);
 
     /**
-     * @brief Initialize SPDM connection
-     * @throws std::runtime_error if initialization fails
+     * @brief Run VCA (GET_VERSION / GET_CAPABILITIES / NEGOTIATE_ALGORITHMS)
+     *        at most once per SpdmTransport instance.
+     * @details Requires transport->connectionMutex to already be held by
+     *          the caller. On success, transitions the transport's
+     *          connection state to Negotiated. A failed VCA leaves the
+     *          state at NotConnected so a later call may retry.
+     * @throws std::runtime_error if negotiation fails
      */
-    void initializeSpdmConnection();
+    void ensureNegotiatedLocked();
 
     /**
      * @brief Get certificate digests from SPDM device

@@ -158,9 +158,9 @@ class ComponentIntegrityTest : public ::testing::Test
         componentIntegrity->validateMeasurementIndices(indices);
     }
 
-    void initializeSpdmConnection()
+    void ensureNegotiatedLocked()
     {
-        componentIntegrity->initializeSpdmConnection();
+        componentIntegrity->ensureNegotiatedLocked();
     }
 
     std::tuple<uint8_t, std::vector<uint8_t>, size_t> getCertificateDigests()
@@ -195,14 +195,14 @@ TEST_F(ComponentIntegrityTest, ValidateMeasurementIndicesInvalidTest)
         sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument);
 }
 
-// Test initializeSpdmConnection with null transport
-TEST_F(ComponentIntegrityTest, InitializeSpdmConnectionNullTransportTest)
+// Test ensureNegotiatedLocked with null transport
+TEST_F(ComponentIntegrityTest, EnsureNegotiatedLockedNullTransportTest)
 {
     // Set transport to null
     componentIntegrity->setTransport(nullptr);
 
     // This should throw runtime_error
-    EXPECT_THROW(initializeSpdmConnection(), std::runtime_error);
+    EXPECT_THROW(ensureNegotiatedLocked(), std::runtime_error);
 }
 
 // Test getCertificateDigests with null transport context
@@ -262,8 +262,8 @@ TEST_F(ComponentIntegrityTest, GetCertificateDigestsFailureTest)
     EXPECT_THROW(getCertificateDigests(), std::runtime_error);
 }
 
-// Test initializeSpdmConnection with successful initialization
-TEST_F(ComponentIntegrityTest, InitializeSpdmConnectionSuccessTest)
+// Test ensureNegotiatedLocked with successful initialization
+TEST_F(ComponentIntegrityTest, EnsureNegotiatedLockedSuccessTest)
 {
     // Set a non-null spdmContext for successful initialization using a
     // heap-allocated buffer
@@ -276,11 +276,13 @@ TEST_F(ComponentIntegrityTest, InitializeSpdmConnectionSuccessTest)
     mockTransport->setAsCurrentMock();
 
     // This should not throw
-    EXPECT_NO_THROW(initializeSpdmConnection());
+    EXPECT_NO_THROW(ensureNegotiatedLocked());
+    EXPECT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::Negotiated);
 }
 
-// Test initializeSpdmConnection with failed initialization
-TEST_F(ComponentIntegrityTest, InitializeSpdmConnectionFailureTest)
+// Test ensureNegotiatedLocked with failed initialization
+TEST_F(ComponentIntegrityTest, EnsureNegotiatedLockedFailureTest)
 {
     // Set a non-null spdmContext for initialization attempt using a
     // heap-allocated buffer
@@ -292,12 +294,15 @@ TEST_F(ComponentIntegrityTest, InitializeSpdmConnectionFailureTest)
     // Set this mock as the current mock for libspdm calls
     mockTransport->setAsCurrentMock();
 
-    // This should throw runtime_error
-    EXPECT_THROW(initializeSpdmConnection(), std::runtime_error);
+    // This should throw runtime_error, leaving the state NotConnected so a
+    // later call may retry.
+    EXPECT_THROW(ensureNegotiatedLocked(), std::runtime_error);
+    EXPECT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::NotConnected);
 }
 
-// Test initializeSpdmConnection with null spdmContext
-TEST_F(ComponentIntegrityTest, InitializeSpdmConnectionNullContextTest)
+// Test ensureNegotiatedLocked with null spdmContext
+TEST_F(ComponentIntegrityTest, EnsureNegotiatedLockedNullContextTest)
 {
     // Ensure spdmContext is null (default state)
     mockTransport->setSpdmContext(nullptr);
@@ -306,7 +311,46 @@ TEST_F(ComponentIntegrityTest, InitializeSpdmConnectionNullContextTest)
     mockTransport->initStatus = LIBSPDM_STATUS_SUCCESS;
 
     // This should throw runtime_error due to null spdmContext
-    EXPECT_THROW(initializeSpdmConnection(), std::runtime_error);
+    EXPECT_THROW(ensureNegotiatedLocked(), std::runtime_error);
+}
+
+// A second call after a successful VCA must not re-run
+// libspdm_init_connection(): the state is already Negotiated, so flipping
+// initStatus to failure afterward must not surface as a thrown error.
+TEST_F(ComponentIntegrityTest, EnsureNegotiatedLockedRunsVcaOnlyOnceTest)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->initStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->setAsCurrentMock();
+
+    EXPECT_NO_THROW(ensureNegotiatedLocked());
+    EXPECT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::Negotiated);
+
+    mockTransport->initStatus = LIBSPDM_STATUS_INVALID_PARAMETER;
+    mockTransport->setAsCurrentMock();
+    EXPECT_NO_THROW(ensureNegotiatedLocked());
+    EXPECT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::Negotiated);
+}
+
+// A failed VCA leaves connectionState at NotConnected, so a later call may
+// retry and succeed.
+TEST_F(ComponentIntegrityTest, EnsureNegotiatedLockedFailureIsRetryableTest)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->initStatus = LIBSPDM_STATUS_INVALID_PARAMETER;
+    mockTransport->setAsCurrentMock();
+
+    EXPECT_THROW(ensureNegotiatedLocked(), std::runtime_error);
+    EXPECT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::NotConnected);
+
+    mockTransport->initStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->setAsCurrentMock();
+    EXPECT_NO_THROW(ensureNegotiatedLocked());
+    EXPECT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::Negotiated);
 }
 
 // Test validateMeasurementIndices with empty indices
