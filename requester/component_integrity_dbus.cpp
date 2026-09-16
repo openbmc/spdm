@@ -15,6 +15,8 @@ extern "C"
 #include "library/spdm_return_status.h"
 }
 
+#include <sdbusplus/async/mutex.hpp>
+
 #include <phosphor-logging/lg2.hpp>
 
 #include <chrono>
@@ -159,10 +161,11 @@ void ComponentIntegrity::checkForDuplicateIndices(
 }
 
 /**
- * @brief Initialize SPDM connection
- * @throws std::runtime_error if initialization fails
+ * @brief Run VCA at most once per SpdmTransport instance.
+ * @details Requires transport->connectionMutex to already be held by the
+ *          caller.
  */
-void ComponentIntegrity::initializeSpdmConnection()
+void ComponentIntegrity::ensureNegotiatedLocked()
 {
     if (!transport)
     {
@@ -176,6 +179,13 @@ void ComponentIntegrity::initializeSpdmConnection()
         throw std::runtime_error("SPDM context not initialized");
     }
 
+    if (transport->getConnectionState() != SpdmConnectionState::NotConnected)
+    {
+        lg2::debug("Connection already negotiated, skipping VCA, path {PATH}",
+                   "PATH", path);
+        return;
+    }
+
     libspdm_return_t initStatus =
         libspdm_init_connection(transport->spdmContext.get(), false);
 
@@ -185,6 +195,8 @@ void ComponentIntegrity::initializeSpdmConnection()
                    "STATUS", initStatus);
         throw std::runtime_error("SPDM connection initialization failed");
     }
+
+    transport->markNegotiated();
 }
 
 /**
@@ -373,7 +385,20 @@ auto ComponentIntegrity::method_call(
     try
     {
         validateMeasurementIndices(measurementIndices);
-        initializeSpdmConnection();
+
+        if (!transport)
+        {
+            lg2::error("Transport is null");
+            throw std::runtime_error("SPDM transport not initialized");
+        }
+
+        // Held for the entire operation (VCA-if-needed + GET_DIGESTS +
+        // GET_CERTIFICATE + GET_MEASUREMENTS) so it cannot interleave with
+        // a concurrent requester operation on the same spdmContext.
+        sdbusplus::async::lock_guard guard(transport->connectionMutex);
+        co_await guard.lock();
+
+        ensureNegotiatedLocked();
 
         auto [slotMask, digestBuffer,
               totalDigestSize] = getCertificateDigests();
