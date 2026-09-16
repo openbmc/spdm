@@ -3,6 +3,8 @@
 
 #include "libspdm_mctp_transport.hpp"
 
+#include "spdm_encap_log.hpp"
+
 #include <phosphor-logging/lg2.hpp>
 
 #include <algorithm>
@@ -70,6 +72,44 @@ bool SpdmMctpTransport::allocateContext()
     return true;
 }
 
+namespace
+{
+
+/* Thin wrappers around libspdm's MCTP codecs. Decode is where a secured
+ * message becomes plaintext and encode is the last point before it is
+ * encrypted. */
+libspdm_return_t mctpDecodeAndLog(
+    void* spdmContext, uint32_t** sessionId, bool* isAppMessage,
+    bool isRequestMessage, size_t transportMessageSize, void* transportMessage,
+    size_t* messageSize, void** message)
+{
+    libspdm_return_t status = libspdm_transport_mctp_decode_message(
+        spdmContext, sessionId, isAppMessage, isRequestMessage,
+        transportMessageSize, transportMessage, messageSize, message);
+    if (status == LIBSPDM_STATUS_SUCCESS && isAppMessage != nullptr &&
+        !*isAppMessage && messageSize != nullptr && message != nullptr)
+    {
+        logEncapsulatedMessage(*message, *messageSize, /*isOutgoing=*/false);
+    }
+    return status;
+}
+
+libspdm_return_t mctpEncodeAndLog(
+    void* spdmContext, const uint32_t* sessionId, bool isAppMessage,
+    bool isRequestMessage, size_t messageSize, void* message,
+    size_t* transportMessageSize, void** transportMessage)
+{
+    if (!isAppMessage)
+    {
+        logEncapsulatedMessage(message, messageSize, /*isOutgoing=*/true);
+    }
+    return libspdm_transport_mctp_encode_message(
+        spdmContext, sessionId, isAppMessage, isRequestMessage, messageSize,
+        message, transportMessageSize, transportMessage);
+}
+
+} // namespace
+
 bool SpdmMctpTransport::registerFunctions()
 {
     libspdm_register_device_io_func(spdmContext.get(),
@@ -78,8 +118,7 @@ bool SpdmMctpTransport::registerFunctions()
     libspdm_register_transport_layer_func(
         spdmContext.get(), LIBSPDM_MAX_SPDM_MSG_SIZE,
         LIBSPDM_TRANSPORT_HEADER_SIZE, LIBSPDM_TRANSPORT_TAIL_SIZE,
-        libspdm_transport_mctp_encode_message,
-        libspdm_transport_mctp_decode_message);
+        mctpEncodeAndLog, mctpDecodeAndLog);
     libspdm_register_device_buffer_func(
         spdmContext.get(), LIBSPDM_SENDER_BUFFER_SIZE,
         LIBSPDM_RECEIVER_BUFFER_SIZE, &SpdmMctpTransport::acquireBuffer,

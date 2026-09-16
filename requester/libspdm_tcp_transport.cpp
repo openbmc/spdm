@@ -3,6 +3,8 @@
 
 #include "libspdm_tcp_transport.hpp"
 
+#include "spdm_encap_log.hpp"
+
 extern "C"
 {
 #include "library/spdm_transport_tcp_lib.h"
@@ -89,6 +91,41 @@ bool SpdmTcpTransport::allocateContext()
     return true;
 }
 
+namespace
+{
+
+libspdm_return_t tcpDecodeAndLog(
+    void* spdmContext, uint32_t** sessionId, bool* isAppMessage,
+    bool isRequestMessage, size_t transportMessageSize, void* transportMessage,
+    size_t* messageSize, void** message)
+{
+    libspdm_return_t status = libspdm_transport_tcp_decode_message(
+        spdmContext, sessionId, isAppMessage, isRequestMessage,
+        transportMessageSize, transportMessage, messageSize, message);
+    if (status == LIBSPDM_STATUS_SUCCESS && isAppMessage != nullptr &&
+        !*isAppMessage && messageSize != nullptr && message != nullptr)
+    {
+        logEncapsulatedMessage(*message, *messageSize, /*isOutgoing=*/false);
+    }
+    return status;
+}
+
+libspdm_return_t tcpEncodeAndLog(
+    void* spdmContext, const uint32_t* sessionId, bool isAppMessage,
+    bool isRequestMessage, size_t messageSize, void* message,
+    size_t* transportMessageSize, void** transportMessage)
+{
+    if (!isAppMessage)
+    {
+        logEncapsulatedMessage(message, messageSize, /*isOutgoing=*/true);
+    }
+    return libspdm_transport_tcp_encode_message(
+        spdmContext, sessionId, isAppMessage, isRequestMessage, messageSize,
+        message, transportMessageSize, transportMessage);
+}
+
+} // namespace
+
 bool SpdmTcpTransport::registerFunctions()
 {
     // Register device I/O functions
@@ -100,8 +137,7 @@ bool SpdmTcpTransport::registerFunctions()
     libspdm_register_transport_layer_func(
         spdmContext.get(), LIBSPDM_MAX_SPDM_MSG_SIZE,
         LIBSPDM_TRANSPORT_HEADER_SIZE, LIBSPDM_TRANSPORT_TAIL_SIZE,
-        libspdm_transport_tcp_encode_message,
-        libspdm_transport_tcp_decode_message);
+        tcpEncodeAndLog, tcpDecodeAndLog);
 
     // Register buffer management functions
     libspdm_register_device_buffer_func(

@@ -190,8 +190,8 @@ void ComponentIntegrity::initializeSpdmConnection()
         connectionState >= LIBSPDM_CONNECTION_STATE_NEGOTIATED)
     {
         lg2::debug(
-            "SPDM connection already negotiated (state=0x{STATE:X}), skipping init",
-            "STATE", connectionState);
+            "SPDM connection already negotiated (state=0x{STATE}), skipping init",
+            "STATE", std::format("{:X}", connectionState));
         return;
     }
 
@@ -204,6 +204,25 @@ void ComponentIntegrity::initializeSpdmConnection()
                    "STATUS",
                    std::format("0x{:08X}", static_cast<uint32_t>(initStatus)));
         throw std::runtime_error("SPDM connection initialization failed");
+    }
+
+    // Log the negotiated SPDM version for diagnostics.
+    {
+        libspdm_data_parameter_t vp{};
+        vp.location = LIBSPDM_DATA_LOCATION_CONNECTION;
+        spdm_version_number_t negotiatedVersion = 0;
+        size_t versionSize = sizeof(negotiatedVersion);
+        if (libspdm_get_data(transport->spdmContext.get(),
+                             LIBSPDM_DATA_SPDM_VERSION, &vp, &negotiatedVersion,
+                             &versionSize) == LIBSPDM_STATUS_SUCCESS)
+        {
+            const uint8_t major =
+                (negotiatedVersion >> SPDM_VERSION_NUMBER_SHIFT_BIT) >> 4 & 0xF;
+            const uint8_t minor =
+                (negotiatedVersion >> SPDM_VERSION_NUMBER_SHIFT_BIT) & 0xF;
+            lg2::info("SPDM connection negotiated version {MAJOR}.{MINOR}",
+                      "MAJOR", major, "MINOR", minor);
+        }
     }
 }
 
