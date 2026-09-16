@@ -3,6 +3,7 @@
 
 #pragma once
 #include <phosphor-logging/lg2.hpp>
+#include <sdbusplus/async/mutex.hpp>
 
 extern "C"
 {
@@ -51,6 +52,21 @@ struct SpdmContextDeleter
 };
 
 /**
+ * @brief Lifecycle of the shared libspdm connection for one endpoint.
+ * @details Authenticated and AuthenticationFailed are both terminal --
+ *          once reached, no further challenge is attempted until this
+ *          SpdmTransport instance is replaced by rediscovery. A failed
+ *          VCA leaves the state at NotConnected and may be retried.
+ */
+enum class SpdmConnectionState
+{
+    NotConnected,
+    Negotiated,
+    Authenticated,
+    AuthenticationFailed,
+};
+
+/**
  * @brief Abstract base class for SPDM transport implementations.
  * @details Holds libspdm context and algorithm negotiation state shared by
  *          all transport backends (MCTP, PCIe-DOE, TCP, etc.).
@@ -58,7 +74,8 @@ struct SpdmContextDeleter
 class SpdmTransport
 {
   public:
-    SpdmTransport() = default;
+    SpdmTransport() : connectionMutex("spdm::SpdmTransport")
+    {}
     virtual ~SpdmTransport() = default;
 
     /** @brief Shared send/receive buffer for SPDM messages. */
@@ -124,6 +141,51 @@ class SpdmTransport
     std::unique_ptr<void, decltype(&free)> scratchBuffer{nullptr, &free};
 
     /**
+     * @brief Serializes complete operations (VCA, GET_CERTIFICATE,
+     *        GET_CHALLENGE, GET_MEASUREMENTS) against the shared libspdm
+     *        context.
+     */
+    sdbusplus::async::mutex connectionMutex;
+
+    /**
+     * @brief Current connection state. Reads and transitions must happen
+     *        while connectionMutex is held by the caller.
+     * @pre The caller must hold connectionMutex.
+     */
+    SpdmConnectionState getConnectionState() const noexcept
+    {
+        return connectionState;
+    }
+
+    /**
+     * @brief NotConnected -> Negotiated, on VCA success.
+     * @pre The caller must hold connectionMutex.
+     */
+    void markNegotiated() noexcept
+    {
+        connectionState = SpdmConnectionState::Negotiated;
+    }
+
+    /**
+     * @brief Negotiated -> Authenticated, on a verified GET_CHALLENGE.
+     * @pre The caller must hold connectionMutex.
+     */
+    void markAuthenticated() noexcept
+    {
+        connectionState = SpdmConnectionState::Authenticated;
+    }
+
+    /**
+     * @brief Negotiated -> AuthenticationFailed, on a completed but
+     *        failed/erroring GET_CHALLENGE attempt.
+     * @pre The caller must hold connectionMutex.
+     */
+    void markAuthenticationFailed() noexcept
+    {
+        connectionState = SpdmConnectionState::AuthenticationFailed;
+    }
+
+    /**
      * @brief Initialize the SPDM transport specific functions. This function
      * needs to be implemented by the transport layer Ex: MCTP, PCIe-DOE, etc.
      *
@@ -131,6 +193,9 @@ class SpdmTransport
      * @return false if the SPDM context is not initialized successfully
      */
     virtual bool initialize() = 0;
+
+  private:
+    SpdmConnectionState connectionState = SpdmConnectionState::NotConnected;
 };
 
 } // namespace spdm
