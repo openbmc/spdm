@@ -21,12 +21,15 @@ typedef libspdm_return_t (*libspdm_get_digest_func_t)(void*, const uint32_t*,
 typedef void (*libspdm_deinit_context_func_t)(void*);
 typedef libspdm_return_t (*libspdm_get_cert_func_t)(void*, const uint32_t*,
                                                     uint8_t, size_t*, void*);
+typedef libspdm_return_t (*libspdm_challenge_func_t)(void*, void*, uint8_t,
+                                                     uint8_t, void*, uint8_t*);
 typedef size_t (*libspdm_get_hash_size_func_t)(uint32_t);
 
 // Global function pointers that can be redirected
 static libspdm_init_connection_func_t g_libspdm_init_connection = nullptr;
 static libspdm_get_digest_func_t g_libspdm_get_digest = nullptr;
 static libspdm_get_cert_func_t g_libspdm_get_cert = nullptr;
+static libspdm_challenge_func_t g_libspdm_challenge = nullptr;
 static libspdm_deinit_context_func_t g_libspdm_deinit_context = nullptr;
 static libspdm_get_hash_size_func_t g_libspdm_get_hash_size = nullptr;
 
@@ -37,6 +40,7 @@ struct MockSpdmData
     libspdm_return_t initStatus = LIBSPDM_STATUS_SUCCESS;
     libspdm_return_t digestStatus = LIBSPDM_STATUS_SUCCESS;
     libspdm_return_t getCertStatus = LIBSPDM_STATUS_SUCCESS;
+    libspdm_return_t challengeStatus = LIBSPDM_STATUS_SUCCESS;
     uint8_t mockSlotMask = 0x01;
     uint8_t mockDigestBuffer[48] = {0xAA, 0xBB, 0xCC,
                                     0xDD}; // 48-byte digest, rest will be 0
@@ -167,6 +171,33 @@ extern "C" libspdm_return_t libspdm_get_certificate(
     {
         return g_libspdm_get_cert(spdm_context, session_id, slot_id,
                                   cert_chain_size, cert_chain);
+    }
+    return LIBSPDM_STATUS_SUCCESS;
+}
+
+extern "C" libspdm_return_t libspdm_challenge(
+    void* spdm_context, void* reserved, uint8_t slot_id,
+    uint8_t measurement_hash_type, void* measurement_hash, uint8_t* slot_mask)
+{
+    (void)reserved;
+    (void)slot_id;
+    (void)measurement_hash_type;
+    (void)measurement_hash;
+
+    if (g_mockDataValid && g_mockData.spdmContext == spdm_context)
+    {
+        if (slot_mask)
+        {
+            *slot_mask = g_mockData.mockSlotMask;
+        }
+        return g_mockData.challengeStatus;
+    }
+
+    if (g_libspdm_challenge)
+    {
+        return g_libspdm_challenge(spdm_context, reserved, slot_id,
+                                   measurement_hash_type, measurement_hash,
+                                   slot_mask);
     }
     return LIBSPDM_STATUS_SUCCESS;
 }

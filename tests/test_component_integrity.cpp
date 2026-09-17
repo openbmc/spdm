@@ -24,6 +24,7 @@ struct MockSpdmData
     uint32_t initStatus = 0;    // LIBSPDM_STATUS_SUCCESS
     uint32_t digestStatus = 0;  // LIBSPDM_STATUS_SUCCESS
     uint32_t getCertStatus = 0; // LIBSPDM_STATUS_SUCCESS
+    uint32_t challengeStatus = 0; // LIBSPDM_STATUS_SUCCESS
     uint8_t mockSlotMask = 0x01;
     uint8_t mockDigestBuffer[48] = {0xAA, 0xBB, 0xCC,
                                     0xDD}; // 48-byte digest, rest will be 0
@@ -51,6 +52,7 @@ class MockSpdmTransport : public SpdmTransport
     libspdm_return_t initStatus = LIBSPDM_STATUS_SUCCESS;
     libspdm_return_t digestStatus = LIBSPDM_STATUS_SUCCESS;
     libspdm_return_t getCertStatus = LIBSPDM_STATUS_SUCCESS;
+    libspdm_return_t challengeStatus = LIBSPDM_STATUS_SUCCESS;
 
     // Mock data
     uint8_t mockSlotMask = 0x01; // Single slot
@@ -75,6 +77,7 @@ class MockSpdmTransport : public SpdmTransport
         mockData.initStatus = this->initStatus;
         mockData.digestStatus = this->digestStatus;
         mockData.getCertStatus = this->getCertStatus;
+        mockData.challengeStatus = this->challengeStatus;
         mockData.mockSlotMask = this->mockSlotMask;
         // Copy the vector data to the fixed-size array (only first 4 bytes,
         // rest remain 0)
@@ -172,6 +175,11 @@ class ComponentIntegrityTest : public ::testing::Test
         size_t slotId)
     {
         return componentIntegrity->getCertificate(slotId);
+    }
+
+    void authenticateResponder(uint8_t slotId)
+    {
+        componentIntegrity->authenticateResponder(slotId);
     }
 };
 
@@ -307,6 +315,24 @@ TEST_F(ComponentIntegrityTest, InitializeSpdmConnectionNullContextTest)
 
     // This should throw runtime_error due to null spdmContext
     EXPECT_THROW(initializeSpdmConnection(), std::runtime_error);
+}
+
+TEST_F(ComponentIntegrityTest, AuthenticateResponderSuccessTest)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->challengeStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->setAsCurrentMock();
+
+    EXPECT_NO_THROW(authenticateResponder(0));
+}
+
+TEST_F(ComponentIntegrityTest, AuthenticateResponderFailureTest)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->challengeStatus = LIBSPDM_STATUS_INVALID_PARAMETER;
+    mockTransport->setAsCurrentMock();
+
+    EXPECT_THROW(authenticateResponder(0), std::runtime_error);
 }
 
 // Test validateMeasurementIndices with empty indices
