@@ -8,6 +8,7 @@
 #include <phosphor-logging/lg2.hpp>
 
 #include <format>
+#include <memory>
 #include <stdexcept>
 
 PHOSPHOR_LOG2_USING;
@@ -26,14 +27,29 @@ SPDMDBusResponder::SPDMDBusResponder(sdbusplus::async::context& ctx,
                         ComponentIntegrity::namespace_path) +
         "/" + devName;
     componentIntegrity =
-        std::make_unique<ComponentIntegrity>(ctx, componentIntegrityPath);
+        std::make_shared<ComponentIntegrity>(ctx, componentIntegrityPath);
     std::visit(
-        [this](const auto& info) {
+        [this, &ctx](const auto& info) {
             using T = std::decay_t<decltype(info)>;
             if constexpr (std::is_same_v<T, MctpResponderInfo>)
             {
                 componentIntegrity->setTransport(
                     std::make_shared<SpdmMctpTransport>(info.eid));
+
+                // Authenticate the responder once, in the background, after
+                // transport attachment. Captures only a weak_ptr so device
+                // removal before the task runs is a safe no-op.
+                std::weak_ptr<ComponentIntegrity> weakCi = componentIntegrity;
+                ctx.spawn(
+                    [](std::weak_ptr<ComponentIntegrity> weakCi)
+                        -> sdbusplus::async::task<> {
+                        auto ci = weakCi.lock();
+                        if (!ci)
+                        {
+                            co_return;
+                        }
+                        co_await ci->performIdentityChallenge();
+                    }(weakCi));
             }
         },
         responderInfo.info);
