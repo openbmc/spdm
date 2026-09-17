@@ -22,6 +22,9 @@ typedef void (*libspdm_deinit_context_func_t)(void*);
 typedef libspdm_return_t (*libspdm_get_cert_func_t)(void*, const uint32_t*,
                                                     uint8_t, size_t*, void*);
 typedef size_t (*libspdm_get_hash_size_func_t)(uint32_t);
+typedef libspdm_return_t (*libspdm_challenge_ex_func_t)(
+    void*, void*, uint8_t, uint8_t, void*, uint8_t*, const void*, void*,
+    void*, void*, size_t*);
 
 // Global function pointers that can be redirected
 static libspdm_init_connection_func_t g_libspdm_init_connection = nullptr;
@@ -29,6 +32,7 @@ static libspdm_get_digest_func_t g_libspdm_get_digest = nullptr;
 static libspdm_get_cert_func_t g_libspdm_get_cert = nullptr;
 static libspdm_deinit_context_func_t g_libspdm_deinit_context = nullptr;
 static libspdm_get_hash_size_func_t g_libspdm_get_hash_size = nullptr;
+static libspdm_challenge_ex_func_t g_libspdm_challenge_ex = nullptr;
 
 // Mock data structure
 struct MockSpdmData
@@ -37,6 +41,7 @@ struct MockSpdmData
     libspdm_return_t initStatus = LIBSPDM_STATUS_SUCCESS;
     libspdm_return_t digestStatus = LIBSPDM_STATUS_SUCCESS;
     libspdm_return_t getCertStatus = LIBSPDM_STATUS_SUCCESS;
+    libspdm_return_t challengeStatus = LIBSPDM_STATUS_SUCCESS;
     uint8_t mockSlotMask = 0x01;
     uint8_t mockDigestBuffer[48] = {0xAA, 0xBB, 0xCC,
                                     0xDD}; // 48-byte digest, rest will be 0
@@ -46,6 +51,48 @@ struct MockSpdmData
 // Global mock data (stored by value, not pointer)
 static MockSpdmData g_mockData;
 static bool g_mockDataValid = false;
+
+// Call counters for proving no-retry behavior. Not part of MockSpdmData
+// since they must survive set_mock_spdm_data() calls within one test.
+static unsigned g_initConnectionCallCount = 0;
+static unsigned g_getCertificateCallCount = 0;
+static unsigned g_challengeExCallCount = 0;
+static uint8_t g_lastCertificateSlotId = 0xFF;
+static uint8_t g_lastChallengeSlotId = 0xFF;
+
+extern "C" void reset_mock_call_counts()
+{
+    g_initConnectionCallCount = 0;
+    g_getCertificateCallCount = 0;
+    g_challengeExCallCount = 0;
+    g_lastCertificateSlotId = 0xFF;
+    g_lastChallengeSlotId = 0xFF;
+}
+
+extern "C" unsigned get_mock_init_connection_call_count()
+{
+    return g_initConnectionCallCount;
+}
+
+extern "C" unsigned get_mock_get_certificate_call_count()
+{
+    return g_getCertificateCallCount;
+}
+
+extern "C" unsigned get_mock_challenge_ex_call_count()
+{
+    return g_challengeExCallCount;
+}
+
+extern "C" uint8_t get_mock_last_certificate_slot_id()
+{
+    return g_lastCertificateSlotId;
+}
+
+extern "C" uint8_t get_mock_last_challenge_slot_id()
+{
+    return g_lastChallengeSlotId;
+}
 
 // Function to set mock data
 extern "C" void set_mock_spdm_data(MockSpdmData* data)
@@ -68,13 +115,15 @@ extern "C" void set_real_libspdm_functions(
     libspdm_get_digest_func_t digest_func,
     libspdm_get_cert_func_t get_cert_func,
     libspdm_deinit_context_func_t deinit_func,
-    libspdm_get_hash_size_func_t get_hash_size_func)
+    libspdm_get_hash_size_func_t get_hash_size_func,
+    libspdm_challenge_ex_func_t challenge_ex_func)
 {
     g_libspdm_init_connection = init_func;
     g_libspdm_get_digest = digest_func;
     g_libspdm_get_cert = get_cert_func;
     g_libspdm_deinit_context = deinit_func;
     g_libspdm_get_hash_size = get_hash_size_func;
+    g_libspdm_challenge_ex = challenge_ex_func;
 }
 
 // Mock wrapper for libspdm_init_connection
@@ -83,6 +132,7 @@ extern "C" libspdm_return_t libspdm_init_connection(void* spdm_context,
 {
     if (g_mockDataValid && g_mockData.spdmContext == spdm_context)
     {
+        ++g_initConnectionCallCount;
         return g_mockData.initStatus;
     }
 
@@ -146,10 +196,12 @@ extern "C" libspdm_return_t libspdm_get_certificate(
     size_t* cert_chain_size, void* cert_chain)
 {
     (void)session_id; // Suppress unused parameter warning
-    (void)slot_id;    // Suppress unused parameter warning
 
     if (g_mockDataValid && g_mockData.spdmContext == spdm_context)
     {
+        ++g_getCertificateCallCount;
+        g_lastCertificateSlotId = slot_id;
+
         if (cert_chain && cert_chain_size)
         {
             size_t to_copy =
@@ -177,4 +229,43 @@ extern "C" size_t libspdm_get_hash_size(uint32_t base_hash_algo)
     (void)base_hash_algo;
     // Always return 48 for the mock
     return 48;
+}
+
+// Mock wrapper for libspdm_challenge_ex
+extern "C" libspdm_return_t libspdm_challenge_ex(
+    void* spdm_context, void* reserved, uint8_t slot_id,
+    uint8_t measurement_hash_type, void* measurement_hash, uint8_t* slot_mask,
+    const void* requester_nonce_in, void* requester_nonce,
+    void* responder_nonce, void* opaque_data, size_t* opaque_data_size)
+{
+    (void)reserved;
+    (void)measurement_hash_type;
+    (void)measurement_hash;
+    (void)requester_nonce_in;
+    (void)requester_nonce;
+    (void)responder_nonce;
+    (void)opaque_data;
+    (void)opaque_data_size;
+
+    if (g_mockDataValid && g_mockData.spdmContext == spdm_context)
+    {
+        ++g_challengeExCallCount;
+        g_lastChallengeSlotId = slot_id;
+
+        if (slot_mask)
+        {
+            *slot_mask = g_mockData.mockSlotMask;
+        }
+        return g_mockData.challengeStatus;
+    }
+
+    // If no mock data or context doesn't match, call the real function
+    if (g_libspdm_challenge_ex)
+    {
+        return g_libspdm_challenge_ex(
+            spdm_context, reserved, slot_id, measurement_hash_type,
+            measurement_hash, slot_mask, requester_nonce_in, requester_nonce,
+            responder_nonce, opaque_data, opaque_data_size);
+    }
+    return LIBSPDM_STATUS_SUCCESS;
 }

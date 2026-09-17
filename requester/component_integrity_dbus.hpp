@@ -8,12 +8,18 @@
 #include "xyz/openbmc_project/Attestation/IdentityAuthentication/aserver.hpp"
 #include "xyz/openbmc_project/Attestation/MeasurementSet/aserver.hpp"
 
+extern "C"
+{
+#include "library/spdm_return_status.h"
+}
+
 #include <sdbusplus/async.hpp>
 #include <sdbusplus/async/context.hpp>
 #include <sdbusplus/async/server.hpp>
 #include <sdbusplus/server/object.hpp>
 
 #include <chrono>
+#include <memory>
 
 namespace spdm
 {
@@ -37,7 +43,8 @@ class ComponentIntegrity :
     public sdbusplus::aserver::xyz::openbmc_project::attestation::
         MeasurementSet<ComponentIntegrity, void>,
     public sdbusplus::aserver::xyz::openbmc_project::attestation::
-        IdentityAuthentication<ComponentIntegrity, void>
+        IdentityAuthentication<ComponentIntegrity, void>,
+    public std::enable_shared_from_this<ComponentIntegrity>
 {
   public:
     ComponentIntegrity() = delete;
@@ -116,6 +123,21 @@ class ComponentIntegrity :
                      size_t slotId)
         -> sdbusplus::async::task<spdm_get_signed_measurements_t::return_type>;
 
+    /**
+     * @brief Authenticate the SPDM responder's identity via GET_CHALLENGE.
+     * @details Performs VCA, GET_DIGESTS, GET_CERTIFICATE, and GET_CHALLENGE
+     *          under one connectionMutex acquisition. The first populated
+     *          certificate slot is selected for authentication. Public
+     *          because it is also invoked externally by SPDMDBusResponder,
+     *          spawned once per device after transport attachment. A
+     *          definitive negative result (e.g. a rejected CHALLENGE_AUTH)
+     *          is terminal until rediscovery replaces this SpdmTransport
+     *          instance; a transient transport/busy failure or an
+     *          unsupported-but-optional capability leaves the connection
+     *          retryable (see applyAuthenticationFailure()).
+     */
+    sdbusplus::async::task<void> performIdentityChallenge();
+
   private:
     /** @brief Object path for this component */
     std::string path;
@@ -164,10 +186,44 @@ class ComponentIntegrity :
     void ensureNegotiatedLocked();
 
     /**
+     * @brief Apply a GET_DIGESTS/GET_CERTIFICATE/GET_CHALLENGE failure to
+     *        the connection state and ResponderVerificationStatus.
+     * @details Requires transport->connectionMutex to already be held by
+     *          the caller. Classifies status (transient/local failure,
+     *          unsupported-but-optional capability, a responder-requested
+     *          resynchronization, or a definitive negative result). Only
+     *          the definitive case marks the connection
+     *          AuthenticationFailed / reports VerificationStatus::Failed.
+     *          Transient and Unsupported leave the connection at
+     *          Negotiated so a later call may retry. Resynchronize resets
+     *          the connection to NotConnected so VCA runs again, since
+     *          libspdm itself invalidates its negotiated state in that
+     *          case.
+     * @param status The libspdm_return_t that caused the failing
+     *               operation to be aborted.
+     */
+    void applyAuthenticationFailure(libspdm_return_t status);
+
+    /**
      * @brief Get certificate digests from SPDM device
      * @return Tuple of (slotMask, digestBuffer, totalDigestSize)
+     * @throws SpdmStatusError on failure, carrying the libspdm_return_t so
+     *         callers can classify the failure (see classifySpdmFailure()
+     *         in component_integrity_dbus.cpp).
      */
     std::tuple<uint8_t, std::vector<uint8_t>, size_t> getCertificateDigests();
+
+    /**
+     * @brief Retrieve the raw certificate chain for one slot.
+     * @details Requires transport->connectionMutex to already be held by
+     *          the caller.
+     * @param slotId Certificate slot ID
+     * @return Raw SPDM certificate chain bytes (header + hash + DER certs)
+     * @throws SpdmStatusError on failure, carrying the libspdm_return_t so
+     *         callers can classify the failure (see classifySpdmFailure()
+     *         in component_integrity_dbus.cpp).
+     */
+    std::vector<uint8_t> getCertificateChainLocked(size_t slotId);
 
     /**
      * @brief Get certificate from SPDM device

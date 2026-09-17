@@ -25,6 +25,100 @@ extern "C"
 namespace spdm
 {
 
+namespace
+{
+
+/**
+ * @brief Carries the libspdm_return_t that caused a helper to throw, so
+ *        performIdentityChallenge() can classify the failure (retryable
+ *        vs. terminal) instead of treating every thrown exception as a
+ *        definitive authentication failure.
+ */
+class SpdmStatusError : public std::runtime_error
+{
+  public:
+    SpdmStatusError(const std::string& message, libspdm_return_t status) :
+        std::runtime_error(message), spdmStatus(status)
+    {}
+
+    libspdm_return_t status() const noexcept
+    {
+        return spdmStatus;
+    }
+
+  private:
+    libspdm_return_t spdmStatus;
+};
+
+/** @brief How a failed libspdm operation should affect connection state. */
+enum class SpdmFailureClass
+{
+    /** Transport-layer or peer-busy condition, or a local-only failure
+     *  (e.g. RNG, local hashing, a caller-side precondition) that never
+     *  reached an identity evaluation: the responder's identity was never
+     *  actually evaluated, so a later call may retry. */
+    Transient,
+    /** The responder does not implement the capability that was
+     *  attempted (e.g. CHAL_CAP unset). Retrying will not change this
+     *  without rediscovery, but it is not a negative identity result. */
+    Unsupported,
+    /** The responder requested a full resynchronization
+     *  (LIBSPDM_STATUS_RESYNCH_PEER). libspdm invalidates its own
+     *  negotiated connection state as a side effect, so this must drive
+     *  the transport back to NotConnected (not just avoid Failed) so
+     *  VCA runs again before any further requests. */
+    Resynchronize,
+    /** A definitive negative result: the responder's data or signature
+     *  was rejected, or the request was otherwise malformed. */
+    Definitive,
+};
+
+/**
+ * @brief Classify a libspdm_return_t from GET_DIGESTS, GET_CERTIFICATE, or
+ *        GET_CHALLENGE for performIdentityChallenge()'s state transitions.
+ * @details Transport-sourced failures, busy/not-ready/generic-error peer
+ *          responses, and local-only failures (RNG, local hashing, a
+ *          caller-side state precondition) reflect a failed attempt, not
+ *          a failed responder, so they must not be folded into
+ *          AuthenticationFailed. CHALLENGE support (CHAL_CAP) is optional
+ *          in SPDM, so UNSUPPORTED_CAP is distinct from a failed
+ *          challenge. RESYNCH_PEER gets its own class because it also
+ *          requires resetting the transport's connection state, not just
+ *          avoiding a terminal failure. Everything else -- malformed
+ *          responses (INVALID_MSG_FIELD/INVALID_MSG_SIZE) and
+ *          signature/certificate verification failures (VERIF_FAIL/
+ *          INVALID_CERT) -- is treated as a definitive negative result.
+ */
+SpdmFailureClass classifySpdmFailure(libspdm_return_t status)
+{
+    if (status == LIBSPDM_STATUS_UNSUPPORTED_CAP)
+    {
+        return SpdmFailureClass::Unsupported;
+    }
+
+    if (status == LIBSPDM_STATUS_RESYNCH_PEER)
+    {
+        return SpdmFailureClass::Resynchronize;
+    }
+
+    if (LIBSPDM_STATUS_SOURCE(status) == LIBSPDM_SOURCE_TRANSPORT ||
+        status == LIBSPDM_STATUS_BUSY_PEER ||
+        status == LIBSPDM_STATUS_NOT_READY_PEER ||
+        status == LIBSPDM_STATUS_ERROR_PEER ||
+        status == LIBSPDM_STATUS_INVALID_STATE_LOCAL ||
+        status == LIBSPDM_STATUS_LOW_ENTROPY ||
+        status == LIBSPDM_STATUS_CRYPTO_ERROR ||
+        status == LIBSPDM_STATUS_BUFFER_TOO_SMALL ||
+        status == LIBSPDM_STATUS_PEER_BUFFER_TOO_SMALL)
+    {
+        return SpdmFailureClass::Transient;
+    }
+
+    return SpdmFailureClass::Definitive;
+}
+
+} // namespace
+
 /**
  * @brief Initialize ComponentIntegrity properties
  * @details Sets initial values for all ComponentIntegrity interface properties
@@ -200,6 +294,206 @@ void ComponentIntegrity::ensureNegotiatedLocked()
 }
 
 /**
+ * @brief Authenticate the SPDM responder's identity via GET_CHALLENGE.
+ * @details Performs VCA, GET_DIGESTS, GET_CERTIFICATE, and GET_CHALLENGE
+ *          under one connectionMutex acquisition. Selects the first
+ *          populated certificate slot. Success is reported through
+ *          ResponderVerificationStatus rather than thrown. GET_DIGESTS,
+ *          GET_CERTIFICATE, and GET_CHALLENGE failures are classified via
+ *          applyAuthenticationFailure(): a definitive negative result is
+ *          terminal (AuthenticationFailed) until rediscovery replaces this
+ *          SpdmTransport instance; a transient/local condition or an
+ *          optional capability the responder does not support leaves the
+ *          state at Negotiated so a later call may retry; a responder-
+ *          requested resynchronization resets the state to NotConnected
+ *          so VCA runs again.
+ */
+auto ComponentIntegrity::performIdentityChallenge()
+    -> sdbusplus::async::task<void>
+{
+    using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+        attestation::IdentityAuthentication::VerificationStatus;
+
+    if (!transport || !transport->spdmContext)
+    {
+        lg2::error("Cannot perform SPDM challenge: transport not initialized");
+        responder_verification_status(VerificationStatus::Failed);
+        co_return;
+    }
+
+    sdbusplus::async::lock_guard guard(transport->connectionMutex);
+    co_await guard.lock();
+
+    auto state = transport->getConnectionState();
+    if (state == SpdmConnectionState::Authenticated ||
+        state == SpdmConnectionState::AuthenticationFailed)
+    {
+        // Terminal state: no retry until rediscovery replaces the
+        // transport.
+        co_return;
+    }
+
+    try
+    {
+        ensureNegotiatedLocked();
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("SPDM VCA failed before challenge: {ERROR}", "ERROR", e);
+        responder_verification_status(VerificationStatus::Failed);
+        co_return;
+    }
+
+    uint8_t slotMask = 0;
+
+    try
+    {
+        const auto certDigestInfo = getCertificateDigests();
+        slotMask = std::get<0>(certDigestInfo);
+    }
+    catch (const SpdmStatusError& e)
+    {
+        lg2::error("SPDM GET_DIGESTS failed before challenge: {ERROR}",
+                   "ERROR", e);
+        applyAuthenticationFailure(e.status());
+        co_return;
+    }
+    catch (const std::exception& e)
+    {
+        // Not a libspdm status failure (e.g. a precondition check inside
+        // getCertificateDigests()); the transport/context null checks at
+        // the top of this function make this unreachable in practice, but
+        // treat it as a definitive failure rather than letting it escape
+        // this coroutine unhandled.
+        lg2::error("SPDM GET_DIGESTS failed before challenge: {ERROR}",
+                   "ERROR", e);
+        transport->markAuthenticationFailed();
+        responder_verification_status(VerificationStatus::Failed);
+        co_return;
+    }
+
+    if (slotMask == 0)
+    {
+        lg2::error(
+            "SPDM authentication failed: no populated certificate slots, "
+            "path {PATH}",
+            "PATH", path);
+        transport->markAuthenticationFailed();
+        responder_verification_status(VerificationStatus::Failed);
+        co_return;
+    }
+
+    uint8_t slotId = 0;
+    while ((slotMask & (1U << slotId)) == 0)
+    {
+        ++slotId;
+    }
+
+    try
+    {
+        // Populates libspdm's cached peer certificate chain for this slot,
+        // which libspdm_challenge_ex() below verifies the CHALLENGE_AUTH
+        // response against; the single shared implementation of
+        // GET_CERTIFICATE, reused (not duplicated) from getCertificate().
+        getCertificateChainLocked(slotId);
+    }
+    catch (const SpdmStatusError& e)
+    {
+        lg2::error("SPDM GET_CERTIFICATE failed before challenge: {ERROR}",
+                   "ERROR", e);
+        applyAuthenticationFailure(e.status());
+        co_return;
+    }
+    catch (const std::exception& e)
+    {
+        // Not a libspdm status failure (e.g. a precondition check inside
+        // getCertificateChainLocked()); unreachable in practice given the
+        // checks above, but treated as a definitive failure rather than
+        // letting it escape this coroutine unhandled.
+        lg2::error("SPDM GET_CERTIFICATE failed before challenge: {ERROR}",
+                   "ERROR", e);
+        transport->markAuthenticationFailed();
+        responder_verification_status(VerificationStatus::Failed);
+        co_return;
+    }
+
+    uint8_t measurementHash[LIBSPDM_MAX_HASH_SIZE] = {};
+    uint8_t challengeSlotMask = 0;
+
+    auto challengeStatus = libspdm_challenge_ex(
+        transport->spdmContext.get(), nullptr, slotId,
+        SPDM_CHALLENGE_REQUEST_NO_MEASUREMENT_SUMMARY_HASH, measurementHash,
+        &challengeSlotMask, nullptr, nullptr, nullptr, nullptr, nullptr);
+
+    if (LIBSPDM_STATUS_IS_ERROR(challengeStatus))
+    {
+        lg2::error("libspdm_challenge_ex failed, status: 0x{STATUS:X}",
+                   "STATUS", challengeStatus);
+        applyAuthenticationFailure(challengeStatus);
+        co_return;
+    }
+
+    transport->markAuthenticated();
+    responder_verification_status(VerificationStatus::Success);
+    lg2::info("SPDM GET_CHALLENGE succeeded for path {PATH}, slot {SLOT}",
+              "PATH", path, "SLOT", static_cast<unsigned>(slotId));
+}
+
+/**
+ * @brief Apply a GET_DIGESTS/GET_CERTIFICATE/GET_CHALLENGE failure to the
+ *        connection state and ResponderVerificationStatus according to
+ *        classifySpdmFailure().
+ * @details Requires transport->connectionMutex to already be held by the
+ *          caller (same precondition as performIdentityChallenge()).
+ * @param status The libspdm_return_t that caused the failing operation to
+ *               be aborted.
+ */
+void ComponentIntegrity::applyAuthenticationFailure(libspdm_return_t status)
+{
+    using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+        attestation::IdentityAuthentication::VerificationStatus;
+
+    switch (classifySpdmFailure(status))
+    {
+        case SpdmFailureClass::Transient:
+            // Leave state at Negotiated and status at Unknown: this
+            // attempt didn't evaluate the responder's identity at all,
+            // so a later call may retry.
+            lg2::warning(
+                "SPDM authentication attempt failed transiently, path "
+                "{PATH}, status: 0x{STATUS:X}",
+                "PATH", path, "STATUS", status);
+            break;
+        case SpdmFailureClass::Unsupported:
+            // CHALLENGE (or a prerequisite) is an optional capability the
+            // responder legitimately does not implement. Not a negative
+            // identity result, and nothing will change without
+            // rediscovery, but it must not be reported as Failed.
+            lg2::info(
+                "SPDM authentication not supported by responder, path "
+                "{PATH}, status: 0x{STATUS:X}",
+                "PATH", path, "STATUS", status);
+            break;
+        case SpdmFailureClass::Resynchronize:
+            // The responder asked for a full resynchronization; libspdm
+            // itself invalidated its negotiated state, so this transport
+            // must follow suit (NotConnected, not Negotiated) or the next
+            // call would skip VCA against a context that no longer
+            // considers itself negotiated.
+            lg2::warning(
+                "SPDM responder requested resynchronization, path {PATH}, "
+                "status: 0x{STATUS:X}",
+                "PATH", path, "STATUS", status);
+            transport->resetConnection();
+            break;
+        case SpdmFailureClass::Definitive:
+            transport->markAuthenticationFailed();
+            responder_verification_status(VerificationStatus::Failed);
+            break;
+    }
+}
+
+/**
  * @brief Get certificate digests from SPDM device
  * @return Tuple of (slotMask, digestBuffer, totalDigestSize)
  */
@@ -236,7 +530,7 @@ std::tuple<uint8_t, std::vector<uint8_t>, size_t>
     {
         lg2::error("libspdm_get_digest failed, status: 0x{STATUS:X}", "STATUS",
                    status);
-        throw std::runtime_error("Failed to get certificate digests");
+        throw SpdmStatusError("Failed to get certificate digests", status);
     }
 
     // Calculate actual digest size using the negotiated hash algorithm.
@@ -378,6 +672,11 @@ auto ComponentIntegrity::method_call(
     size_t slotId [[maybe_unused]])
     -> sdbusplus::async::task<spdm_get_signed_measurements_t::return_type>
 {
+    // Keeps this object alive across the coroutine's suspension points,
+    // even if the owning SPDMDBusResponder is removed while queued on
+    // connectionMutex.
+    auto self = shared_from_this();
+
     lg2::debug(
         "spdmGetSignedMeasurements: Starting with path={PATH}, slotId={SLOTID}, nonce_length={NONCE_LEN}",
         "PATH", path, "SLOTID", slotId, "NONCE_LEN", nonce.length());
@@ -496,8 +795,8 @@ std::tuple<std::string, std::vector<uint8_t>> ComponentIntegrity::derCertsToPem(
     return {pemChain, lastCert};
 }
 
-std::tuple<std::string, std::vector<uint8_t>, std::vector<uint8_t>>
-    ComponentIntegrity::getCertificate(size_t slotId)
+std::vector<uint8_t> ComponentIntegrity::getCertificateChainLocked(
+    size_t slotId)
 {
     if (!transport)
     {
@@ -510,6 +809,7 @@ std::tuple<std::string, std::vector<uint8_t>, std::vector<uint8_t>>
         lg2::error("SPDM context is null");
         throw std::runtime_error("SPDM context not initialized");
     }
+
     std::vector<uint8_t> certChain(LIBSPDM_MAX_CERT_CHAIN_SIZE);
     size_t certChainSize = certChain.size();
 
@@ -521,9 +821,17 @@ std::tuple<std::string, std::vector<uint8_t>, std::vector<uint8_t>>
     {
         lg2::error("libspdm_get_certificate failed, status: 0x{STATUS:X}",
                    "STATUS", status);
-        throw std::runtime_error("Failed to get certificate chain");
+        throw SpdmStatusError("Failed to get certificate chain", status);
     }
     certChain.resize(certChainSize);
+    return certChain;
+}
+
+std::tuple<std::string, std::vector<uint8_t>, std::vector<uint8_t>>
+    ComponentIntegrity::getCertificate(size_t slotId)
+{
+    std::vector<uint8_t> certChain = getCertificateChainLocked(slotId);
+
     size_t hash_size = 0;
     if (transport && transport->spdmContext)
     {

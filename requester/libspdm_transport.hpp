@@ -56,7 +56,11 @@ struct SpdmContextDeleter
  * @details Authenticated and AuthenticationFailed are both terminal --
  *          once reached, no further challenge is attempted until this
  *          SpdmTransport instance is replaced by rediscovery. A failed
- *          VCA leaves the state at NotConnected and may be retried.
+ *          VCA leaves the state at NotConnected and may be retried. A
+ *          responder-requested resynchronization (RESYNCH_PEER) after
+ *          Negotiated also returns to NotConnected via resetConnection(),
+ *          since libspdm itself invalidates its negotiated state in that
+ *          case.
  */
 enum class SpdmConnectionState
 {
@@ -183,6 +187,22 @@ class SpdmTransport
     void markAuthenticationFailed() noexcept
     {
         connectionState = SpdmConnectionState::AuthenticationFailed;
+    }
+
+    /**
+     * @brief Any state -> NotConnected, when the responder requests a
+     *        full resynchronization (LIBSPDM_STATUS_RESYNCH_PEER).
+     * @details libspdm itself resets its internal connection_state to
+     *          NOT_STARTED as a side effect of this error, so this
+     *          transport's state must follow suit or a later call would
+     *          skip VCA (ensureNegotiatedLocked() only runs it when state
+     *          is NotConnected) against a libspdm context that no longer
+     *          considers itself negotiated.
+     * @pre The caller must hold connectionMutex.
+     */
+    void resetConnection() noexcept
+    {
+        connectionState = SpdmConnectionState::NotConnected;
     }
 
     /**

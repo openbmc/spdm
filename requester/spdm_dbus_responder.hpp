@@ -50,8 +50,12 @@ class SPDMDBusResponder
   private:
     ResponderInfo responder;
 
-    /** @brief D-Bus ComponentIntegrity interface object for this device. */
-    std::unique_ptr<ComponentIntegrity> componentIntegrity;
+    /** @brief D-Bus ComponentIntegrity interface object for this device.
+     *  @details shared_ptr so the async task spawned to run
+     *           performIdentityChallenge() after discovery can hold a
+     *           weak_ptr, keeping the object alive across the coroutine's
+     *           suspension without blocking device removal. */
+    std::shared_ptr<ComponentIntegrity> componentIntegrity;
     /** @brief D-Bus TrustedComponent interface object for this device. */
     std::unique_ptr<TrustedComponent> trustedComponent;
 };
