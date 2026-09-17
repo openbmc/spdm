@@ -14,6 +14,7 @@
 #include <sdbusplus/server/object.hpp>
 
 #include <chrono>
+#include <memory>
 
 namespace spdm
 {
@@ -37,7 +38,8 @@ class ComponentIntegrity :
     public sdbusplus::aserver::xyz::openbmc_project::attestation::
         MeasurementSet<ComponentIntegrity, void>,
     public sdbusplus::aserver::xyz::openbmc_project::attestation::
-        IdentityAuthentication<ComponentIntegrity, void>
+        IdentityAuthentication<ComponentIntegrity, void>,
+    public std::enable_shared_from_this<ComponentIntegrity>
 {
   public:
     ComponentIntegrity() = delete;
@@ -116,6 +118,18 @@ class ComponentIntegrity :
                      size_t slotId)
         -> sdbusplus::async::task<spdm_get_signed_measurements_t::return_type>;
 
+    /**
+     * @brief Authenticate the SPDM responder's identity via GET_CHALLENGE.
+     * @details Performs VCA, GET_DIGESTS, GET_CERTIFICATE, and GET_CHALLENGE
+     *          under one connectionMutex acquisition. The first populated
+     *          certificate slot is selected for authentication. Public
+     *          because it is also invoked externally by SPDMDBusResponder,
+     *          spawned once per device after transport attachment. Success
+     *          or failure is terminal until rediscovery replaces this
+     *          SpdmTransport instance.
+     */
+    sdbusplus::async::task<void> performIdentityChallenge();
+
   private:
     /** @brief Object path for this component */
     std::string path;
@@ -168,6 +182,16 @@ class ComponentIntegrity :
      * @return Tuple of (slotMask, digestBuffer, totalDigestSize)
      */
     std::tuple<uint8_t, std::vector<uint8_t>, size_t> getCertificateDigests();
+
+    /**
+     * @brief Retrieve the raw certificate chain for one slot.
+     * @details Requires transport->connectionMutex to already be held by
+     *          the caller.
+     * @param slotId Certificate slot ID
+     * @return Raw SPDM certificate chain bytes (header + hash + DER certs)
+     * @throws std::runtime_error on failure
+     */
+    std::vector<uint8_t> getCertificateChainLocked(size_t slotId);
 
     /**
      * @brief Get certificate from SPDM device

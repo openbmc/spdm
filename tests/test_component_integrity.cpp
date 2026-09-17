@@ -21,9 +21,10 @@ extern "C"
 struct MockSpdmData
 {
     void* spdmContext = nullptr;
-    uint32_t initStatus = 0;    // LIBSPDM_STATUS_SUCCESS
-    uint32_t digestStatus = 0;  // LIBSPDM_STATUS_SUCCESS
-    uint32_t getCertStatus = 0; // LIBSPDM_STATUS_SUCCESS
+    uint32_t initStatus = 0;      // LIBSPDM_STATUS_SUCCESS
+    uint32_t digestStatus = 0;    // LIBSPDM_STATUS_SUCCESS
+    uint32_t getCertStatus = 0;   // LIBSPDM_STATUS_SUCCESS
+    uint32_t challengeStatus = 0; // LIBSPDM_STATUS_SUCCESS
     uint8_t mockSlotMask = 0x01;
     uint8_t mockDigestBuffer[48] = {0xAA, 0xBB, 0xCC,
                                     0xDD}; // 48-byte digest, rest will be 0
@@ -31,6 +32,11 @@ struct MockSpdmData
     std::vector<uint8_t> mockCertChain;
 };
 void set_mock_spdm_data(MockSpdmData* data);
+void reset_mock_call_counts();
+unsigned get_mock_get_certificate_call_count();
+unsigned get_mock_challenge_ex_call_count();
+uint8_t get_mock_last_certificate_slot_id();
+uint8_t get_mock_last_challenge_slot_id();
 }
 
 PHOSPHOR_LOG2_USING;
@@ -51,6 +57,7 @@ class MockSpdmTransport : public SpdmTransport
     libspdm_return_t initStatus = LIBSPDM_STATUS_SUCCESS;
     libspdm_return_t digestStatus = LIBSPDM_STATUS_SUCCESS;
     libspdm_return_t getCertStatus = LIBSPDM_STATUS_SUCCESS;
+    libspdm_return_t challengeStatus = LIBSPDM_STATUS_SUCCESS;
 
     // Mock data
     uint8_t mockSlotMask = 0x01; // Single slot
@@ -75,6 +82,7 @@ class MockSpdmTransport : public SpdmTransport
         mockData.initStatus = this->initStatus;
         mockData.digestStatus = this->digestStatus;
         mockData.getCertStatus = this->getCertStatus;
+        mockData.challengeStatus = this->challengeStatus;
         mockData.mockSlotMask = this->mockSlotMask;
         // Copy the vector data to the fixed-size array (only first 4 bytes,
         // rest remain 0)
@@ -172,6 +180,17 @@ class ComponentIntegrityTest : public ::testing::Test
         getCertificate(size_t slotId)
     {
         return componentIntegrity->getCertificate(slotId);
+    }
+
+    // Runs performIdentityChallenge() to completion.
+    void performIdentityChallenge()
+    {
+        asyncCtx->spawn(
+            [](auto& ctx, auto& ci) -> sdbusplus::async::task<> {
+                co_await ci->performIdentityChallenge();
+                ctx.request_stop();
+            }(*asyncCtx, componentIntegrity));
+        asyncCtx->run();
     }
 };
 
@@ -779,6 +798,320 @@ TEST_F(ComponentIntegrityTest, GetCertificateMultipleDerCertsTest)
 }
 
 // Note: method_call tests are omitted because they require async testing
+
+// GET_CHALLENGE: a full success path performs VCA, GET_DIGESTS,
+// GET_CERTIFICATE, and GET_CHALLENGE, reaches Authenticated, and reports
+// VerificationStatus::Success.
+TEST_F(ComponentIntegrityTest, PerformIdentityChallengeSuccessTest)
+{
+    static uint8_t dummyContextBuffer[1024];
+    mockTransport->setSpdmContext(dummyContextBuffer);
+    mockTransport->initStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->digestStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->getCertStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->mockCertChain = makeMockSpdmCertChain();
+    mockTransport->challengeStatus = LIBSPDM_STATUS_SUCCESS;
+    reset_mock_call_counts();
+    mockTransport->setAsCurrentMock();
+
+    performIdentityChallenge();
+
+    using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+        attestation::IdentityAuthentication::VerificationStatus;
+    EXPECT_EQ(componentIntegrity->responder_verification_status(),
+             VerificationStatus::Success);
+    EXPECT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::Authenticated);
+    EXPECT_EQ(get_mock_get_certificate_call_count(), 1u);
+    EXPECT_EQ(get_mock_challenge_ex_call_count(), 1u);
+}
+
+// GET_DIGESTS advertises only slot 2 (slot 0 is empty). Identity
+// authentication must use slot 2 consistently for GET_CERTIFICATE and
+// GET_CHALLENGE.
+TEST_F(ComponentIntegrityTest, PerformIdentityChallengeSelectsPopulatedSlotTest)
+{
+    static uint8_t dummyContextBuffer[1024];
+    mockTransport->setSpdmContext(dummyContextBuffer);
+    mockTransport->initStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->digestStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->mockSlotMask = 0x04; // Slot 0 and 1 empty, slot 2 populated
+    mockTransport->getCertStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->mockCertChain = makeMockSpdmCertChain();
+    mockTransport->challengeStatus = LIBSPDM_STATUS_SUCCESS;
+    reset_mock_call_counts();
+    mockTransport->setAsCurrentMock();
+
+    performIdentityChallenge();
+
+    using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+        attestation::IdentityAuthentication::VerificationStatus;
+    EXPECT_EQ(get_mock_last_certificate_slot_id(), 2);
+    EXPECT_EQ(get_mock_last_challenge_slot_id(), 2);
+    EXPECT_EQ(componentIntegrity->responder_verification_status(),
+             VerificationStatus::Success);
+    EXPECT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::Authenticated);
+}
+
+// A completed-but-failed CHALLENGE_AUTH reaches AuthenticationFailed, not
+// Negotiated, and reports VerificationStatus::Failed.
+TEST_F(ComponentIntegrityTest, PerformIdentityChallengeFailureTest)
+{
+    static uint8_t dummyContextBuffer[1024];
+    mockTransport->setSpdmContext(dummyContextBuffer);
+    mockTransport->initStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->getCertStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->mockCertChain = makeMockSpdmCertChain();
+    mockTransport->challengeStatus = LIBSPDM_STATUS_INVALID_PARAMETER;
+    mockTransport->setAsCurrentMock();
+
+    performIdentityChallenge();
+
+    using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+        attestation::IdentityAuthentication::VerificationStatus;
+    EXPECT_EQ(componentIntegrity->responder_verification_status(),
+             VerificationStatus::Failed);
+    EXPECT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::AuthenticationFailed);
+}
+
+// A GET_CERTIFICATE failure must prevent GET_CHALLENGE from being issued
+// at all, and reaches AuthenticationFailed / VerificationStatus::Failed.
+TEST_F(ComponentIntegrityTest, PerformIdentityChallengeCertificateFailureTest)
+{
+    static uint8_t dummyContextBuffer[1024];
+    mockTransport->setSpdmContext(dummyContextBuffer);
+    mockTransport->initStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->getCertStatus = LIBSPDM_STATUS_INVALID_PARAMETER;
+    mockTransport->challengeStatus = LIBSPDM_STATUS_SUCCESS;
+    reset_mock_call_counts();
+    mockTransport->setAsCurrentMock();
+
+    performIdentityChallenge();
+
+    using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+        attestation::IdentityAuthentication::VerificationStatus;
+    EXPECT_EQ(get_mock_challenge_ex_call_count(), 0u);
+    EXPECT_EQ(componentIntegrity->responder_verification_status(),
+             VerificationStatus::Failed);
+    EXPECT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::AuthenticationFailed);
+}
+
+// A GET_DIGESTS failure occurs after VCA has already succeeded, so it must
+// be terminal (AuthenticationFailed) like the other post-negotiation
+// failures, not left at Negotiated where a later call would silently
+// retry GET_DIGESTS. GET_CERTIFICATE and GET_CHALLENGE must not be
+// attempted, and a second call must not re-issue any operation.
+TEST_F(ComponentIntegrityTest, PerformIdentityChallengeDigestsFailureTest)
+{
+    static uint8_t dummyContextBuffer[1024];
+    mockTransport->setSpdmContext(dummyContextBuffer);
+    mockTransport->initStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->digestStatus = LIBSPDM_STATUS_INVALID_PARAMETER;
+    mockTransport->challengeStatus = LIBSPDM_STATUS_SUCCESS;
+    reset_mock_call_counts();
+    mockTransport->setAsCurrentMock();
+
+    performIdentityChallenge();
+
+    using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+        attestation::IdentityAuthentication::VerificationStatus;
+    EXPECT_EQ(get_mock_get_certificate_call_count(), 0u);
+    EXPECT_EQ(get_mock_challenge_ex_call_count(), 0u);
+    EXPECT_EQ(componentIntegrity->responder_verification_status(),
+             VerificationStatus::Failed);
+    EXPECT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::AuthenticationFailed);
+
+    // Terminal: a second call must not re-run VCA, GET_DIGESTS,
+    // GET_CERTIFICATE, or GET_CHALLENGE. Reconfigure the mock so any of
+    // those operations would otherwise succeed, then confirm no counters
+    // move and initStatus/digestStatus changes have no effect.
+    mockTransport->initStatus = LIBSPDM_STATUS_INVALID_PARAMETER;
+    mockTransport->digestStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->getCertStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->mockCertChain = makeMockSpdmCertChain();
+    mockTransport->setAsCurrentMock();
+    performIdentityChallenge();
+
+    EXPECT_EQ(get_mock_get_certificate_call_count(), 0u);
+    EXPECT_EQ(get_mock_challenge_ex_call_count(), 0u);
+    EXPECT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::AuthenticationFailed);
+    EXPECT_EQ(componentIntegrity->responder_verification_status(),
+             VerificationStatus::Failed);
+}
+
+// A failed VCA leaves connectionState at NotConnected (not
+// AuthenticationFailed, since no challenge attempt was made), reports
+// VerificationStatus::Failed, and a later call may retry negotiation.
+TEST_F(ComponentIntegrityTest, PerformIdentityChallengeVcaFailureTest)
+{
+    static uint8_t dummyContextBuffer[1024];
+    mockTransport->setSpdmContext(dummyContextBuffer);
+    mockTransport->initStatus = LIBSPDM_STATUS_INVALID_PARAMETER;
+    mockTransport->setAsCurrentMock();
+
+    performIdentityChallenge();
+
+    using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+        attestation::IdentityAuthentication::VerificationStatus;
+    EXPECT_EQ(componentIntegrity->responder_verification_status(),
+             VerificationStatus::Failed);
+    EXPECT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::NotConnected);
+
+    // Retry: negotiation succeeds on a later call.
+    mockTransport->initStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->getCertStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->mockCertChain = makeMockSpdmCertChain();
+    mockTransport->challengeStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->setAsCurrentMock();
+    performIdentityChallenge();
+
+    EXPECT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::Authenticated);
+}
+
+// Authenticated is terminal -- re-running after success must not re-issue
+// VCA, GET_DIGESTS, GET_CERTIFICATE, or GET_CHALLENGE.
+TEST_F(ComponentIntegrityTest, PerformIdentityChallengeIsTerminalAfterSuccessTest)
+{
+    static uint8_t dummyContextBuffer[1024];
+    mockTransport->setSpdmContext(dummyContextBuffer);
+    mockTransport->initStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->getCertStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->mockCertChain = makeMockSpdmCertChain();
+    mockTransport->challengeStatus = LIBSPDM_STATUS_SUCCESS;
+    reset_mock_call_counts();
+    mockTransport->setAsCurrentMock();
+
+    performIdentityChallenge();
+
+    using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+        attestation::IdentityAuthentication::VerificationStatus;
+    ASSERT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::Authenticated);
+    ASSERT_EQ(componentIntegrity->responder_verification_status(),
+             VerificationStatus::Success);
+
+    unsigned certCallsAfterFirst = get_mock_get_certificate_call_count();
+    unsigned challengeCallsAfterFirst = get_mock_challenge_ex_call_count();
+    EXPECT_GT(challengeCallsAfterFirst, 0u);
+
+    // Reconfigure the mock to fail; the counters must not increase if the
+    // terminal-state guard short-circuits this second call.
+    mockTransport->challengeStatus = LIBSPDM_STATUS_INVALID_PARAMETER;
+    mockTransport->setAsCurrentMock();
+    performIdentityChallenge();
+
+    EXPECT_EQ(get_mock_challenge_ex_call_count(), challengeCallsAfterFirst);
+    EXPECT_EQ(get_mock_get_certificate_call_count(), certCallsAfterFirst);
+    EXPECT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::Authenticated);
+    EXPECT_EQ(componentIntegrity->responder_verification_status(),
+             VerificationStatus::Success);
+}
+
+// AuthenticationFailed is terminal too -- re-running must not re-issue
+// GET_CHALLENGE; flip challengeStatus to success afterward and confirm the
+// state does NOT change.
+TEST_F(ComponentIntegrityTest, PerformIdentityChallengeIsTerminalAfterFailureTest)
+{
+    static uint8_t dummyContextBuffer[1024];
+    mockTransport->setSpdmContext(dummyContextBuffer);
+    mockTransport->initStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->getCertStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->mockCertChain = makeMockSpdmCertChain();
+    mockTransport->challengeStatus = LIBSPDM_STATUS_INVALID_PARAMETER;
+    mockTransport->setAsCurrentMock();
+
+    performIdentityChallenge();
+    ASSERT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::AuthenticationFailed);
+
+    mockTransport->challengeStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->setAsCurrentMock();
+    performIdentityChallenge();
+
+    EXPECT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::AuthenticationFailed);
+}
+
+// An empty slot mask (no populated certificate slots) must not attempt
+// GET_CERTIFICATE or GET_CHALLENGE, and reaches AuthenticationFailed.
+TEST_F(ComponentIntegrityTest, PerformIdentityChallengeNoPopulatedSlotTest)
+{
+    static uint8_t dummyContextBuffer[1024];
+    mockTransport->setSpdmContext(dummyContextBuffer);
+    mockTransport->initStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->digestStatus = LIBSPDM_STATUS_SUCCESS;
+    mockTransport->mockSlotMask = 0x00; // No populated slots
+    reset_mock_call_counts();
+    mockTransport->setAsCurrentMock();
+
+    performIdentityChallenge();
+
+    using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+        attestation::IdentityAuthentication::VerificationStatus;
+    EXPECT_EQ(get_mock_get_certificate_call_count(), 0u);
+    EXPECT_EQ(get_mock_challenge_ex_call_count(), 0u);
+    EXPECT_EQ(componentIntegrity->responder_verification_status(),
+             VerificationStatus::Failed);
+    EXPECT_EQ(mockTransport->getConnectionState(),
+             spdm::SpdmConnectionState::AuthenticationFailed);
+}
+
+// Null transport must fail cleanly (report Failed) without touching
+// connectionMutex.
+TEST_F(ComponentIntegrityTest, PerformIdentityChallengeNullTransportTest)
+{
+    componentIntegrity->setTransport(nullptr);
+
+    performIdentityChallenge();
+
+    using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+        attestation::IdentityAuthentication::VerificationStatus;
+    EXPECT_EQ(componentIntegrity->responder_verification_status(),
+             VerificationStatus::Failed);
+}
+
+// Null spdmContext must also fail cleanly (report Failed) without a mutex
+// dereference through a null transport.
+TEST_F(ComponentIntegrityTest, PerformIdentityChallengeNullContextTest)
+{
+    mockTransport->setSpdmContext(nullptr);
+
+    performIdentityChallenge();
+
+    using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+        attestation::IdentityAuthentication::VerificationStatus;
+    EXPECT_EQ(componentIntegrity->responder_verification_status(),
+             VerificationStatus::Failed);
+}
+
+// Lifetime/responder-removal behavior: SPDMDBusResponder spawns
+// performIdentityChallenge() via a captureless coroutine lambda that
+// receives only a std::weak_ptr<ComponentIntegrity>, locking it before
+// dereferencing (requester/spdm_dbus_responder.cpp). This test framework
+// constructs ComponentIntegrity directly via a unique_ptr for the other
+// fixtures above, so it cannot reproduce SPDMDBusResponder's
+// discovery-triggered spawn/removal race without duplicating that
+// production wiring in the test. The guarantee instead comes from the
+// ownership structure itself, verified by inspection:
+//   - SPDMDBusResponder holds ComponentIntegrity in a shared_ptr and
+//     passes only a weak_ptr to the spawned coroutine;
+//   - the coroutine's first action is weakCi.lock(), returning nullptr
+//     (and co_return before touching the object) if the responder --
+//     and its shared_ptr -- was destroyed first;
+//   - performIdentityChallenge() itself never captures shared_from_this(),
+//     so no aliasing shared_ptr keeps a removed responder's
+//     ComponentIntegrity alive solely because authentication is queued.
+// This mirrors the existing weak_ptr contract already relied upon
+// elsewhere in this file's design and in the discovery-driven responder
+// lifecycle.
 
 } // namespace test
 } // namespace spdm
