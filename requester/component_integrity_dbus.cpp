@@ -144,6 +144,25 @@ std::tuple<uint8_t, std::vector<uint8_t>, size_t>
     return {slotMask, digestBuffer, totalDigestSize};
 }
 
+void ComponentIntegrity::authenticateResponder(uint8_t slotId)
+{
+    if (!transport || !transport->spdmContext)
+    {
+        throw std::runtime_error("SPDM transport not initialized");
+    }
+
+    uint8_t slotMask = 0;
+    const auto status = libspdm_challenge(
+        transport->spdmContext.get(), nullptr, slotId,
+        SPDM_CHALLENGE_REQUEST_NO_MEASUREMENT_SUMMARY_HASH, nullptr, &slotMask);
+    if (LIBSPDM_STATUS_IS_ERROR(status))
+    {
+        lg2::error("libspdm_challenge failed, status: 0x{STATUS:X}", "STATUS",
+                   status);
+        throw std::runtime_error("Failed to authenticate SPDM responder");
+    }
+}
+
 /**
  * @brief Async D-Bus method that handles SPDM signed measurements requests
  *
@@ -168,6 +187,7 @@ auto ComponentIntegrity::method_call(
         auto [slotMask, digestBuffer,
               totalDigestSize] = getCertificateDigests();
         auto [certPem, certRaw, certRawSize] = getCertificate(slotId);
+                authenticateResponder(static_cast<uint8_t>(slotId));
 
         std::string signedMeas{};
         auto objectPath = sdbusplus::object_path(path);

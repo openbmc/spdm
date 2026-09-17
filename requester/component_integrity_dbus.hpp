@@ -141,6 +141,13 @@ class ComponentIntegrity :
     std::tuple<uint8_t, std::vector<uint8_t>, size_t> getCertificateDigests();
 
     /**
+     * @brief Authenticate the responder using its selected certificate slot.
+     * @param slotId Certificate slot used to verify CHALLENGE_AUTH.
+     * @throws std::runtime_error if challenge authentication fails.
+     */
+    void authenticateResponder(uint8_t slotId);
+
+    /**
      * @brief Get certificate from SPDM device
      * @param slotId Certificate slot ID
      * @return Tuple of (certificate, certificateSize)
