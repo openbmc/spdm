@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf741939_3e8db11a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003175
+      },
+      "writtenOn": "2026-09-17T07:40:13Z",
+      "side": 1,
+      "message": "This WIP series adds SPDM responder identity authentication as a dependent follow-up to the existing requester series.\n\nThe series introduces persistent requester connection state and serialized access to the shared libspdm context, reuses successful negotiation state, and implements GET_CHALLENGE using the first populated certificate slot.\n\nAuthentication success and post-negotiation authentication failures remain terminal until endpoint rediscovery. VCA failures remain retryable. The series also adds shared and weak ownership protection for suspended requester operations and asynchronous responder authentication.\n\nThe existing libspdm, transport, digest, certificate, and signed-measurement reviews remain unchanged and retain their original authorship.\n\nPolicy.Enabled enforcement, GET_EAT, signed-measurement nonce forwarding, inventory association, secure sessions, and extended structured logging are intentionally outside this series.\n\nThe changed production translation units compile successfully in the ARM cross-build environment. The newly added test sources also compile independently. Full test execution is currently blocked by pre-existing build failures in the dependent review stack.",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
