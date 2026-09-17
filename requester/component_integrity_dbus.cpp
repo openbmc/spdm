@@ -200,6 +200,123 @@ void ComponentIntegrity::ensureNegotiatedLocked()
 }
 
 /**
+ * @brief Authenticate the SPDM responder's identity via GET_CHALLENGE.
+ * @details Performs VCA, GET_DIGESTS, GET_CERTIFICATE, and GET_CHALLENGE
+ *          under one connectionMutex acquisition. Selects the first
+ *          populated certificate slot. Success or failure is reported
+ *          through ResponderVerificationStatus rather than thrown, and is
+ *          terminal until rediscovery replaces this SpdmTransport instance.
+ */
+auto ComponentIntegrity::performIdentityChallenge()
+    -> sdbusplus::async::task<void>
+{
+    using VerificationStatus = sdbusplus::common::xyz::openbmc_project::
+        attestation::IdentityAuthentication::VerificationStatus;
+
+    if (!transport || !transport->spdmContext)
+    {
+        lg2::error("Cannot perform SPDM challenge: transport not initialized");
+        responder_verification_status(VerificationStatus::Failed);
+        co_return;
+    }
+
+    sdbusplus::async::lock_guard guard(transport->connectionMutex);
+    co_await guard.lock();
+
+    auto state = transport->getConnectionState();
+    if (state == SpdmConnectionState::Authenticated ||
+        state == SpdmConnectionState::AuthenticationFailed)
+    {
+        // Terminal state: no retry until rediscovery replaces the
+        // transport.
+        co_return;
+    }
+
+    try
+    {
+        ensureNegotiatedLocked();
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("SPDM VCA failed before challenge: {ERROR}", "ERROR", e);
+        responder_verification_status(VerificationStatus::Failed);
+        co_return;
+    }
+
+    uint8_t slotMask = 0;
+
+    try
+    {
+        const auto certDigestInfo = getCertificateDigests();
+        slotMask = std::get<0>(certDigestInfo);
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("SPDM GET_DIGESTS failed before challenge: {ERROR}",
+                   "ERROR", e);
+        transport->markAuthenticationFailed();
+        responder_verification_status(VerificationStatus::Failed);
+        co_return;
+    }
+
+    if (slotMask == 0)
+    {
+        lg2::error(
+            "SPDM authentication failed: no populated certificate slots, "
+            "path {PATH}",
+            "PATH", path);
+        transport->markAuthenticationFailed();
+        responder_verification_status(VerificationStatus::Failed);
+        co_return;
+    }
+
+    uint8_t slotId = 0;
+    while ((slotMask & (1U << slotId)) == 0)
+    {
+        ++slotId;
+    }
+
+    try
+    {
+        // Populates libspdm's cached peer certificate chain for this slot,
+        // which libspdm_challenge_ex() below verifies the CHALLENGE_AUTH
+        // response against; the single shared implementation of
+        // GET_CERTIFICATE, reused (not duplicated) from getCertificate().
+        getCertificateChainLocked(slotId);
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("SPDM GET_CERTIFICATE failed before challenge: {ERROR}",
+                   "ERROR", e);
+        transport->markAuthenticationFailed();
+        responder_verification_status(VerificationStatus::Failed);
+        co_return;
+    }
+
+    uint8_t measurementHash[LIBSPDM_MAX_HASH_SIZE] = {};
+    uint8_t challengeSlotMask = 0;
+
+    auto challengeStatus = libspdm_challenge_ex(
+        transport->spdmContext.get(), nullptr, slotId,
+        SPDM_CHALLENGE_REQUEST_NO_MEASUREMENT_SUMMARY_HASH, measurementHash,
+        &challengeSlotMask, nullptr, nullptr, nullptr, nullptr, nullptr);
+
+    if (LIBSPDM_STATUS_IS_ERROR(challengeStatus))
+    {
+        lg2::error("libspdm_challenge_ex failed, status: 0x{STATUS:X}",
+                   "STATUS", challengeStatus);
+        transport->markAuthenticationFailed();
+        responder_verification_status(VerificationStatus::Failed);
+        co_return;
+    }
+
+    transport->markAuthenticated();
+    responder_verification_status(VerificationStatus::Success);
+    lg2::info("SPDM GET_CHALLENGE succeeded for path {PATH}, slot {SLOT}",
+              "PATH", path, "SLOT", static_cast<unsigned>(slotId));
+}
+
+/**
  * @brief Get certificate digests from SPDM device
  * @return Tuple of (slotMask, digestBuffer, totalDigestSize)
  */
@@ -378,6 +495,11 @@ auto ComponentIntegrity::method_call(
     size_t slotId [[maybe_unused]])
     -> sdbusplus::async::task<spdm_get_signed_measurements_t::return_type>
 {
+    // Keeps this object alive across the coroutine's suspension points,
+    // even if the owning SPDMDBusResponder is removed while queued on
+    // connectionMutex.
+    auto self = shared_from_this();
+
     lg2::debug(
         "spdmGetSignedMeasurements: Starting with path={PATH}, slotId={SLOTID}, nonce_length={NONCE_LEN}",
         "PATH", path, "SLOTID", slotId, "NONCE_LEN", nonce.length());
@@ -496,8 +618,8 @@ std::tuple<std::string, std::vector<uint8_t>> ComponentIntegrity::derCertsToPem(
     return {pemChain, lastCert};
 }
 
-std::tuple<std::string, std::vector<uint8_t>, std::vector<uint8_t>>
-    ComponentIntegrity::getCertificate(size_t slotId)
+std::vector<uint8_t> ComponentIntegrity::getCertificateChainLocked(
+    size_t slotId)
 {
     if (!transport)
     {
@@ -510,6 +632,7 @@ std::tuple<std::string, std::vector<uint8_t>, std::vector<uint8_t>>
         lg2::error("SPDM context is null");
         throw std::runtime_error("SPDM context not initialized");
     }
+
     std::vector<uint8_t> certChain(LIBSPDM_MAX_CERT_CHAIN_SIZE);
     size_t certChainSize = certChain.size();
 
@@ -524,6 +647,14 @@ std::tuple<std::string, std::vector<uint8_t>, std::vector<uint8_t>>
         throw std::runtime_error("Failed to get certificate chain");
     }
     certChain.resize(certChainSize);
+    return certChain;
+}
+
+std::tuple<std::string, std::vector<uint8_t>, std::vector<uint8_t>>
+    ComponentIntegrity::getCertificate(size_t slotId)
+{
+    std::vector<uint8_t> certChain = getCertificateChainLocked(slotId);
+
     size_t hash_size = 0;
     if (transport && transport->spdmContext)
     {
