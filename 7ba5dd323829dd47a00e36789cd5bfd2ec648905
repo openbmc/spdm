@@ -35,6 +35,23 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6853cb28_7b7f3b07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003175
+      },
+      "writtenOn": "2026-09-21T18:01:40Z",
+      "side": 1,
+      "message": "@hosmanechinmay@gmail.com Thank you for the detailed review and for pointing me to change 94663.\n\nI compared patch set 3 of 94663 with this three-change series. The two implementations appear to have been developed independently and were uploaded on the same day. This series was created in Gerrit before 94663, so it was not developed as a duplicate of that change.\n\nThe overlap is primarily around the basic GET_CERTIFICATE and GET_CHALLENGE invocation. Changes 94632 and 94633 introduce foundational requester behavior that is not currently present in 94663:\n\nserialization of access to the shared libspdm context;\npersistent requester connection state;\nreuse of successful VCA rather than reinitializing the connection for each operation;\nretryable negotiation failure handling;\nlocking across complete requester operations.\n\nChange 94634 additionally provides populated certificate-slot selection using the GET_DIGESTS slot mask, D-Bus ResponderVerificationStatus updates, explicit authentication state, responder-lifetime protection for asynchronous work, and focused tests for slot selection and state transitions.\n\nI agree that the review has identified areas that need revision:\n\ntransient communication failures must be distinguished from definitive authentication failures;\nlack of CHALLENGE support must not be represented as failed authentication;\nsuccessful CHALLENGE_AUTH verification alone is insufficient to establish a trusted identity without certificate-chain validation against a provisioned trust anchor;\nthe requirement and ordering for discovery-time background authentication need to be clarified.\n\nI will address these concerns in a revised patch set. I am also willing to remove protocol logic that is demonstrably duplicated by 94663. However, rebasing this series directly on top of 94663 requires deciding how to preserve the connection-state and serialization foundation from 94632 and 94633, which 94663 does not currently include.\n\nCould the maintainers please advise the preferred dependency order? Specifically, should 94663 be rebased on top of 94632 and 94633, or should I rebuild the unique state-management, slot-validation, status, and test changes as follow-ups to 94663?",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "afd2991e_3c239737",
