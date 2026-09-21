@@ -16,6 +16,57 @@
       "message": "Could you please rebase this commit into get-meas chain\nhttps://gerrit.openbmc.org/c/openbmc/spdm/+/94240/3",
       "revId": "e31f7bc32305c716a927bf66a3704d9d43e252da",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55a54fe6_790962f2",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-21T06:50:25Z",
+      "side": 1,
+      "message": "CHALLENGE_AUTH is optional in SPDM 1.1. This could break responder supporting 1.1 without CHALLENGE_AUTH. Can we please check the responder’s advertised CHAL_CAP bit and issue CHALLENGE only when it is set, skipping this step otherwise?",
+      "revId": "e31f7bc32305c716a927bf66a3704d9d43e252da",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09f4c4e7_d4f3d282",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-21T06:50:25Z",
+      "side": 1,
+      "message": "SPDM_CHALLENGE_REQUEST_NO_MEASUREMENT_SUMMARY_HASH --\u003e Can this selection live in a header?. For future extensions for TCB and all meas hash it can be extended later if required.",
+      "revId": "e31f7bc32305c716a927bf66a3704d9d43e252da",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bd1aa94_1bc7e1dd",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-21T06:50:25Z",
+      "side": 1,
+      "message": "Other option is to rely on error code `LIBSPDM_STATUS_UNSUPPORTED_CAP` since libspdm_try_challenge does this check here https://github.com/DMTF/libspdm/blob/main/library/spdm_requester_lib/libspdm_req_challenge.c#L84",
+      "revId": "e31f7bc32305c716a927bf66a3704d9d43e252da",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
