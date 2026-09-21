@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f77404af_0e1bab03",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-21T15:37:36Z",
+      "side": 1,
+      "message": "Commit https://gerrit.openbmc.org/c/openbmc/spdm/+/94663 adds support for get challenge, can you please rebase on top of that commit and add changes which is not covered already by 94663.",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "bf741939_3e8db11a",
@@ -14,6 +31,125 @@
       "writtenOn": "2026-09-17T07:40:13Z",
       "side": 1,
       "message": "This WIP series adds SPDM responder identity authentication as a dependent follow-up to the existing requester series.\n\nThe series introduces persistent requester connection state and serialized access to the shared libspdm context, reuses successful negotiation state, and implements GET_CHALLENGE using the first populated certificate slot.\n\nAuthentication success and post-negotiation authentication failures remain terminal until endpoint rediscovery. VCA failures remain retryable. The series also adds shared and weak ownership protection for suspended requester operations and asynchronous responder authentication.\n\nThe existing libspdm, transport, digest, certificate, and signed-measurement reviews remain unchanged and retain their original authorship.\n\nPolicy.Enabled enforcement, GET_EAT, signed-measurement nonce forwarding, inventory association, secure sessions, and extended structured logging are intentionally outside this series.\n\nThe changed production translation units compile successfully in the ARM cross-build environment. The newly added test sources also compile independently. Full test execution is currently blocked by pre-existing build failures in the dependent review stack.",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afd2991e_3c239737",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-21T15:37:36Z",
+      "side": 1,
+      "message": "Why does authentication need a separate flow rather than calling CHALLENGE, when supported, within the existing get-measurements flow?  Could you please clarify on the requirement",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b52c216_8030515d",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-21T15:37:36Z",
+      "side": 1,
+      "message": "A temporary transport timeout during certificate retrieval or CHALLENGE also reaches this state. Should transient communication failures permit a bounded retry, separately from signature-verification failures?",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "024b3661_7caca25e",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-21T15:37:36Z",
+      "side": 1,
+      "message": "Similar to comment in 94663. https://gerrit.openbmc.org/c/openbmc/spdm/+/94663/comment/55a54fe6_790962f2/\n\nHow should unsupported devices be represented?. Missing optional support currently becomes the same status as failed authentication.",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "527de854_66b7009c",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-21T15:37:36Z",
+      "side": 1,
+      "message": "Where is the responder’s certificate chain validated against a provisioned trust anchor before reporting Success, since CHALLENGE_AUTH alone only proves possession of the corresponding private key",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa023458_b5e8327d",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-21T15:37:36Z",
+      "side": 1,
+      "message": "getCertificateChainLocked() appears to extract the existing retrieval logic without adding locking or validation, could you please clarify that intent?",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ef948f7_1c582e50",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-21T15:37:36Z",
+      "side": 1,
+      "message": "What happens when get-meas request is received before responder is verified?",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02269e0a_dfb3f65e",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-21T15:37:36Z",
+      "side": 1,
+      "message": "Is there a specific reason to do this in background?",
       "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
