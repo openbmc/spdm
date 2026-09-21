@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9132526c_241d999c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1003175
+      },
+      "writtenOn": "2026-09-21T18:52:49Z",
+      "side": 1,
+      "message": "Thanks for pointing me to 94663. I have posted a detailed comparison in the top-level response.\n\nI agree that the basic GET_CERTIFICATE and GET_CHALLENGE invocation overlaps. However, 94632 and 94633 add connection serialization, persistent requester state, and successful VCA reuse, which are not currently present in 94663.\n\nBefore rewriting the stack, could you please confirm the preferred dependency order: should I rebuild these unique changes as follow-ups to 94663, or should 94663 be rebased on 94632 and 94633?",
+      "parentUuid": "f77404af_0e1bab03",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "bf741939_3e8db11a",
@@ -71,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cfa9d3d2_e5061ac6",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1003175
+      },
+      "writtenOn": "2026-09-21T18:52:49Z",
+      "side": 1,
+      "message": "The separate flow was intentional. The D-Bus IdentityAuthentication status represents responder identity verification independently of whether a client happens to invoke the signed-measurements method.\n\nTriggering authentication after discovery allows the responder verification status to be populated proactively and avoids making identity verification an undocumented side effect of a measurement request. It also supports the “authenticate once and retain the result until rediscovery” state model instead of rerunning VCA and CHALLENGE for every measurement request.\n\nThe implementation performs this asynchronously so responder discovery and D-Bus object creation are not blocked by SPDM protocol exchanges. Access to the shared libspdm context remains serialized through connectionMutex.\n\nThat said, I agree that the trigger policy needs to be backed by an explicit interface or product requirement. If upstream expects authentication to occur only as part of signed measurements, I can adapt the trigger while retaining the persistent state, serialization, slot handling, and D-Bus status semantics.",
+      "parentUuid": "afd2991e_3c239737",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7b52c216_8030515d",
         "filename": "requester/component_integrity_dbus.cpp",
         "patchSetId": 3
@@ -82,6 +118,24 @@
       "writtenOn": "2026-09-21T15:37:36Z",
       "side": 1,
       "message": "A temporary transport timeout during certificate retrieval or CHALLENGE also reaches this state. Should transient communication failures permit a bounded retry, separately from signature-verification failures?",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd7253c7_60510a11",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1003175
+      },
+      "writtenOn": "2026-09-21T18:52:49Z",
+      "side": 1,
+      "message": "Agreed. The current implementation correctly separates VCA failure from later authentication stages, but it still classifies some post-VCA communication failures too broadly.\n\nThe persistent state model remains useful, but state transitions should be based on the failure type rather than only the stage:\n\ntransport timeout, device communication error, responder busy, or another temporary protocol condition should remain retryable;\nunsupported CHALLENGE capability should not become authentication failure;\ncertificate trust failure or invalid CHALLENGE_AUTH signature should become terminal AuthenticationFailed;\nsuccessful trusted verification should become Authenticated.\n\nI will inspect the specific libspdm_return_t values and update the implementation and tests so transient communication failures do not permanently block authentication until rediscovery.",
+      "parentUuid": "7b52c216_8030515d",
       "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -105,6 +159,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6ce4a40a_ad5ce854",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1003175
+      },
+      "writtenOn": "2026-09-21T18:52:49Z",
+      "side": 1,
+      "message": "Agreed. Lack of CHAL_CAP is not equivalent to a failed authentication attempt.\n\nThe revised implementation should check the negotiated responder capability before issuing CHALLENGE. If the existing D-Bus enum has no explicit Unsupported value, I propose leaving ResponderVerificationStatus as Unknown for an unsupported responder.\n\nFailed should be reserved for a definitive negative result from an authentication attempt, rather than for a responder that does not implement an optional command.",
+      "parentUuid": "024b3661_7caca25e",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "527de854_66b7009c",
         "filename": "requester/component_integrity_dbus.cpp",
         "patchSetId": 3
@@ -116,6 +188,24 @@
       "writtenOn": "2026-09-21T15:37:36Z",
       "side": 1,
       "message": "Where is the responder’s certificate chain validated against a provisioned trust anchor before reporting Success, since CHALLENGE_AUTH alone only proves possession of the corresponding private key",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee6b2430_a7727a90",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1003175
+      },
+      "writtenOn": "2026-09-21T18:52:49Z",
+      "side": 1,
+      "message": "This is a valid gap, and I investigated the libspdm trust-validation path.\n\nThe current flow retrieves the responder certificate chain and verifies CHALLENGE_AUTH using the public key from that chain. This proves possession of the corresponding private key, but it does not, by itself, establish that the chain terminates at a trusted platform root.\n\nI confirmed that neither this series nor 94663 currently provisions LIBSPDM_DATA_PEER_PUBLIC_ROOT_CERT, LIBSPDM_DATA_PEER_PUBLIC_CERT_CHAIN, or an equivalent libspdm_register_verify_spdm_cert_chain_func callback. A genuine trust check therefore requires a provisioning mechanism for the expected responder root certificate, which does not currently exist in this repository.\n\nCould you please clarify the intended contract of ResponderVerificationStatus::Success?\n\nDoes Success mean successful CHALLENGE_AUTH proof of possession?\nOr does it require certificate-chain validation against a provisioned platform trust anchor?\n\nIf trusted-chain validation is required, I agree that the implementation must not publish Success until the provisioning mechanism and ownership are defined. I can document and enforce that prerequisite in the revised design.",
+      "parentUuid": "527de854_66b7009c",
       "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -139,6 +229,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "25210ac2_8de9a2a6",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1003175
+      },
+      "writtenOn": "2026-09-21T18:52:49Z",
+      "side": 1,
+      "message": "The helper extraction is intentional.\n\ngetCertificateChainLocked() does not acquire connectionMutex. The Locked suffix documents its calling contract: the caller must already hold the mutex. This allows authentication to perform VCA, GET_DIGESTS, GET_CERTIFICATE, and GET_CHALLENGE as one serialized requester operation without recursively acquiring the same non-recursive mutex.\n\nThe helper also avoids duplicating the raw GET_CERTIFICATE retrieval code between certificate publication and responder authentication. Trust-chain validation is a separate concern and is not implied by the helper name.",
+      "parentUuid": "fa023458_b5e8327d",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2ef948f7_1c582e50",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 3
@@ -156,6 +264,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4644fae3_5cd1ec91",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1003175
+      },
+      "writtenOn": "2026-09-21T18:52:49Z",
+      "side": 1,
+      "message": "The shared libspdm context is protected by connectionMutex, so authentication and signed-measurement operations cannot execute concurrently on the same responder.\n\nIf a measurement request arrives while authentication owns the mutex, the measurement coroutine waits rather than interleaving protocol operations. This was one of the reasons changes 94632 and 94633 were introduced.\n\nThe remaining question is the policy after the wait:\n\nwhether measurements require successful responder authentication;\nwhether measurements may proceed when CHALLENGE is unsupported;\nand whether a transient authentication error should be retried by the measurement operation.\n\nI will make those outcomes explicit in the revised flow. The current serialization already prevents the underlying shared-context race, but I agree that the D-Bus behavior for each authentication outcome should be documented and tested.",
+      "parentUuid": "2ef948f7_1c582e50",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "02269e0a_dfb3f65e",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 3
@@ -167,6 +293,24 @@
       "writtenOn": "2026-09-21T15:37:36Z",
       "side": 1,
       "message": "Is there a specific reason to do this in background?",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ab4e865_5f6a4505",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1003175
+      },
+      "writtenOn": "2026-09-21T18:52:49Z",
+      "side": 1,
+      "message": "The background execution was intentional for two reasons.\n\nFirst, SPDM authentication involves multiple transport exchanges and should not block responder discovery or D-Bus object construction.\n\nSecond, authentication was designed as responder lifecycle work rather than as an undocumented side effect of the signed-measurements method. This permits the verification status to be established independently and retained until rediscovery.\n\nBecause the task can suspend while waiting for connectionMutex or transport responses, the implementation uses weak/shared ownership so removal of a discovered responder cannot leave queued work referencing a destroyed ComponentIntegrity object.",
+      "parentUuid": "02269e0a_dfb3f65e",
       "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
