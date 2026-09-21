@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "766a5ea7_9895f36c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-21T15:41:41Z",
+      "side": 1,
+      "message": "It\u0027s addressed here. https://gerrit.openbmc.org/c/openbmc/spdm/+/80264/35..36/requester/spdm_dbus_responder.cpp#44.\n\nAlso this PR can be closed now.",
+      "parentUuid": "c0d50306_65c0948d",
+      "revId": "1416fb0b08634cb36ece2ba8f8e2ee1b4b07a4b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "758ccdbd_d563c1d5",
         "filename": "requester/utils/dbus_path.cpp",
         "patchSetId": 1
@@ -49,6 +67,24 @@
       "side": 1,
       "message": "It\u0027s addressed here. https://gerrit.openbmc.org/c/openbmc/spdm/+/80264/35..36/requester/spdm_dbus_responder.cpp#44.\n\nAlso this PR can be closed now.",
       "parentUuid": "758ccdbd_d563c1d5",
+      "revId": "1416fb0b08634cb36ece2ba8f8e2ee1b4b07a4b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0043c88_3fb4f2de",
+        "filename": "requester/utils/dbus_path.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-21T15:41:41Z",
+      "side": 1,
+      "message": "Resolving",
+      "parentUuid": "661e8411_82167ac8",
       "revId": "1416fb0b08634cb36ece2ba8f8e2ee1b4b07a4b0",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
