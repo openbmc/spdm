@@ -69,6 +69,23 @@
       "parentUuid": "8f1a8327_913e02ad",
       "revId": "d3c84a100487d01a94f578a4722cab7a483ad7ea",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70949e59_b0c29332",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-09-22T19:17:42Z",
+      "side": 1,
+      "message": "I\u0027m not interested in reviewing AI-generated documentation.  There are bits here that are potentially useful but I\u0027m not merging something that is a waste of human time to read.",
+      "revId": "d3c84a100487d01a94f578a4722cab7a483ad7ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
