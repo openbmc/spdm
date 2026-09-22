@@ -39,6 +39,7 @@ reviewers:
 - mine260309@gmail.com
 - ratankgupta31@gmail.com
 - archana.kakani@ibm.com
+- hosmanechinmay@gmail.com
 
 matchers:
 
@@ -58,3 +59,6 @@ openbmc:
 - name: Archana Kakani
   email: archana.kakani@ibm.com
   discord: archanakakani
+- name: Chinmay Shripad Hegde
+  email: hosmanechinmay@gmail.com
+  discord: chinmay_hegde
