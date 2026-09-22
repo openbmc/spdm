@@ -89,6 +89,23 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1afe7eb4_7de3b905",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-22T05:28:59Z",
+      "side": 1,
+      "message": "This patch set can be closed now, PDI defaults addressed here https://gerrit.openbmc.org/c/openbmc/phosphor-dbus-interfaces/+/92151.",
+      "revId": "6b17f676c47ce3953befbd5430fec0303e808a07",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bfea7378_dfb33071",
