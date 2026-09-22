@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "633dca70_3cd7396e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1003105
+      },
+      "writtenOn": "2026-09-22T11:10:44Z",
+      "side": 1,
+      "message": "Thank you for the context, and for adding Ratan Gupta.\n\nYou are right, and the commit message should not imply otherwise: when 80422 was written the daemon functionality was not in the tree, so a README could not have described it. What that review gave me was the standard — describe the merged tree, reference the Redfish design, include a code organization section — and this change is an attempt to meet it now that there is something to describe, not a criticism of the earlier one.\n\nHappy to reword that paragraph in the next patchset to say so explicitly. I have not pushed one yet so that any further comments can go into the same revision.",
+      "parentUuid": "ab913983_655815f0",
+      "revId": "d3c84a100487d01a94f578a4722cab7a483ad7ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f1a8327_913e02ad",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2026-09-22T06:56:16Z",
       "side": 1,
       "message": "While it\u0027s still WIP guideline, could you please review this policy and make sure changes and commit messages are aligned with community.\n\nhttps://gerrit.openbmc.org/c/openbmc/docs/+/89452/4/coding-assistants.md#18",
+      "revId": "d3c84a100487d01a94f578a4722cab7a483ad7ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "766bfd2c_d5e71c34",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1003105
+      },
+      "writtenOn": "2026-09-22T11:10:44Z",
+      "side": 1,
+      "message": "Thank you — and thank you for the pointer. I had read CONTRIBUTING.md, found no AI policy in it, and did not find 89452. That was my mistake: a project\u0027s rules can be in review as well as merged, and I only searched what was already on master.\n\nI have now read coding-assistants.md at patchset 4.\n\n- Signed-off-by / DCO. The only Signed-off-by: on this change is mine and it matches the commit author. No AI is named in it and there is no Co-authored-by:. I reviewed this change before sending it and I take responsibility for it.\n- Attribution. Assisted-by: Claude Code:claude-opus-5, in the AGENT_NAME:MODEL_VERSION form the document specifies. No basic tools listed.\n- Licensing. One Markdown file, no code.\n\nOn the human half: every statement in the README was read out of the tree at 72e3ea9 rather than recalled — the transports from TransportType and spdmd_src, the policy property names from Policy.interface.yaml in phosphor-dbus-interfaces rather than transliterated from the C++ tag names, the cache path from paths.cpp. The two build notes are things I hit myself: GCC 13.3 ICEs at requester/utils/mapper.cpp:46 while GCC 14.2 builds all 863 targets, and test_policy_manager needs dbus-run-session on a machine that is not a BMC (3/3 OK with it).\n\nIf the document changes before this lands, I will follow it.",
+      "parentUuid": "8f1a8327_913e02ad",
       "revId": "d3c84a100487d01a94f578a4722cab7a483ad7ea",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
