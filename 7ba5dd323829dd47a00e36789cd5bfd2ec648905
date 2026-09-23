@@ -36,6 +36,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bdfddee_2523f417",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-09-23T05:02:13Z",
+      "side": 1,
+      "message": "94633 \u0026  94632  are infra changes can be added after get challenge. But there is one open comment on https://gerrit.openbmc.org/c/openbmc/spdm/+/94663/comment/af4f93e3_ce60a79b/ to rebase 94663 on top of 94240. Once that is resolved i am thinking chain should be in this order \n\n94633: spdmd: reuse negotiated SPDM requester connections | https://gerrit.openbmc.org/c/openbmc/spdm/+/94633\n\n94632: spdmd: serialize SPDM requester connection access | https://gerrit.openbmc.org/c/openbmc/spdm/+/94632\n\n94634: spdmd: authenticate responders using GET_CHALLENGE | https://gerrit.openbmc.org/c/openbmc/spdm/+/94634 --\u003e Any changes which is not present in 94663 can be present in this.\n\n94663: Authenticate responder with CHALLENGE | https://gerrit.openbmc.org/c/openbmc/spdm/+/94663\n\n94240: spdm: Fix version response for getSignedMeasurements | https://gerrit.openbmc.org/c/openbmc/spdm/+/94240",
+      "parentUuid": "9132526c_241d999c",
+      "revId": "7ba5dd323829dd47a00e36789cd5bfd2ec648905",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "bf741939_3e8db11a",
