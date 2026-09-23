@@ -48,11 +48,14 @@ class PolicyManager final :
     explicit PolicyManager(
         sdbusplus::async::context& ctx, auto path,
         std::filesystem::path cachePath = paths::policy_cache()) :
-        PolicyServer<PolicyManager<Observer>>(ctx, path),
+        PolicyServer<PolicyManager<Observer>>(
+            ctx, path, sdbusplus::async::signal_action::defer_emit),
         PolicyManagerBase(std::move(cachePath))
     {
         auto properties = PolicyManagerBase::load();
         this->properties = std::move(properties);
+
+        PolicyServer<PolicyManager<Observer>>::emit_object_added();
     }
 
     auto set_property(Policy::enabled_t, auto&& value) -> bool
