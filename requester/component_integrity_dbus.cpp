@@ -24,6 +24,91 @@ extern "C"
 namespace spdm
 {
 
+namespace
+{
+
+// SPDM 1.4 PqcAsymAlgo name, spelled as libspdm and spdm-emu spell it.
+const char* pqcAsymAlgoName(uint32_t algo)
+{
+    switch (algo)
+    {
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_ML_DSA_44:
+            return "ML_DSA_44";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_ML_DSA_65:
+            return "ML_DSA_65";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_ML_DSA_87:
+            return "ML_DSA_87";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHA2_128S:
+            return "SLH_DSA_SHA2_128S";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHAKE_128S:
+            return "SLH_DSA_SHAKE_128S";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHA2_128F:
+            return "SLH_DSA_SHA2_128F";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHAKE_128F:
+            return "SLH_DSA_SHAKE_128F";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHA2_192S:
+            return "SLH_DSA_SHA2_192S";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHAKE_192S:
+            return "SLH_DSA_SHAKE_192S";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHA2_192F:
+            return "SLH_DSA_SHA2_192F";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHAKE_192F:
+            return "SLH_DSA_SHAKE_192F";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHA2_256S:
+            return "SLH_DSA_SHA2_256S";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHAKE_256S:
+            return "SLH_DSA_SHAKE_256S";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHA2_256F:
+            return "SLH_DSA_SHA2_256F";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHAKE_256F:
+            return "SLH_DSA_SHAKE_256F";
+        default:
+            return nullptr;
+    }
+}
+
+// Name of the negotiated key exchange: a DHE group or an SPDM 1.4 KEM.
+const char* keyExchangeAlgoName(uint16_t dheNamedGroup, uint32_t kemAlg)
+{
+    switch (kemAlg)
+    {
+        case 0:
+            break;
+        case SPDM_ALGORITHMS_KEM_ALG_ML_KEM_512:
+            return "ML_KEM_512";
+        case SPDM_ALGORITHMS_KEM_ALG_ML_KEM_768:
+            return "ML_KEM_768";
+        case SPDM_ALGORITHMS_KEM_ALG_ML_KEM_1024:
+            return "ML_KEM_1024";
+        default:
+            return "unknown";
+    }
+
+    switch (dheNamedGroup)
+    {
+        case 0:
+            return "none";
+        case SPDM_ALGORITHMS_DHE_NAMED_GROUP_FFDHE_2048:
+            return "FFDHE_2048";
+        case SPDM_ALGORITHMS_DHE_NAMED_GROUP_FFDHE_3072:
+            return "FFDHE_3072";
+        case SPDM_ALGORITHMS_DHE_NAMED_GROUP_FFDHE_4096:
+            return "FFDHE_4096";
+        case SPDM_ALGORITHMS_DHE_NAMED_GROUP_SECP_256_R1:
+            return "SECP_256_R1";
+        case SPDM_ALGORITHMS_DHE_NAMED_GROUP_SECP_384_R1:
+            return "SECP_384_R1";
+        case SPDM_ALGORITHMS_DHE_NAMED_GROUP_SECP_521_R1:
+            return "SECP_521_R1";
+        case SPDM_ALGORITHMS_DHE_NAMED_GROUP_SM2_P256:
+            return "SM2_P256";
+        default:
+            return "unknown";
+    }
+}
+
+} // namespace
+
 /**
  * @brief Initialize ComponentIntegrity properties
  * @details Sets initial values for all ComponentIntegrity interface properties
@@ -206,7 +291,9 @@ void ComponentIntegrity::initializeSpdmConnection()
         throw std::runtime_error("SPDM connection initialization failed");
     }
 
-    // Log the negotiated SPDM version for diagnostics.
+    // Log the negotiated SPDM version and algorithms for diagnostics. The
+    // responder picks a classic or a PQC algorithm for signing and for key
+    // exchange independently.
     {
         libspdm_data_parameter_t vp{};
         vp.location = LIBSPDM_DATA_LOCATION_CONNECTION;
@@ -220,8 +307,18 @@ void ComponentIntegrity::initializeSpdmConnection()
                 (negotiatedVersion >> SPDM_VERSION_NUMBER_SHIFT_BIT) >> 4 & 0xF;
             const uint8_t minor =
                 (negotiatedVersion >> SPDM_VERSION_NUMBER_SHIFT_BIT) & 0xF;
-            lg2::info("SPDM connection negotiated version {MAJOR}.{MINOR}",
-                      "MAJOR", major, "MINOR", minor);
+            const auto& algo = reinterpret_cast<libspdm_context_t*>(
+                                   transport->spdmContext.get())
+                                   ->connection_info.algorithm;
+            const std::string asym =
+                (algo.base_asym_algo == 0 && algo.pqc_asym_algo == 0)
+                    ? std::string("none")
+                    : getSigningAlgorithmStr(algo.base_asym_algo,
+                                             algo.pqc_asym_algo);
+            lg2::info(
+                "SPDM connection negotiated version {MAJOR}.{MINOR}, asym {ASYM}, key exchange {KEY_EXCHANGE}",
+                "MAJOR", major, "MINOR", minor, "ASYM", asym, "KEY_EXCHANGE",
+                keyExchangeAlgoName(algo.dhe_named_group, algo.kem_alg));
         }
     }
 }
@@ -429,7 +526,8 @@ auto ComponentIntegrity::method_call(
         auto hashAlgoStr = getHashingAlgorithmStr(
             spdmCtx->connection_info.algorithm.base_hash_algo);
         auto signAlgoStr = getSigningAlgorithmStr(
-            spdmCtx->connection_info.algorithm.base_asym_algo);
+            spdmCtx->connection_info.algorithm.base_asym_algo,
+            spdmCtx->connection_info.algorithm.pqc_asym_algo);
         auto versionStr = getNegotiatedVersion();
         type_version(versionStr);
 
@@ -441,10 +539,10 @@ auto ComponentIntegrity::method_call(
     {
         lg2::error("SPDM Get Signed Measurements FAILED: {ERROR}", "ERROR", e);
         // Return empty tuple on error
-        co_return std::make_tuple(sdbusplus::object_path(path), std::string(""),
-                                  std::string(""), std::string(""),
-                                  std::string(""), type_version(),
-                                  std::vector<uint8_t>{});
+        co_return std::make_tuple(
+            sdbusplus::object_path(path), std::string(""), std::string(""),
+            std::string(""), std::string(""), type_version(),
+            std::vector<uint8_t>{});
     }
 }
 
@@ -591,9 +689,21 @@ std::string ComponentIntegrity::getHashingAlgorithmStr(uint16_t algo)
     }
 }
 
-std::string ComponentIntegrity::getSigningAlgorithmStr(uint16_t algo)
+std::string ComponentIntegrity::getSigningAlgorithmStr(uint32_t baseAsymAlgo,
+                                                       uint32_t pqcAsymAlgo)
 {
-    switch (algo)
+    if (pqcAsymAlgo != 0)
+    {
+        if (const char* name = pqcAsymAlgoName(pqcAsymAlgo))
+        {
+            return name;
+        }
+        lg2::error("Unknown PQC signing algorithm: {ALGO}", "ALGO",
+                   pqcAsymAlgo);
+        return "NONE";
+    }
+
+    switch (baseAsymAlgo)
     {
         case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_RSASSA_2048:
             return "RSASSA2048";
@@ -606,7 +716,8 @@ std::string ComponentIntegrity::getSigningAlgorithmStr(uint16_t algo)
         case SPDM_ALGORITHMS_BASE_ASYM_ALGO_TPM_ALG_ECDSA_ECC_NIST_P521:
             return "ECDSA_P521";
         default:
-            lg2::error("Unknown signing algorithm: {ALGO}", "ALGO", algo);
+            lg2::error("Unknown signing algorithm: {ALGO}", "ALGO",
+                       baseAsymAlgo);
             return "NONE";
     }
 }

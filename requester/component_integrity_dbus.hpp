@@ -202,11 +202,14 @@ class ComponentIntegrity :
     std::string getHashingAlgorithmStr(uint16_t algo);
 
     /**
-     * @brief Convert signing algorithm to string representation
-     * @param algo Algorithm enumeration value
-     * @return String representation of algorithm
+     * @brief Convert the negotiated signing algorithm to a string
+     * @param baseAsymAlgo Negotiated classic algorithm (base_asym_algo)
+     * @param pqcAsymAlgo Negotiated SPDM 1.4 PQC algorithm (pqc_asym_algo);
+     *        takes precedence when non-zero
+     * @return String representation of algorithm, "NONE" if unknown
      */
-    std::string getSigningAlgorithmStr(uint16_t algo);
+    std::string getSigningAlgorithmStr(uint32_t baseAsymAlgo,
+                                       uint32_t pqcAsymAlgo);
 
     /**
      * @brief Get the SPDM version negotiated by libspdm as a string

@@ -72,6 +72,9 @@ const std::string& requesterKeyBaseDir()
  * The key is read per call rather than cached so that no private key material
  * lingers in the daemon's address space between sessions; this mirrors the
  * libspdm sample secret lib.
+ *
+ * libspdm negotiates either a classic (req_base_asym_alg) or an SPDM 1.4 PQC
+ * (req_pqc_asym_alg) algorithm and passes 0 for the other one.
  */
 extern "C" bool libspdm_requester_data_sign(
     void* /* spdm_context */, spdm_version_number_t spdm_version,
@@ -80,11 +83,6 @@ extern "C" bool libspdm_requester_data_sign(
     const uint8_t* message, size_t message_size, uint8_t* signature,
     size_t* sig_size)
 {
-    if (req_pqc_asym_alg != 0)
-    {
-        lg2::error("Requester signing: PQC algorithms are not supported");
-        return false;
-    }
     // spdmd never advertises MULTI_KEY_CAP, so libspdm always passes 0.
     if (key_pair_id != 0)
     {
@@ -93,14 +91,20 @@ extern "C" bool libspdm_requester_data_sign(
         return false;
     }
 
-    const char* subdir = spdm::asymAlgoSubdir(req_base_asym_alg);
+    // Rejects unknown algorithms before they reach the libspdm key parsers,
+    // which assert on them.
+    const char* subdir =
+        spdm::sigAlgoSubdir(req_base_asym_alg, req_pqc_asym_alg);
     if (subdir == nullptr)
     {
         lg2::error(
-            "Requester signing: unknown req_base_asym_alg {ALGO}", "ALGO",
-            std::format("0x{:04X}", static_cast<uint32_t>(req_base_asym_alg)));
+            "Requester signing: unknown req_base_asym_alg {ALGO} / req_pqc_asym_alg {PQC_ALGO}",
+            "ALGO",
+            std::format("0x{:04X}", static_cast<uint32_t>(req_base_asym_alg)),
+            "PQC_ALGO", std::format("0x{:08X}", req_pqc_asym_alg));
         return false;
     }
+    const bool isPqc = req_pqc_asym_alg != 0;
 
     const std::filesystem::path keyPath =
         std::filesystem::path(spdm::requesterKeyBaseDir()) / subdir /
@@ -117,9 +121,14 @@ extern "C" bool libspdm_requester_data_sign(
     }
 
     void* keyCtx = nullptr;
-    if (!libspdm_req_asym_get_private_key_from_pem(
-            req_base_asym_alg, pem.data(), pem.size(), /*password=*/nullptr,
-            &keyCtx))
+    const bool parsed =
+        isPqc ? libspdm_req_pqc_asym_get_private_key_from_pem(
+                    req_pqc_asym_alg, pem.data(), pem.size(),
+                    /*password=*/nullptr, &keyCtx)
+              : libspdm_req_asym_get_private_key_from_pem(
+                    req_base_asym_alg, pem.data(), pem.size(),
+                    /*password=*/nullptr, &keyCtx);
+    if (!parsed)
     {
         std::ranges::fill(pem, uint8_t{0});
         lg2::error("Requester signing: failed to parse private key {PATH}",
@@ -128,20 +137,39 @@ extern "C" bool libspdm_requester_data_sign(
     }
 
     bool result = false;
-    if (is_data_hash)
+    if (isPqc)
     {
-        result = libspdm_req_asym_sign_hash(
-            spdm_version, op_code, req_base_asym_alg, base_hash_algo, keyCtx,
-            message, message_size, signature, sig_size);
+        if (is_data_hash)
+        {
+            result = libspdm_req_pqc_asym_sign_hash(
+                spdm_version, op_code, req_pqc_asym_alg, base_hash_algo, keyCtx,
+                message, message_size, signature, sig_size);
+        }
+        else
+        {
+            result = libspdm_req_pqc_asym_sign(
+                spdm_version, op_code, req_pqc_asym_alg, base_hash_algo, keyCtx,
+                message, message_size, signature, sig_size);
+        }
+        libspdm_req_pqc_asym_free(req_pqc_asym_alg, keyCtx);
     }
     else
     {
-        result = libspdm_req_asym_sign(spdm_version, op_code, req_base_asym_alg,
-                                       base_hash_algo, keyCtx, message,
-                                       message_size, signature, sig_size);
+        if (is_data_hash)
+        {
+            result = libspdm_req_asym_sign_hash(
+                spdm_version, op_code, req_base_asym_alg, base_hash_algo,
+                keyCtx, message, message_size, signature, sig_size);
+        }
+        else
+        {
+            result = libspdm_req_asym_sign(
+                spdm_version, op_code, req_base_asym_alg, base_hash_algo,
+                keyCtx, message, message_size, signature, sig_size);
+        }
+        libspdm_req_asym_free(req_base_asym_alg, keyCtx);
     }
 
-    libspdm_req_asym_free(req_base_asym_alg, keyCtx);
     std::ranges::fill(pem, uint8_t{0});
 
     if (!result)
