@@ -171,6 +171,9 @@ bool SpdmMctpTransport::configureContext()
     uint32_t data32 = supportAsymAlgo;
     libspdm_set_data(spdmContext.get(), LIBSPDM_DATA_BASE_ASYM_ALGO, &parameter,
                      &data32, sizeof(data32));
+    data32 = supportPqcAsymAlgo;
+    libspdm_set_data(spdmContext.get(), LIBSPDM_DATA_PQC_ASYM_ALGO, &parameter,
+                     &data32, sizeof(data32));
     data32 = supportHashAlgo;
     libspdm_set_data(spdmContext.get(), LIBSPDM_DATA_BASE_HASH_ALGO, &parameter,
                      &data32, sizeof(data32));
@@ -246,13 +249,30 @@ libspdm_return_t SpdmMctpTransport::device_receive_message(
             lg2::error("Failed to receive SPDM message");
             return LIBSPDM_STATUS_RECEIVE_FAIL;
         }
-        if (transport->mctpMessageTransport.decode(transport->eid, response,
-                                                   message, message_size) !=
-            LIBSPDM_STATUS_SUCCESS)
+        void* decoded = nullptr;
+        size_t decodedSize = 0;
+        libspdm_return_t decodeStatus = transport->mctpMessageTransport.decode(
+            transport->eid, response, &decoded, &decodedSize);
+        // NOLINTNEXTLINE(cppcoreguidelines-no-malloc)
+        std::unique_ptr<void, decltype(&free)> decodedOwner(decoded, &free);
+        if (decodeStatus != LIBSPDM_STATUS_SUCCESS)
         {
             lg2::error("Failed to decode MCTP message");
             return LIBSPDM_STATUS_RECEIVE_FAIL;
         }
+
+        // libspdm requires the message to stay inside the receiver buffer it
+        // passed in (capacity *message_size): it decodes in place and
+        // reassembles a chunked large response into that buffer.
+        if (decodedSize > *message_size)
+        {
+            lg2::error(
+                "SPDM message of {SIZE} bytes exceeds the {MAX} byte receive buffer",
+                "SIZE", decodedSize, "MAX", *message_size);
+            return LIBSPDM_STATUS_RECEIVE_FAIL;
+        }
+        std::memcpy(*message, decoded, decodedSize);
+        *message_size = decodedSize;
         return LIBSPDM_STATUS_SUCCESS;
     }
     catch (const std::exception& e)

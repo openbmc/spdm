@@ -316,7 +316,7 @@ bool libspdm_write_key_pair_info(
 }
 #endif /* #if LIBSPDM_ENABLE_CAPABILITY_SET_KEY_PAIR_INFO_CAP */
 
-#ifdef LIBSPDM_ENABLE_CAPABILITY_ENDPOINT_INFO_CAP
+#if LIBSPDM_ENABLE_CAPABILITY_ENDPOINT_INFO_CAP
 libspdm_return_t libspdm_generate_device_endpoint_info(
     void* /* spdm_context */, uint8_t /* sub_code */,
     uint8_t /* request_attributes */, uint32_t* /* endpoint_info_size */,

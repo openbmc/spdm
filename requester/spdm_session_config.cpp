@@ -104,14 +104,14 @@ libspdm_return_t applyVersionConfig(void* ctx, SpdmTransport& transport,
     return LIBSPDM_STATUS_SUCCESS;
 }
 
-uint32_t getNegotiatedAsymAlgo(void* ctx)
+// Read a negotiated 32-bit algorithm selection (0 if not negotiated).
+uint32_t getNegotiatedAlgo32(void* ctx, libspdm_data_type_t key)
 {
     libspdm_data_parameter_t p{};
     p.location = LIBSPDM_DATA_LOCATION_CONNECTION;
     uint32_t algo = 0;
     size_t algoSize = sizeof(algo);
-    libspdm_return_t st = libspdm_get_data(ctx, LIBSPDM_DATA_BASE_ASYM_ALGO, &p,
-                                           &algo, &algoSize);
+    libspdm_return_t st = libspdm_get_data(ctx, key, &p, &algo, &algoSize);
     if (LIBSPDM_STATUS_IS_ERROR(st))
     {
         return 0;
@@ -136,13 +136,17 @@ std::optional<CertLoadResult> loadPeerRootCert(void* ctx,
 
     if (!cfg.peerRootCertBaseDir.empty())
     {
-        const uint32_t algo = getNegotiatedAsymAlgo(ctx);
-        const char* subdir = asymAlgoSubdir(algo);
+        const uint32_t algo =
+            getNegotiatedAlgo32(ctx, LIBSPDM_DATA_BASE_ASYM_ALGO);
+        const uint32_t pqcAlgo =
+            getNegotiatedAlgo32(ctx, LIBSPDM_DATA_PQC_ASYM_ALGO);
+        const char* subdir = sigAlgoSubdir(algo, pqcAlgo);
         if (subdir == nullptr)
         {
             lg2::error(
-                "Cannot derive cert subdir: unknown negotiated base_asym_algo {ALGO}",
-                "ALGO", std::format("0x{:08X}", algo));
+                "Cannot derive cert subdir: unknown negotiated base_asym_algo {ALGO} / pqc_asym_algo {PQC_ALGO}",
+                "ALGO", std::format("0x{:08X}", algo), "PQC_ALGO",
+                std::format("0x{:08X}", pqcAlgo));
             return std::nullopt;
         }
 
@@ -158,8 +162,11 @@ std::optional<CertLoadResult> loadPeerRootCert(void* ctx,
 
 } // namespace
 
-/// Map a negotiated base_asym_algo bit to the spdm-emu sample-key folder name.
-const char* asymAlgoSubdir(uint32_t baseAsymAlgo)
+namespace
+{
+
+// Map a negotiated base_asym_algo bit to the spdm-emu sample-key folder name.
+const char* baseAsymAlgoSubdir(uint32_t baseAsymAlgo)
 {
     switch (baseAsymAlgo)
     {
@@ -191,6 +198,62 @@ const char* asymAlgoSubdir(uint32_t baseAsymAlgo)
         default:
             return nullptr;
     }
+}
+
+// Map a negotiated SPDM 1.4 pqc_asym_algo bit to the sample-key folder name.
+const char* pqcAsymAlgoSubdir(uint32_t pqcAsymAlgo)
+{
+    switch (pqcAsymAlgo)
+    {
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_ML_DSA_44:
+            return "mldsa44";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_ML_DSA_65:
+            return "mldsa65";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_ML_DSA_87:
+            return "mldsa87";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHA2_128S:
+            return "slh-dsa-sha2-128s";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHAKE_128S:
+            return "slh-dsa-shake-128s";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHA2_128F:
+            return "slh-dsa-sha2-128f";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHAKE_128F:
+            return "slh-dsa-shake-128f";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHA2_192S:
+            return "slh-dsa-sha2-192s";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHAKE_192S:
+            return "slh-dsa-shake-192s";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHA2_192F:
+            return "slh-dsa-sha2-192f";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHAKE_192F:
+            return "slh-dsa-shake-192f";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHA2_256S:
+            return "slh-dsa-sha2-256s";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHAKE_256S:
+            return "slh-dsa-shake-256s";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHA2_256F:
+            return "slh-dsa-sha2-256f";
+        case SPDM_ALGORITHMS_PQC_ASYM_ALGO_SLH_DSA_SHAKE_256F:
+            return "slh-dsa-shake-256f";
+        default:
+            return nullptr;
+    }
+}
+
+} // namespace
+
+// Map a negotiated signature algorithm to the spdm-emu sample-key folder name.
+const char* sigAlgoSubdir(uint32_t baseAsymAlgo, uint32_t pqcAsymAlgo)
+{
+    if (pqcAsymAlgo == 0)
+    {
+        return baseAsymAlgoSubdir(baseAsymAlgo);
+    }
+    if (baseAsymAlgo == 0)
+    {
+        return pqcAsymAlgoSubdir(pqcAsymAlgo);
+    }
+    return nullptr;
 }
 
 libspdm_return_t applySecureSessionConfig(SpdmTransport& transport,
@@ -227,6 +290,12 @@ libspdm_return_t applySecureSessionConfig(SpdmTransport& transport,
         return st;
     }
 
+    st = setDataAndCheck(ctx, LIBSPDM_DATA_KEM_ALG, cfg.kemAlg, "KEM_ALG");
+    if (LIBSPDM_STATUS_IS_ERROR(st))
+    {
+        return st;
+    }
+
     st = setDataAndCheck(ctx, LIBSPDM_DATA_AEAD_CIPHER_SUITE, cfg.aeadCipher,
                          "AEAD_CIPHER_SUITE");
     if (LIBSPDM_STATUS_IS_ERROR(st))
@@ -236,6 +305,13 @@ libspdm_return_t applySecureSessionConfig(SpdmTransport& transport,
 
     st = setDataAndCheck(ctx, LIBSPDM_DATA_REQ_BASE_ASYM_ALG,
                          transport.supportReqAsymAlgo, "REQ_BASE_ASYM_ALG");
+    if (LIBSPDM_STATUS_IS_ERROR(st))
+    {
+        return st;
+    }
+
+    st = setDataAndCheck(ctx, LIBSPDM_DATA_REQ_PQC_ASYM_ALG,
+                         transport.supportReqPqcAsymAlgo, "REQ_PQC_ASYM_ALG");
     if (LIBSPDM_STATUS_IS_ERROR(st))
     {
         return st;
