@@ -21,8 +21,9 @@ namespace spdm
 namespace
 {
 
-/// Read the negotiated requester asym algo. 0 means the responder offered no
-/// overlap, i.e. it will not ask us to authenticate.
+// Read the negotiated requester asym algo. It and the PQC one below are both
+// 0 when the responder offered no overlap, i.e. it will not ask us to
+// authenticate.
 uint16_t getNegotiatedReqAsymAlgo(void* ctx)
 {
     libspdm_data_parameter_t p{};
@@ -31,6 +32,21 @@ uint16_t getNegotiatedReqAsymAlgo(void* ctx)
     size_t algoSize = sizeof(algo);
     if (LIBSPDM_STATUS_IS_ERROR(libspdm_get_data(
             ctx, LIBSPDM_DATA_REQ_BASE_ASYM_ALG, &p, &algo, &algoSize)))
+    {
+        return 0;
+    }
+    return algo;
+}
+
+// Read the negotiated requester PQC asym algo (SPDM 1.4).
+uint32_t getNegotiatedReqPqcAsymAlgo(void* ctx)
+{
+    libspdm_data_parameter_t p{};
+    p.location = LIBSPDM_DATA_LOCATION_CONNECTION;
+    uint32_t algo = 0;
+    size_t algoSize = sizeof(algo);
+    if (LIBSPDM_STATUS_IS_ERROR(libspdm_get_data(
+            ctx, LIBSPDM_DATA_REQ_PQC_ASYM_ALG, &p, &algo, &algoSize)))
     {
         return 0;
     }
@@ -125,7 +141,8 @@ libspdm_return_t installLocalRequesterCertChain(SpdmTransport& transport,
     }
 
     const uint16_t reqAsym = getNegotiatedReqAsymAlgo(ctx);
-    if (reqAsym == 0)
+    const uint32_t reqPqcAsym = getNegotiatedReqPqcAsymAlgo(ctx);
+    if (reqAsym == 0 && reqPqcAsym == 0)
     {
         // The responder offered no requester asym algo, so it cannot ask for
         // mutual authentication. A one-way session must still succeed.
@@ -134,12 +151,13 @@ libspdm_return_t installLocalRequesterCertChain(SpdmTransport& transport,
         return LIBSPDM_STATUS_SUCCESS;
     }
 
-    const char* subdir = asymAlgoSubdir(reqAsym);
+    const char* subdir = sigAlgoSubdir(reqAsym, reqPqcAsym);
     if (subdir == nullptr)
     {
         lg2::error(
-            "Cannot derive local cert subdir: unknown negotiated req_base_asym_alg {ALGO}",
-            "ALGO", std::format("0x{:04X}", static_cast<uint32_t>(reqAsym)));
+            "Cannot derive local cert subdir: unknown negotiated req_base_asym_alg {ALGO} / req_pqc_asym_alg {PQC_ALGO}",
+            "ALGO", std::format("0x{:04X}", static_cast<uint32_t>(reqAsym)),
+            "PQC_ALGO", std::format("0x{:08X}", reqPqcAsym));
         return LIBSPDM_STATUS_INVALID_PARAMETER;
     }
 
@@ -196,9 +214,10 @@ libspdm_return_t installLocalRequesterCertChain(SpdmTransport& transport,
         }
     }
 
-    // SPDM 1.3 puts this mask in the encapsulated DIGESTS Param1 and the
-    // responder rejects the response unless it covers every provisioned slot.
-    // It defaults to 0, so setting it is mandatory on 1.3 and harmless below.
+    // SPDM 1.3 and later put this mask in the encapsulated DIGESTS Param1 and
+    // the responder rejects the response unless it covers every provisioned
+    // slot. It defaults to 0, so setting it is mandatory on 1.3+ and harmless
+    // below.
     uint8_t mask = cfg.localCertSlotMask;
     libspdm_data_parameter_t maskParam{};
     maskParam.location = LIBSPDM_DATA_LOCATION_LOCAL;
