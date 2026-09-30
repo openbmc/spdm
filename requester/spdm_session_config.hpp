@@ -27,9 +27,17 @@ struct SecureSessionConfig
         SPDM_GET_CAPABILITIES_REQUEST_FLAGS_HBEAT_CAP |
         SPDM_GET_CAPABILITIES_REQUEST_FLAGS_KEY_UPD_CAP |
         SPDM_GET_CAPABILITIES_REQUEST_FLAGS_ENCAP_CAP |
-        SPDM_GET_CAPABILITIES_REQUEST_FLAGS_MUT_AUTH_CAP;
+        SPDM_GET_CAPABILITIES_REQUEST_FLAGS_MUT_AUTH_CAP |
+        // PQC signatures and KEM keys make KEY_EXCHANGE_RSP, FINISH and
+        // CERTIFICATE larger than many responders' DataTransferSize.
+        (LIBSPDM_ENABLE_CAPABILITY_CHUNK_CAP
+             ? SPDM_GET_CAPABILITIES_REQUEST_FLAGS_CHUNK_CAP
+             : 0);
 
     uint16_t dheGroup = SPDM_ALGORITHMS_DHE_NAMED_GROUP_SECP_384_R1;
+    // SPDM 1.4 KEM algorithms, sent only when 1.4 is negotiated. The
+    // responder selects either a DHE group or a KEM, never both.
+    uint32_t kemAlg = mlKemAlgos;
     uint16_t aeadCipher = SPDM_ALGORITHMS_AEAD_CIPHER_SUITE_AES_256_GCM;
     // Requester signing algorithms come from SpdmTransport::supportReqAsymAlgo.
     uint16_t keySchedule = SPDM_ALGORITHMS_KEY_SCHEDULE_SPDM;
@@ -41,7 +49,8 @@ struct SecureSessionConfig
     ///   3. peerRootCertBaseDir   — base directory; the actual file is
     ///                              <baseDir>/<algoSubdir>/<peerRootCertFileName>
     ///                              and <algoSubdir> is picked from the
-    ///                              negotiated base_asym_algo (e.g. ecp384).
+    ///                              negotiated base_asym_algo or pqc_asym_algo
+    ///                              (e.g. ecp384, mldsa65).
     ///
     /// Resolution by basedir requires libspdm_init_connection to have run
     /// first, so it happens at session-open time, not in
@@ -79,10 +88,14 @@ libspdm_return_t installPeerRootCert(SpdmTransport& transport,
                                      const SecureSessionConfig& cfg);
 
 /**
- * Directory name (e.g. "ecp256") for a base asym algo, matching the
- * spdm-emu sample-key layout. Returns nullptr for unknown algos.
+ * Directory name (e.g. "ecp256", "mldsa65") for a negotiated signature
+ * algorithm, matching the spdm-emu sample-key layout.
+ *
+ * libspdm negotiates either a classic or a PQC algorithm, so exactly one of
+ * the two values must be non-zero. Returns nullptr otherwise, or for an
+ * unknown algorithm.
  */
-const char* asymAlgoSubdir(uint32_t baseAsymAlgo);
+const char* sigAlgoSubdir(uint32_t baseAsymAlgo, uint32_t pqcAsymAlgo);
 
 /**
  * Provision the requester's own cert chain so libspdm can answer the
@@ -91,8 +104,9 @@ const char* asymAlgoSubdir(uint32_t baseAsymAlgo);
  *
  * Requires libspdm_init_connection to have completed (the req asym algo is
  * only negotiated by then). Returns LIBSPDM_STATUS_SUCCESS and does nothing
- * if no base directory is configured, or if the responder negotiated no
- * requester asym algo (mutual auth simply will not be requested).
+ * if no base directory is configured, or if the responder negotiated neither
+ * a classic nor a PQC requester asym algo (mutual auth simply will not be
+ * requested).
  */
 libspdm_return_t installLocalRequesterCertChain(SpdmTransport& transport,
                                                 const SecureSessionConfig& cfg);
