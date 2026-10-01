@@ -16,6 +16,23 @@
       "message": "@manojkiran.eda@gmail.com @patrick@stwcx.xyz can you please review this commit?",
       "revId": "61b12b05e6ebb9decd314241d5082c663621366d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af3255db_37fadd94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2026-10-01T06:45:39Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "61b12b05e6ebb9decd314241d5082c663621366d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
