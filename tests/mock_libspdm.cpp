@@ -21,7 +21,7 @@ typedef libspdm_return_t (*libspdm_get_digest_func_t)(void*, const uint32_t*,
 typedef void (*libspdm_deinit_context_func_t)(void*);
 typedef libspdm_return_t (*libspdm_get_cert_func_t)(void*, const uint32_t*,
                                                     uint8_t, size_t*, void*);
-typedef size_t (*libspdm_get_hash_size_func_t)(uint32_t);
+typedef uint32_t (*libspdm_get_hash_size_func_t)(uint32_t);
 
 // Global function pointers that can be redirected
 static libspdm_init_connection_func_t g_libspdm_init_connection = nullptr;
@@ -78,8 +78,8 @@ extern "C" void set_real_libspdm_functions(
 }
 
 // Mock wrapper for libspdm_init_connection
-extern "C" libspdm_return_t libspdm_init_connection(void* spdm_context,
-                                                    bool get_version_only)
+extern "C" libspdm_return_t __wrap_libspdm_init_connection(
+    void* spdm_context, bool get_version_only)
 {
     if (g_mockDataValid && g_mockData.spdmContext == spdm_context)
     {
@@ -96,7 +96,7 @@ extern "C" libspdm_return_t libspdm_init_connection(void* spdm_context,
 }
 
 // Mock wrapper for libspdm_deinit_context
-extern "C" void libspdm_deinit_context(void* spdm_context)
+extern "C" void __wrap_libspdm_deinit_context(void* spdm_context)
 {
     (void)spdm_context; // Suppress unused parameter warning
 
@@ -111,7 +111,7 @@ extern "C" void libspdm_deinit_context(void* spdm_context)
 }
 
 // Mock wrapper for libspdm_get_digest
-extern "C" libspdm_return_t libspdm_get_digest(
+extern "C" libspdm_return_t __wrap_libspdm_get_digest(
     void* spdm_context, const uint32_t* session_id, uint8_t* slot_mask,
     void* total_digest_buffer)
 {
@@ -141,7 +141,7 @@ extern "C" libspdm_return_t libspdm_get_digest(
 }
 
 // Mock wrapper for libspdm_get_certificate
-extern "C" libspdm_return_t libspdm_get_certificate(
+extern "C" libspdm_return_t __wrap_libspdm_get_certificate(
     void* spdm_context, const uint32_t* session_id, uint8_t slot_id,
     size_t* cert_chain_size, void* cert_chain)
 {
@@ -172,7 +172,7 @@ extern "C" libspdm_return_t libspdm_get_certificate(
 }
 
 // Mock wrapper for libspdm_get_hash_size
-extern "C" size_t libspdm_get_hash_size(uint32_t base_hash_algo)
+extern "C" uint32_t __wrap_libspdm_get_hash_size(uint32_t base_hash_algo)
 {
     (void)base_hash_algo;
     // Always return 48 for the mock
