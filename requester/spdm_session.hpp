@@ -68,10 +68,11 @@ class SpdmSession
     libspdm_return_t send(std::span<const uint8_t> req, std::span<uint8_t> resp,
                           size_t& respLen);
 
-    bool active() const
-    {
-        return isActive;
-    }
+    /**
+     * True while libspdm still holds the session. The transport drops every
+     * session when it reconnects (SpdmTransport::ensureLink()).
+     */
+    bool active() const;
     uint32_t sessionId() const
     {
         return id;

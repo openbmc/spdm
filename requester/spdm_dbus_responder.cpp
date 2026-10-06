@@ -178,6 +178,12 @@ libspdm_return_t SPDMDBusResponder::closeSecureSession()
     {
         return LIBSPDM_STATUS_SUCCESS;
     }
+    // A responder that dropped the connection has already ended the session.
+    // ensureLink() then resets libspdm, and stop() has nothing to send.
+    if (transport)
+    {
+        transport->ensureLink();
+    }
     return session->stop();
 }
 

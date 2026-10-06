@@ -40,6 +40,16 @@ class SpdmTcpTransport : public SpdmTransport
      */
     bool initialize() override;
 
+    /**
+     * @brief Reconnect if the responder closed the TCP connection
+     *
+     * Resets the libspdm connection state when it reconnects (see
+     * SpdmTransport::ensureLink()).
+     *
+     * @return true if the connection is up
+     */
+    bool ensureLink() override;
+
     /* Public members for callback access */
     std::string ipAddr;
     uint16_t port;

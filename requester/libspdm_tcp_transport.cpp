@@ -61,6 +61,36 @@ bool SpdmTcpTransport::initialize()
     return true;
 }
 
+bool SpdmTcpTransport::ensureLink()
+{
+    if (!spdmContext)
+    {
+        return false;
+    }
+
+    if (tcpIo.isSocketOpen() && !tcpIo.peerClosed())
+    {
+        return true;
+    }
+
+    lg2::warning("TCP connection to {IP}:{PORT} lost, reconnecting", "IP",
+                 ipAddr, "PORT", port);
+    tcpIo.closeSocket();
+
+    // A restarted responder knows nothing of the old connection. Drop the
+    // negotiated connection and its sessions; local settings (capabilities,
+    // algorithms, certificates) are kept.
+    libspdm_reset_context(spdmContext.get());
+
+    if (!tcpIo.createSocket())
+    {
+        lg2::error("Failed to reconnect to {IP}:{PORT}", "IP", ipAddr, "PORT",
+                   port);
+        return false;
+    }
+    return true;
+}
+
 bool SpdmTcpTransport::allocateContext()
 {
     // NOLINTNEXTLINE(cppcoreguidelines-no-malloc)
