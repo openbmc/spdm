@@ -185,6 +185,20 @@ class SpdmTransport
      * @return false if the SPDM context is not initialized successfully
      */
     virtual bool initialize() = 0;
+
+    /**
+     * @brief Make sure the link to the responder is up.
+     * @details A transport whose link can drop (TCP) reconnects here. The
+     *          responder keeps no state across a new link, so the transport
+     *          also resets the libspdm connection: the next caller
+     *          renegotiates it, and every secure session is gone.
+     *
+     * @return true if the link is up, false if it could not be restored
+     */
+    virtual bool ensureLink()
+    {
+        return true;
+    }
 };
 
 } // namespace spdm

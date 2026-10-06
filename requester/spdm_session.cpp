@@ -77,11 +77,12 @@ libspdm_return_t SpdmSession::start(uint8_t slotId, uint8_t measHashType,
         lg2::error("SpdmSession::start: spdmContext is null");
         return LIBSPDM_STATUS_INVALID_PARAMETER;
     }
-    if (isActive)
+    if (active())
     {
         lg2::warning("SpdmSession::start called while already active");
         return LIBSPDM_STATUS_SUCCESS;
     }
+    isActive = false;
 
     if (!usePsk)
     {
@@ -125,10 +126,19 @@ libspdm_return_t SpdmSession::start(uint8_t slotId, uint8_t measHashType,
     return LIBSPDM_STATUS_SUCCESS;
 }
 
+bool SpdmSession::active() const
+{
+    return isActive && transport.spdmContext &&
+           libspdm_get_session_info_via_session_id(transport.spdmContext.get(),
+                                                   id) != nullptr;
+}
+
 libspdm_return_t SpdmSession::stop(uint8_t endAttrs)
 {
-    if (!isActive)
+    if (!active())
     {
+        // Nothing to end, or libspdm already dropped the session.
+        isActive = false;
         return LIBSPDM_STATUS_SUCCESS;
     }
     void* ctx = transport.spdmContext.get();
