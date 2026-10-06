@@ -153,7 +153,7 @@ class TcpMessageTransport : public NonCopyable
         if (headerTransportType !=
             static_cast<uint32_t>(PlatformTransportType::TCP))
         {
-            lg2::error("Unexpected transport type: 0x{TYPE:08X}", "TYPE",
+            lg2::error("Unexpected transport type: {TYPE}", "TYPE", lg2::hex,
                        headerTransportType);
             return LIBSPDM_STATUS_INVALID_MSG_FIELD;
         }

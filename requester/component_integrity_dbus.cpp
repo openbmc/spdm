@@ -358,8 +358,8 @@ std::tuple<uint8_t, std::vector<uint8_t>, size_t>
 
     if (LIBSPDM_STATUS_IS_ERROR(status))
     {
-        lg2::error("libspdm_get_digest failed, status: 0x{STATUS:X}", "STATUS",
-                   status);
+        lg2::error("libspdm_get_digest failed, status: {STATUS}", "STATUS",
+                   lg2::hex, status);
         throw std::runtime_error("Failed to get certificate digests");
     }
 
@@ -372,9 +372,9 @@ std::tuple<uint8_t, std::vector<uint8_t>, size_t>
     size_t totalDigestSize = std::min(numSlots * hashSize, digestBuffer.size());
 
     lg2::debug(
-        "libspdm_get_digest completed, slotMask: 0x{MASK:X}, slots: {SLOTS}, size: {SIZE}",
-        "MASK", static_cast<unsigned>(slotMask), "SLOTS", numSlots, "SIZE",
-        totalDigestSize);
+        "libspdm_get_digest completed, slotMask: {MASK}, slots: {SLOTS}, size: {SIZE}",
+        "MASK", lg2::hex, static_cast<unsigned>(slotMask), "SLOTS", numSlots,
+        "SIZE", totalDigestSize);
 
     return {slotMask, digestBuffer, totalDigestSize};
 }
@@ -454,8 +454,8 @@ std::pair<std::vector<uint8_t>, uint8_t>
     if (LIBSPDM_STATUS_IS_ERROR(status))
     {
         lg2::error(
-            "libspdm_get_measurement failed for index {INDEX}, status: 0x{STATUS:X}",
-            "INDEX", measurementIndex, "STATUS", status);
+            "libspdm_get_measurement failed for index {INDEX}, status: {STATUS}",
+            "INDEX", measurementIndex, "STATUS", lg2::hex, status);
         throw std::runtime_error("Failed to get signed measurements");
     }
 
@@ -633,8 +633,8 @@ std::tuple<std::string, std::vector<uint8_t>, std::vector<uint8_t>>
 
     if (LIBSPDM_STATUS_IS_ERROR(status))
     {
-        lg2::error("libspdm_get_certificate failed, status: 0x{STATUS:X}",
-                   "STATUS", status);
+        lg2::error("libspdm_get_certificate failed, status: {STATUS}", "STATUS",
+                   lg2::hex, status);
         throw std::runtime_error("Failed to get certificate chain");
     }
     certChain.resize(certChainSize);
