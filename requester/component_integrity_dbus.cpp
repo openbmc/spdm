@@ -262,6 +262,14 @@ void ComponentIntegrity::initializeSpdmConnection()
         throw std::runtime_error("SPDM context not initialized");
     }
 
+    // Reconnect if the responder dropped the link. That also resets the
+    // connection state, so the check below then runs the negotiation again.
+    if (!transport->ensureLink())
+    {
+        lg2::error("SPDM transport link is down");
+        throw std::runtime_error("SPDM transport link down");
+    }
+
     // If the connection is already negotiated, skip re-init so a
     // later caller cannot tear down an established secure session
     // by re-running the handshake.

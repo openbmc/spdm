@@ -336,6 +336,39 @@ class TcpIoClass : public IOClass
     }
 
     /**
+     * @brief Check whether the responder has closed the connection
+     * @details SPDM is request/response, so between requests the responder
+     *          sends nothing: a socket that is readable then reports
+     *          end-of-stream or a reset.
+     * @return true if the socket is closed or the peer has closed it
+     */
+    bool peerClosed() const
+    {
+        if (!isSocketOpen())
+        {
+            return true;
+        }
+
+        struct pollfd pfd{};
+        pfd.fd = socketFd;
+        pfd.events = POLLIN;
+        if (poll(&pfd, 1, 0) <= 0)
+        {
+            return false;
+        }
+        if ((pfd.revents & (POLLERR | POLLHUP | POLLNVAL)) != 0)
+        {
+            return true;
+        }
+
+        uint8_t byte = 0;
+        ssize_t received =
+            ::recv(socketFd, &byte, sizeof(byte), MSG_PEEK | MSG_DONTWAIT);
+        return received == 0 || (received < 0 && errno != EAGAIN &&
+                                 errno != EWOULDBLOCK && errno != EINTR);
+    }
+
+    /**
      * @brief Write data to TCP socket (IOClass interface)
      * @param buf Buffer containing data to send (with platform header)
      * @param timeout Timeout in microseconds
@@ -356,7 +389,7 @@ class TcpIoClass : public IOClass
         while (totalSent < buf.size())
         {
             ssize_t sent = ::send(socketFd, buf.data() + totalSent,
-                                  buf.size() - totalSent, 0);
+                                  buf.size() - totalSent, sendFlags);
             if (sent < 0)
             {
                 if (errno == EINTR)
@@ -365,11 +398,13 @@ class TcpIoClass : public IOClass
                 }
                 lg2::error("TCP send failed: {ERRNO} ({ERRMSG})", "ERRNO",
                            errno, "ERRMSG", std::strerror(errno));
+                closeIfDisconnected(errno);
                 return LIBSPDM_STATUS_SEND_FAIL;
             }
             if (sent == 0)
             {
                 lg2::error("TCP connection closed during send");
+                closeSocket();
                 return LIBSPDM_STATUS_SEND_FAIL;
             }
             totalSent += static_cast<size_t>(sent);
@@ -417,11 +452,13 @@ class TcpIoClass : public IOClass
                 }
                 lg2::error("TCP receive header failed: {ERRNO} ({ERRMSG})",
                            "ERRNO", errno, "ERRMSG", std::strerror(errno));
+                closeIfDisconnected(errno);
                 return LIBSPDM_STATUS_RECEIVE_FAIL;
             }
             if (received == 0)
             {
                 lg2::error("TCP connection closed during header read");
+                closeSocket();
                 return LIBSPDM_STATUS_RECEIVE_FAIL;
             }
             headerReceived += static_cast<size_t>(received);
@@ -474,11 +511,13 @@ class TcpIoClass : public IOClass
                 }
                 lg2::error("TCP receive payload failed: {ERRNO} ({ERRMSG})",
                            "ERRNO", errno, "ERRMSG", std::strerror(errno));
+                closeIfDisconnected(errno);
                 return LIBSPDM_STATUS_RECEIVE_FAIL;
             }
             if (received == 0)
             {
                 lg2::error("TCP connection closed during payload read");
+                closeSocket();
                 return LIBSPDM_STATUS_RECEIVE_FAIL;
             }
             payloadReceived += static_cast<size_t>(received);
@@ -519,6 +558,27 @@ class TcpIoClass : public IOClass
 
     // Minimum socket timeout (5 seconds) to avoid network latency issues
     static constexpr timeout_us_t minSocketTimeoutUs = 5000000;
+
+    // Report a closed connection as EPIPE instead of raising SIGPIPE.
+#ifdef MSG_NOSIGNAL
+    static constexpr int sendFlags = MSG_NOSIGNAL;
+#else
+    static constexpr int sendFlags = 0;
+#endif
+
+    /**
+     * @brief Close the socket if a send / receive error means the peer has
+     *        dropped the connection, so the next user reconnects
+     * @param err errno of the failed call
+     */
+    void closeIfDisconnected(int err)
+    {
+        if (err == EPIPE || err == ECONNRESET || err == ENOTCONN ||
+            err == ECONNABORTED)
+        {
+            closeSocket();
+        }
+    }
 
     /**
      * @brief Set socket timeout options
