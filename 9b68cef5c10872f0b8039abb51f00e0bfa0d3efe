@@ -34,6 +34,24 @@
       "parentUuid": "17c2e473_66573d89",
       "revId": "9b68cef5c10872f0b8039abb51f00e0bfa0d3efe",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38a581e2_421d04d7",
+        "filename": "requester/libspdm_transport.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1003188
+      },
+      "writtenOn": "2026-10-06T18:11:05Z",
+      "side": 1,
+      "message": "Abandoned",
+      "parentUuid": "fbb2c191_f3290f86",
+      "revId": "9b68cef5c10872f0b8039abb51f00e0bfa0d3efe",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
