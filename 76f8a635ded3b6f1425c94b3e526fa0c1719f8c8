@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36449011_7a376f56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003188
+      },
+      "writtenOn": "2026-10-06T12:42:46Z",
+      "side": 1,
+      "message": "Related bmcweb changes: https://gerrit.openbmc.org/c/openbmc/bmcweb/+/95259\nBoth series use the topic spdm-signed-measurements.\n\nAll changes in spdm-signed-measurements: https://gerrit.openbmc.org/q/topic:spdm-signed-measurements",
+      "revId": "76f8a635ded3b6f1425c94b3e526fa0c1719f8c8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
