@@ -75,7 +75,8 @@ int main(int argc, char* argv[])
                     "Failed to apply secure-session config for device {PATH}",
                     "PATH", device.path);
             }
-            else if (policyManager.secure_session_enabled())
+            else if (policyManager.enabled() &&
+                     policyManager.secure_session_enabled())
             {
                 if (LIBSPDM_STATUS_IS_ERROR(
                         responder->openSecureSession(sessionCfg)))
@@ -104,12 +105,74 @@ int main(int argc, char* argv[])
             });
         });
 
+    // Open a secure session with every device that has none.
+    auto openSecureSessions = [&responders, &sessionCfg]() {
+        for (const auto& r : responders)
+        {
+            if (!r->secureSessionActive())
+            {
+                if (LIBSPDM_STATUS_IS_ERROR(r->openSecureSession(sessionCfg)))
+                {
+                    lg2::warning(
+                        "Runtime openSecureSession failed for {DEVICE}",
+                        "DEVICE", r->deviceName);
+                }
+            }
+        }
+    };
+
+    // Close every open secure session.
+    auto closeSecureSessions = [&responders]() {
+        for (const auto& r : responders)
+        {
+            if (r->secureSessionActive())
+            {
+                if (LIBSPDM_STATUS_IS_ERROR(r->closeSecureSession()))
+                {
+                    lg2::warning(
+                        "Runtime closeSecureSession failed for {DEVICE}",
+                        "DEVICE", r->deviceName);
+                }
+            }
+        }
+    };
+
+    // Register callback for runtime Enabled flips. Secure sessions run only
+    // while both Enabled and SecureSessionEnabled are true.
+    policyManager.registerEnabledChangeCallback([&policyManager,
+                                                 &openSecureSessions,
+                                                 &closeSecureSessions](
+                                                    bool oldValue,
+                                                    bool newValue) {
+        if (oldValue == newValue)
+        {
+            return;
+        }
+
+        if (!newValue)
+        {
+            lg2::info("Enabled changed from true to false, closing sessions");
+            closeSecureSessions();
+            return;
+        }
+
+        if (!policyManager.secure_session_enabled())
+        {
+            lg2::info(
+                "Enabled changed from false to true; SecureSessionEnabled is false, no sessions to open");
+            return;
+        }
+
+        lg2::info("Enabled changed from false to true, opening sessions");
+        openSecureSessions();
+    });
+
     // Register callback for runtime SecureSessionEnabled flips while
     // Enabled=true. KEY_EX caps were already advertised at responder creation,
     // so we can open / close sessions on the fly without a full re-init.
-    policyManager.registerSecureSessionEnabledChangeCallback([&responders,
-                                                              &policyManager,
-                                                              &sessionCfg](
+    policyManager.registerSecureSessionEnabledChangeCallback([&policyManager,
+                                                              &openSecureSessions,
+                                                              &closeSecureSessions](
                                                                  bool oldValue,
                                                                  bool
                                                                      newValue) {
@@ -129,36 +192,13 @@ int main(int argc, char* argv[])
         {
             lg2::info(
                 "SecureSessionEnabled changed from false to true, opening sessions");
-            for (const auto& r : responders)
-            {
-                if (!r->secureSessionActive())
-                {
-                    if (LIBSPDM_STATUS_IS_ERROR(
-                            r->openSecureSession(sessionCfg)))
-                    {
-                        lg2::warning(
-                            "Runtime openSecureSession failed for {DEVICE}",
-                            "DEVICE", r->deviceName);
-                    }
-                }
-            }
+            openSecureSessions();
         }
         else
         {
             lg2::info(
                 "SecureSessionEnabled changed from true to false, closing sessions");
-            for (const auto& r : responders)
-            {
-                if (r->secureSessionActive())
-                {
-                    if (LIBSPDM_STATUS_IS_ERROR(r->closeSecureSession()))
-                    {
-                        lg2::warning(
-                            "Runtime closeSecureSession failed for {DEVICE}",
-                            "DEVICE", r->deviceName);
-                    }
-                }
-            }
+            closeSecureSessions();
         }
     });
 
