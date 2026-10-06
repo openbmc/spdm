@@ -129,6 +129,12 @@ class ComponentIntegrity :
     void validateMeasurementIndices(
         const std::vector<size_t>& measurementIndices);
 
+    /** @brief Validate the caller nonce: empty, or 32 bytes in hexadecimal. */
+    void validateNonce(const std::string& nonce);
+
+    /** @brief Validate that the slot is a supported certificate slot (0-7). */
+    void validateSlotId(size_t slotId);
+
     /**
      * @brief Check for special value combinations in measurement indices
      * @param measurementIndices Vector of measurement indices to check
@@ -230,7 +236,22 @@ class ComponentIntegrity :
      * @return Pair of measurement data and number of blocks
      */
     std::pair<std::vector<uint8_t>, uint8_t> getSingleMeasurement(
-        size_t measurementIndex, size_t slotId);
+        size_t measurementIndex, size_t slotId, bool requestSignature,
+        const std::vector<uint8_t>& nonceBytes);
+
+    /** @brief Start capturing the transcript. Call before init_connection.
+     *  @param measurementRequestCount Number of GET_MEASUREMENTS exchanges.
+     */
+    void beginTranscriptLog(size_t measurementRequestCount);
+
+    /** @brief Pause logging, and drop the VCA prefix below SPDM 1.2. */
+    void suspendTranscriptLog();
+
+    /** @brief Resume logging before the GET_MEASUREMENTS exchange. */
+    void resumeTranscriptLog();
+
+    /** @brief Retrieve the captured transcript. */
+    std::vector<uint8_t> takeTranscriptLog();
 
     /**
      * @brief Process measurement data based on index type
@@ -245,6 +266,10 @@ class ComponentIntegrity :
 
   private:
     std::shared_ptr<spdm::SpdmTransport> transport;
+
+    /** @brief Backing store for libspdm's message log. libspdm keeps a raw
+     *  pointer to it, so it must outlive the log. */
+    std::vector<uint8_t> transcriptBuffer;
 
     /** @brief Async context for D-Bus operations */
     sdbusplus::async::context& asyncCtx;
