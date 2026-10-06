@@ -5,10 +5,6 @@ test_deps = [
     libspdm_dep,
 ]
 
-common_src = [
-    'mock_libspdm.cpp',
-]
-
 tests = [
     'test_mctp_transport_discovery',
     'test_mctp_helper',
@@ -19,15 +15,27 @@ tests = [
 ]
 
 foreach t : tests
+    test_src = [t + '.cpp']
+    test_link_args = []
+    if t == 'test_component_integrity'
+        test_src += ['mock_libspdm.cpp']
+        test_link_args += [
+            '-Wl,--wrap=libspdm_init_connection',
+            '-Wl,--wrap=libspdm_deinit_context',
+            '-Wl,--wrap=libspdm_get_digest',
+            '-Wl,--wrap=libspdm_get_certificate',
+            '-Wl,--wrap=libspdm_get_hash_size',
+        ]
+    endif
     test(
         t,
         executable(
             t,
-            t + '.cpp',
-            common_src,
+            test_src,
             link_with: spdmd_lib,
             dependencies: spdmd_deps + test_deps,
             include_directories: spdmd_includes,
+            link_args: test_link_args,
         ),
     )
 endforeach
