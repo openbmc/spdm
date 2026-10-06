@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49f370f6_496ddffd",
+        "filename": "meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-10-06T10:12:28Z",
+      "side": 0,
+      "message": "When this change is pushed it removed https://gerrit.openbmc.org/c/openbmc/spdm/+/94240 from the chain. Can you please rebase the changes on top of this?",
+      "revId": "ea398b45ba1d4e85a43d9bd9433e2014443d79a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
