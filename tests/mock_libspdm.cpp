@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: Copyright OpenBMC Authors
 
+#include "mock_transcript.hpp"
+
 #include <algorithm>
 #include <cstdint>
 #include <cstdio>
@@ -77,12 +79,38 @@ extern "C" void set_real_libspdm_functions(
     g_libspdm_get_hash_size = get_hash_size_func;
 }
 
+// Real libspdm message log functions; the mocks below write to the log the
+// way libspdm does, so the tests see the transcript spdmd returns.
+extern "C" void libspdm_append_msg_log(void* spdm_context, void* message,
+                                       size_t message_size);
+
+namespace spdm::test
+{
+MockTranscript& mockTranscript()
+{
+    static MockTranscript transcript;
+    return transcript;
+}
+} // namespace spdm::test
+
+static void appendToMessageLog(void* spdm_context, std::vector<uint8_t> bytes)
+{
+    if (!bytes.empty())
+    {
+        libspdm_append_msg_log(spdm_context, bytes.data(), bytes.size());
+    }
+}
+
 // Mock wrapper for libspdm_init_connection
 extern "C" libspdm_return_t __wrap_libspdm_init_connection(
     void* spdm_context, bool get_version_only)
 {
     if (g_mockDataValid && g_mockData.spdmContext == spdm_context)
     {
+        if (g_mockData.initStatus == LIBSPDM_STATUS_SUCCESS)
+        {
+            appendToMessageLog(spdm_context, spdm::test::mockTranscript().vca);
+        }
         return g_mockData.initStatus;
     }
 
@@ -177,4 +205,67 @@ extern "C" uint32_t __wrap_libspdm_get_hash_size(uint32_t base_hash_algo)
     (void)base_hash_algo;
     // Always return 48 for the mock
     return 48;
+}
+
+// Mock wrapper for libspdm_get_data: only the negotiated SPDM version is
+// requested by the code under test.
+extern "C" libspdm_return_t __wrap_libspdm_get_data(
+    void* spdm_context, uint32_t data_type, const void* parameter, void* data,
+    size_t* data_size)
+{
+    (void)spdm_context;
+    (void)data_type;
+    (void)parameter;
+    uint16_t version = spdm::test::mockTranscript().spdmVersion;
+    if (data == nullptr || data_size == nullptr || *data_size < sizeof(version))
+    {
+        return LIBSPDM_STATUS_INVALID_PARAMETER;
+    }
+    std::copy_n(reinterpret_cast<const uint8_t*>(&version), sizeof(version),
+                static_cast<uint8_t*>(data));
+    *data_size = sizeof(version);
+    return LIBSPDM_STATUS_SUCCESS;
+}
+
+// Mock wrapper for libspdm_get_measurement_ex: record what spdmd asked for
+// and log one GET_MEASUREMENTS request and MEASUREMENTS response.
+extern "C" libspdm_return_t __wrap_libspdm_get_measurement_ex(
+    void* spdm_context, const uint32_t* session_id, uint8_t request_attribute,
+    uint8_t measurement_operation, uint8_t slot_id, uint8_t* content_changed,
+    uint8_t* number_of_blocks, uint32_t* measurement_record_length,
+    void* measurement_record, const void* requester_nonce_in,
+    void* requester_nonce, void* responder_nonce, void* opaque_data,
+    size_t* opaque_data_size)
+{
+    (void)session_id;
+    (void)measurement_operation;
+    (void)slot_id;
+    (void)content_changed;
+    (void)measurement_record;
+    (void)requester_nonce;
+    (void)responder_nonce;
+    (void)opaque_data;
+    (void)opaque_data_size;
+
+    auto& transcript = spdm::test::mockTranscript();
+    transcript.requestAttributes.push_back(request_attribute);
+    const auto* nonce = static_cast<const uint8_t*>(requester_nonce_in);
+    transcript.nonces.emplace_back();
+    if (nonce != nullptr)
+    {
+        transcript.nonces.back().assign(nonce, nonce + 32);
+    }
+
+    appendToMessageLog(spdm_context, transcript.request);
+    appendToMessageLog(spdm_context, transcript.response);
+
+    if (number_of_blocks != nullptr)
+    {
+        *number_of_blocks = 1;
+    }
+    if (measurement_record_length != nullptr)
+    {
+        *measurement_record_length = 0;
+    }
+    return LIBSPDM_STATUS_SUCCESS;
 }

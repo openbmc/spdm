@@ -25,6 +25,8 @@ foreach t : tests
             '-Wl,--wrap=libspdm_get_digest',
             '-Wl,--wrap=libspdm_get_certificate',
             '-Wl,--wrap=libspdm_get_hash_size',
+            '-Wl,--wrap=libspdm_get_data',
+            '-Wl,--wrap=libspdm_get_measurement_ex',
         ]
     endif
     test(

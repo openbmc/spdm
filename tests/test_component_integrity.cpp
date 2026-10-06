@@ -4,10 +4,14 @@
 #include "../requester/component_integrity_dbus.hpp"
 #include "../requester/libspdm_transport.hpp"
 #include "../requester/mctp_helper.hpp"
+#include "../requester/utils/base64.hpp"
+#include "mock_transcript.hpp"
 
 #include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/async.hpp>
+#include <xyz/openbmc_project/Common/error.hpp>
 
+#include <algorithm>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -123,6 +127,7 @@ class ComponentIntegrityTest : public ::testing::Test
 
         // Clear any previous mock data
         MockSpdmTransport::clearCurrentMock();
+        mockTranscript() = MockTranscript{};
     }
 
     void TearDown() override
@@ -149,7 +154,7 @@ class ComponentIntegrityTest : public ::testing::Test
     static void* makeDummyContext()
     {
         // NOLINTNEXTLINE(cppcoreguidelines-no-malloc)
-        return calloc(1, 1024);
+        return calloc(1, libspdm_get_context_size());
     }
 
     // Wrapper methods to access protected methods for testing
@@ -158,9 +163,57 @@ class ComponentIntegrityTest : public ::testing::Test
         componentIntegrity->validateMeasurementIndices(indices);
     }
 
+    void validateNonce(const std::string& nonce)
+    {
+        componentIntegrity->validateNonce(nonce);
+    }
+
+    void validateSlotId(size_t slotId)
+    {
+        componentIntegrity->validateSlotId(slotId);
+    }
+
+    size_t beginTranscriptLog(size_t measurementRequestCount)
+    {
+        componentIntegrity->beginTranscriptLog(measurementRequestCount);
+        return componentIntegrity->transcriptBuffer.size();
+    }
+
     void initializeSpdmConnection()
     {
         componentIntegrity->initializeSpdmConnection();
+    }
+
+    void suspendTranscriptLog()
+    {
+        componentIntegrity->suspendTranscriptLog();
+    }
+
+    std::string getSignedMeasurements(const std::vector<size_t>& indices,
+                                      const std::string& nonce)
+    {
+        return componentIntegrity->getSignedMeasurements(indices, nonce, 0);
+    }
+
+    /** @brief Run the transcript part of SPDMGetSignedMeasurements the way
+     *         method_call() does, and return the base64 transcript. */
+    std::string captureTranscript(const std::vector<size_t>& indices,
+                                  const std::string& nonce)
+    {
+        beginTranscriptLog(std::max<size_t>(indices.size(), 1));
+        initializeSpdmConnection();
+        suspendTranscriptLog();
+        return getSignedMeasurements(indices, nonce);
+    }
+
+    /** @brief Fill the transcript mock with recognizable messages. */
+    static void setTranscriptMessages(uint16_t spdmVersion)
+    {
+        auto& transcript = mockTranscript();
+        transcript.spdmVersion = spdmVersion;
+        transcript.vca = {0x10, 0x84, 0x00, 0x00, 0x10, 0x04, 0x00, 0x00};
+        transcript.request = {0x11, 0xE0, 0x00, 0x01};
+        transcript.response = {0x11, 0x60, 0x01, 0x00};
     }
 
     std::tuple<uint8_t, std::vector<uint8_t>, size_t> getCertificateDigests()
@@ -413,6 +466,143 @@ TEST_F(ComponentIntegrityTest, ValidateMeasurementIndicesMixZeroAndRegularTest)
     EXPECT_THROW(
         validateMeasurementIndices(mixedIndices),
         sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument);
+}
+
+TEST_F(ComponentIntegrityTest, ValidateNonceTest)
+{
+    EXPECT_NO_THROW(validateNonce(std::string(64, 'a')));
+    EXPECT_NO_THROW(validateNonce(std::string(64, 'F')));
+    EXPECT_NO_THROW(validateNonce(""));
+    EXPECT_THROW(
+        validateNonce(std::string(63, 'a')),
+        sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument);
+    EXPECT_THROW(
+        validateNonce(std::string(64, 'z')),
+        sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument);
+}
+
+TEST_F(ComponentIntegrityTest, ValidateSlotIdTest)
+{
+    EXPECT_NO_THROW(validateSlotId(0));
+    EXPECT_NO_THROW(validateSlotId(SPDM_MAX_SLOT_COUNT - 1));
+    EXPECT_THROW(
+        validateSlotId(SPDM_MAX_SLOT_COUNT),
+        sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument);
+}
+
+// SPDM 1.0/1.1 sign only the GET_MEASUREMENTS exchanges (DSP0274), so the
+// VCA logged during negotiation must not be in the returned transcript.
+TEST_F(ComponentIntegrityTest, TranscriptSpdm11HasMeasurementsOnlyTest)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->setAsCurrentMock();
+    setTranscriptMessages(0x1100);
+    const auto& t = mockTranscript();
+
+    std::vector<uint8_t> expected;
+    for (int i = 0; i < 2; ++i)
+    {
+        expected.insert(expected.end(), t.request.begin(), t.request.end());
+        expected.insert(expected.end(), t.response.begin(), t.response.end());
+    }
+
+    EXPECT_EQ(captureTranscript({1, 2}, std::string(64, 'a')),
+              spdm::base64Encode(expected));
+}
+
+// SPDM 1.2 signs the VCA and the GET_MEASUREMENTS exchanges (DSP0274 L1/L2).
+TEST_F(ComponentIntegrityTest, TranscriptSpdm12StartsWithVcaTest)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->setAsCurrentMock();
+    setTranscriptMessages(0x1200);
+    const auto& t = mockTranscript();
+
+    std::vector<uint8_t> expected = t.vca;
+    for (int i = 0; i < 2; ++i)
+    {
+        expected.insert(expected.end(), t.request.begin(), t.request.end());
+        expected.insert(expected.end(), t.response.begin(), t.response.end());
+    }
+
+    EXPECT_EQ(captureTranscript({1, 2}, std::string(64, 'a')),
+              spdm::base64Encode(expected));
+}
+
+// Only the last GET_MEASUREMENTS asks for a signature; the caller nonce is
+// passed through, and an empty nonce lets libspdm generate one.
+TEST_F(ComponentIntegrityTest, TranscriptSignatureOnLastRequestTest)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->setAsCurrentMock();
+    setTranscriptMessages(0x1200);
+
+    captureTranscript({1, 2, 3}, std::string(64, 'a'));
+    const auto& t = mockTranscript();
+    EXPECT_EQ(t.requestAttributes, (std::vector<uint8_t>{0, 0, 1}));
+    ASSERT_EQ(t.nonces.size(), 3U);
+    EXPECT_EQ(t.nonces.back(), std::vector<uint8_t>(32, 0xaa));
+
+    mockTranscript().requestAttributes.clear();
+    mockTranscript().nonces.clear();
+    captureTranscript({255}, "");
+    EXPECT_EQ(mockTranscript().requestAttributes, (std::vector<uint8_t>{1}));
+    ASSERT_EQ(mockTranscript().nonces.size(), 1U);
+    EXPECT_TRUE(mockTranscript().nonces.back().empty());
+}
+
+// A transcript that does not fit the log buffer is an error, not a
+// truncated transcript.
+TEST_F(ComponentIntegrityTest, TranscriptOverflowIsAnErrorTest)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->setAsCurrentMock();
+    setTranscriptMessages(0x1200);
+    mockTranscript().response.assign(4 * LIBSPDM_MAX_SPDM_MSG_SIZE, 0x5A);
+
+    EXPECT_THROW(captureTranscript({1}, std::string(64, 'a')),
+                 std::runtime_error);
+}
+
+// The message log is switched off after the method, also when it fails, so
+// later libspdm traffic is not written into the transcript buffer.
+TEST_F(ComponentIntegrityTest, MessageLogOffAfterFailedMeasurementTest)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->initStatus = LIBSPDM_STATUS_NEGOTIATION_FAIL;
+    mockTransport->setAsCurrentMock();
+
+    asyncCtx->spawn(
+        [](spdm::ComponentIntegrity& ci) -> sdbusplus::async::task<> {
+            try
+            {
+                co_await ci.method_call(
+                    spdm::ComponentIntegrity::spdm_get_signed_measurements_t{},
+                    {1}, std::string(64, 'a'), 0);
+            }
+            catch (const std::exception&)
+            {}
+        }(*componentIntegrity) | sdbusplus::async::execution::then([this]() {
+                                                asyncCtx->request_stop();
+                                            }));
+    asyncCtx->run();
+
+    void* context = mockTransport->spdmContext.get();
+    std::vector<uint8_t> later = {0x12, 0x82, 0x00, 0x00};
+    libspdm_append_msg_log(static_cast<libspdm_context_t*>(context),
+                           later.data(), later.size());
+    EXPECT_EQ(libspdm_get_msg_log_size(context), 0U);
+}
+
+TEST_F(ComponentIntegrityTest, TranscriptLogScalesWithRequestCountTest)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    constexpr size_t exchangeSize = 2 * LIBSPDM_MAX_SPDM_MSG_SIZE;
+
+    EXPECT_EQ(beginTranscriptLog(1),
+              LIBSPDM_MAX_MESSAGE_VCA_BUFFER_SIZE + exchangeSize);
+    EXPECT_EQ(beginTranscriptLog(254),
+              LIBSPDM_MAX_MESSAGE_VCA_BUFFER_SIZE + 254 * exchangeSize);
 }
 
 // Test validateMeasurementIndices with mixing 255 and regular indices (should
@@ -734,7 +924,40 @@ TEST_F(ComponentIntegrityTest, GetCertificateMultipleDerCertsTest)
     EXPECT_EQ(rawBytes.size(), mockTransport->mockCertChain.size());
 }
 
-// Note: method_call tests are omitted because they require async testing
+// A failed SPDM exchange must be reported as the InternalFailure error that
+// MeasurementSet declares, not as a successful reply with empty fields.
+TEST_F(ComponentIntegrityTest, SignedMeasurementsFailureReturnsInternalFailure)
+{
+    mockTransport->setSpdmContext(makeDummyContext());
+    mockTransport->initStatus = LIBSPDM_STATUS_NEGOTIATION_FAIL;
+    mockTransport->setAsCurrentMock();
+
+    bool internalFailure = false;
+    bool replied = false;
+    asyncCtx->spawn(
+        [](spdm::ComponentIntegrity& ci, bool& internalFailure,
+           bool& replied) -> sdbusplus::async::task<> {
+            try
+            {
+                co_await ci.method_call(
+                    spdm::ComponentIntegrity::spdm_get_signed_measurements_t{},
+                    {1}, std::string(64, 'a'), 0);
+                replied = true;
+            }
+            catch (const sdbusplus::xyz::openbmc_project::Common::Error::
+                       InternalFailure&)
+            {
+                internalFailure = true;
+            }
+        }(*componentIntegrity, internalFailure, replied) |
+                                 sdbusplus::async::execution::then([this]() {
+                                     asyncCtx->request_stop();
+                                 }));
+    asyncCtx->run();
+
+    EXPECT_TRUE(internalFailure);
+    EXPECT_FALSE(replied);
+}
 
 } // namespace test
 } // namespace spdm
