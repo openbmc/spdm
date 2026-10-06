@@ -5,6 +5,7 @@
 
 #include "libspdm_transport.hpp"
 #include "utils/base64.hpp"
+#include "utils/hex.hpp"
 #include "utils/mapper.hpp"
 
 extern "C"
@@ -17,11 +18,36 @@ extern "C"
 
 #include <phosphor-logging/lg2.hpp>
 
+#include <algorithm>
 #include <chrono>
 #include <set>
 
 namespace spdm
 {
+
+namespace
+{
+
+/** @brief Switch libspdm message logging off when the scope ends, so later
+ *         libspdm traffic is not written into the transcript buffer. */
+class MessageLogGuard
+{
+  public:
+    explicit MessageLogGuard(void* spdmContext) : spdmContext(spdmContext) {}
+    ~MessageLogGuard()
+    {
+        libspdm_set_msg_log_mode(spdmContext, 0);
+    }
+    MessageLogGuard(const MessageLogGuard&) = delete;
+    MessageLogGuard& operator=(const MessageLogGuard&) = delete;
+    MessageLogGuard(MessageLogGuard&&) = delete;
+    MessageLogGuard& operator=(MessageLogGuard&&) = delete;
+
+  private:
+    void* spdmContext;
+};
+
+} // namespace
 
 /**
  * @brief Initialize ComponentIntegrity properties
@@ -120,6 +146,38 @@ void ComponentIntegrity::validateSpecialValueCombinations(
     {
         lg2::error(
             "Cannot mix index 255 (all measurements) with specific measurement indices");
+        throw InvalidArgument();
+    }
+}
+
+void ComponentIntegrity::validateNonce(const std::string& nonce)
+{
+    using namespace sdbusplus::xyz::openbmc_project::Common::Error;
+
+    // Redfish: if the client provides no nonce, the SPDM Requester generates
+    // it.  An empty nonce makes libspdm generate a random one.
+    if (nonce.empty())
+    {
+        return;
+    }
+
+    if (nonce.size() != SPDM_NONCE_SIZE * 2 ||
+        hexDecode(nonce).size() != SPDM_NONCE_SIZE)
+    {
+        lg2::error("Nonce must be exactly {EXPECTED} hexadecimal characters",
+                   "EXPECTED", SPDM_NONCE_SIZE * 2);
+        throw InvalidArgument();
+    }
+}
+
+void ComponentIntegrity::validateSlotId(size_t slotId)
+{
+    using namespace sdbusplus::xyz::openbmc_project::Common::Error;
+
+    if (slotId >= SPDM_MAX_SLOT_COUNT)
+    {
+        lg2::error("Invalid SPDM certificate slot {SLOT}; expected 0-{MAX}",
+                   "SLOT", slotId, "MAX", SPDM_MAX_SLOT_COUNT - 1);
         throw InvalidArgument();
     }
 }
@@ -243,6 +301,80 @@ std::tuple<uint8_t, std::vector<uint8_t>, size_t>
     return {slotMask, digestBuffer, totalDigestSize};
 }
 
+void ComponentIntegrity::beginTranscriptLog(size_t measurementRequestCount)
+{
+    if (!transport || !transport->spdmContext)
+    {
+        lg2::error("SPDM context is null");
+        throw std::runtime_error("SPDM context not initialized");
+    }
+
+    const size_t exchangeSize = 2 * LIBSPDM_MAX_SPDM_MSG_SIZE;
+    transcriptBuffer.assign(LIBSPDM_MAX_MESSAGE_VCA_BUFFER_SIZE +
+                                measurementRequestCount * exchangeSize,
+                            0);
+    libspdm_init_msg_log(transport->spdmContext.get(), transcriptBuffer.data(),
+                         transcriptBuffer.size());
+    libspdm_set_msg_log_mode(transport->spdmContext.get(),
+                             LIBSPDM_MSG_LOG_MODE_ENABLE);
+}
+
+void ComponentIntegrity::suspendTranscriptLog()
+{
+    libspdm_data_parameter_t parameter{};
+    parameter.location = LIBSPDM_DATA_LOCATION_CONNECTION;
+
+    spdm_version_number_t versionNumber = 0;
+    size_t versionSize = sizeof(versionNumber);
+    libspdm_return_t status = libspdm_get_data(
+        transport->spdmContext.get(), LIBSPDM_DATA_SPDM_VERSION, &parameter,
+        &versionNumber, &versionSize);
+    if (LIBSPDM_STATUS_IS_ERROR(status))
+    {
+        lg2::error("libspdm_get_data(SPDM_VERSION) failed, status: {STATUS}",
+                   "STATUS", lg2::hex, status);
+        throw std::runtime_error("Could not read the negotiated SPDM version");
+    }
+
+    // SPDM_MESSAGE_VERSION_12 is 0x12, the top byte of VersionNumberEntry.
+    const uint8_t version = (versionNumber >> 8) & 0xFF;
+
+    if (version < SPDM_MESSAGE_VERSION_12)
+    {
+        // 1.0/1.1 sign L only, so drop the VCA bytes libspdm already logged.
+        // reset_msg_log() also clears the mode, which is the pause we want.
+        libspdm_reset_msg_log(transport->spdmContext.get());
+    }
+    else
+    {
+        libspdm_set_msg_log_mode(transport->spdmContext.get(), 0);
+    }
+}
+
+void ComponentIntegrity::resumeTranscriptLog()
+{
+    libspdm_set_msg_log_mode(transport->spdmContext.get(),
+                             LIBSPDM_MSG_LOG_MODE_ENABLE);
+}
+
+std::vector<uint8_t> ComponentIntegrity::takeTranscriptLog()
+{
+    size_t size = libspdm_get_msg_log_size(transport->spdmContext.get());
+
+    if (libspdm_get_msg_log_status(transport->spdmContext.get()) &
+        LIBSPDM_MSG_LOG_STATUS_BUFFER_FULL)
+    {
+        lg2::error("SPDM message log overflowed; transcript truncated at "
+                   "{SIZE} bytes",
+                   "SIZE", size);
+        throw std::runtime_error("SPDM transcript log overflowed");
+    }
+
+    size = std::min(size, transcriptBuffer.size());
+    return {transcriptBuffer.begin(),
+            transcriptBuffer.begin() + static_cast<ptrdiff_t>(size)};
+}
+
 std::string ComponentIntegrity::getSignedMeasurements(
     const std::vector<size_t>& measurementIndices, const std::string& nonce,
     size_t slotId)
@@ -272,20 +404,32 @@ std::string ComponentIntegrity::getSignedMeasurements(
         indicesToProcess = {255}; // Request all measurements
     }
 
+    // validateNonce() has already checked the public D-Bus input.  Empty means
+    // libspdm generates the nonce.
+    const std::vector<uint8_t> nonceBytes = hexDecode(nonce);
+
     // Buffer to collect all measurements
     std::vector<uint8_t> allMeasurements;
 
-    // Loop through each measurement index and get measurements individually
-    for (const auto& idx : indicesToProcess)
+    resumeTranscriptLog();
+
+    // DSP0274: a signature request resets the L1/L2 calculation, so ask for
+    // it on the final index only.
+    for (size_t i = 0; i < indicesToProcess.size(); ++i)
     {
-        auto [measurementData,
-              numberOfBlocks] = getSingleMeasurement(idx, slotId);
+        const auto idx = indicesToProcess[i];
+        const bool requestSignature = (i + 1 == indicesToProcess.size());
+
+        auto [measurementData, numberOfBlocks] =
+            getSingleMeasurement(idx, slotId, requestSignature, nonceBytes);
         processMeasurementData(idx, measurementData, allMeasurements,
                                numberOfBlocks);
     }
 
-    // Convert combined measurements to base64 for D-Bus transport
-    std::string base64Measurement = spdm::base64Encode(allMeasurements);
+    // The signed transcript, not the bare record: a verifier needs the exact
+    // bytes the responder signed.
+    std::vector<uint8_t> transcript = takeTranscriptLog();
+    std::string base64Measurement = spdm::base64Encode(transcript);
 
     lg2::debug(
         "Successfully retrieved {COUNT} measurements, total size: {SIZE} bytes",
@@ -295,8 +439,9 @@ std::string ComponentIntegrity::getSignedMeasurements(
 }
 
 std::pair<std::vector<uint8_t>, uint8_t>
-    ComponentIntegrity::getSingleMeasurement(size_t measurementIndex,
-                                             size_t slotId)
+    ComponentIntegrity::getSingleMeasurement(
+        size_t measurementIndex, size_t slotId, bool requestSignature,
+        const std::vector<uint8_t>& nonceBytes)
 {
     uint8_t measurementOperation = static_cast<uint8_t>(measurementIndex);
 
@@ -307,13 +452,23 @@ std::pair<std::vector<uint8_t>, uint8_t>
     uint8_t contentChanged = 0;
     uint8_t numberOfBlocks = 0;
 
-    // Call libspdm to get single measurement
-    libspdm_return_t status = libspdm_get_measurement(
+    uint8_t requestAttribute =
+        requestSignature
+            ? SPDM_GET_MEASUREMENTS_REQUEST_ATTRIBUTES_GENERATE_SIGNATURE
+            : 0;
+
+    // _ex() is the only variant taking a caller-supplied nonce.
+    libspdm_return_t status = libspdm_get_measurement_ex(
         transport->spdmContext.get(),
         nullptr, // No session
-        0,       // request_attribute
-        measurementOperation, static_cast<uint8_t>(slotId), &contentChanged,
-        &numberOfBlocks, &measurementSize, measurementBuffer.data());
+        requestAttribute, measurementOperation, static_cast<uint8_t>(slotId),
+        &contentChanged, &numberOfBlocks, &measurementSize,
+        measurementBuffer.data(),
+        nonceBytes.empty() ? nullptr : nonceBytes.data(),
+        nullptr,  // requester_nonce out - the caller already has it
+        nullptr,  // responder_nonce out
+        nullptr,  // opaque_data
+        nullptr); // opaque_data_size
 
     if (LIBSPDM_STATUS_IS_ERROR(status))
     {
@@ -360,23 +515,43 @@ void ComponentIntegrity::processMeasurementData(
  * This function uses sdbusplus async context to execute libspdm operations
  * asynchronously without blocking the D-Bus event loop.
  */
-auto ComponentIntegrity::method_call(
-    spdm_get_signed_measurements_t,
-    std::vector<size_t> measurementIndices [[maybe_unused]], std::string nonce,
-    size_t slotId [[maybe_unused]])
+auto ComponentIntegrity::method_call(spdm_get_signed_measurements_t,
+                                     std::vector<size_t> measurementIndices,
+                                     std::string nonce, size_t slotId)
     -> sdbusplus::async::task<spdm_get_signed_measurements_t::return_type>
 {
     lg2::debug(
         "spdmGetSignedMeasurements: Starting with path={PATH}, slotId={SLOTID}, nonce_length={NONCE_LEN}",
         "PATH", path, "SLOTID", slotId, "NONCE_LEN", nonce.length());
 
+    validateMeasurementIndices(measurementIndices);
+    validateNonce(nonce);
+    validateSlotId(slotId);
+
     try
     {
-        validateMeasurementIndices(measurementIndices);
+        const size_t requestCount =
+            std::max<size_t>(measurementIndices.size(), 1);
+
+        // Before init: SPDM 1.2+ signs VCA as part of the transcript.
+        beginTranscriptLog(requestCount);
+        const MessageLogGuard logGuard(transport->spdmContext.get());
         initializeSpdmConnection();
+
+        // GET_DIGESTS and GET_CERTIFICATE are not part of L1/L2.
+        suspendTranscriptLog();
 
         auto [slotMask, digestBuffer,
               totalDigestSize] = getCertificateDigests();
+        if ((slotMask & (1U << slotId)) == 0)
+        {
+            using namespace sdbusplus::xyz::openbmc_project::Common::Error;
+            lg2::error(
+                "SPDM certificate slot {SLOT} is not populated; mask={MASK}",
+                "SLOT", slotId, "MASK", lg2::hex,
+                static_cast<unsigned>(slotMask));
+            throw InvalidArgument();
+        }
         auto [certPem, certRaw, certLeaf] = getCertificate(slotId);
 
         // Get signed measurements using libspdm
@@ -398,14 +573,17 @@ auto ComponentIntegrity::method_call(
                                   signAlgoStr, versionStr,
                                   std::vector<uint8_t>{});
     }
+    catch (
+        const sdbusplus::xyz::openbmc_project::Common::Error::InvalidArgument&)
+    {
+        throw;
+    }
     catch (const std::exception& e)
     {
         lg2::error("SPDM Get Signed Measurements FAILED: {ERROR}", "ERROR", e);
-        // Return empty tuple on error
-        co_return std::make_tuple(sdbusplus::object_path(path), std::string(""),
-                                  std::string(""), std::string(""),
-                                  std::string(""), type_version(),
-                                  std::vector<uint8_t>{});
+        // Report the failure as the error MeasurementSet declares; an empty
+        // reply would look like a successful measurement to the caller.
+        throw sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure();
     }
 }
 
