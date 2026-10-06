@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17c2e473_66573d89",
+        "filename": "requester/libspdm_transport.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-10-06T14:27:18Z",
+      "side": 1,
+      "message": "@florian.sorin@arm.com\nWe can leverage libspdm’s recommended message-logging API, as described in https://github.com/DMTF/libspdm/discussions/2889. It would provide SPDM message capture for independent verification and eliminate the need to implement this functionality in the MCTP device callbacks.\n\nCan you please check this patch and see if it resolves the issue?\nhttps://gerrit.openbmc.org/c/openbmc/spdm/+/95272/1",
+      "revId": "9b68cef5c10872f0b8039abb51f00e0bfa0d3efe",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
