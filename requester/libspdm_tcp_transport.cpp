@@ -74,8 +74,8 @@ bool SpdmTcpTransport::allocateContext()
     libspdm_return_t status = libspdm_init_context(ctx);
     if (status != LIBSPDM_STATUS_SUCCESS)
     {
-        lg2::error("Failed to initialize SPDM context: 0x{STATUS:X}", "STATUS",
-                   status);
+        lg2::error("Failed to initialize SPDM context: {STATUS}", "STATUS",
+                   lg2::hex, status);
         // NOLINTNEXTLINE(cppcoreguidelines-no-malloc)
         free(ctx);
         return false;
