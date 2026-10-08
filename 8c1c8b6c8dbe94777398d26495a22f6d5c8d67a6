@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78139031_6227abbb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003175
+      },
+      "writtenOn": "2026-10-08T15:04:01Z",
+      "side": 1,
+      "message": "@hosmanechinmay@gmail.com\n\nAddressed review feedback around authentication state handling.\n\nChanges in this patchset:\n* Unsupported CHALLENGE capability (LIBSPDM_STATUS_UNSUPPORTED_CAP) no longer transitions to AuthenticationFailed and leaves verification status Unknown.\n* Transient transport, busy/not-ready, and local infrastructure failures remain retryable.\n* REQUEST_RESYNCH now resets requester connection state and forces renegotiation before retry.\n* Added unit-test coverage for unsupported capability, transient failures, retry behavior, and resynchronization handling.",
+      "revId": "8c1c8b6c8dbe94777398d26495a22f6d5c8d67a6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
