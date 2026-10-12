@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed19639b_e51c8c96",
+        "filename": "tests/test_component_integrity.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-12T05:43:52Z",
+      "side": 1,
+      "message": "This only tests the default 4608. I think it would be better to also test a smaller limit, with one record that fits and one that doesn\u0027t.",
+      "revId": "10c047764a17db4898d15fad2859e94302d423c4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
