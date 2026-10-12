@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3d227e82_3faf5f03",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-10-12T05:14:12Z",
+      "side": 1,
+      "message": "Let’s get @archana.kakani@ibm.com input on this PDI comment: https://gerrit.openbmc.org/c/openbmc/phosphor-dbus-interfaces/+/94606/comment/bb0620d9_67710d11/\n\nFor SPDM 1.2, Redfish SignedMeasurements includes the VCA and the GET_MEASUREMENTS request/response transcript, including any opaque data in the MEASUREMENTS responses. I’d like to better understand the use case for exposing this property additionally.",
+      "revId": "ca27f1e372eeeda42afdb793885e7caa4bd1845b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6bbb07db_1ef9208c",
         "filename": "requester/component_integrity_dbus.cpp",
         "patchSetId": 3
