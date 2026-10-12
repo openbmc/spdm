@@ -62,6 +62,13 @@ class ComponentIntegrity :
         path(path), asyncCtx(ctx)
     {
         initializeProperties();
+
+        namespace attestation =
+            sdbusplus::aserver::xyz::openbmc_project::attestation;
+        attestation::ComponentIntegrity<ComponentIntegrity, void>::emit_added();
+        attestation::MeasurementSet<ComponentIntegrity, void>::emit_added();
+        attestation::IdentityAuthentication<ComponentIntegrity,
+                                            void>::emit_added();
     }
 
     /**
