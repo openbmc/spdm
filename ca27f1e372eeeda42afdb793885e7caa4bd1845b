@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bbb07db_1ef9208c",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-12T04:13:08Z",
+      "side": 1,
+      "message": "I see that libspdm 3.8.2 rejects the opaque data if opaque_length \u003e\u003d buffer size. So with this 1024 byte buffer, a device sending the full 1024 bytes will fail with BUFFER_TOO_SMALL. I see libspdm maintainers already fixed this on main https://github.com/DMTF/libspdm/commit/cd06c89ed3c1e8c3205e8206cab191f1d297f310\nbut it\u0027s not in a release yet",
+      "revId": "ca27f1e372eeeda42afdb793885e7caa4bd1845b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2a3075f_74e9e8f5",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-12T04:13:08Z",
+      "side": 1,
+      "message": "Could we keep this Unknown until the certificate is verified against a trusted root? spdmd doesn’t provision one today. Also, LIBSPDM_STATUS_VERIF_NO_AUTHORITY is a warning for a root mismatch, so getCertificate() LIBSPDM_STATUS_IS_ERROR check would miss it even after provisioning. A valid measurement signature alone doesn’t establish a trusted identity. \nRef - https://redfish.dmtf.org/schemas/v1/ComponentIntegrity.v1_4_0.json",
+      "revId": "ca27f1e372eeeda42afdb793885e7caa4bd1845b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4769aadf_11f5737e",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-12T04:13:08Z",
+      "side": 1,
+      "message": "This catch also marks timeouts and local errors as identity verification failures.",
+      "revId": "ca27f1e372eeeda42afdb793885e7caa4bd1845b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
