@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d14b17af_d5bbaa07",
+        "filename": "requester/libspdm_mctp_transport.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-12T05:37:42Z",
+      "side": 1,
+      "message": "If MaxSPDMmsgSize is lowered here, DataTransferSize still stays 4608 from the buffers registered below. Without CHUNK_CAP these two must be equal as per SPDM 1.2 spec so this would fail",
+      "revId": "aab28235b6de66aab8019c0eef0881b3a8ec61aa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5258ed1_3193e121",
+        "filename": "requester/libspdm_mctp_transport.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-12T05:37:42Z",
+      "side": 1,
+      "message": "Just wondering, how would a platform pass its own value? I see the code currently only passes the eid here.Is that planned for a follow-up?",
+      "revId": "aab28235b6de66aab8019c0eef0881b3a8ec61aa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d7c5665_16bbf926",
+        "filename": "requester/libspdm_transport.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-12T05:37:42Z",
+      "side": 1,
+      "message": "I think as per SPDM 1.2 this should be at least 42 (SPDM_MIN_DATA_TRANSFER_SIZE_VERSION_12). Can we add that check here too?",
+      "revId": "aab28235b6de66aab8019c0eef0881b3a8ec61aa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
