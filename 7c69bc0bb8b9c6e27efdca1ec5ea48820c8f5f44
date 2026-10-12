@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a943df0_7ab083c3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-12T05:01:58Z",
+      "side": 1,
+      "message": "Could the TrustedComponent association be a separate commit? The transport init fix looks right and could go in on its own while the association is discussed.",
+      "revId": "7c69bc0bb8b9c6e27efdca1ec5ea48820c8f5f44",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "899ed250_6b5c5de8",
+        "filename": "requester/component_integrity_dbus.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-12T05:01:58Z",
+      "side": 1,
+      "message": "I think this link should be reporting / reported_by. PDI requires the authenticating endpoint to implement Inventory.Item, and reporting is the one defined for the TrustedComponent. Could you check which one is intended here?",
+      "revId": "7c69bc0bb8b9c6e27efdca1ec5ea48820c8f5f44",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c852917_101320f3",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-12T05:01:58Z",
+      "side": 1,
+      "message": "If initialize() fails this just returns, but discovery has already saved the device, so later adds for the same path are skipped and it never gets another try. Could initialize() be retried after a short delay instead?",
+      "revId": "7c69bc0bb8b9c6e27efdca1ec5ea48820c8f5f44",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
