@@ -43,6 +43,9 @@ int main(int argc, char* argv[])
     // Create object manager for D-Bus object registration
     sdbusplus::server::manager_t objManager(ctx, objManagerPath);
 
+    sdbusplus::server::manager_t trustedComponentManager(
+        ctx, "/xyz/openbmc_project/TrustedComponent");
+
     PolicyManager policyManager(ctx, objManagerPath);
 
     // Common secure-session config
