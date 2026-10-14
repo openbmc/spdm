@@ -225,14 +225,12 @@ class ComponentIntegrity :
     std::string getNegotiatedVersion();
 
     /**
-     * @brief Update certificate object
-     * @param chassisId Chassis ID
+     * @brief Update certificate object, named after this component
      * @param certPem PEM-encoded certificate chain
      * @param leafCert Leaf certificate
      * @return Object path of the certificate object
      */
-    std::string updateCertificateObject(const std::string& chassisId,
-                                        const std::string& certPem,
+    std::string updateCertificateObject(const std::string& certPem,
                                         const std::vector<uint8_t>& leafCert);
 
     /**
