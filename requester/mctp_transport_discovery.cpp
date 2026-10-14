@@ -101,59 +101,61 @@ auto MCTPTransportDiscovery::monitorAdded(SPDMDiscovery& discovery)
 
     while (true)
     {
-        auto msg = co_await matcher.next();
+        // Treat InterfacesAdded as a wake-up signal and re-enumerate
+        // candidate endpoints via the mapper. This keeps runtime
+        // discovery on the same mapper/GetAll path used during
+        // startup discovery instead of decoding the open-ended
+        // ObjectManager payload directly.
+        co_await matcher.next();
 
-        using InterfaceMap = std::unordered_map<
-            std::string, std::unordered_map<
-                             std::string, sdbusplus::utility::merge_variants_t<
-                                              MctpEndpoint::PropertiesVariant,
-                                              CommonUUID::PropertiesVariant>>>;
+        auto instances =
+            co_await mapper::instances::by_interface<MctpEndpoint>(ctx);
 
-        auto [path,
-              interfaces] = msg.unpack<sdbusplus::object_path, InterfaceMap>();
-
-        // Read EID / SupportedMessageTypes / UUID from the signal payload to
-        // avoid an extra Get/GetAll round-trip.
-        auto endpointIfaceIt = interfaces.find(MctpEndpoint::interface);
-        if (endpointIfaceIt == interfaces.end())
+        for (const auto& [path, service] : instances)
         {
-            continue;
-        }
-        // Decode EID / SupportedMessageTypes straight from the
-        // InterfacesAdded payload we already hold (no GetAll round-trip) via
-        // the generated client binding's unpack.
-        MctpEndpoint::properties_t endpointProps;
-        std::string uuid;
-        try
-        {
-            endpointProps =
-                MctpEndpoint::properties_t::unpack(endpointIfaceIt->second);
-
-            // UUID is best-effort (see discovery()); record when present.
-            if (auto uuidIfaceIt = interfaces.find(CommonUUID::interface);
-                uuidIfaceIt != interfaces.end())
+            MctpEndpoint::properties_t endpointProps;
+            try
             {
-                uuid =
-                    CommonUUID::properties_t::unpack(uuidIfaceIt->second).uuid;
+                endpointProps = co_await MctpEndpoint(ctx)
+                                    .service(service)
+                                    .path(path.str)
+                                    .properties();
             }
-        }
-        catch (const sdbusplus::internal_exception_t& e)
-        {
-            debug(
-                "InterfacesAdded for {PATH} has malformed properties; skipping: {ERR}",
-                "PATH", path, "ERR", e);
-            continue;
-        }
+            catch (const sdbusplus::exception_t& e)
+            {
+                debug(
+                    "Endpoint {PATH} disappeared before properties could be read; skipping: {ERR}",
+                    "PATH", path, "ERR", e);
+                continue;
+            }
 
-        if (!addResponder(discovery, path, endpointProps.eid, std::move(uuid),
-                          endpointProps.supported_message_types))
-        {
-            continue;
-        }
+            std::string uuid;
+            try
+            {
+                auto uuidProps = co_await CommonUUID(ctx)
+                                     .service(service)
+                                     .path(path.str)
+                                     .properties();
+                uuid = uuidProps.uuid;
+            }
+            catch (const sdbusplus::exception_t& e)
+            {
+                debug(
+                    "UUID unavailable for {PATH}; proceeding EID-only: {ERR}",
+                    "PATH", path, "ERR", e);
+            }
 
-        info(
-            "Runtime-discovered SPDM MCTP device at {PATH}, EID={EID}, UUID={UUID}",
-            "PATH", path, "EID", endpointProps.eid, "UUID", uuid);
+            if (!addResponder(discovery, path, endpointProps.eid,
+                              std::move(uuid),
+                              endpointProps.supported_message_types))
+            {
+                continue;
+            }
+
+            info(
+                "Runtime-discovered SPDM MCTP device at {PATH}, EID={EID}, UUID={UUID}",
+                "PATH", path, "EID", endpointProps.eid, "UUID", uuid);
+        }
     }
 }
 
