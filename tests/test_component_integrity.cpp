@@ -178,6 +178,13 @@ class ComponentIntegrityTest : public ::testing::Test
     {
         return componentIntegrity->getNegotiatedVersion();
     }
+    
+    static std::string updateCertificateObject(
+        ComponentIntegrity& component, const std::string& certPem,
+        const std::vector<uint8_t>& leafCert)
+    {
+        return component.updateCertificateObject(certPem, leafCert);
+    }
 };
 
 // Test validateMeasurementIndices with valid indices
@@ -737,6 +744,22 @@ TEST_F(ComponentIntegrityTest, GetCertificateMultipleDerCertsTest)
     // Raw bytes should match
     EXPECT_EQ(rawBytes, mockTransport->mockCertChain);
     EXPECT_EQ(rawBytes.size(), mockTransport->mockCertChain.size());
+}
+
+// A TCP component name is escaped; unescaping it for the certificate path
+// yields dots, which sd-bus rejects with EINVAL.
+TEST_F(ComponentIntegrityTest, UpdateCertificateObjectEscapedNameTest)
+{
+    ComponentIntegrity tcpComponent(
+        *asyncCtx,
+        "/xyz/openbmc_project/component_integrity/_39_2e6_2e28_2e101_4194");
+    const std::vector<uint8_t> leafCert(std::begin(spdmCert3),
+                                        std::end(spdmCert3));
+
+    EXPECT_EQ(
+        updateCertificateObject(tcpComponent, "-----BEGIN CERTIFICATE-----",
+                                leafCert),
+        "/xyz/openbmc_project/certs/devices/_39_2e6_2e28_2e101_4194/CertChain");
 }
 
 // Note: method_call tests are omitted because they require async testing

@@ -527,8 +527,7 @@ auto ComponentIntegrity::method_call(
         std::string signedMeas =
             getSignedMeasurements(measurementIndices, nonce, slotId);
 
-        std::string chassisId = sdbusplus::object_path(path).filename();
-        auto objectPath = updateCertificateObject(chassisId, certPem, certLeaf);
+        auto objectPath = updateCertificateObject(certPem, certLeaf);
         auto* spdmCtx =
             reinterpret_cast<libspdm_context_t*>(transport->spdmContext.get());
         auto hashAlgoStr = getHashingAlgorithmStr(
@@ -755,8 +754,7 @@ std::string ComponentIntegrity::getNegotiatedVersion()
 }
 
 std::string ComponentIntegrity::updateCertificateObject(
-    const std::string& chassisId, const std::string& certPem,
-    const std::vector<uint8_t>& leafCert)
+    const std::string& certPem, const std::vector<uint8_t>& leafCert)
 {
     std::string certId = "CertChain";
     if (certPem.empty())
@@ -764,6 +762,9 @@ std::string ComponentIntegrity::updateCertificateObject(
         lg2::error("Certificate PEM is empty");
         throw std::runtime_error("Certificate PEM is empty");
     }
+    // Keep the component's path element escaped: object_path::filename()
+    // would unescape a TCP name into dots, which no object path may hold.
+    std::string chassisId = path.substr(path.rfind('/') + 1);
     std::string objectPath =
         "/xyz/openbmc_project/certs/devices/" + chassisId + "/" + certId;
     if (certificateObject)
