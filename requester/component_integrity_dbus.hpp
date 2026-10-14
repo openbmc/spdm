@@ -14,6 +14,8 @@
 #include <sdbusplus/server/object.hpp>
 
 #include <chrono>
+#include <functional>
+#include <optional>
 
 namespace spdm
 {
@@ -86,6 +88,18 @@ class ComponentIntegrity :
     }
 
     /**
+     * @brief Set the hook that picks the secure session for
+     * SPDMGetSignedMeasurements
+     * @param hook Returns the id of the session to send the requests in,
+     *        opening it if needed, or nullopt to send them outside a
+     *        session. Throws InternalFailure while SPDM is disabled.
+     */
+    void setSessionHook(std::function<std::optional<uint32_t>()> hook)
+    {
+        sessionHook = std::move(hook);
+    }
+
+    /**
      * @brief Ensure the SPDM connection is negotiated (GET_VERSION /
      * CAPABILITIES / NEGOTIATE_ALGORITHMS).
      *
@@ -123,7 +137,8 @@ class ComponentIntegrity :
      * @return Async task containing tuple with:
      *         - Certificate path
      *         - Hashing algorithm string
-     *         - Public key PEM string
+     *         - Public key PEM string, empty when a certificate slot signed
+     *           (the chain is the Certificate object's CertificateString)
      *         - Signed measurements base64 string
      *         - Signing algorithm string
      *         - Version string
@@ -180,17 +195,22 @@ class ComponentIntegrity :
 
     /**
      * @brief Get certificate digests from SPDM device
+     * @param sessionId Secure session to send the request in, nullptr for
+     *        none
      * @return Tuple of (slotMask, digestBuffer, totalDigestSize)
      */
-    std::tuple<uint8_t, std::vector<uint8_t>, size_t> getCertificateDigests();
+    std::tuple<uint8_t, std::vector<uint8_t>, size_t> getCertificateDigests(
+        const uint32_t* sessionId);
 
     /**
      * @brief Get certificate from SPDM device
      * @param slotId Certificate slot ID
+     * @param sessionId Secure session to send the request in, nullptr for
+     *        none
      * @return Tuple of (certificate, certificateSize, leaf certificate)
      */
     std::tuple<std::string, std::vector<uint8_t>, std::vector<uint8_t>>
-        getCertificate(size_t slotId);
+        getCertificate(size_t slotId, const uint32_t* sessionId);
 
     /**
      * @brief Helper to convert DER certificate(s) to PEM string(s).
@@ -238,20 +258,24 @@ class ComponentIntegrity :
      * @param measurementIndices Vector of measurement indices to request
      * @param nonce Nonce for freshness
      * @param slotId Certificate slot ID for signing
+     * @param sessionId Secure session to send the requests in, nullptr for
+     *        none
      * @return Base64 encoded signed measurements
      */
     std::string getSignedMeasurements(
         const std::vector<size_t>& measurementIndices, const std::string& nonce,
-        size_t slotId);
+        size_t slotId, const uint32_t* sessionId);
 
     /**
      * @brief Get a single measurement from SPDM device
      * @param measurementIndex Measurement index to request
      * @param slotId Certificate slot ID for signing
+     * @param sessionId Secure session to send the request in, nullptr for
+     *        none
      * @return Pair of measurement data and number of blocks
      */
     std::pair<std::vector<uint8_t>, uint8_t> getSingleMeasurement(
-        size_t measurementIndex, size_t slotId);
+        size_t measurementIndex, size_t slotId, const uint32_t* sessionId);
 
     /**
      * @brief Process measurement data based on index type
@@ -282,6 +306,9 @@ class ComponentIntegrity :
 
     /** @brief Certificate object */
     std::shared_ptr<Certificate> certificateObject = nullptr;
+
+    /** @brief Picks the secure session, see setSessionHook() */
+    std::function<std::optional<uint32_t>()> sessionHook;
 };
 
 } // namespace spdm

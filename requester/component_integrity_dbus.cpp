@@ -333,10 +333,11 @@ void ComponentIntegrity::initializeSpdmConnection()
 
 /**
  * @brief Get certificate digests from SPDM device
+ * @param sessionId Secure session to send the request in, nullptr for none
  * @return Tuple of (slotMask, digestBuffer, totalDigestSize)
  */
 std::tuple<uint8_t, std::vector<uint8_t>, size_t>
-    ComponentIntegrity::getCertificateDigests()
+    ComponentIntegrity::getCertificateDigests(const uint32_t* sessionId)
 {
     lg2::debug("Getting certificate digests");
 
@@ -360,7 +361,7 @@ std::tuple<uint8_t, std::vector<uint8_t>, size_t>
     uint8_t slotMask = 0;
 
     auto status =
-        libspdm_get_digest(transport->spdmContext.get(), nullptr, // No session
+        libspdm_get_digest(transport->spdmContext.get(), sessionId,
                            &slotMask, // Output: which slots have certificates
                            digestBuffer.data()); // Output: digest data buffer
 
@@ -389,7 +390,7 @@ std::tuple<uint8_t, std::vector<uint8_t>, size_t>
 
 std::string ComponentIntegrity::getSignedMeasurements(
     const std::vector<size_t>& measurementIndices, const std::string& nonce,
-    size_t slotId)
+    size_t slotId, const uint32_t* sessionId)
 {
     lg2::debug(
         "Getting signed measurements for slot {SLOTID}, nonce length: {NONCE_LEN}",
@@ -423,7 +424,7 @@ std::string ComponentIntegrity::getSignedMeasurements(
     for (const auto& idx : indicesToProcess)
     {
         auto [measurementData,
-              numberOfBlocks] = getSingleMeasurement(idx, slotId);
+              numberOfBlocks] = getSingleMeasurement(idx, slotId, sessionId);
         processMeasurementData(idx, measurementData, allMeasurements,
                                numberOfBlocks);
     }
@@ -439,8 +440,8 @@ std::string ComponentIntegrity::getSignedMeasurements(
 }
 
 std::pair<std::vector<uint8_t>, uint8_t>
-    ComponentIntegrity::getSingleMeasurement(size_t measurementIndex,
-                                             size_t slotId)
+    ComponentIntegrity::getSingleMeasurement(
+        size_t measurementIndex, size_t slotId, const uint32_t* sessionId)
 {
     uint8_t measurementOperation = static_cast<uint8_t>(measurementIndex);
 
@@ -453,9 +454,8 @@ std::pair<std::vector<uint8_t>, uint8_t>
 
     // Call libspdm to get single measurement
     libspdm_return_t status = libspdm_get_measurement(
-        transport->spdmContext.get(),
-        nullptr, // No session
-        0,       // request_attribute
+        transport->spdmContext.get(), sessionId,
+        0, // request_attribute
         measurementOperation, static_cast<uint8_t>(slotId), &contentChanged,
         &numberOfBlocks, &measurementSize, measurementBuffer.data());
 
@@ -517,15 +517,19 @@ auto ComponentIntegrity::method_call(
     try
     {
         validateMeasurementIndices(measurementIndices);
+        // Runs before any SPDM traffic, so it can refuse while SPDM is
+        // disabled.
+        const auto sessionId = sessionHook ? sessionHook() : std::nullopt;
+        const uint32_t* session = sessionId ? &*sessionId : nullptr;
         initializeSpdmConnection();
 
         auto [slotMask, digestBuffer,
-              totalDigestSize] = getCertificateDigests();
-        auto [certPem, certRaw, certLeaf] = getCertificate(slotId);
+              totalDigestSize] = getCertificateDigests(session);
+        auto [certPem, certRaw, certLeaf] = getCertificate(slotId, session);
 
         // Get signed measurements using libspdm
         std::string signedMeas =
-            getSignedMeasurements(measurementIndices, nonce, slotId);
+            getSignedMeasurements(measurementIndices, nonce, slotId, session);
 
         auto objectPath = updateCertificateObject(certPem, certLeaf);
         auto* spdmCtx =
@@ -538,9 +542,17 @@ auto ComponentIntegrity::method_call(
         auto versionStr = getNegotiatedVersion();
         type_version(versionStr);
 
-        co_return std::make_tuple(objectPath, hashAlgoStr, certPem, signedMeas,
-                                  signAlgoStr, versionStr,
+        // PublicKey is for a responder whose public key was pre-provisioned;
+        // a certificate slot signed this, and its chain is at objectPath.
+        co_return std::make_tuple(objectPath, hashAlgoStr, std::string{},
+                                  signedMeas, signAlgoStr, versionStr,
                                   std::vector<uint8_t>{});
+    }
+    catch (
+        const sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure&)
+    {
+        // From the session hook: SPDM is disabled, tell the caller.
+        throw;
     }
     catch (const std::exception& e)
     {
@@ -618,7 +630,7 @@ std::tuple<std::string, std::vector<uint8_t>> ComponentIntegrity::derCertsToPem(
 }
 
 std::tuple<std::string, std::vector<uint8_t>, std::vector<uint8_t>>
-    ComponentIntegrity::getCertificate(size_t slotId)
+    ComponentIntegrity::getCertificate(size_t slotId, const uint32_t* sessionId)
 {
     if (!transport)
     {
@@ -635,7 +647,7 @@ std::tuple<std::string, std::vector<uint8_t>, std::vector<uint8_t>>
     size_t certChainSize = certChain.size();
 
     libspdm_return_t status =
-        libspdm_get_certificate(transport->spdmContext.get(), nullptr, slotId,
+        libspdm_get_certificate(transport->spdmContext.get(), sessionId, slotId,
                                 &certChainSize, certChain.data());
 
     if (LIBSPDM_STATUS_IS_ERROR(status))

@@ -13,6 +13,7 @@
 #include <sdbusplus/async.hpp>
 
 #include <memory>
+#include <optional>
 #include <string>
 
 namespace spdm
@@ -73,6 +74,23 @@ class SPDMDBusResponder
     /** @brief Tear down the secure session. */
     libspdm_return_t closeSecureSession();
 
+    /**
+     * @brief Make SPDMGetSignedMeasurements follow the policy: refuse while
+     * SPDM is disabled, and run inside a secure session, opened on demand,
+     * while secure sessions are enabled.
+     * @param policy SPDM policy manager; must outlive this object.
+     * @param cfg    Session config; must outlive this object.
+     */
+    template <typename PolicyManagerT>
+    void setMeasurementPolicy(const PolicyManagerT& policy,
+                              const SecureSessionConfig& cfg)
+    {
+        componentIntegrity->setSessionHook([this, &policy, &cfg] {
+            return measurementSession(policy.enabled(),
+                                      policy.secure_session_enabled(), cfg);
+        });
+    }
+
     /** @brief True if a secure session is currently open. */
     bool secureSessionActive() const
     {
@@ -83,6 +101,15 @@ class SPDMDBusResponder
     std::string deviceName;
 
   private:
+    /**
+     * @brief Pick the secure session for SPDMGetSignedMeasurements
+     * @return The session id, or nullopt to stay outside a session
+     * @throws InternalFailure while SPDM is disabled
+     */
+    std::optional<uint32_t> measurementSession(bool spdmEnabled,
+                                               bool secureSessionEnabled,
+                                               const SecureSessionConfig& cfg);
+
     ResponderInfo responder;
 
     /** @brief Shared transport used for the secure session. */
