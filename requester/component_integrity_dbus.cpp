@@ -19,6 +19,7 @@ extern "C"
 
 #include <chrono>
 #include <format>
+#include <optional>
 #include <set>
 
 namespace spdm
@@ -514,9 +515,16 @@ auto ComponentIntegrity::method_call(
         "spdmGetSignedMeasurements: Starting with path={PATH}, slotId={SLOTID}, nonce_length={NONCE_LEN}",
         "PATH", path, "SLOTID", slotId, "NONCE_LEN", nonce.length());
 
+    std::optional<spdm_get_signed_measurements_t::return_type> result;
     try
     {
         validateMeasurementIndices(measurementIndices);
+        // Runs before any SPDM traffic, so it can refuse while SPDM is
+        // disabled and close the secure session the requests must avoid.
+        if (beforeMeasurementHook)
+        {
+            beforeMeasurementHook();
+        }
         initializeSpdmConnection();
 
         auto [slotMask, digestBuffer,
@@ -538,19 +546,34 @@ auto ComponentIntegrity::method_call(
         auto versionStr = getNegotiatedVersion();
         type_version(versionStr);
 
-        co_return std::make_tuple(objectPath, hashAlgoStr, certPem, signedMeas,
-                                  signAlgoStr, versionStr,
-                                  std::vector<uint8_t>{});
+        // PublicKey is for a responder whose public key was pre-provisioned;
+        // a certificate slot signed this, and its chain is at objectPath.
+        result =
+            std::make_tuple(objectPath, hashAlgoStr, std::string{}, signedMeas,
+                            signAlgoStr, versionStr, std::vector<uint8_t>{});
+    }
+    catch (
+        const sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure&)
+    {
+        // From the before hook: SPDM is disabled, tell the caller.
+        throw;
     }
     catch (const std::exception& e)
     {
         lg2::error("SPDM Get Signed Measurements FAILED: {ERROR}", "ERROR", e);
         // Return empty tuple on error
-        co_return std::make_tuple(
-            sdbusplus::object_path(path), std::string(""), std::string(""),
-            std::string(""), std::string(""), type_version(),
-            std::vector<uint8_t>{});
+        result =
+            std::make_tuple(sdbusplus::object_path(path), std::string(""),
+                            std::string(""), std::string(""), std::string(""),
+                            type_version(), std::vector<uint8_t>{});
     }
+
+    // Also after a failure, so the closed session does not stay closed.
+    if (afterMeasurementHook)
+    {
+        afterMeasurementHook();
+    }
+    co_return std::move(*result);
 }
 
 std::tuple<std::string, std::vector<uint8_t>> ComponentIntegrity::derCertsToPem(

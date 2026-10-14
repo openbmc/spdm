@@ -7,6 +7,7 @@
 #include "libspdm_tcp_transport.hpp"
 
 #include <phosphor-logging/lg2.hpp>
+#include <xyz/openbmc_project/Common/error.hpp>
 
 #include <algorithm>
 #include <cctype>
@@ -126,6 +127,13 @@ libspdm_return_t SPDMDBusResponder::openSecureSession(
         return LIBSPDM_STATUS_INVALID_STATE_LOCAL;
     }
 
+    // ensureConnected() drops the session of a restarted responder, so one
+    // still active here is live.
+    if (session && session->active())
+    {
+        return LIBSPDM_STATUS_SUCCESS;
+    }
+
     if (auto st = installPeerRootCert(*transport, cfg);
         LIBSPDM_STATUS_IS_ERROR(st))
     {
@@ -150,10 +158,6 @@ libspdm_return_t SPDMDBusResponder::openSecureSession(
     {
         session = std::make_unique<SpdmSession>(*transport);
     }
-    if (session->active())
-    {
-        return LIBSPDM_STATUS_SUCCESS;
-    }
     auto st = session->start(slotId);
     if (LIBSPDM_STATUS_IS_ERROR(st))
     {
@@ -177,6 +181,33 @@ libspdm_return_t SPDMDBusResponder::closeSecureSession()
         transport->ensureLink();
     }
     return session->stop();
+}
+
+void SPDMDBusResponder::beforeMeasurement(bool spdmEnabled)
+{
+    if (!spdmEnabled)
+    {
+        error("SPDM is disabled by policy, not contacting {DEVICE}", "DEVICE",
+              deviceName);
+        throw sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure();
+    }
+    // The secure session only carries the root CA certificates, so the
+    // measurement requests go outside it.
+    if (secureSessionActive() && LIBSPDM_STATUS_IS_ERROR(closeSecureSession()))
+    {
+        warning("Closing the secure session with {DEVICE} failed", "DEVICE",
+                deviceName);
+    }
+}
+
+void SPDMDBusResponder::afterMeasurement(bool sessionWanted,
+                                         const SecureSessionConfig& cfg)
+{
+    if (sessionWanted && LIBSPDM_STATUS_IS_ERROR(openSecureSession(cfg)))
+    {
+        error("Secure session with {DEVICE} not reopened after measurement",
+              "DEVICE", deviceName);
+    }
 }
 
 } // namespace spdm

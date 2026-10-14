@@ -71,6 +71,26 @@ class SPDMDBusResponder
     /** @brief Tear down the secure session. */
     libspdm_return_t closeSecureSession();
 
+    /**
+     * @brief Make SPDMGetSignedMeasurements follow the policy: refuse while
+     * SPDM is disabled, and always send its requests outside a secure
+     * session. An open session is closed first, and a new one is opened
+     * afterwards while secure sessions are enabled.
+     * @param policy SPDM policy manager; must outlive this object.
+     * @param cfg    Session config; must outlive this object.
+     */
+    template <typename PolicyManagerT>
+    void setMeasurementPolicy(const PolicyManagerT& policy,
+                              const SecureSessionConfig& cfg)
+    {
+        componentIntegrity->setMeasurementHooks(
+            [this, &policy] { beforeMeasurement(policy.enabled()); },
+            [this, &policy, &cfg] {
+                afterMeasurement(
+                    policy.enabled() && policy.secure_session_enabled(), cfg);
+            });
+    }
+
     /** @brief True if a secure session is currently open. */
     bool secureSessionActive() const
     {
@@ -81,6 +101,18 @@ class SPDMDBusResponder
     std::string deviceName;
 
   private:
+    /**
+     * @brief Close the secure session before SPDMGetSignedMeasurements
+     * @throws InternalFailure while SPDM is disabled
+     */
+    void beforeMeasurement(bool spdmEnabled);
+
+    /**
+     * @brief Open a new secure session after SPDMGetSignedMeasurements
+     * @param sessionWanted True while the policy enables secure sessions
+     */
+    void afterMeasurement(bool sessionWanted, const SecureSessionConfig& cfg);
+
     ResponderInfo responder;
 
     /** @brief Shared transport used for the secure session. */

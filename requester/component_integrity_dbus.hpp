@@ -14,6 +14,7 @@
 #include <sdbusplus/server/object.hpp>
 
 #include <chrono>
+#include <functional>
 
 namespace spdm
 {
@@ -86,6 +87,19 @@ class ComponentIntegrity :
     }
 
     /**
+     * @brief Set the hooks that run around SPDMGetSignedMeasurements
+     * @param before Runs before any SPDM traffic. Throws InternalFailure
+     *        while SPDM is disabled; the call then sends nothing.
+     * @param after Runs once the requests are done, also after a failure.
+     */
+    void setMeasurementHooks(std::function<void()> before,
+                             std::function<void()> after)
+    {
+        beforeMeasurementHook = std::move(before);
+        afterMeasurementHook = std::move(after);
+    }
+
+    /**
      * @brief Ensure the SPDM connection is negotiated (GET_VERSION /
      * CAPABILITIES / NEGOTIATE_ALGORITHMS).
      *
@@ -123,7 +137,8 @@ class ComponentIntegrity :
      * @return Async task containing tuple with:
      *         - Certificate path
      *         - Hashing algorithm string
-     *         - Public key PEM string
+     *         - Public key PEM string, empty when a certificate slot signed
+     *           (the chain is the Certificate object's CertificateString)
      *         - Signed measurements base64 string
      *         - Signing algorithm string
      *         - Version string
@@ -283,6 +298,10 @@ class ComponentIntegrity :
 
     /** @brief Certificate object */
     std::shared_ptr<Certificate> certificateObject = nullptr;
+
+    /** @brief See setMeasurementHooks() */
+    std::function<void()> beforeMeasurementHook;
+    std::function<void()> afterMeasurementHook;
 };
 
 } // namespace spdm
