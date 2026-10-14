@@ -57,10 +57,26 @@ auto MCTPTransportDiscovery::discovery(SPDMDiscovery& discovery)
 
     for (const auto& [path, service] : instances)
     {
-        auto endpointProps = co_await MctpEndpoint(ctx)
-                                 .service(service)
-                                 .path(path.str)
-                                 .properties();
+        // The mapper snapshot can race mctpd removing this endpoint before
+        // properties() reaches it; skip rather than let UnknownObject
+        // escape the coroutine. This sweep runs once at startup, so a
+        // missed endpoint here is not otherwise lost -- it is picked up
+        // later if it reappears.
+        MctpEndpoint::properties_t endpointProps;
+        try
+        {
+            endpointProps = co_await MctpEndpoint(ctx)
+                                .service(service)
+                                .path(path.str)
+                                .properties();
+        }
+        catch (const sdbusplus::exception_t& e)
+        {
+            debug(
+                "Endpoint {PATH} disappeared before properties could be read; skipping: {ERR}",
+                "PATH", path, "ERR", e);
+            continue;
+        }
 
         std::string uuid;
         try
