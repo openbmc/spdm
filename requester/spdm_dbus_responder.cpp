@@ -33,8 +33,22 @@ SPDMDBusResponder::SPDMDBusResponder(sdbusplus::async::context& ctx,
             using T = std::decay_t<decltype(info)>;
             if constexpr (std::is_same_v<T, MctpResponderInfo>)
             {
-                componentIntegrity->setTransport(
-                    std::make_shared<SpdmMctpTransport>(info.eid));
+                auto transport = std::make_shared<SpdmMctpTransport>(info.eid);
+
+                debug("Initializing SPDM transport for EID {EID}", "EID",
+                    info.eid);
+                if (!transport->initialize())
+                {
+                    error("SPDM transport initialization failed for EID {EID}",
+                        "EID", info.eid);
+                }
+                else
+                {
+                    debug("SPDM transport initialized for EID {EID}", "EID",
+                        info.eid);
+                }
+
+                componentIntegrity->setTransport(transport);
 
                 // Authenticate the responder once, in the background, after
                 // transport attachment. Captures only a weak_ptr so device
