@@ -165,13 +165,13 @@ class ComponentIntegrityTest : public ::testing::Test
 
     std::tuple<uint8_t, std::vector<uint8_t>, size_t> getCertificateDigests()
     {
-        return componentIntegrity->getCertificateDigests();
+        return componentIntegrity->getCertificateDigests(nullptr);
     }
 
     std::tuple<std::string, std::vector<uint8_t>, std::vector<uint8_t>>
         getCertificate(size_t slotId)
     {
-        return componentIntegrity->getCertificate(slotId);
+        return componentIntegrity->getCertificate(slotId, nullptr);
     }
 
     static std::string updateCertificateObject(

@@ -66,6 +66,7 @@ int main(int argc, char* argv[])
             lg2::info("Creating D-Bus responder for device {PATH}", "PATH",
                       device.path);
             auto responder = std::make_unique<SPDMDBusResponder>(ctx, device);
+            responder->setMeasurementPolicy(policyManager, sessionCfg);
 
             // Always advertise KEY_EX caps so that runtime flips of
             // SecureSessionEnabled can open/close sessions without a full

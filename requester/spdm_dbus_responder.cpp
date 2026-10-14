@@ -7,6 +7,7 @@
 #include "libspdm_tcp_transport.hpp"
 
 #include <phosphor-logging/lg2.hpp>
+#include <xyz/openbmc_project/Common/error.hpp>
 
 #include <algorithm>
 #include <cctype>
@@ -134,6 +135,13 @@ libspdm_return_t SPDMDBusResponder::openSecureSession(
         return LIBSPDM_STATUS_INVALID_STATE_LOCAL;
     }
 
+    // ensureConnected() drops the session of a restarted responder, so one
+    // still active here is live.
+    if (session && session->active())
+    {
+        return LIBSPDM_STATUS_SUCCESS;
+    }
+
     if (auto st = installPeerRootCert(*transport, cfg);
         LIBSPDM_STATUS_IS_ERROR(st))
     {
@@ -158,10 +166,6 @@ libspdm_return_t SPDMDBusResponder::openSecureSession(
     {
         session = std::make_unique<SpdmSession>(*transport);
     }
-    if (session->active())
-    {
-        return LIBSPDM_STATUS_SUCCESS;
-    }
     auto st = session->start(slotId);
     if (LIBSPDM_STATUS_IS_ERROR(st))
     {
@@ -185,6 +189,26 @@ libspdm_return_t SPDMDBusResponder::closeSecureSession()
         transport->ensureLink();
     }
     return session->stop();
+}
+
+std::optional<uint32_t> SPDMDBusResponder::measurementSession(
+    bool spdmEnabled, bool secureSessionEnabled, const SecureSessionConfig& cfg)
+{
+    if (!spdmEnabled)
+    {
+        error("SPDM is disabled by policy, not contacting {DEVICE}", "DEVICE",
+              deviceName);
+        throw sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure();
+    }
+    if (!secureSessionEnabled)
+    {
+        return std::nullopt;
+    }
+    if (LIBSPDM_STATUS_IS_ERROR(openSecureSession(cfg)))
+    {
+        throw std::runtime_error("Secure session not available");
+    }
+    return session->sessionId();
 }
 
 } // namespace spdm
