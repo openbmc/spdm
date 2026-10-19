@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcdf382e_5c4b4855",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 38
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-10-19T10:07:11Z",
+      "side": 1,
+      "message": "@ratankgupta31@gmail.com- these test statement does not seem right ? this commit in the current states does not really expose any dbus object - it just builds the ResponderInfo and logs a message.\n\njust you update the commit message to explain what it does accurately.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 64
+      },
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99e0ac0a_80aa683a",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-10-19T10:07:11Z",
+      "side": 1,
+      "message": "drop this comment.",
+      "range": {
+        "startLine": 81,
+        "startChar": 8,
+        "endLine": 81,
+        "endChar": 75
+      },
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2633a5ea_6c79421f",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-10-19T10:07:11Z",
+      "side": 1,
+      "message": "drop this comment as well.",
+      "range": {
+        "startLine": 152,
+        "startChar": 8,
+        "endLine": 154,
+        "endChar": 30
+      },
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61ef5aa3_f2395438",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-10-19T10:07:11Z",
+      "side": 1,
+      "message": "drop the comment",
+      "range": {
+        "startLine": 32,
+        "startChar": 14,
+        "endLine": 35,
+        "endChar": 77
+      },
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16c1961c_f6b9c918",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-10-19T10:07:11Z",
+      "side": 1,
+      "message": "I thought sdbusplus uses underscore/hex escaping.",
+      "range": {
+        "startLine": 42,
+        "startChar": 19,
+        "endLine": 42,
+        "endChar": 34
+      },
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "231790d6_4e05107b",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-10-19T10:07:11Z",
+      "side": 1,
+      "message": "drop this comment as well",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 58
+      },
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ba372c8_8153af97",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-10-19T10:07:11Z",
+      "side": 1,
+      "message": "use `std::move_only_function` ? \n\nIs the intent for these callbacks to create/remove the device’s D-Bus representation, with asynchronous SPDM communication managed separately per device?",
+      "range": {
+        "startLine": 104,
+        "startChar": 24,
+        "endLine": 104,
+        "endChar": 42
+      },
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccde5d5c_1af011fe",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-10-19T10:07:11Z",
+      "side": 1,
+      "message": "Add callback tests and verify that objects appear on discovery and disappear on removal seems to be missing.",
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
