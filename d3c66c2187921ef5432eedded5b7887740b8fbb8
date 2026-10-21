@@ -118,6 +118,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "758652e3_f84aec2d",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1001516
+      },
+      "writtenOn": "2026-10-21T08:49:46Z",
+      "side": 1,
+      "message": "This comment can be dropped since current code uses / operator which has built in escape chars as suggested by Patrick in other commit.",
+      "parentUuid": "16c1961c_f6b9c918",
+      "range": {
+        "startLine": 42,
+        "startChar": 19,
+        "endLine": 42,
+        "endChar": 34
+      },
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "231790d6_4e05107b",
         "filename": "requester/spdm_dbus_responder.cpp",
         "patchSetId": 38
