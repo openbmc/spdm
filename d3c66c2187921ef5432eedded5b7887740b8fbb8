@@ -48,6 +48,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee6dec7e_f0fc941f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 38
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-22T13:34:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "466d929c_a245285a",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 64
+      },
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99e0ac0a_80aa683a",
@@ -354,6 +378,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "302de5e4_8aa1ef69",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-22T13:34:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "681b3faf_7913eeaa",
+      "range": {
+        "startLine": 104,
+        "startChar": 24,
+        "endLine": 104,
+        "endChar": 42
+      },
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ccde5d5c_1af011fe",
@@ -385,6 +433,24 @@
       "side": 1,
       "message": "Added tests for the callbacks: the add callback runs when an SPDM endpoint is discovered and not for a non-SPDM or duplicate endpoint. The remove callback runs when the endpoint is removed and if the same endpoint comes back, the add callback runs again.",
       "parentUuid": "ccde5d5c_1af011fe",
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7423788_4e85e028",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-22T13:34:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0408f03_b3a2a926",
       "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
