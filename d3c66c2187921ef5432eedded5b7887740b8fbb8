@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "466d929c_a245285a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 38
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-22T12:44:28Z",
+      "side": 1,
+      "message": "Done, updated the commit message.",
+      "parentUuid": "bcdf382e_5c4b4855",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 64
+      },
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "99e0ac0a_80aa683a",
         "filename": "requester/mctp_transport_discovery.cpp",
         "patchSetId": 38
@@ -37,6 +61,30 @@
       "writtenOn": "2026-10-19T10:07:11Z",
       "side": 1,
       "message": "drop this comment.",
+      "range": {
+        "startLine": 81,
+        "startChar": 8,
+        "endLine": 81,
+        "endChar": 75
+      },
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b09ab2e_b51c9e55",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-22T12:44:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99e0ac0a_80aa683a",
       "range": {
         "startLine": 81,
         "startChar": 8,
@@ -70,6 +118,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "185d6a99_b9532fd6",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-22T12:44:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2633a5ea_6c79421f",
+      "range": {
+        "startLine": 152,
+        "startChar": 8,
+        "endLine": 154,
+        "endChar": 30
+      },
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61ef5aa3_f2395438",
@@ -83,6 +155,30 @@
       "writtenOn": "2026-10-19T10:07:11Z",
       "side": 1,
       "message": "drop the comment",
+      "range": {
+        "startLine": 32,
+        "startChar": 14,
+        "endLine": 35,
+        "endChar": 77
+      },
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4c97435_01ae4534",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-22T12:44:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61ef5aa3_f2395438",
       "range": {
         "startLine": 32,
         "startChar": 14,
@@ -140,6 +236,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d556534_8371bbd4",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-22T12:44:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "758652e3_f84aec2d",
+      "range": {
+        "startLine": 42,
+        "startChar": 19,
+        "endLine": 42,
+        "endChar": 34
+      },
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "231790d6_4e05107b",
@@ -153,6 +273,30 @@
       "writtenOn": "2026-10-19T10:07:11Z",
       "side": 1,
       "message": "drop this comment as well",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 58
+      },
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "515cd457_9823c9d0",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-22T12:44:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "231790d6_4e05107b",
       "range": {
         "startLine": 40,
         "startChar": 0,
@@ -188,6 +332,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "681b3faf_7913eeaa",
+        "filename": "requester/spdm_discovery.hpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-22T12:44:28Z",
+      "side": 1,
+      "message": "Done, changed to std::move_only_function. Yes, in this commit the callbacks only create and remove the responder for each device. The D-Bus interfaces and the per-device SPDM requests come in the later changes.",
+      "parentUuid": "3ba372c8_8153af97",
+      "range": {
+        "startLine": 104,
+        "startChar": 24,
+        "endLine": 104,
+        "endChar": 42
+      },
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ccde5d5c_1af011fe",
         "filename": "tests/test_mctp_transport_discovery.cpp",
         "patchSetId": 38
@@ -199,6 +367,24 @@
       "writtenOn": "2026-10-19T10:07:11Z",
       "side": 1,
       "message": "Add callback tests and verify that objects appear on discovery and disappear on removal seems to be missing.",
+      "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0408f03_b3a2a926",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-22T12:44:28Z",
+      "side": 1,
+      "message": "Added tests for the callbacks: the add callback runs when an SPDM endpoint is discovered and not for a non-SPDM or duplicate endpoint. The remove callback runs when the endpoint is removed and if the same endpoint comes back, the add callback runs again.",
+      "parentUuid": "ccde5d5c_1af011fe",
       "revId": "d3c66c2187921ef5432eedded5b7887740b8fbb8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
