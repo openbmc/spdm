@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "951b8b3e_eeecdd8e",
+        "filename": "requester/mctp_helper.hpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1002771
+      },
+      "writtenOn": "2026-10-27T11:30:52Z",
+      "side": 1,
+      "message": "Could we honour timeout here instead of discarding it? libspdm calculates the receive timeout but relies on this callback to enforce it. The blocking recv()/recvfrom() calls can otherwise wait indefinitely if the responder does not reply, leaving spdmd unable to process further D-Bus requests.\n\nOne option is to set SO_RCVTIMEO before receiving and return LIBSPDM_STATUS_RECEIVE_FAIL on EAGAIN/EWOULDBLOCK. Zero timeout needs nonblocking handling, since a zero socket timeout disables the timeout. Please account for both the peek and the subsequent read. The send path at L308 similarly ignores its timeout and could use SO_SNDTIMEO.\n\nHappy to provide a follow-up patch if preferred.",
+      "range": {
+        "startLine": 315,
+        "startChar": 0,
+        "endLine": 315,
+        "endChar": 5
+      },
+      "revId": "38844a8fe126526f797bcd50088bb467db9712c9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
