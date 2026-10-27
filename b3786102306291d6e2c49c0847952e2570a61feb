@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad28d53d_30cd336c",
+        "filename": "requester/libspdm_mctp_transport.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1002771
+      },
+      "writtenOn": "2026-10-27T11:30:32Z",
+      "side": 1,
+      "message": "Could we also configure LIBSPDM_DATA_CAPABILITY_RTT_US here? Without it, libspdm uses zero transport allowance when calculating the receive timeout.\n\nOnce the helper enforces that timeout, fragmented responses can time out before reassembly completes. In our MCTP-over-USB capture, a CERTIFICATE response completed after approximately 122 ms, while the responder advertised a processing allowance of 32.768 ms.\n\nA configurable RTT would let platforms account for transport latency. Happy to provide a follow-up patch.",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 76
+      },
+      "revId": "b3786102306291d6e2c49c0847952e2570a61feb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1e082a2_93d3d88d",
+        "filename": "requester/libspdm_mctp_transport.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1002771
+      },
+      "writtenOn": "2026-10-27T11:30:32Z",
+      "side": 1,
+      "message": "Once receive timeouts are enforced, how should we handle delayed replies after a timeout? They could remain queued and be consumed by the next request.\n\nOne option is to close the failed socket and recreate it before the next exchange. This would require an explicit reopen path, since the socket is currently created only during initialization. It clears queued data, but does not fully prevent late replies if the kernel reuses the same tag.\n\nWould socket recreation be appropriate here, or would you recommend another recovery approach?",
+      "range": {
+        "startLine": 207,
+        "startChar": 0,
+        "endLine": 207,
+        "endChar": 42
+      },
+      "revId": "b3786102306291d6e2c49c0847952e2570a61feb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
