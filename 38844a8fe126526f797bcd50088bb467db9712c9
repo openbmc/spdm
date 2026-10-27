@@ -22,6 +22,30 @@
       },
       "revId": "38844a8fe126526f797bcd50088bb467db9712c9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b75fa0cf_05b331fa",
+        "filename": "requester/mctp_helper.hpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-27T12:44:09Z",
+      "side": 1,
+      "message": "There is an open change that adds this, it waits with poll() using the libspdm timeout - https://gerrit.openbmc.org/c/openbmc/spdm/+/95257\n\nAlso on zero - libspdm uses 0 to mean no timeout, not return right away, so a zero socket timeout would match it. And when spdmd waits for a response, libspdm always passes RTT plus ST1 or CT, so it is never 0 here - https://github.com/DMTF/libspdm/blob/3.8.2/include/library/spdm_common_lib.h#L522-L526",
+      "parentUuid": "951b8b3e_eeecdd8e",
+      "range": {
+        "startLine": 315,
+        "startChar": 0,
+        "endLine": 315,
+        "endChar": 5
+      },
+      "revId": "38844a8fe126526f797bcd50088bb467db9712c9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }

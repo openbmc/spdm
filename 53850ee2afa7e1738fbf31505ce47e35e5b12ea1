@@ -33,6 +33,24 @@
       "message": "We may have memory leak here. `message` already points to libspdm’s registered receiver buffer, with `*message_size` providing its capacity. Replacing it with `malloc()` leaks one allocation per received response because libspdm does not free replacement pointers. \nCan we retain the supplied pointer, verify that the payload fits, copy into  `*message`,and update `*message_size` to the actual payload length? A pointer into  `buf` would also be invalid because the caller’s vector is local.",
       "revId": "53850ee2afa7e1738fbf31505ce47e35e5b12ea1",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfb51e15_1fa25764",
+        "filename": "requester/mctp_helper.hpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-27T12:44:09Z",
+      "side": 1,
+      "message": "Yes, this leaks one buffer per reply and the malloc is still in the latest patchset. I have a fix that copies into libspdm\u0027s buffer after checking the size, I will check with Ratan and upload it.",
+      "parentUuid": "38c85f8d_5795a7da",
+      "revId": "53850ee2afa7e1738fbf31505ce47e35e5b12ea1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
