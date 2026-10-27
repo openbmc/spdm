@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8fa0497b_582306fd",
+        "filename": "requester/libspdm_mctp_transport.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-10-27T12:52:17Z",
+      "side": 1,
+      "message": "There is an open change that sets RTT with 1 s as the default - https://gerrit.openbmc.org/c/openbmc/spdm/+/95258\nit\u0027s a constructor parameter, nothing passes a platform value yet.",
+      "parentUuid": "ad28d53d_30cd336c",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 76
+      },
+      "revId": "b3786102306291d6e2c49c0847952e2570a61feb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b1e082a2_93d3d88d",
         "filename": "requester/libspdm_mctp_transport.cpp",
         "patchSetId": 41
