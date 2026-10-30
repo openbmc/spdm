@@ -447,7 +447,10 @@ class TcpIoClass : public IOClass
                 }
                 if (errno == EAGAIN || errno == EWOULDBLOCK)
                 {
+                    // A late response would otherwise be read as the reply
+                    // to the next request, so the next user reconnects.
                     lg2::error("TCP receive timeout");
+                    closeSocket();
                     return LIBSPDM_STATUS_RECEIVE_FAIL;
                 }
                 lg2::error("TCP receive header failed: {ERRNO} ({ERRMSG})",
@@ -484,6 +487,7 @@ class TcpIoClass : public IOClass
         if (msgLen > tcpMaxMessageSize)
         {
             lg2::error("Invalid TCP message length: {LEN}", "LEN", msgLen);
+            closeSocket();
             return LIBSPDM_STATUS_RECEIVE_FAIL;
         }
 
@@ -507,6 +511,7 @@ class TcpIoClass : public IOClass
                 if (errno == EAGAIN || errno == EWOULDBLOCK)
                 {
                     lg2::error("TCP receive timeout during payload");
+                    closeSocket();
                     return LIBSPDM_STATUS_RECEIVE_FAIL;
                 }
                 lg2::error("TCP receive payload failed: {ERRNO} ({ERRMSG})",
