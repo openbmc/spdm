@@ -34,6 +34,24 @@
       "parentUuid": "fd78f426_e6d82335",
       "revId": "171e07b354d852b695584aa79ec7318990290d74",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "792302b8_c4565f00",
+        "filename": "requester/mctp_transport_discovery.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-11-02T16:27:56Z",
+      "side": 1,
+      "message": "This was added so the new test can finish.\n\nTest runs the real monitorServiceLost(). It opens a separate bus connection that takes the MCTP1 name (like mctpd starting) and then closes it (mctpd stopping), so the bus sends the same NameOwnerChanged signals. Then it checks the MCTP responders are removed and the TCP one stays.\n\nAt the end the test has to stop the context, since ctx.run() only returns after request_stop(), so it calls request_stop() and sends one more NameOwnerChanged to wake up matcher.next(): https://gerrit.openbmc.org/c/openbmc/spdm/+/92880/8/tests/test_mctp_transport_discovery.cpp#98\nThe loop then checks stop_requested() and returns.\n\nWith while (true) it just goes back to waiting, ctx.run() never returns and the test hangs.",
+      "parentUuid": "bae3f68c_bface4f3",
+      "revId": "171e07b354d852b695584aa79ec7318990290d74",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
