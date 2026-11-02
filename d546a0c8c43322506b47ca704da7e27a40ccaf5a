@@ -16,6 +16,24 @@
       "message": "These tests does not test `monitorServiceLost()`. Could we add a test that sends `NameOwnerChanged` and checks that MCTP responders are removed through the callbacks while TCP responders remain?\n\nIt would also be useful to cover mctpd disappearing during startup discovery and see if there are race conditions in code.",
       "revId": "d546a0c8c43322506b47ca704da7e27a40ccaf5a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8c368da_663157b8",
+        "filename": "tests/test_mctp_transport_discovery.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-11-02T13:35:18Z",
+      "side": 1,
+      "message": "Added a test for monitorServiceLost(): it drops the MCTP1 name on a second bus connection, and the MCTP responders are removed through the callback while the TCP one stays.\n\nStartup discovery now catches failed properties() reads and checks serviceLost before addResponder(). On hardware, a failed read terminated spdmd and an endpoint could be added after the cleanup; both are fixed now.",
+      "parentUuid": "de0d2bda_0c0c3c85",
+      "revId": "d546a0c8c43322506b47ca704da7e27a40ccaf5a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
