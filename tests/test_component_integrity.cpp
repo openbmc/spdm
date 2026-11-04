@@ -242,6 +242,53 @@ class ComponentIntegrityTest : public ::testing::Test
     }
 };
 
+TEST_F(ComponentIntegrityTest, TrustedComponentUsesReportingAssociation)
+{
+    const std::string trustedPath =
+        "/xyz/openbmc_project/TrustedComponent/test";
+    componentIntegrity->setTrustedComponentAssociation(trustedPath);
+
+    const std::vector<std::tuple<std::string, std::string, std::string>>
+        expected = {{"reporting", "reported_by", trustedPath}};
+    EXPECT_EQ(componentIntegrity->associations(), expected);
+}
+
+TEST_F(ComponentIntegrityTest, ReportingPreservesAuthenticatingAssociation)
+{
+    const std::string inventoryPath =
+        "/xyz/openbmc_project/inventory/system/board";
+    const std::string trustedPath =
+        "/xyz/openbmc_project/TrustedComponent/test";
+    componentIntegrity->associations(
+        {{"authenticating", "authenticated_by", inventoryPath}});
+
+    componentIntegrity->setTrustedComponentAssociation(trustedPath);
+
+    const std::vector<std::tuple<std::string, std::string, std::string>>
+        expected = {{"authenticating", "authenticated_by", inventoryPath},
+                    {"reporting", "reported_by", trustedPath}};
+    EXPECT_EQ(componentIntegrity->associations(), expected);
+}
+
+TEST_F(ComponentIntegrityTest, ReportingUpdateReplacesOnlyTrustedComponent)
+{
+    const std::string inventoryPath =
+        "/xyz/openbmc_project/inventory/system/board";
+    const std::string trustedPath = "/xyz/openbmc_project/TrustedComponent/new";
+    componentIntegrity->associations(
+        {{"authenticating", "authenticated_by", inventoryPath},
+         {"reporting", "reported_by",
+          "/xyz/openbmc_project/TrustedComponent/old"}});
+
+    componentIntegrity->setTrustedComponentAssociation(trustedPath);
+    componentIntegrity->setTrustedComponentAssociation(trustedPath);
+
+    const std::vector<std::tuple<std::string, std::string, std::string>>
+        expected = {{"authenticating", "authenticated_by", inventoryPath},
+                    {"reporting", "reported_by", trustedPath}};
+    EXPECT_EQ(componentIntegrity->associations(), expected);
+}
+
 // Test validateMeasurementIndices with valid indices
 TEST_F(ComponentIntegrityTest, ValidateMeasurementIndicesValidTest)
 {
