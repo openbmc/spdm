@@ -4,6 +4,7 @@
 #pragma once
 
 #include "certificate_dbus.hpp"
+#include "xyz/openbmc_project/Association/Definitions/aserver.hpp"
 #include "xyz/openbmc_project/Attestation/ComponentIntegrity/aserver.hpp"
 #include "xyz/openbmc_project/Attestation/IdentityAuthentication/aserver.hpp"
 #include "xyz/openbmc_project/Attestation/MeasurementSet/aserver.hpp"
@@ -13,7 +14,10 @@
 #include <sdbusplus/async/server.hpp>
 #include <sdbusplus/server/object.hpp>
 
+#include <algorithm>
 #include <chrono>
+#include <tuple>
+#include <utility>
 
 namespace spdm
 {
@@ -37,7 +41,9 @@ class ComponentIntegrity :
     public sdbusplus::aserver::xyz::openbmc_project::attestation::
         MeasurementSet<ComponentIntegrity, void>,
     public sdbusplus::aserver::xyz::openbmc_project::attestation::
-        IdentityAuthentication<ComponentIntegrity, void>
+        IdentityAuthentication<ComponentIntegrity, void>,
+    public sdbusplus::aserver::xyz::openbmc_project::association::Definitions<
+        ComponentIntegrity, void>
 {
   public:
     ComponentIntegrity() = delete;
@@ -59,6 +65,8 @@ class ComponentIntegrity :
             ComponentIntegrity, void>(ctx, path.c_str()),
         sdbusplus::aserver::xyz::openbmc_project::attestation::
             IdentityAuthentication<ComponentIntegrity, void>(ctx, path.c_str()),
+        sdbusplus::aserver::xyz::openbmc_project::association::Definitions<
+            ComponentIntegrity, void>(ctx, path.c_str()),
         path(path), asyncCtx(ctx)
     {
         initializeProperties();
@@ -76,6 +84,23 @@ class ComponentIntegrity :
     void setTransport(std::shared_ptr<spdm::SpdmTransport> transportIn)
     {
         transport = transportIn;
+    }
+
+    /**
+     * @brief Link this attestation object to its reporting TrustedComponent.
+     *
+     * The authenticating association has a different target: the protected
+     * inventory component. Preserve that independently configured association
+     * rather than deriving an inventory target from the transport endpoint.
+     */
+    void setTrustedComponentAssociation(const std::string& trustedComponentPath)
+    {
+        auto links = associations();
+        std::erase_if(links, [](const auto& link) {
+            return (std::get<0>(link) == "reporting");
+        });
+        links.emplace_back("reporting", "reported_by", trustedComponentPath);
+        associations(std::move(links));
     }
 
     /**

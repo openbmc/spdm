@@ -53,6 +53,7 @@ bool SPDMDBusResponder::initialize(sdbusplus::async::context& ctx)
         "/xyz/openbmc_project/TrustedComponent/" + devName;
     trustedComponent =
         std::make_unique<TrustedComponent>(ctx, trustedComponentPath);
+    componentIntegrity->setTrustedComponentAssociation(trustedComponentPath);
 
     info("Created SPDM D-Bus responder for device {ID} at {PATH}", "ID",
          devName, "PATH", responder.path);
