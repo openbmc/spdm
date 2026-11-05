@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c604641_3b69b203",
+        "filename": "requester/libspdm_mctp_transport.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1003188
+      },
+      "writtenOn": "2026-11-05T09:38:12Z",
+      "side": 1,
+      "message": "Agreed. Sender and receiver buffer sizes are now registered using the selected\nSPDM limit + transport overhead. libspdm subtracts that overhead, so both\ntransfer sizes match MaxSPDMmsgSize without CHUNK_CAP. Added tests that inspect\nthe real libspdm context at the minimum, a reduced limit and the default.",
+      "parentUuid": "d14b17af_d5bbaa07",
+      "revId": "aab28235b6de66aab8019c0eef0881b3a8ec61aa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5258ed1_3193e121",
@@ -35,6 +53,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86ce3abb_760930bf",
+        "filename": "requester/libspdm_mctp_transport.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1003188
+      },
+      "writtenOn": "2026-11-05T09:38:12Z",
+      "side": 1,
+      "message": "You are right this can and should be included here.\nAdded --max-spdm-message-size to the daemon in this change. Platform service\nconfiguration can pass the limit at startup, for example\nspdmd --max-spdm-message-size 2047. The daemon validates the value before\ndiscovery and passes it to each discovered MCTP responder, including\ninitialization retries and runtime additions. The default remains 4608 bytes.\nAdded option-validation and responder-configuration tests and usage documentation.",
+      "parentUuid": "f5258ed1_3193e121",
+      "revId": "aab28235b6de66aab8019c0eef0881b3a8ec61aa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d7c5665_16bbf926",
@@ -48,6 +84,24 @@
       "writtenOn": "2026-10-12T05:37:42Z",
       "side": 1,
       "message": "I think as per SPDM 1.2 this should be at least 42 (SPDM_MIN_DATA_TRANSFER_SIZE_VERSION_12). Can we add that check here too?",
+      "revId": "aab28235b6de66aab8019c0eef0881b3a8ec61aa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "480a99cc_931f3f50",
+        "filename": "requester/libspdm_transport.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1003188
+      },
+      "writtenOn": "2026-11-05T09:38:12Z",
+      "side": 1,
+      "message": "Added the SPDM_MIN_DATA_TRANSFER_SIZE_VERSION_12 lower bound. Limits below 42\nor above the supported maximum throw invalid_argument before context setup.\nThe transport tests cover rejected boundaries and valid registration at 42.",
+      "parentUuid": "1d7c5665_16bbf926",
       "revId": "aab28235b6de66aab8019c0eef0881b3a8ec61aa",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
