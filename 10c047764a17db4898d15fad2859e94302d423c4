@@ -16,6 +16,24 @@
       "message": "This only tests the default 4608. I think it would be better to also test a smaller limit, with one record that fits and one that doesn\u0027t.",
       "revId": "10c047764a17db4898d15fad2859e94302d423c4",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f5a7733_ce7f4a03",
+        "filename": "tests/test_component_integrity.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1003188
+      },
+      "writtenOn": "2026-11-05T09:09:19Z",
+      "side": 1,
+      "message": "Added coverage at a reduced limit of 2047 bytes as well as the default 4608.\nFor each limit, the tests check that a complete 40-block record exactly at the\nconfigured capacity returns the expected transcript, and a record one byte\nover the capacity fails. Both request the complete record with operation 255.",
+      "parentUuid": "ed19639b_e51c8c96",
+      "revId": "10c047764a17db4898d15fad2859e94302d423c4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
