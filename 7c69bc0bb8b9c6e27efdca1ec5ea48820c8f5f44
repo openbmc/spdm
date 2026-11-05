@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a8a9137_19006721",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1003188
+      },
+      "writtenOn": "2026-11-05T09:07:13Z",
+      "side": 1,
+      "message": "Done, see https://gerrit.openbmc.org/c/openbmc/spdm/+/96805",
+      "parentUuid": "2a943df0_7ab083c3",
+      "revId": "7c69bc0bb8b9c6e27efdca1ec5ea48820c8f5f44",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "899ed250_6b5c5de8",
@@ -35,6 +53,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfc34302_9e5c1ff5",
+        "filename": "requester/component_integrity_dbus.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1003188
+      },
+      "writtenOn": "2026-11-05T09:07:13Z",
+      "side": 1,
+      "message": "Agreed, this is now fixed.",
+      "parentUuid": "899ed250_6b5c5de8",
+      "revId": "7c69bc0bb8b9c6e27efdca1ec5ea48820c8f5f44",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c852917_101320f3",
@@ -48,6 +84,24 @@
       "writtenOn": "2026-10-12T05:01:58Z",
       "side": 1,
       "message": "If initialize() fails this just returns, but discovery has already saved the device, so later adds for the same path are skipped and it never gets another try. Could initialize() be retried after a short delay instead?",
+      "revId": "7c69bc0bb8b9c6e27efdca1ec5ea48820c8f5f44",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80e06914_7117c5dc",
+        "filename": "requester/spdmd.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1003188
+      },
+      "writtenOn": "2026-11-05T09:07:13Z",
+      "side": 1,
+      "message": "Agreed, fixed.\nFailed initialization retries after 1, 2, 4, 8, 16, then 30 seconds.\nRemoval invalidates pending retries, including across rediscovery.",
+      "parentUuid": "3c852917_101320f3",
       "revId": "7c69bc0bb8b9c6e27efdca1ec5ea48820c8f5f44",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
