@@ -3,6 +3,7 @@
 
 #include "mapper.hpp"
 
+#include <org/freedesktop/DBus/Error/event.hpp>
 #include <phosphor-logging/lg2.hpp>
 #include <xyz/openbmc_project/ObjectMapper/client.hpp>
 
@@ -11,7 +12,6 @@
 namespace spdm::mapper
 {
 PHOSPHOR_LOG2_USING;
-using namespace std::string_literals;
 
 namespace instances
 {
@@ -29,18 +29,16 @@ auto by_interface(sdbusplus::async::context& ctx, std::string interface)
                 .path(Mapper::instance_path)
                 .get_sub_tree("/", 0, std::vector<std::string>{interface});
         }
+        catch (const sdbusplus::error::org::freedesktop::d_bus::Error::
+                   ServiceUnknown& e)
+        {
+            info("mapper::get_sub_tree: mapper service not found: {ERROR}",
+                 "ERROR", e);
+            std::terminate();
+        }
         catch (const sdbusplus::internal_exception_t& e)
         {
             info("mapper::get_sub_tree failure: {ERROR}", "ERROR", e);
-
-            // TODO: once sdbusplus has the ability to differentiate
-            //       ServiceUnknown we should catch and abort on that one
-            //       instead of checking a string. Mapper being gone is a
-            //       critical issue.
-            if (e.name() == "org.freedesktop.DBus.Error.ServiceUnknown"s)
-            {
-                std::terminate();
-            }
             co_return {};
         }
     }();
