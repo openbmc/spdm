@@ -134,8 +134,7 @@ libspdm_return_t SPDMDBusResponder::openSecureSession(
         return LIBSPDM_STATUS_SUCCESS;
     }
 
-    if (auto st = installPeerRootCert(*transport, cfg);
-        LIBSPDM_STATUS_IS_ERROR(st))
+    if (auto st = installPeerRootCert(*transport); LIBSPDM_STATUS_IS_ERROR(st))
     {
         error("Trust anchor install failed for {DEVICE}: {STATUS}", "DEVICE",
               deviceName, "STATUS",

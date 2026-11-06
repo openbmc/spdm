@@ -42,30 +42,8 @@ struct SecureSessionConfig
     // Requester signing algorithms come from SpdmTransport::supportReqAsymAlgo.
     uint16_t keySchedule = SPDM_ALGORITHMS_KEY_SCHEDULE_SPDM;
 
-    /// Trust anchor for verifying the responder's KEY_EXCHANGE_RSP signature.
-    /// Resolution precedence (first non-empty wins):
-    ///   1. peerRootCertDer       — raw DER bytes
-    ///   2. peerRootCertDerPath   — explicit absolute path to a DER file
-    ///   3. peerRootCertBaseDir   — base directory; the actual file is
-    ///                              <baseDir>/<algoSubdir>/<peerRootCertFileName>
-    ///                              and <algoSubdir> is picked from the
-    ///                              negotiated base_asym_algo or pqc_asym_algo
-    ///                              (e.g. ecp384, mldsa65).
-    ///
-    /// Resolution by basedir requires libspdm_init_connection to have run
-    /// first, so it happens at session-open time, not in
-    /// applySecureSessionConfig().
-    std::vector<uint8_t> peerRootCertDer;
-    std::string peerRootCertDerPath;
-    std::string peerRootCertBaseDir;
-    std::string peerRootCertFileName = "ca.cert.der";
-
-    /// File name of the requester's (local) cert chain, resolved as
-    /// <peerRootCertBaseDir>/<algoSubdir(negotiated req asym algo)>/<file>.
-    /// An empty peerRootCertBaseDir disables local-chain provisioning.
-    std::string localCertChainFileName = "bundle_requester.certchain.der";
-    /// Bit mask of cert slots to provision the local chain into.
-    uint8_t localCertSlotMask = 0x03; // slots 0 and 1
+    /// Bit mask of cert slots to provision the local (TPM slot 0) chain into.
+    uint8_t localCertSlotMask = 0x01; // slot 0
 };
 
 /**
@@ -79,34 +57,23 @@ libspdm_return_t applySecureSessionConfig(SpdmTransport& transport,
                                           const SecureSessionConfig& cfg);
 
 /**
- * Install the responder's root cert as the trust anchor.
+ * Install the trust anchor for the responder's cert chain.
  *
- * Reads cfg per the resolution rules in SecureSessionConfig. Returns
- * LIBSPDM_STATUS_SUCCESS and does nothing if no trust anchor is configured.
+ * Requester and responder share one root CA, so the trust anchor is the root
+ * certificate of our own slot 0 cert chain in the TPM.
  */
-libspdm_return_t installPeerRootCert(SpdmTransport& transport,
-                                     const SecureSessionConfig& cfg);
-
-/**
- * Directory name (e.g. "ecp256", "mldsa65") for a negotiated signature
- * algorithm, matching the spdm-emu sample-key layout.
- *
- * libspdm negotiates either a classic or a PQC algorithm, so exactly one of
- * the two values must be non-zero. Returns nullptr otherwise, or for an
- * unknown algorithm.
- */
-const char* sigAlgoSubdir(uint32_t baseAsymAlgo, uint32_t pqcAsymAlgo);
+libspdm_return_t installPeerRootCert(SpdmTransport& transport);
 
 /**
  * Provision the requester's own cert chain so libspdm can answer the
  * responder's encapsulated GET_DIGESTS / GET_CERTIFICATE during
  * session-based mutual authentication.
  *
- * Requires libspdm_init_connection to have completed (the req asym algo is
- * only negotiated by then). Returns LIBSPDM_STATUS_SUCCESS and does nothing
- * if no base directory is configured, or if the responder negotiated neither
- * a classic nor a PQC requester asym algo (mutual auth simply will not be
- * requested).
+ * The chain is the requester's slot 0 chain from the TPM. Requires
+ * libspdm_init_connection to have completed (the hash algo is only
+ * negotiated by then). Returns LIBSPDM_STATUS_SUCCESS and does nothing if the
+ * responder negotiated neither a classic nor a PQC requester asym algo
+ * (mutual auth simply will not be requested).
  */
 libspdm_return_t installLocalRequesterCertChain(SpdmTransport& transport,
                                                 const SecureSessionConfig& cfg);

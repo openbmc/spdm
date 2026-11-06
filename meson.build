@@ -61,6 +61,11 @@ if not libspdm_dep.found()
     endif
 endif
 
+# The requester's cert slot 0 lives in the TPM, so libspdm must be built with
+# LIBSPDM_TPM_SUPPORT=ON. Its pkg-config file does not carry that macro, which
+# gates the libspdm_tpm_* declarations.
+add_project_arguments('-DLIBSPDM_TPM_SUPPORT=1', language: 'cpp')
+
 spdmd_deps = [
     CLI11_dep,
     phosphor_dbus_interfaces_dep,
@@ -106,6 +111,14 @@ spdm_state_dir = get_option('localstatedir') + '/lib/spdm'
 
 conf_data = configuration_data()
 conf_data.set_quoted('SPDM_STATE_DIR', spdm_state_dir)
+conf_data.set(
+    'SPDM_TPM_CERTCHAIN_NV_INDEX',
+    get_option('tpm-requester-certchain-nv-index'),
+)
+conf_data.set_quoted(
+    'SPDM_TPM_KEY_HANDLE',
+    'handle:' + get_option('tpm-requester-key-handle'),
+)
 
 configure_file(
     input: 'config.hpp.in',

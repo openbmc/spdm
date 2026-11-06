@@ -11,6 +11,14 @@ namespace spdm
 {
 
 /**
+ * Read the requester's slot 0 cert chain (raw DER, root certificate first)
+ * from its TPM NV index.
+ *
+ * Returns an empty vector on failure.
+ */
+std::vector<uint8_t> readSlot0CertChain();
+
+/**
  * Build the libspdm cert-chain blob for a raw DER chain:
  *
  *   spdm_cert_chain_t{ uint32_t length } | root cert hash | DER chain

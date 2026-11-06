@@ -5,13 +5,17 @@
 
 #include "spdm_session_config.hpp"
 
+extern "C"
+{
+#include "library/spdm_crypt_ext_lib.h"
+}
+
+#include <config.hpp>
 #include <phosphor-logging/lg2.hpp>
 
+#include <cstdlib>
 #include <cstring>
-#include <filesystem>
 #include <format>
-#include <fstream>
-#include <iterator>
 #include <utility>
 #include <vector>
 
@@ -68,6 +72,22 @@ uint32_t getNegotiatedHashAlgo(void* ctx)
 }
 
 } // namespace
+
+std::vector<uint8_t> readSlot0CertChain()
+{
+    void* buf = nullptr;
+    size_t size = 0;
+    if (!libspdm_tpm_read_nv(SPDM_TPM_CERTCHAIN_NV_INDEX, &buf, &size))
+    {
+        lg2::error("Failed to read the slot 0 cert chain from TPM NV {INDEX}",
+                   "INDEX", std::format("0x{:X}", SPDM_TPM_CERTCHAIN_NV_INDEX));
+        return {};
+    }
+    const auto* bytes = static_cast<const uint8_t*>(buf);
+    std::vector<uint8_t> der(bytes, bytes + size);
+    std::free(buf);
+    return der;
+}
 
 std::vector<uint8_t> buildSpdmCertChainBlob(std::span<const uint8_t> chainDer,
                                             uint32_t baseHashAlgo)
@@ -135,11 +155,6 @@ libspdm_return_t installLocalRequesterCertChain(SpdmTransport& transport,
         return LIBSPDM_STATUS_INVALID_PARAMETER;
     }
 
-    if (cfg.peerRootCertBaseDir.empty())
-    {
-        return LIBSPDM_STATUS_SUCCESS;
-    }
-
     const uint16_t reqAsym = getNegotiatedReqAsymAlgo(ctx);
     const uint32_t reqPqcAsym = getNegotiatedReqPqcAsymAlgo(ctx);
     if (reqAsym == 0 && reqPqcAsym == 0)
@@ -151,29 +166,11 @@ libspdm_return_t installLocalRequesterCertChain(SpdmTransport& transport,
         return LIBSPDM_STATUS_SUCCESS;
     }
 
-    const char* subdir = sigAlgoSubdir(reqAsym, reqPqcAsym);
-    if (subdir == nullptr)
+    // We advertised MUT_AUTH_CAP, so a missing chain would surface later as
+    // an opaque encapsulated-flow failure. Fail crisply here instead.
+    const std::vector<uint8_t> der = readSlot0CertChain();
+    if (der.empty())
     {
-        lg2::error(
-            "Cannot derive local cert subdir: unknown negotiated req_base_asym_alg {ALGO} / req_pqc_asym_alg {PQC_ALGO}",
-            "ALGO", std::format("0x{:04X}", static_cast<uint32_t>(reqAsym)),
-            "PQC_ALGO", std::format("0x{:08X}", reqPqcAsym));
-        return LIBSPDM_STATUS_INVALID_PARAMETER;
-    }
-
-    const std::filesystem::path chainPath =
-        std::filesystem::path(cfg.peerRootCertBaseDir) / subdir /
-        cfg.localCertChainFileName;
-
-    std::ifstream f(chainPath, std::ios::binary);
-    std::vector<uint8_t> der{std::istreambuf_iterator<char>(f),
-                             std::istreambuf_iterator<char>()};
-    if (!f || der.empty())
-    {
-        // We advertised MUT_AUTH_CAP, so a missing chain would surface later
-        // as an opaque encapsulated-flow failure. Fail crisply here instead.
-        lg2::error("Failed to read local requester cert chain from {PATH}",
-                   "PATH", chainPath.string());
         return LIBSPDM_STATUS_INVALID_PARAMETER;
     }
 
@@ -233,9 +230,10 @@ libspdm_return_t installLocalRequesterCertChain(SpdmTransport& transport,
     }
 
     lg2::info(
-        "Installed local requester cert chain from {PATH} ({SIZE} bytes, slots {MASK})",
-        "PATH", chainPath.string(), "SIZE", transport.localCertChainBlob.size(),
-        "MASK", std::format("0x{:02X}", static_cast<uint32_t>(mask)));
+        "Installed local requester cert chain from TPM NV {INDEX} ({SIZE} bytes, slots {MASK})",
+        "INDEX", std::format("0x{:X}", SPDM_TPM_CERTCHAIN_NV_INDEX), "SIZE",
+        transport.localCertChainBlob.size(), "MASK",
+        std::format("0x{:02X}", static_cast<uint32_t>(mask)));
 
     return LIBSPDM_STATUS_SUCCESS;
 }

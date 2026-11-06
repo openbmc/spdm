@@ -1,3 +1,11 @@
 #pragma once
 
+#include <cstdint>
+
 static constexpr auto SPDM_STATE_DIR = @SPDM_STATE_DIR@;
+
+// The requester's SPDM cert slot 0 lives in the TPM: its cert chain (DER,
+// root first) in an NV index, and its signing key as a persistent key.
+static constexpr uint32_t SPDM_TPM_CERTCHAIN_NV_INDEX =
+    @SPDM_TPM_CERTCHAIN_NV_INDEX@;
+static constexpr auto SPDM_TPM_KEY_HANDLE = @SPDM_TPM_KEY_HANDLE@;

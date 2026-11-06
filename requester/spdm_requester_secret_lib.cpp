@@ -1,10 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: Copyright OpenBMC Authors
 
-#include "spdm_requester_secret_lib.hpp"
-
-#include "spdm_session_config.hpp"
-
 extern "C"
 {
 // clang-format off
@@ -14,16 +10,11 @@ extern "C"
 // clang-format on
 }
 
+#include <config.hpp>
 #include <phosphor-logging/lg2.hpp>
 
-#include <algorithm>
 #include <cstdint>
-#include <filesystem>
 #include <format>
-#include <fstream>
-#include <iterator>
-#include <string>
-#include <vector>
 
 /* Mutual authentication is not optional for spdmd: the requester advertises
  * ENCAP_CAP and MUT_AUTH_CAP unconditionally. A libspdm stripped of either
@@ -35,46 +26,18 @@ extern "C"
     "spdmd mutual authentication requires libspdm built with MUT_AUTH_CAP and ENCAP_CAP"
 #endif
 
-namespace spdm
-{
-
-namespace
-{
-
-std::string& keyBaseDir()
-{
-    static std::string dir = "/usr/share/spdm-emu";
-    return dir;
-}
-
-} // namespace
-
-void setRequesterKeyBaseDir(std::string dir)
-{
-    keyBaseDir() = std::move(dir);
-}
-
-const std::string& requesterKeyBaseDir()
-{
-    return keyBaseDir();
-}
-
-} // namespace spdm
-
 /**
- * Sign an SPDM message with the requester's own private key.
+ * Sign an SPDM message with the requester's slot 0 key.
  *
  * libspdm calls this via the requester HAL when it has to prove possession of
  * the key behind the cert chain it handed the responder during the
  * encapsulated mutual-authentication flow — for spdmd's scope that is the
  * FINISH signature (op_code == SPDM_FINISH).
  *
- * The key is read per call rather than cached so that no private key material
- * lingers in the daemon's address space between sessions; this mirrors the
- * libspdm sample secret lib.
- *
+ * The key is a TPM persistent key, so the private key never leaves the TPM.
  * libspdm negotiates either a classic (req_base_asym_alg) or an SPDM 1.4 PQC
- * (req_pqc_asym_alg) algorithm and passes 0 for the other one.
+ * (req_pqc_asym_alg) algorithm and passes 0 for the other one. It must match
+ * the key type in the TPM, or signing fails.
  */
 extern "C" bool libspdm_requester_data_sign(
     void* /* spdm_context */, spdm_version_number_t spdm_version,
@@ -91,91 +54,55 @@ extern "C" bool libspdm_requester_data_sign(
         return false;
     }
 
-    // Rejects unknown algorithms before they reach the libspdm key parsers,
-    // which assert on them.
-    const char* subdir =
-        spdm::sigAlgoSubdir(req_base_asym_alg, req_pqc_asym_alg);
-    if (subdir == nullptr)
+    if (!libspdm_tpm_device_init())
     {
         lg2::error(
-            "Requester signing: unknown req_base_asym_alg {ALGO} / req_pqc_asym_alg {PQC_ALGO}",
-            "ALGO",
-            std::format("0x{:04X}", static_cast<uint32_t>(req_base_asym_alg)),
-            "PQC_ALGO", std::format("0x{:08X}", req_pqc_asym_alg));
-        return false;
-    }
-    const bool isPqc = req_pqc_asym_alg != 0;
-
-    const std::filesystem::path keyPath =
-        std::filesystem::path(spdm::requesterKeyBaseDir()) / subdir /
-        "end_requester.key";
-
-    std::ifstream f(keyPath, std::ios::binary);
-    std::vector<uint8_t> pem{std::istreambuf_iterator<char>(f),
-                             std::istreambuf_iterator<char>()};
-    if (!f || pem.empty())
-    {
-        lg2::error("Requester signing: failed to read private key {PATH}",
-                   "PATH", keyPath.string());
+            "Requester signing: failed to load the OpenSSL tpm2 provider");
         return false;
     }
 
     void* keyCtx = nullptr;
-    const bool parsed =
-        isPqc ? libspdm_req_pqc_asym_get_private_key_from_pem(
-                    req_pqc_asym_alg, pem.data(), pem.size(),
-                    /*password=*/nullptr, &keyCtx)
-              : libspdm_req_asym_get_private_key_from_pem(
-                    req_base_asym_alg, pem.data(), pem.size(),
-                    /*password=*/nullptr, &keyCtx);
-    if (!parsed)
+    if (!libspdm_tpm_get_pvt_key_handle(SPDM_TPM_KEY_HANDLE, &keyCtx))
     {
-        std::ranges::fill(pem, uint8_t{0});
-        lg2::error("Requester signing: failed to parse private key {PATH}",
-                   "PATH", keyPath.string());
+        lg2::error("Requester signing: failed to load TPM key {HANDLE}",
+                   "HANDLE", SPDM_TPM_KEY_HANDLE);
         return false;
     }
 
     bool result = false;
-    if (isPqc)
+    if (req_pqc_asym_alg != 0)
     {
-        if (is_data_hash)
-        {
-            result = libspdm_req_pqc_asym_sign_hash(
-                spdm_version, op_code, req_pqc_asym_alg, base_hash_algo, keyCtx,
-                message, message_size, signature, sig_size);
-        }
-        else
-        {
-            result = libspdm_req_pqc_asym_sign(
-                spdm_version, op_code, req_pqc_asym_alg, base_hash_algo, keyCtx,
-                message, message_size, signature, sig_size);
-        }
+        result =
+            is_data_hash
+                ? libspdm_req_pqc_asym_sign_hash(
+                      spdm_version, op_code, req_pqc_asym_alg, base_hash_algo,
+                      keyCtx, message, message_size, signature, sig_size)
+                : libspdm_req_pqc_asym_sign(
+                      spdm_version, op_code, req_pqc_asym_alg, base_hash_algo,
+                      keyCtx, message, message_size, signature, sig_size);
         libspdm_req_pqc_asym_free(req_pqc_asym_alg, keyCtx);
     }
     else
     {
-        if (is_data_hash)
-        {
-            result = libspdm_req_asym_sign_hash(
-                spdm_version, op_code, req_base_asym_alg, base_hash_algo,
-                keyCtx, message, message_size, signature, sig_size);
-        }
-        else
-        {
-            result = libspdm_req_asym_sign(
-                spdm_version, op_code, req_base_asym_alg, base_hash_algo,
-                keyCtx, message, message_size, signature, sig_size);
-        }
+        result =
+            is_data_hash
+                ? libspdm_req_asym_sign_hash(
+                      spdm_version, op_code, req_base_asym_alg, base_hash_algo,
+                      keyCtx, message, message_size, signature, sig_size)
+                : libspdm_req_asym_sign(
+                      spdm_version, op_code, req_base_asym_alg, base_hash_algo,
+                      keyCtx, message, message_size, signature, sig_size);
         libspdm_req_asym_free(req_base_asym_alg, keyCtx);
     }
 
-    std::ranges::fill(pem, uint8_t{0});
-
     if (!result)
     {
-        lg2::error("Requester signing failed for op_code {OP}", "OP",
-                   std::format("0x{:02X}", static_cast<uint32_t>(op_code)));
+        lg2::error(
+            "Requester signing failed for op_code {OP} with req_base_asym_alg {ALGO} / req_pqc_asym_alg {PQC_ALGO}",
+            "OP", std::format("0x{:02X}", static_cast<uint32_t>(op_code)),
+            "ALGO",
+            std::format("0x{:04X}", static_cast<uint32_t>(req_base_asym_alg)),
+            "PQC_ALGO", std::format("0x{:08X}", req_pqc_asym_alg));
     }
     return result;
 }

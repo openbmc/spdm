@@ -1,1 +1,13 @@
 option('tests', type: 'feature', value: 'enabled', description: 'Build tests')
+option(
+    'tpm-requester-certchain-nv-index',
+    type: 'string',
+    value: '0x1500011',
+    description: 'TPM NV index holding the requester slot 0 cert chain (DER, root first)',
+)
+option(
+    'tpm-requester-key-handle',
+    type: 'string',
+    value: '0x81000011',
+    description: 'TPM persistent handle of the requester slot 0 signing key',
+)
