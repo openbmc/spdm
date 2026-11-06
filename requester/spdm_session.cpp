@@ -53,6 +53,16 @@ libspdm_return_t fetchPeerCert(void* ctx, uint8_t slotId)
                    std::format("0x{:08X}", static_cast<uint32_t>(st)));
         return st;
     }
+    // libspdm reports a chain that does not lead to the trust anchor as a
+    // warning, and would still open a session on it. Callers only check for
+    // errors, so return one.
+    if (st == LIBSPDM_STATUS_VERIF_NO_AUTHORITY)
+    {
+        lg2::error(
+            "Responder cert chain in slot {SLOT} is not signed by the trust anchor",
+            "SLOT", static_cast<uint32_t>(slotId));
+        return LIBSPDM_STATUS_VERIF_FAIL;
+    }
     lg2::info("Fetched peer cert chain for slot {SLOT} ({SIZE} bytes)", "SLOT",
               static_cast<uint32_t>(slotId), "SIZE", certChainSize);
     return LIBSPDM_STATUS_SUCCESS;
