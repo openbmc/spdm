@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dd12f43_b0b8908d",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-11-12T11:51:55Z",
+      "side": 1,
+      "message": "Done, used the \u003cfalse\u003e form of the setters.",
+      "parentUuid": "babe45c3_bb99e817",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 31
+      },
+      "revId": "de79df6a75a3bca14024dad1a4b68bf7280283ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc438dbf_54112079",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-11-11T03:31:36Z",
       "side": 1,
       "message": "make this human readable https://github.com/openbmc/docs/blob/master/anti-patterns.md#ill-defined-data-structuring-in-lg2-message-strings",
+      "range": {
+        "startLine": 45,
+        "startChar": 9,
+        "endLine": 46,
+        "endChar": 67
+      },
+      "revId": "de79df6a75a3bca14024dad1a4b68bf7280283ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59e0264e_e252dcbe",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-11-12T11:51:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc438dbf_54112079",
       "range": {
         "startLine": 45,
         "startChar": 9,
@@ -64,6 +112,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c98058e1_141f8f68",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-11-12T11:51:55Z",
+      "side": 1,
+      "message": "This gets implemented later in this chain. 84019 adds the real call and 95272 returns the errors, so kept the stub as is here.\nhttps://gerrit.openbmc.org/c/openbmc/spdm/+/84019",
+      "parentUuid": "0fc5dbf4_94fb1cb0",
+      "revId": "de79df6a75a3bca14024dad1a4b68bf7280283ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd8b6327_7c628994",
@@ -77,6 +143,30 @@
       "writtenOn": "2026-11-11T03:31:36Z",
       "side": 1,
       "message": "Could we compose these interfaces through a single sdbusplus::async::server_t ? Each \u003cComponentIntegrity, void\u003e base creates a separate server with its own context reference, path, and signal state. One composed server would let us manage the three interfaces as one object and emit emit_object_added() just once.",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 1
+      },
+      "revId": "de79df6a75a3bca14024dad1a4b68bf7280283ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "257a2ba7_f267093b",
+        "filename": "requester/component_integrity_dbus.hpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-11-12T11:51:55Z",
+      "side": 1,
+      "message": "Done. Three interfaces are under one server_t now, and emit_object_added() is called once.",
+      "parentUuid": "bd8b6327_7c628994",
       "range": {
         "startLine": 27,
         "startChar": 0,
@@ -104,6 +194,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93811022_1854fbef",
+        "filename": "requester/component_integrity_dbus.hpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-11-12T11:51:55Z",
+      "side": 1,
+      "message": "Done. The object is created with defer_emit now, and emit_object_added() is called once the properties are set. Tested on hw - InterfacesAdded comes once per object with all three interfaces and InterfacesRemoved comes when the object goes away.",
+      "parentUuid": "3adf903d_2526e4f7",
+      "revId": "de79df6a75a3bca14024dad1a4b68bf7280283ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62626a1b_b7bb4bd2",
@@ -117,6 +225,30 @@
       "writtenOn": "2026-11-11T03:31:36Z",
       "side": 1,
       "message": "Can we remove this unused method and the asyncCtx member? This context is shared by the whole daemon, so calling this on one component stops discovery and every other responder too right ?",
+      "range": {
+        "startLine": 65,
+        "startChar": 1,
+        "endLine": 71,
+        "endChar": 5
+      },
+      "revId": "de79df6a75a3bca14024dad1a4b68bf7280283ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c567169d_d062ff98",
+        "filename": "requester/component_integrity_dbus.hpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-11-12T11:51:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62626a1b_b7bb4bd2",
       "range": {
         "startLine": 65,
         "startChar": 1,
@@ -150,6 +282,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d122ac74_18b75ce3",
+        "filename": "requester/component_integrity_dbus.hpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-11-12T11:51:55Z",
+      "side": 1,
+      "message": "Updated. Removed it from here,so LastUpdated stays at its default 0.",
+      "parentUuid": "ee0f2ee6_a8cb666d",
+      "range": {
+        "startLine": 78,
+        "startChar": 7,
+        "endLine": 80,
+        "endChar": 35
+      },
+      "revId": "de79df6a75a3bca14024dad1a4b68bf7280283ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8574bbd_8327e405",
@@ -163,6 +319,30 @@
       "writtenOn": "2026-11-11T03:31:36Z",
       "side": 1,
       "message": "Could we use std::format(\"{}/{}\", ..., devName) here? This would make the path construction easier to read and avoid the explicit std::string conversion and chained concatenation.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 74
+      },
+      "revId": "de79df6a75a3bca14024dad1a4b68bf7280283ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "031ab380_c1958744",
+        "filename": "requester/spdm_dbus_responder.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-11-12T11:51:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8574bbd_8327e405",
       "range": {
         "startLine": 21,
         "startChar": 0,
