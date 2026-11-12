@@ -132,6 +132,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5b503dee_f5d89167",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-11-12T16:16:39Z",
+      "side": 1,
+      "message": "I understand the implementation and error handling come later in the series, but could we return `InternalFailure` in this patch until then? The stub currently reports success with empty data, which doesn\u0027t fulfill the method\u0027s contract. Returning an error would keep this commit\u0027s behavior valid on its own, including if the later patches are delayed or reverted.",
+      "parentUuid": "c98058e1_141f8f68",
+      "revId": "de79df6a75a3bca14024dad1a4b68bf7280283ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bd8b6327_7c628994",
         "filename": "requester/component_integrity_dbus.hpp",
         "patchSetId": 42
@@ -296,6 +314,30 @@
       "side": 1,
       "message": "Updated. Removed it from here,so LastUpdated stays at its default 0.",
       "parentUuid": "ee0f2ee6_a8cb666d",
+      "range": {
+        "startLine": 78,
+        "startChar": 7,
+        "endLine": 80,
+        "endChar": 35
+      },
+      "revId": "de79df6a75a3bca14024dad1a4b68bf7280283ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b03e40b3_1a365c94",
+        "filename": "requester/component_integrity_dbus.hpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-11-12T16:16:39Z",
+      "side": 1,
+      "message": "Removing the initialization leaves it at zero, agreed. Could we also add `default: 0` to the interface YAML and document that zero means no component integrity information has been acquired yet? Otherwise, we\u0027re relying on generated initialization without defining what that value means to consumers. We should also confirm the Redfish mapping treats zero as unavailable rather than displaying an epoch timestamp.",
+      "parentUuid": "d122ac74_18b75ce3",
       "range": {
         "startLine": 78,
         "startChar": 7,
