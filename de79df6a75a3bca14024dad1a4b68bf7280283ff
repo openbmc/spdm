@@ -148,6 +148,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffa05e3b_53ed6c17",
+        "filename": "requester/component_integrity_dbus.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-11-13T07:34:38Z",
+      "side": 1,
+      "message": "Done, the stub returns InternalFailure now until 84019 adds the real call.",
+      "parentUuid": "5b503dee_f5d89167",
+      "revId": "de79df6a75a3bca14024dad1a4b68bf7280283ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd8b6327_7c628994",
@@ -362,6 +380,30 @@
       "side": 1,
       "message": "Thanks Manoj. Sure, I can add default: 0 in the ComponentIntegrity PDI saying \"A value of zero indicates that no component-integrity information has been acquired yet.\"\n\nToday, https://gerrit.openbmc.org/c/openbmc/bmcweb/+/88828/15/redfish-core/lib/component_integrity.hpp#159 skips LastUpdated when it is zero, so no epoch timestamp is shown. And looks like the https://redfish.dmtf.org/schemas/v1/ComponentIntegrity.v1_4_0.json schema also allows null, so returning null when the timestamp is unavailable looks like an option.\n\nQuick doubt on LastUpdated - PDI mentions firmware and certificate changes. Today, spdmd gets that information during the signed-measurement request. Should the timestamp update after every successful measurement request, even if the values are unchanged, or only when a change in the integrity information is detected? (For the second one, I think spdmd does not monitor those change events separately or compare measurements across requests.)",
       "parentUuid": "b03e40b3_1a365c94",
+      "range": {
+        "startLine": 78,
+        "startChar": 7,
+        "endLine": 80,
+        "endChar": 35
+      },
+      "revId": "de79df6a75a3bca14024dad1a4b68bf7280283ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1290c897_b1de86ad",
+        "filename": "requester/component_integrity_dbus.hpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1003181
+      },
+      "writtenOn": "2026-11-13T07:34:38Z",
+      "side": 1,
+      "message": "The PDI change is merged now with default: 0\nhttps://gerrit.openbmc.org/c/openbmc/phosphor-dbus-interfaces/+/97225",
+      "parentUuid": "e2095f79_df3e72de",
       "range": {
         "startLine": 78,
         "startChar": 7,
